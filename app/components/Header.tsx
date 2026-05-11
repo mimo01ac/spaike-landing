@@ -8,6 +8,9 @@ export default function Header() {
           <Logo size="md" />
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
+          <a href="#hvad-vi-bygger" className="hover:text-neutral-900 transition-colors">
+            Hvad vi bygger
+          </a>
           <a href="#discovery" className="hover:text-neutral-900 transition-colors">
             Discovery
           </a>

@@ -9,12 +9,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SpAIke — Spiken er i kombinationen",
+  title: "SpAIke — AI der flytter forretningstal",
   description:
-    "Vi accelererer AI-impact for danske mid-market virksomheder ved at kombinere 15+ års kommerciel erfaring med hands-on AI-byggeri. AI alene er ikke nok — spiken er i kombinationen.",
+    "Vi hjælper danske mid-market virksomheder fra AI-eksperimenter til målbare business-resultater. Sparet tid, frigjorte ressourcer, højere kvalitet i output. Start med en gratis SpAIke Discovery — konkret handlingsplan på 48 timer.",
   openGraph: {
-    title: "SpAIke",
-    description: "Spiken er i kombinationen.",
+    title: "SpAIke — AI der flytter forretningstal",
+    description:
+      "Fra AI-eksperimenter til målbare business-resultater. Gratis Discovery på 48 timer.",
     type: "website",
     locale: "da_DK",
     url: "https://spaike.dk",

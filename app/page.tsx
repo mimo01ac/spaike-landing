@@ -1,7 +1,8 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import Manifest from "./components/Manifest";
+import WhatWeBuild from "./components/WhatWeBuild";
 import DiscoveryCTA from "./components/DiscoveryCTA";
+import Manifest from "./components/Manifest";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -10,8 +11,9 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Manifest />
+        <WhatWeBuild />
         <DiscoveryCTA />
+        <Manifest />
       </main>
       <Footer />
     </>

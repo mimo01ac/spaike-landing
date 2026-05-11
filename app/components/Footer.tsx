@@ -7,17 +7,19 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-start gap-10 md:justify-between">
           <div className="space-y-4 max-w-sm">
             <Logo size="sm" />
-            <p className="text-sm text-neutral-600 leading-relaxed">
-              AI-automation til danske mid-market virksomheder. Spiken er i
-              kombinationen.
+            <p className="text-sm text-neutral-700 leading-relaxed">
+              AI der flytter forretningstal — bygget af en der har stået i
+              kommercielle roller i 15+ år.
             </p>
-            <p className="text-xs text-neutral-500">Drevet af mimoco ApS</p>
+            <p className="text-xs text-neutral-500">
+              Drevet af mimoco ApS · Spiken er i kombinationen.
+            </p>
           </div>
           <div className="space-y-3">
             <h3 className="text-sm font-semibold">Kontakt</h3>
             <a
               href="mailto:michael@spaike.dk"
-              className="block text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+              className="block text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
             >
               michael@spaike.dk
             </a>
