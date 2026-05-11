@@ -7,25 +7,28 @@ export default function Header() {
         <a href="#top" aria-label="SpAIke">
           <Logo size="md" />
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
+        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-neutral-600">
           <a href="#hvad-vi-bygger" className="hover:text-neutral-900 transition-colors">
             Hvad vi bygger
+          </a>
+          <a href="#cases" className="hover:text-neutral-900 transition-colors">
+            Cases
           </a>
           <a href="#discovery" className="hover:text-neutral-900 transition-colors">
             Discovery
           </a>
-          <a href="#manifest" className="hover:text-neutral-900 transition-colors">
-            Manifest
+          <a href="#om" className="hover:text-neutral-900 transition-colors">
+            Om
           </a>
-          <a href="mailto:michael@spaike.dk" className="hover:text-neutral-900 transition-colors">
-            Kontakt
+          <a href="#waitlist" className="hover:text-neutral-900 transition-colors">
+            Waitlist
           </a>
         </nav>
         <a
-          href="#discovery"
+          href="#waitlist"
           className="bg-spaike-blue hover:bg-spaike-blue-dark text-black font-medium px-5 py-2.5 rounded-lg transition-colors text-sm"
         >
-          Kør Discovery
+          Kom på waitlist
         </a>
       </div>
     </header>
