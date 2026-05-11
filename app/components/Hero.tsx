@@ -72,7 +72,7 @@ export default function Hero() {
                 Michael Mortensen
               </div>
               <div className="font-mono text-[10px] tracking-wider uppercase text-muted mt-1">
-                Founder · 15 år: McKinsey · Nilfisk · GetWhy · UserTribe
+                Founder · 15 år: McKinsey · Nilfisk · GetWhy · home
               </div>
             </div>
           </div>

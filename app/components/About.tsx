@@ -30,7 +30,7 @@ export default function About() {
             <div className="space-y-4 text-lg text-neutral-700 leading-relaxed">
               <p>
                 Efter 15+ år i kommercielle roller — McKinsey, Nilfisk, GetWhy,
-                UserTribe — fra konsulent-verden til scale-up til stor corporate —
+                home — fra konsulent-verden til scale-up til stor corporate —
                 har jeg set hvor AI-projekter strander.
               </p>
               <p>
