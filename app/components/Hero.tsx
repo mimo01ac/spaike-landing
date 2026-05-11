@@ -1,45 +1,103 @@
-import Logo from "./Logo";
+import { Dateline, SectionLabel, Pager, SpaikeWordmark } from "./EditorialUI";
+
+const stats: [string, string][] = [
+  ["48 t", "fra kick-off til handlingsplan"],
+  ["3-5", "medarbejdere AI-interviewet"],
+  ["10", "gratis Discovery-spots i beta"],
+];
 
 export default function Hero() {
   return (
-    <section
-      id="top"
-      className="max-w-content mx-auto px-6 py-20 md:py-28 text-center"
-    >
-      <div className="flex justify-center mb-10 md:mb-14">
-        <Logo size="lg" />
+    <section id="top" className="flex flex-col">
+      <Dateline
+        left="Vol. I · Beta · Maj 2026"
+        mid="København · Danmark"
+        right="For mid-market CEOs"
+      />
+
+      <div className="max-w-editorial mx-auto w-full grid md:grid-cols-[1.15fr_1fr] gap-0 px-6 md:px-14 pt-14 md:pt-16 pb-14">
+        {/* LEFT — Forsidehistorien */}
+        <div className="md:pr-12 md:border-r border-rule flex flex-col gap-7 pb-10 md:pb-0">
+          <SectionLabel>Forsidehistorien</SectionLabel>
+
+          <div className="-mb-2">
+            <SpaikeWordmark size="xl" />
+          </div>
+
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-[96px] font-normal leading-[0.95] tracking-tight text-ink">
+            AI der flytter <em className="italic font-normal">forretnings­tal.</em>
+          </h1>
+
+          <p className="font-serif text-lg md:text-xl leading-relaxed text-ink-soft max-w-[500px]">
+            De fleste virksomheder har afprøvet AI — få har set det reelt flytte
+            tallene. SpAIke hjælper danske mid-market virksomheder fra
+            AI-eksperimenter til <em className="italic">målbare</em> business-resultater. Sparet
+            tid, frigjorte ressourcer, højere kvalitet i output.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4 mt-2">
+            <a
+              href="#discovery"
+              className="bg-ink text-cream px-6 py-4 font-sans text-sm font-medium hover:bg-ink/85 transition-colors"
+            >
+              Kør gratis Discovery →
+            </a>
+            <a
+              href="#cases"
+              className="font-sans text-sm text-ink underline underline-offset-4 decoration-rule hover:decoration-ink"
+            >
+              Se hvem vi har leveret for
+            </a>
+          </div>
+        </div>
+
+        {/* RIGHT — Et lille manifest + founder + stats */}
+        <div className="md:pl-12 pt-10 md:pt-0 flex flex-col gap-7">
+          <SectionLabel>Et lille manifest</SectionLabel>
+
+          <blockquote className="font-serif text-xl md:text-[28px] leading-[1.3] italic text-ink">
+            "Det er ikke teknologien der mangler. Det er{" "}
+            <span className="text-amber-dark not-italic font-semibold">
+              kombinationen
+            </span>{" "}
+            af forretnings­forståelse og hands-on AI-byggeri."
+          </blockquote>
+
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-ink text-cream flex items-center justify-center font-serif font-semibold text-lg">
+              MM
+            </div>
+            <div>
+              <div className="font-sans text-sm font-semibold text-ink">
+                Michael Mortensen
+              </div>
+              <div className="font-mono text-[10px] tracking-wider uppercase text-muted mt-1">
+                Founder · 15 år: McKinsey · Nilfisk · GetWhy · UserTribe
+              </div>
+            </div>
+          </div>
+
+          <div className="h-px bg-rule mt-auto" />
+
+          <div className="grid grid-cols-3 gap-0">
+            {stats.map(([n, l], i) => (
+              <div
+                key={i}
+                className={`px-4 md:px-5 pt-1 ${i ? "border-l border-rule" : ""}`}
+              >
+                <div className="font-serif text-4xl md:text-5xl font-medium leading-none tracking-tight">
+                  {n}
+                </div>
+                <div className="font-sans text-xs text-muted mt-2 leading-snug">
+                  {l}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 md:mb-8 leading-tight">
-        AI der flytter forretningstal.
-      </h1>
-      <p className="text-lg md:text-2xl text-neutral-700 max-w-3xl mx-auto leading-relaxed mb-6">
-        De fleste virksomheder har afprøvet AI — få har set det reelt flytte
-        tallene. SpAIke hjælper danske mid-market virksomheder fra
-        AI-eksperimenter til målbare business-resultater. Sparet tid, frigjorte
-        ressourcer, højere kvalitet i output.
-      </p>
-      <p className="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed mb-10 md:mb-12">
-        Start med vores gratis SpAIke Discovery: 3-5 medarbejdere bliver
-        AI-interviewet, og I får en konkret handlingsplan på 48 timer.
-      </p>
-      <div className="flex items-center justify-center gap-6 flex-wrap mb-12 md:mb-16">
-        <a
-          href="#discovery"
-          className="bg-spaike-blue hover:bg-spaike-blue-dark text-black font-semibold px-8 py-4 rounded-lg transition-colors text-base md:text-lg"
-        >
-          Kør gratis Discovery →
-        </a>
-        <a
-          href="#cases"
-          className="text-neutral-700 hover:text-neutral-900 font-medium underline-offset-4 hover:underline"
-        >
-          Se hvem vi har leveret for
-        </a>
-      </div>
-      <p className="text-sm md:text-base text-neutral-500 max-w-2xl mx-auto leading-relaxed">
-        Bygget af Michael Mortensen — 15+ års kommerciel erfaring fra McKinsey,
-        Nilfisk, GetWhy og UserTribe. Vi binder forretning og AI sammen.
-      </p>
+
+      <Pager n="01" of="06" next="Hvad vi bygger" />
     </section>
   );
 }

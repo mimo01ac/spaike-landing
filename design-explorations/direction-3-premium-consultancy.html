@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpAIke — Direction 3: Premium Consultancy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-cream: #FAF7EE;
+  --bg-cream-deep: #EFE9D7;
+  --bg-teal: #0F2A36;
+  --bg-teal-light: #1A3D4A;
+  --text-primary: #1A1810;
+  --text-secondary: #514D40;
+  --text-muted: #76705F;
+  --text-on-dark: #F4EFE0;
+  --accent: #5ECEEA;
+  --accent-warm: #C97A4A;
+  --accent-warm-light: #E69266;
+  --border-cream: #DFD8C2;
+  --border-warm: #C9C0A6;
+  --content-width: 1120px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-cream);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.serif {
+  font-family: 'Newsreader', Georgia, serif;
+  font-variation-settings: "opsz" 60;
+}
+.container { max-width: var(--content-width); margin: 0 auto; padding: 0 32px; }
+
+/* Header */
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 247, 238, 0.94); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-cream);
+}
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: 'Newsreader', serif; font-weight: 600; font-size: 24px; letter-spacing: -0.015em; }
+.logo svg { width: 22px; height: 22px; color: var(--accent-warm); }
+.logo .ai { color: var(--accent-warm); font-style: italic; }
+.nav-links { display: flex; gap: 30px; font-size: 14px; font-weight: 500; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text-primary); }
+.cta-btn {
+  background: var(--bg-teal); color: var(--text-on-dark); padding: 11px 22px; border-radius: 6px;
+  font-weight: 600; font-size: 14px; text-decoration: none; transition: background 0.2s;
+  letter-spacing: 0.01em;
+}
+.cta-btn:hover { background: var(--bg-teal-light); }
+.cta-btn-primary {
+  background: var(--accent-warm); color: #FFFFFF;
+  padding: 16px 32px; font-size: 16px; font-weight: 600; border-radius: 8px;
+}
+.cta-btn-primary:hover { background: var(--accent-warm-light); }
+
+/* Hero */
+.hero { padding: 90px 0 80px; position: relative; }
+.hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: end; }
+.hero-content { }
+.hero-logo { display: flex; align-items: center; gap: 16px; margin-bottom: 56px; }
+.hero-logo svg { width: 44px; height: 44px; color: var(--accent-warm); }
+.hero-logo span { font-family: 'Newsreader', serif; font-size: 56px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.hero-logo .ai { color: var(--accent-warm); font-style: italic; }
+
+.hero h1 {
+  font-family: 'Newsreader', serif;
+  font-size: clamp(48px, 6.5vw, 92px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  margin-bottom: 32px;
+}
+.hero h1 em { font-style: italic; color: var(--accent-warm); }
+
+/* Spike line — warm accent */
+.spike-container {
+  max-width: 600px; margin: 32px 0 40px;
+  height: 90px;
+}
+.spike-svg { width: 100%; height: 100%; }
+.spike-base { stroke: var(--border-warm); stroke-width: 1; fill: none; }
+.spike-line {
+  stroke: var(--accent-warm);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawSpike 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+@keyframes drawSpike { to { stroke-dashoffset: 0; } }
+.spike-dot { fill: var(--accent-warm); opacity: 0; animation: fadeDot 0.4s ease 2.5s forwards; }
+@keyframes fadeDot { to { opacity: 1; } }
+.spike-label {
+  font-family: 'Newsreader', serif; font-style: italic;
+  font-size: 13px; fill: var(--text-muted);
+  opacity: 0; animation: fadeDot 0.6s ease 2.7s forwards;
+}
+
+.hero-sub {
+  font-size: 21px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 18px;
+  max-width: 600px;
+}
+.hero-sub strong { color: var(--text-primary); font-weight: 600; }
+.hero-action-line {
+  font-size: 16px; color: var(--text-muted);
+  max-width: 560px; margin-bottom: 36px;
+}
+.hero-cta-row { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+.hero-sec-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 15px; border-bottom: 1px solid var(--border-cream); padding-bottom: 2px; transition: all 0.2s; }
+.hero-sec-link:hover { color: var(--text-primary); border-color: var(--text-primary); }
+
+/* Right column — founder note */
+.founder-block {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-cream);
+  border-radius: 4px;
+  padding: 36px 32px;
+  position: relative;
+}
+.founder-block::before {
+  content: "“";
+  position: absolute; top: 12px; left: 20px;
+  font-family: 'Newsreader', serif; font-size: 80px; color: var(--accent-warm);
+  line-height: 1; opacity: 0.5;
+}
+.founder-block .eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; padding-top: 24px; }
+.founder-block .quote {
+  font-family: 'Newsreader', serif; font-size: 19px; line-height: 1.45;
+  color: var(--text-primary); margin-bottom: 24px; font-style: italic;
+}
+.founder-block .quote em { color: var(--accent-warm); font-style: italic; }
+.founder-block .signature {
+  display: flex; align-items: center; gap: 14px; padding-top: 20px; border-top: 1px solid var(--border-cream);
+}
+.founder-block .avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-teal); color: var(--text-on-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Newsreader', serif; font-size: 18px; font-weight: 500;
+  letter-spacing: 0;
+}
+.founder-block .who { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
+.founder-block .who strong { color: var(--text-primary); font-weight: 600; display: block; font-size: 14px; }
+
+/* What we build — cream-deep section */
+.what-section { background: var(--bg-cream-deep); padding: 110px 0; }
+.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.what-section h2 {
+  font-family: 'Newsreader', serif;
+  font-size: clamp(40px, 5vw, 68px); font-weight: 400; letter-spacing: -0.025em; line-height: 1.02;
+  margin-bottom: 24px; max-width: 720px;
+}
+.what-section h2 em { font-style: italic; color: var(--accent-warm); }
+.what-section .lead { font-size: 18px; color: var(--text-secondary); max-width: 620px; margin-bottom: 64px; }
+.what-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--border-warm); }
+.what-item {
+  padding: 36px 32px 36px 0;
+  border-bottom: 1px solid var(--border-warm);
+  position: relative;
+}
+.what-item:nth-child(odd) { padding-right: 48px; }
+.what-item:nth-child(even) { padding-left: 48px; border-left: 1px solid var(--border-warm); }
+.what-item:nth-child(odd):not(:last-child)::after { content: ""; }
+.what-item .num {
+  font-family: 'Newsreader', serif; font-style: italic;
+  color: var(--accent-warm); font-size: 16px; font-weight: 500;
+  margin-bottom: 14px; display: inline-block;
+}
+.what-item h3 { font-family: 'Newsreader', serif; font-size: 26px; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 12px; line-height: 1.15; }
+.what-item p { color: var(--text-secondary); font-size: 16px; }
+
+/* Manifest — dark teal section for contrast */
+.manifest { background: var(--bg-teal); color: var(--text-on-dark); padding: 130px 0 110px; position: relative; }
+.manifest .eyebrow { color: var(--accent); }
+.thesis-card { margin-bottom: 80px; }
+.thesis-card h2 {
+  font-family: 'Newsreader', serif;
+  font-size: clamp(44px, 6vw, 80px); font-weight: 400;
+  letter-spacing: -0.03em; line-height: 1.0;
+  margin-bottom: 32px; max-width: 900px;
+}
+.thesis-card h2 em { font-style: italic; color: var(--accent); }
+.thesis-card .thesis-body {
+  font-family: 'Newsreader', serif;
+  font-size: 22px; line-height: 1.5; max-width: 720px;
+  color: rgba(244, 239, 224, 0.78);
+}
+.thesis-card .thesis-body strong { color: var(--text-on-dark); font-weight: 500; }
+
+.beliefs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 56px; max-width: 980px; }
+.belief { padding-top: 20px; border-top: 1px solid rgba(244, 239, 224, 0.15); }
+.belief .num { color: var(--accent); font-family: 'Newsreader', serif; font-style: italic; font-size: 15px; margin-bottom: 6px; display: block; }
+.belief h4 { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 10px; line-height: 1.2; }
+.belief p { color: rgba(244, 239, 224, 0.7); font-size: 15px; }
+
+/* Footer note */
+.footer-note { text-align: center; padding: 80px 0 40px; background: var(--bg-cream); font-family: 'Newsreader', serif; font-style: italic; color: var(--text-muted); font-size: 16px; }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .hero-logo span { font-size: 44px; }
+  .hero-logo svg { width: 32px; height: 32px; }
+}
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .what-grid, .beliefs { grid-template-columns: 1fr; gap: 24px; }
+  .what-item:nth-child(odd), .what-item:nth-child(even) { padding-left: 0; padding-right: 0; border-left: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-2 8L18 10h-7l2-8z"/></svg>
+      <span>Sp<span class="ai">AI</span>ke</span>
+    </div>
+    <div class="nav-links">
+      <a href="#">Hvad vi bygger</a>
+      <a href="#">Cases</a>
+      <a href="#">Discovery</a>
+      <a href="#">Om</a>
+    </div>
+    <a href="#" class="cta-btn">Kom på waitlist</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-2 8L18 10h-7l2-8z"/></svg>
+        <span>Sp<span class="ai">AI</span>ke</span>
+      </div>
+
+      <h1>AI der flytter <em>forretningstal.</em></h1>
+
+      <div class="spike-container">
+        <svg class="spike-svg" viewBox="0 0 600 90" preserveAspectRatio="none">
+          <line class="spike-base" x1="0" y1="65" x2="600" y2="65" />
+          <polyline class="spike-line"
+            points="0,65 80,63 160,66 240,64 320,66 360,65 380,12 400,65 480,64 560,66 600,65"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <circle class="spike-dot" cx="380" cy="12" r="4" />
+          <text class="spike-label" x="395" y="10">impact</text>
+        </svg>
+      </div>
+
+      <p class="hero-sub">
+        <strong>De fleste virksomheder har afprøvet AI</strong> — få har set det reelt flytte tallene. SpAIke hjælper danske mid-market virksomheder fra AI-eksperimenter til målbare business-resultater. Sparet tid, frigjorte ressourcer, højere kvalitet i output.
+      </p>
+      <p class="hero-action-line">
+        Start med vores gratis SpAIke Discovery: 3-5 medarbejdere bliver AI-interviewet, og I får en konkret handlingsplan på 48 timer.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="#" class="cta-btn cta-btn-primary">Kør gratis Discovery →</a>
+        <a href="#" class="hero-sec-link">Se hvem vi har leveret for</a>
+      </div>
+    </div>
+
+    <div class="founder-block">
+      <p class="eyebrow">Founder note</p>
+      <p class="quote">
+        Det er ikke teknologien der mangler. Det er <em>kombinationen</em> af forretningsforståelse og hands-on AI-byggeri. Det er det vi løser.
+      </p>
+      <div class="signature">
+        <div class="avatar">M</div>
+        <div class="who">
+          <strong>Michael Mortensen</strong>
+          15+ år · McKinsey, Nilfisk, GetWhy, UserTribe
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="what-section">
+  <div class="container">
+    <p class="eyebrow">Hvad vi bygger</p>
+    <h2 class="serif">AI-automation hvor jeres <em>virksomhed sidder fast.</em></h2>
+    <p class="lead">Hvad det bliver for jer afhænger af jeres Discovery-rapport. Vi har leveret alle fire kategorier hos eksisterende klienter.</p>
+
+    <div class="what-grid">
+      <div class="what-item">
+        <span class="num">i</span>
+        <h3>Kundeservice-automation</h3>
+        <p>AI på indbakker, chatbots, voice agents. Færre admin-timer, kortere svartider, konsistent kvalitet.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">ii</span>
+        <h3>Salgs-acceleration</h3>
+        <p>CRM-automation, pitch-assistenter, lead-routing. Mere tid til kundekontakt, mindre tid på admin.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">iii</span>
+        <h3>Videns-arbejde</h3>
+        <p>Søgning i jeres egen dokumentation, automatisk sagsoprettelse, intern AI-assistent. Viden bliver brugbar.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">iv</span>
+        <h3>Ops &amp; proces-digitalisering</h3>
+        <p>Workflow-automation, kategorisering, end-to-end flows fra produktion til færdigvare.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="manifest">
+  <div class="container">
+    <p class="eyebrow">Hvad vi tror på</p>
+    <div class="thesis-card">
+      <h2>Spiken er i <em>kombinationen.</em></h2>
+      <p class="thesis-body">
+        <strong>AI alene giver kapacitet. Forretningsforståelse alene giver retning.</strong> Det er kombinationen der skaber målbart impact.
+      </p>
+    </div>
+
+    <div class="beliefs">
+      <div class="belief">
+        <span class="num">i</span>
+        <h4>AI er ikke magi — det er infrastruktur.</h4>
+        <p>ROI først, hype senere. Vi bygger det der virker, ikke det der lyder smart.</p>
+      </div>
+      <div class="belief">
+        <span class="num">ii</span>
+        <h4>Start med data, ikke meninger.</h4>
+        <p>Ingen seks-ugers discovery før vi kan levere værdi. Vores assessment kører på 48 timer.</p>
+      </div>
+      <div class="belief">
+        <span class="num">iii</span>
+        <h4>Commercial-first, ikke tech-first.</h4>
+        <p>Løsningen tjener forretningen, ikke omvendt. 15 år på den kommercielle side bag os.</p>
+      </div>
+      <div class="belief">
+        <span class="num">iv</span>
+        <h4>Vi bygger med jer, ikke til jer.</h4>
+        <p>I skal kunne drive det selv bagefter. Ingen leverandør-lock-in.</p>
+      </div>
+      <div class="belief">
+        <span class="num">v</span>
+        <h4>Ærlighed om hvad AI kan og ikke kan.</h4>
+        <p>Du hører "det duer ikke her" lige så ofte som "det her kan vi løse".</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer-note">— Direction 3: Premium Consultancy —</div>
+
+</body>
+</html>

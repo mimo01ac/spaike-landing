@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpAIke — Direction 1: Editorial Confidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,0..100&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-cream: #F4EFE3;
+  --text-primary: #0A0A0A;
+  --text-secondary: #4A4A4A;
+  --text-muted: #6E6E6E;
+  --accent: #5ECEEA;
+  --accent-dark: #3FB6D4;
+  --teal-dark: #0F2A36;
+  --border: #E5E0D2;
+  --content-width: 1100px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.serif {
+  font-family: 'Fraunces', Georgia, serif;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  letter-spacing: -0.02em;
+}
+.container { max-width: var(--content-width); margin: 0 auto; padding: 0 32px; }
+
+/* Header */
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,0.94); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+.logo svg { width: 22px; height: 22px; color: var(--accent); }
+.logo .ai { color: var(--accent); }
+.nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text-primary); }
+.cta-btn {
+  background: var(--accent); color: #000; padding: 10px 20px; border-radius: 8px;
+  font-weight: 600; font-size: 14px; text-decoration: none; transition: background 0.2s;
+}
+.cta-btn:hover { background: var(--accent-dark); }
+.cta-btn-lg { padding: 16px 32px; font-size: 17px; border-radius: 10px; }
+
+/* Hero */
+.hero { padding: 100px 0 60px; text-align: center; position: relative; }
+.hero-logo { display: flex; justify-content: center; align-items: center; gap: 18px; margin-bottom: 48px; }
+.hero-logo svg { width: 56px; height: 56px; color: var(--accent); }
+.hero-logo span { font-family: 'Fraunces', serif; font-size: 72px; font-weight: 700; letter-spacing: -0.04em; }
+.hero-logo .ai { color: var(--accent); }
+.hero h1 {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  margin-bottom: 32px;
+  max-width: 900px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em { font-style: italic; font-weight: 500; color: var(--text-secondary); }
+
+/* Spike line */
+.spike-container {
+  max-width: 780px; margin: 0 auto 40px;
+  height: 80px; overflow: visible;
+}
+.spike-svg { width: 100%; height: 100%; }
+.spike-line {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawSpike 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+}
+@keyframes drawSpike { to { stroke-dashoffset: 0; } }
+.spike-dot {
+  fill: var(--accent);
+  opacity: 0;
+  animation: fadeDot 0.4s ease 2.6s forwards;
+}
+@keyframes fadeDot { to { opacity: 1; } }
+
+.hero-sub {
+  font-size: 21px;
+  color: var(--text-secondary);
+  max-width: 720px; margin: 0 auto 24px;
+  line-height: 1.55;
+}
+.hero-sub strong { color: var(--text-primary); font-weight: 600; }
+.hero-action-line {
+  font-size: 17px; color: var(--text-muted);
+  max-width: 620px; margin: 0 auto 40px;
+}
+.hero-cta-row { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; align-items: center; }
+.hero-sec-link { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 16px; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+.hero-sec-link:hover { border-color: var(--text-primary); }
+.founder-line { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); font-size: 15px; color: var(--text-muted); max-width: 680px; margin-left: auto; margin-right: auto; font-style: italic; font-family: 'Fraunces', serif; }
+.founder-line strong { font-style: normal; font-family: 'Inter', sans-serif; color: var(--text-primary); font-weight: 600; }
+
+/* What we build — cream section */
+.what-section { background: var(--bg-cream); padding: 100px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.what-section h2 {
+  font-size: clamp(36px, 4.5vw, 60px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05;
+  margin-bottom: 24px; max-width: 720px;
+}
+.what-section .lead { font-size: 18px; color: var(--text-secondary); max-width: 620px; margin-bottom: 64px; }
+.what-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 56px 64px; }
+.what-item { }
+.what-item .num { color: var(--accent-dark); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; margin-bottom: 10px; display: inline-block; }
+.what-item h3 { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 12px; line-height: 1.15; }
+.what-item p { color: var(--text-secondary); font-size: 16px; }
+
+/* Manifest */
+.manifest { padding: 110px 0; }
+.thesis-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px;
+  margin-bottom: 56px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  position: relative;
+  overflow: hidden;
+}
+.thesis-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+}
+.thesis-card h2 { font-family: 'Fraunces', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 18px; }
+.thesis-card h2 em { font-style: italic; color: var(--accent-dark); }
+.thesis-card p { font-size: 19px; color: var(--text-secondary); max-width: 720px; }
+.thesis-card p strong { color: var(--text-primary); font-weight: 600; }
+
+.beliefs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px 56px; max-width: 960px; }
+.belief { display: flex; gap: 16px; }
+.belief .num { color: var(--accent-dark); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; padding-top: 4px; }
+.belief h4 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500; line-height: 1.2; margin-bottom: 6px; letter-spacing: -0.01em; }
+.belief p { color: var(--text-secondary); font-size: 15px; }
+
+/* Footer note */
+.footer-note { text-align: center; padding: 80px 0 40px; font-family: 'Fraunces', serif; font-style: italic; color: var(--text-muted); font-size: 16px; }
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .what-grid, .beliefs { grid-template-columns: 1fr; gap: 32px; }
+  .hero-logo span { font-size: 48px; }
+  .hero-logo svg { width: 36px; height: 36px; }
+  .thesis-card { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-2 8L18 10h-7l2-8z"/></svg>
+      <span>Sp<span class="ai">AI</span>ke</span>
+    </div>
+    <div class="nav-links">
+      <a href="#">Hvad vi bygger</a>
+      <a href="#">Cases</a>
+      <a href="#">Discovery</a>
+      <a href="#">Om</a>
+    </div>
+    <a href="#" class="cta-btn">Kom på waitlist</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-logo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-2 8L18 10h-7l2-8z"/></svg>
+      <span>Sp<span class="ai">AI</span>ke</span>
+    </div>
+
+    <h1>AI der flytter <em>forretningstal.</em></h1>
+
+    <div class="spike-container">
+      <svg class="spike-svg" viewBox="0 0 800 80" preserveAspectRatio="none">
+        <polyline class="spike-line"
+          points="0,60 80,58 160,60 240,59 320,60 400,58 460,60 480,60 500,8 520,60 560,60 640,58 720,60 800,60"
+          stroke-linecap="round" stroke-linejoin="round" />
+        <circle class="spike-dot" cx="500" cy="8" r="4" />
+      </svg>
+    </div>
+
+    <p class="hero-sub">
+      <strong>De fleste virksomheder har afprøvet AI</strong> — få har set det reelt flytte tallene. SpAIke hjælper danske mid-market virksomheder fra AI-eksperimenter til målbare business-resultater. Sparet tid, frigjorte ressourcer, højere kvalitet i output.
+    </p>
+    <p class="hero-action-line">
+      Start med vores gratis SpAIke Discovery: 3-5 medarbejdere bliver AI-interviewet, og I får en konkret handlingsplan på 48 timer.
+    </p>
+
+    <div class="hero-cta-row">
+      <a href="#" class="cta-btn cta-btn-lg">Kør gratis Discovery →</a>
+      <a href="#" class="hero-sec-link">Se hvem vi har leveret for</a>
+    </div>
+
+    <p class="founder-line">
+      Bygget af <strong>Michael Mortensen</strong> — 15+ års kommerciel erfaring fra McKinsey, Nilfisk, GetWhy og UserTribe. Vi binder forretning og AI sammen.
+    </p>
+  </div>
+</section>
+
+<section class="what-section">
+  <div class="container">
+    <p class="eyebrow">Hvad vi bygger</p>
+    <h2 class="serif">AI-automation hvor jeres virksomhed sidder fast.</h2>
+    <p class="lead">Hvad det bliver for jer afhænger af jeres Discovery-rapport. Vi har leveret alle fire kategorier hos eksisterende klienter.</p>
+
+    <div class="what-grid">
+      <div class="what-item">
+        <span class="num">01</span>
+        <h3>Kundeservice-automation</h3>
+        <p>AI på indbakker, chatbots, voice agents. Færre admin-timer, kortere svartider, konsistent kvalitet.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">02</span>
+        <h3>Salgs-acceleration</h3>
+        <p>CRM-automation, pitch-assistenter, lead-routing. Mere tid til kundekontakt, mindre tid på admin.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">03</span>
+        <h3>Videns-arbejde</h3>
+        <p>Søgning i jeres egen dokumentation, automatisk sagsoprettelse, intern AI-assistent. Viden bliver brugbar.</p>
+      </div>
+      <div class="what-item">
+        <span class="num">04</span>
+        <h3>Ops &amp; proces-digitalisering</h3>
+        <p>Workflow-automation, kategorisering, end-to-end flows fra produktion til færdigvare.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="manifest">
+  <div class="container">
+    <p class="eyebrow">Hvad vi tror på</p>
+    <div class="thesis-card">
+      <h2 class="serif">Spiken er i <em>kombinationen.</em></h2>
+      <p><strong>AI alene giver kapacitet. Forretningsforståelse alene giver retning.</strong> Det er kombinationen der skaber målbart impact.</p>
+    </div>
+
+    <div class="beliefs">
+      <div class="belief">
+        <span class="num">01</span>
+        <div>
+          <h4>AI er ikke magi — det er infrastruktur.</h4>
+          <p>ROI først, hype senere. Vi bygger det der virker, ikke det der lyder smart.</p>
+        </div>
+      </div>
+      <div class="belief">
+        <span class="num">02</span>
+        <div>
+          <h4>Start med data, ikke meninger.</h4>
+          <p>Ingen seks-ugers discovery før vi kan levere værdi. Vores assessment kører på 48 timer.</p>
+        </div>
+      </div>
+      <div class="belief">
+        <span class="num">03</span>
+        <div>
+          <h4>Commercial-first, ikke tech-first.</h4>
+          <p>Løsningen tjener forretningen, ikke omvendt. 15 år på den kommercielle side bag os.</p>
+        </div>
+      </div>
+      <div class="belief">
+        <span class="num">04</span>
+        <div>
+          <h4>Vi bygger med jer, ikke til jer.</h4>
+          <p>I skal kunne drive det selv bagefter. Ingen leverandør-lock-in.</p>
+        </div>
+      </div>
+      <div class="belief">
+        <span class="num">05</span>
+        <div>
+          <h4>Ærlighed om hvad AI kan og ikke kan.</h4>
+          <p>Du hører "det duer ikke her" lige så ofte som "det her kan vi løse".</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer-note">— Direction 1: Editorial Confidence —</div>
+
+</body>
+</html>

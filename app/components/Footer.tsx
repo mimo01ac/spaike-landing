@@ -1,68 +1,42 @@
-import Logo from "./Logo";
+import { DoubleRule, SpaikeWordmark } from "./EditorialUI";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-neutral-200 bg-background-secondary py-12 md:py-16">
-      <div className="max-w-content mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-10 md:gap-16">
-          <div className="space-y-4 max-w-sm">
-            <Logo size="sm" />
-            <p className="text-sm text-neutral-700 leading-relaxed">
+    <footer className="bg-cream-deep">
+      <DoubleRule />
+      <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-10 pb-7">
+        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-12">
+          <div>
+            <SpaikeWordmark size="lg" />
+            <p className="font-serif italic text-base text-ink-soft leading-snug mt-4 max-w-sm">
               AI der flytter forretningstal — bygget af en der har stået i
               kommercielle roller i 15+ år.
             </p>
-            <p className="text-xs text-neutral-500">
-              Drevet af mimoco ApS · Spiken er i kombinationen.
+            <p className="font-mono text-[10px] tracking-widest uppercase text-muted mt-4">
+              Drevet af mimoco ApS · Spiken er i kombinationen · AI + Commercial
             </p>
           </div>
-
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide text-neutral-900">
+          <div>
+            <p className="font-mono text-[10px] tracking-widest uppercase text-muted mb-3.5">
               Site
-            </h3>
-            <ul className="space-y-2 text-sm text-neutral-700">
-              <li>
-                <a href="#hvad-vi-bygger" className="hover:text-neutral-900 transition-colors">
-                  Hvad vi bygger
-                </a>
-              </li>
-              <li>
-                <a href="#cases" className="hover:text-neutral-900 transition-colors">
-                  Cases
-                </a>
-              </li>
-              <li>
-                <a href="#discovery" className="hover:text-neutral-900 transition-colors">
-                  Discovery
-                </a>
-              </li>
-              <li>
-                <a href="#manifest" className="hover:text-neutral-900 transition-colors">
-                  Manifest
-                </a>
-              </li>
-              <li>
-                <a href="#om" className="hover:text-neutral-900 transition-colors">
-                  Om Michael
-                </a>
-              </li>
-              <li>
-                <a href="#waitlist" className="hover:text-neutral-900 transition-colors">
-                  Waitlist
-                </a>
-              </li>
+            </p>
+            <ul className="font-serif text-base space-y-2">
+              <li><a href="#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">Hvad vi bygger</a></li>
+              <li><a href="#cases" className="hover:text-amber-dark transition-colors">Cases</a></li>
+              <li><a href="#discovery" className="hover:text-amber-dark transition-colors">Discovery</a></li>
+              <li><a href="#manifest" className="hover:text-amber-dark transition-colors">Manifest</a></li>
+              <li><a href="#waitlist" className="hover:text-amber-dark transition-colors">Waitlist</a></li>
             </ul>
           </div>
-
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide text-neutral-900">
+          <div>
+            <p className="font-mono text-[10px] tracking-widest uppercase text-muted mb-3.5">
               Kontakt
-            </h3>
-            <ul className="space-y-2 text-sm text-neutral-700">
+            </p>
+            <ul className="font-serif text-base space-y-2">
               <li>
                 <a
                   href="mailto:michael@spaike.dk"
-                  className="hover:text-neutral-900 transition-colors"
+                  className="hover:text-amber-dark transition-colors"
                 >
                   michael@spaike.dk
                 </a>
@@ -72,7 +46,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/in/michaelsbm/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-neutral-900 transition-colors"
+                  className="hover:text-amber-dark transition-colors"
                 >
                   LinkedIn
                 </a>
@@ -80,7 +54,7 @@ export default function Footer() {
               <li>
                 <a
                   href="https://assessment.spaike.dk"
-                  className="hover:text-neutral-900 transition-colors"
+                  className="hover:text-amber-dark transition-colors"
                 >
                   SpAIke Discovery →
                 </a>
@@ -88,7 +62,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-neutral-200 text-xs text-neutral-500 flex flex-col md:flex-row md:justify-between gap-2">
+        <div className="mt-9 pt-4 border-t border-rule flex justify-between font-mono text-[10px] tracking-widest uppercase text-muted">
           <span>© {new Date().getFullYear()} mimoco ApS</span>
           <span>spaike.dk</span>
         </div>

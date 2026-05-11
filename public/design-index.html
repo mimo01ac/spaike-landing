@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpAIke — Design Exploration (Bølge 1)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0A0A0A;
+    color: #FAFAF9;
+    padding: 60px 40px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .subtitle { color: #888; margin-bottom: 48px; max-width: 680px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; max-width: 1200px; }
+  .card {
+    background: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 16px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+    display: block;
+  }
+  .card:hover { border-color: #5ECEEA; transform: translateY(-2px); }
+  .tag { display: inline-block; background: #5ECEEA; color: #000; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+  .card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .card .vibe { color: #5ECEEA; font-size: 14px; margin-bottom: 16px; }
+  .card p { color: #999; font-size: 14px; margin-bottom: 16px; }
+  .specs { font-size: 12px; color: #777; line-height: 1.8; }
+  .specs strong { color: #BBB; font-weight: 600; }
+  .open-link { color: #5ECEEA; font-weight: 600; font-size: 14px; margin-top: 16px; display: inline-block; }
+  .open-link:hover { text-decoration: underline; }
+  .note { margin-top: 60px; padding: 20px; background: #1A1A1A; border-left: 3px solid #5ECEEA; border-radius: 0 8px 8px 0; max-width: 800px; color: #BBB; font-size: 14px; }
+</style>
+</head>
+<body>
+  <h1>SpAIke — Design Exploration (Bølge 1)</h1>
+  <p class="subtitle">Tre design-direktioner for spaike.dk redesign. Hver er en fuld hero + manifest preview med forskellig typografi, farvepalette og spike-line treatment. Klik for at åbne — eller åbn dem direkte i filsystemet.</p>
+
+  <div class="grid">
+    <a href="./direction-1-editorial.html" class="card">
+      <span class="tag">Direction 1</span>
+      <h2>Editorial Confidence</h2>
+      <div class="vibe">Serif headlines · Warm cream · Elegant restraint</div>
+      <p>Klassisk editorial register med modern serif (Fraunces). Cream/sand på vekslende sektioner. Tæt på "magasin"-følelse — voksent, kuratet.</p>
+      <div class="specs">
+        <strong>Headline:</strong> Fraunces (variable serif)<br>
+        <strong>Body:</strong> Inter<br>
+        <strong>Palette:</strong> Hvid + cream (#F4EFE3) + cyan accent<br>
+        <strong>Vibe:</strong> Monocle, NYT Style, BCG Insights
+      </div>
+      <span class="open-link">Åbn prototype →</span>
+    </a>
+
+    <a href="./direction-2-tech-forward.html" class="card">
+      <span class="tag">Direction 2</span>
+      <h2>Modern Tech-Forward</h2>
+      <div class="vibe">Heavy sans · Tight tracking · Graphic spike</div>
+      <p>Distinkt geometrisk sans (Geist) i tunge vægte. Subtle dot-grid baggrund. Stor graphic spike-line. Mere "Vercel/Linear"-register — minimal og selvsikker.</p>
+      <div class="specs">
+        <strong>Headline:</strong> Geist (variable sans)<br>
+        <strong>Body:</strong> Geist regular<br>
+        <strong>Palette:</strong> Hvid + dot-grid + cyan accent<br>
+        <strong>Vibe:</strong> Vercel, Linear, Stripe, Resend
+      </div>
+      <span class="open-link">Åbn prototype →</span>
+    </a>
+
+    <a href="./direction-3-premium-consultancy.html" class="card">
+      <span class="tag">Direction 3</span>
+      <h2>Premium Consultancy</h2>
+      <div class="vibe">Serif + warm · Cream + teal · Gravitas</div>
+      <p>Mix af scharper serif (Newsreader) + Inter. Cream baseline med deep-teal kontrast-sektioner. Tæt på BCG/Bain/Brunswick-visuel-register. Tungere autoritet.</p>
+      <div class="specs">
+        <strong>Headline:</strong> Newsreader (serif)<br>
+        <strong>Body:</strong> Inter<br>
+        <strong>Palette:</strong> Cream baseline + deep teal + cyan + warm sand<br>
+        <strong>Vibe:</strong> BCG, Bain, Brunswick, McKinsey Insights
+      </div>
+      <span class="open-link">Åbn prototype →</span>
+    </a>
+  </div>
+
+  <div class="note">
+    <strong style="color:#5ECEEA;">Hvordan du sammenligner:</strong><br>
+    Åbn alle tre i hver sin browser-tab og skift mellem dem med Cmd+Tab. Fokusér på første-indtryk i hero — hvilken typografi og farvefølelse rammer dig som "det her er SpAIke"? Tag også note af hvordan spike-line-animationen lander forskelligt i hver direction.
+  </div>
+</body>
+</html>

@@ -1,17 +1,23 @@
+import { SectionLabel, Pager, DoubleRule } from "./EditorialUI";
+
 const categories = [
   {
+    n: "01",
     title: "Kundeservice-automation",
     body: "AI på indbakker, chatbots, voice agents. Færre admin-timer, kortere svartider, konsistent kvalitet.",
   },
   {
+    n: "02",
     title: "Salgs-acceleration",
     body: "CRM-automation, pitch-assistenter, lead-routing. Mere tid til kundekontakt, mindre tid på admin.",
   },
   {
+    n: "03",
     title: "Videns-arbejde",
-    body: "Søgning i jeres egen dokumentation, automatisk sagsoprettelse, intern AI-assistent. Viden bliver brugbar.",
+    body: "Søgning i jeres egen dokumentation, automatisk sagsoprettelse, intern AI-assistent.",
   },
   {
+    n: "04",
     title: "Ops & proces-digitalisering",
     body: "Workflow-automation, kategorisering, end-to-end flows fra produktion til færdigvare.",
   },
@@ -19,39 +25,42 @@ const categories = [
 
 export default function WhatWeBuild() {
   return (
-    <section
-      id="hvad-vi-bygger"
-      className="py-20 md:py-28 border-t border-neutral-200"
-    >
-      <div className="max-w-content mx-auto px-6">
-        <p className="text-sm font-medium text-neutral-500 tracking-widest uppercase mb-3">
-          Hvad vi bygger
-        </p>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 max-w-3xl">
-          AI-automation hvor jeres virksomhed sidder fast.
+    <section id="hvad-vi-bygger">
+      <DoubleRule />
+      <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
+        <SectionLabel>Sektion II · Hvad vi bygger</SectionLabel>
+        <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
+          AI-automation hvor jeres virksomhed{" "}
+          <em className="italic font-normal">sidder fast.</em>
         </h2>
-        <p className="text-lg text-neutral-600 max-w-3xl leading-relaxed mb-12 md:mb-16">
+        <p className="font-serif text-base md:text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
           Hvad det bliver for jer afhænger af jeres Discovery-rapport. Vi har
           leveret alle fire kategorier hos eksisterende klienter.
         </p>
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
-          {categories.map((cat, i) => (
-            <div key={i} className="space-y-3">
-              <div className="flex items-baseline gap-3">
-                <span className="text-spaike-blue font-bold text-sm tabular-nums">
-                  0{i + 1}
-                </span>
-                <h3 className="text-xl md:text-2xl font-semibold leading-tight">
-                  {cat.title}
-                </h3>
-              </div>
-              <p className="text-neutral-600 leading-relaxed pl-9">
-                {cat.body}
-              </p>
-            </div>
-          ))}
-        </div>
       </div>
+
+      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-rule">
+        {categories.map((c, i) => (
+          <div
+            key={c.n}
+            className={`px-6 md:px-7 py-8 flex flex-col gap-3.5 min-h-[280px] ${
+              i > 0 ? "border-t md:border-t-0 lg:border-l border-rule" : ""
+            } ${i > 0 && i < 4 ? "md:border-l" : ""}`}
+          >
+            <div className="font-mono text-[11px] text-amber-dark tracking-wider">
+              {c.n}
+            </div>
+            <h3 className="font-serif text-xl md:text-2xl font-medium leading-[1.15]">
+              {c.title}
+            </h3>
+            <p className="font-sans text-[13.5px] leading-relaxed text-ink-soft">
+              {c.body}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <Pager n="02" of="06" next="Cases" />
     </section>
   );
 }
