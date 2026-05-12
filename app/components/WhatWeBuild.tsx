@@ -3,22 +3,22 @@ import { SectionLabel, Pager, DoubleRule } from "./EditorialUI";
 const categories = [
   {
     n: "01",
-    title: "Kundeservice-automation",
+    title: "Når kundeservice ikke kan følge med",
     body: "AI på indbakker, chatbots, voice agents. Færre admin-timer, kortere svartider, konsistent kvalitet.",
   },
   {
     n: "02",
-    title: "Salgs-acceleration",
+    title: "Når sælgerne bruger mere tid på CRM end på kunder",
     body: "CRM-automation, pitch-assistenter, lead-routing. Mere tid til kundekontakt, mindre tid på admin.",
   },
   {
     n: "03",
-    title: "Videns-arbejde",
+    title: "Når viden ligger låst i jeres systemer",
     body: "Søgning i jeres egen dokumentation, automatisk sagsoprettelse, intern AI-assistent.",
   },
   {
     n: "04",
-    title: "Ops & proces-digitalisering",
+    title: "Når processer kører manuelt fra produktion til levering",
     body: "Workflow-automation, kategorisering, end-to-end flows fra produktion til færdigvare.",
   },
 ];

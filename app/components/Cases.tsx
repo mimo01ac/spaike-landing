@@ -3,27 +3,33 @@ import { SectionLabel, Pager, DoubleRule } from "./EditorialUI";
 const cases = [
   {
     num: "01",
-    name: "JUC Service ApS",
+    title: "Kundeservice der ikke kræver flere ansættelser",
+    company: "Hos JUC Service ApS",
     sector: "Juridisk uddannelse",
-    lede: "Email Agent på 7 parallelle kundeservice-indbakker. Salgsportal i Microsoft Teams. AI-drevet søgning i 10+ års juridisk indhold.",
+    before: "Syv parallelle kundeservice-indbakker hvor admin og kategorisering tog halvdelen af medarbejdernes dag. Når én var syg, byggede arbejdet sig op.",
+    after: "AI håndterer kategorisering, prioritering og udkast på alle syv. Teamet fokuserer på de samtaler der reelt kræver et menneske.",
     metric: "7",
-    metricLabel: "parallelle indbakker",
+    metricLabel: "parallelle indbakker automatiseret",
   },
   {
     num: "02",
-    name: "Audiovox",
-    sector: "Audio & elektronik",
-    lede: "Digitaliseret reklamationsflow og hele ordreprocessen — fra produktionsgulvet til færdigvare. Eliminerer manuelle hand-offs.",
-    metric: "End-to-end",
-    metricLabel: "ordrekæde digitaliseret",
+    title: "Fra papirbestillinger til scan-og-bekræft",
+    company: "Hos Audiovox Hørecenter",
+    sector: "Audio & hørerprodukter",
+    before: "Papirbaserede bestillinger med manuel dataoverførsel mellem formularer, CRM og produktion. Fejl-spredning, ingen sporbarhed fra bestilling til levering.",
+    after: "QR-baseret web-app der samler hele flowet. Kunden scanner, data flyder automatisk gennem hele kæden — fra ordre til produktion til leverance.",
+    metric: "8 → 2",
+    metricLabel: "manuelle trin pr. ordre",
   },
   {
     num: "03",
-    name: "WePlan",
-    sector: "Rådgivende ingeniør",
-    lede: "Sagsoprettelses-modul der parser indgående henvendelser og opretter sager automatisk i deres system.",
-    metric: "0",
-    metricLabel: "manuelle hand-offs",
+    title: "Når de samme spørgsmål rammer support igen og igen",
+    company: "Hos JUC Service ApS",
+    sector: "Juridisk uddannelse",
+    before: "Kunder kontaktede support på simple spørgsmål om kursusdatoer, tilmeldinger og certificeringer — selv om svarene fandtes på website. Support-tid gik til at gentage de samme svar.",
+    after: "AI-chatbot på website besvarer typiske kunde-spørgsmål direkte fra eget content. Kunder får svar instant. Support-teamet får tid til de samtaler der reelt kræver et menneske.",
+    metric: "24/7",
+    metricLabel: "selvbetjening uden ventetid",
   },
 ];
 
@@ -34,8 +40,8 @@ export default function Cases() {
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
         <SectionLabel>Sektion III · Cases</SectionLabel>
         <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
-          Tre aktive engagementer{" "}
-          <em className="italic font-normal">på tværs af brancher.</em>
+          Tre virksomheder der gik{" "}
+          <em className="italic font-normal">fra manuelt til målbart.</em>
         </h2>
       </div>
 
@@ -56,13 +62,25 @@ export default function Cases() {
               </span>
             </div>
 
-            <h3 className="font-serif text-3xl md:text-[32px] font-medium leading-[1.1]">
-              {c.name}
-            </h3>
+            <div>
+              <h3 className="font-serif text-2xl md:text-[28px] font-medium leading-[1.15]">
+                {c.title}
+              </h3>
+              <p className="font-sans text-[13px] text-ink-soft mt-2">
+                {c.company}
+              </p>
+            </div>
 
-            <p className="font-serif text-base leading-relaxed text-ink-soft">
-              {c.lede}
-            </p>
+            <div className="space-y-4">
+              <div>
+                <p className="font-mono text-[10px] tracking-wider uppercase text-muted mb-1.5">Før</p>
+                <p className="font-serif text-base leading-relaxed text-ink-soft">{c.before}</p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] tracking-wider uppercase text-amber-dark mb-1.5">Efter</p>
+                <p className="font-serif text-base leading-relaxed text-ink">{c.after}</p>
+              </div>
+            </div>
 
             <div className="mt-auto pt-5 border-t border-rule">
               <div className="font-serif text-4xl md:text-5xl font-medium leading-none tracking-tight">

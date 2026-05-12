@@ -64,6 +64,30 @@ export default function DiscoveryCTA() {
         ))}
       </div>
 
+      <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-12 border-t border-rule">
+        <p className="font-mono text-[11px] tracking-widest uppercase text-muted mb-5">
+          — I rapporten finder I
+        </p>
+        <ul className="grid md:grid-cols-2 gap-x-12 gap-y-3 font-serif text-lg text-ink-soft leading-relaxed max-w-4xl">
+          <li className="flex gap-3">
+            <span className="text-amber-dark font-mono text-sm pt-1.5">→</span>
+            <span>Hvor jeres team faktisk bruger tiden (mappet pr. rolle og proces)</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-amber-dark font-mono text-sm pt-1.5">→</span>
+            <span>3-5 prioriterede automation-muligheder med vurderet impact</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-amber-dark font-mono text-sm pt-1.5">→</span>
+            <span>Forventet tidshorisont og kompleksitet for hver</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-amber-dark font-mono text-sm pt-1.5">→</span>
+            <span>Konkret anbefaling til hvor I bør starte</span>
+          </li>
+        </ul>
+      </div>
+
       <div className="bg-cream-deep border-t border-rule">
         <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-5 flex flex-col md:flex-row items-start md:items-center md:justify-between gap-4">
           <p className="font-serif text-base italic text-ink">

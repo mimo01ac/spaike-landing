@@ -43,13 +43,13 @@ export default function Manifest() {
         </p>
       </div>
 
-      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 border-t border-rule-dark">
+      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-rule-dark">
         {points.map((p, i) => (
           <div
             key={p.n}
             className={`px-6 py-8 flex flex-col gap-3.5 ${
               i > 0 ? "border-t md:border-t-0 md:border-l border-rule-dark" : ""
-            } ${i > 1 ? "lg:border-t-0" : ""}`}
+            } ${i >= 3 ? "lg:border-t lg:border-rule-dark" : "lg:border-t-0"}`}
           >
             <div className="font-mono text-[11px] text-amber tracking-wider">
               {p.n}

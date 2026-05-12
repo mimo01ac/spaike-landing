@@ -38,13 +38,13 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-4 mt-2">
             <a
               href="#discovery"
-              className="bg-ink text-cream px-6 py-4 font-sans text-sm font-medium hover:bg-ink/85 transition-colors"
+              className="bg-ink text-cream px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink/85 transition-colors"
             >
               Kør gratis Discovery →
             </a>
             <a
               href="#cases"
-              className="font-sans text-sm text-ink underline underline-offset-4 decoration-rule hover:decoration-ink"
+              className="font-sans text-sm text-muted underline underline-offset-4 decoration-rule hover:decoration-ink hover:text-ink"
             >
               Se hvem vi har leveret for
             </a>
