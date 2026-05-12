@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <SpaikeWordmark size="lg" />
             <p className="font-serif italic text-base text-ink-soft leading-snug mt-4 max-w-sm">
-              AI der flytter forretningstal — bygget af en der har stået i
+              Commercial impact, drevet af AI — bygget af en der har stået i
               kommercielle roller i 15+ år.
             </p>
             <p className="font-mono text-[10px] tracking-widest uppercase text-muted mt-4">

@@ -25,11 +25,11 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SpAIke — AI der flytter forretningstal",
+  title: "SpAIke — Commercial impact, drevet af AI",
   description:
-    "Vi hjælper danske mid-market virksomheder fra AI-eksperimenter til målbare business-resultater. Sparet tid, frigjorte ressourcer, højere kvalitet i output. Start med en gratis SpAIke Discovery — konkret handlingsplan på 48 timer.",
+    "Vi hjælper danske mid-market virksomheder fra AI-eksperimenter til målbar commercial impact. Sparet tid, frigjorte ressourcer, højere kvalitet i output. Gratis SpAIke Discovery — konkret handlingsplan på 48 timer.",
   openGraph: {
-    title: "SpAIke — AI der flytter forretningstal",
+    title: "SpAIke — Commercial impact, drevet af AI",
     description:
       "Fra AI-eksperimenter til målbare business-resultater. Gratis Discovery på 48 timer.",
     type: "website",

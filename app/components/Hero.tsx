@@ -25,7 +25,7 @@ export default function Hero() {
           </div>
 
           <h1 className="font-serif text-5xl md:text-7xl lg:text-[96px] font-normal leading-[0.95] tracking-tight text-ink">
-            AI der flytter <em className="italic font-normal">forretnings­tal.</em>
+            Commercial impact, <em className="italic font-normal">drevet af AI.</em>
           </h1>
 
           <p className="font-serif text-lg md:text-xl leading-relaxed text-ink-soft max-w-[500px]">
