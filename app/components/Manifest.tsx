@@ -33,7 +33,7 @@ export default function Manifest() {
     <section id="manifest" className="bg-ink text-cream">
       <DoubleRule />
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
-        <SectionLabel inverted>Sektion V · Hvad vi tror på</SectionLabel>
+        <SectionLabel inverted>Hvad vi tror på</SectionLabel>
         <h2 className="font-serif text-5xl md:text-7xl lg:text-[72px] font-normal leading-none tracking-tight max-w-5xl">
           Spiken er i{" "}
           <em className="italic font-normal text-amber">kombinationen.</em>
@@ -62,12 +62,6 @@ export default function Manifest() {
             </p>
           </div>
         ))}
-      </div>
-
-      <div className="flex justify-between px-6 md:px-14 py-5 border-t border-rule-dark font-mono text-[10px] tracking-widest uppercase text-cream/55">
-        <span>Side 05 / 06</span>
-        <span className="hidden md:inline">Spiken er i kombinationen · AI + Commercial</span>
-        <span>Næste → Waitlist</span>
       </div>
     </section>
   );

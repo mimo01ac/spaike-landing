@@ -1,4 +1,4 @@
-import { SectionLabel, Pager, DoubleRule, SpaikeWordmark } from "./EditorialUI";
+import { SectionLabel, DoubleRule, SpaikeWordmark } from "./EditorialUI";
 
 const steps = [
   {
@@ -26,7 +26,7 @@ export default function DiscoveryCTA() {
     <section id="discovery">
       <DoubleRule />
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
-        <SectionLabel>Sektion IV · Sådan starter vi</SectionLabel>
+        <SectionLabel>Sådan starter vi</SectionLabel>
         <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
           Start med{" "}
           <em className="italic font-normal text-amber-dark">48 timers</em> klarhed.
@@ -102,8 +102,6 @@ export default function DiscoveryCTA() {
           </a>
         </div>
       </div>
-
-      <Pager n="04" of="06" next="Manifest" />
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { Dateline, SectionLabel, Pager, SpaikeWordmark } from "./EditorialUI";
+import { Dateline, SectionLabel, SpaikeWordmark } from "./EditorialUI";
 
 const stats: [string, string][] = [
   ["48 t", "fra kick-off til handlingsplan"],
@@ -96,8 +96,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      <Pager n="01" of="06" next="Hvad vi bygger" />
     </section>
   );
 }

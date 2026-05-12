@@ -66,39 +66,7 @@ export function Dateline({
   );
 }
 
-export function Pager({
-  n,
-  of,
-  next,
-  inverted = false,
-}: {
-  n: string;
-  of: string;
-  next: string;
-  inverted?: boolean;
-}) {
-  return (
-    <div
-      className={`flex justify-between px-6 md:px-14 py-5 font-mono text-[10px] tracking-widest uppercase ${
-        inverted
-          ? "border-t border-rule-dark text-amber/70"
-          : "border-t border-rule text-muted"
-      }`}
-    >
-      <span>
-        Side {n} / {of}
-      </span>
-      <span className="hidden md:inline">Spiken er i kombinationen · AI + Commercial</span>
-      <span className="text-right">Næste → {next}</span>
-    </div>
-  );
-}
-
 export function DoubleRule({ inverted = false }: { inverted?: boolean }) {
   const color = inverted ? "border-rule-dark" : "border-rule";
-  return (
-    <div className={`relative ${color} border-t`}>
-      <div className={`absolute left-0 right-0 ${color} border-t`} style={{ top: 4 }} />
-    </div>
-  );
+  return <div className={`${color} border-t`} />;
 }

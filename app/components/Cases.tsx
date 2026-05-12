@@ -1,4 +1,4 @@
-import { SectionLabel, Pager, DoubleRule } from "./EditorialUI";
+import { SectionLabel, DoubleRule } from "./EditorialUI";
 
 const cases = [
   {
@@ -38,7 +38,7 @@ export default function Cases() {
     <section id="cases">
       <DoubleRule />
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
-        <SectionLabel>Sektion III · Cases</SectionLabel>
+        <SectionLabel>Cases</SectionLabel>
         <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
           Tre virksomheder der gik{" "}
           <em className="italic font-normal">fra manuelt til målbart.</em>
@@ -93,8 +93,6 @@ export default function Cases() {
           </article>
         ))}
       </div>
-
-      <Pager n="03" of="06" next="Discovery" />
     </section>
   );
 }

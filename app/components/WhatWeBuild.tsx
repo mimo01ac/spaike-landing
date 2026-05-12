@@ -1,4 +1,4 @@
-import { SectionLabel, Pager, DoubleRule } from "./EditorialUI";
+import { SectionLabel, DoubleRule } from "./EditorialUI";
 
 const categories = [
   {
@@ -28,7 +28,7 @@ export default function WhatWeBuild() {
     <section id="hvad-vi-bygger">
       <DoubleRule />
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
-        <SectionLabel>Sektion II · Hvad vi bygger</SectionLabel>
+        <SectionLabel>Hvad vi bygger</SectionLabel>
         <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
           AI-automation hvor jeres virksomhed{" "}
           <em className="italic font-normal">sidder fast.</em>
@@ -59,8 +59,6 @@ export default function WhatWeBuild() {
           </div>
         ))}
       </div>
-
-      <Pager n="02" of="06" next="Cases" />
     </section>
   );
 }

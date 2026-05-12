@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionLabel, Pager, DoubleRule, SpaikeWordmark } from "./EditorialUI";
+import { SectionLabel, DoubleRule, SpaikeWordmark } from "./EditorialUI";
 
 export default function Waitlist() {
   const [submitted, setSubmitted] = useState(false);
@@ -18,7 +18,7 @@ export default function Waitlist() {
       <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-12 md:gap-16 px-6 md:px-14 pt-16 pb-14">
         {/* LEFT — copy */}
         <div className="flex flex-col gap-6">
-          <SectionLabel>Sektion VI · Beta-launch maj 2026</SectionLabel>
+          <SectionLabel>Beta-launch maj 2026</SectionLabel>
           <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight">
             <em className="italic font-normal text-amber-dark">10</em> gratis
             Discovery-spots.
@@ -88,8 +88,6 @@ export default function Waitlist() {
           </form>
         )}
       </div>
-
-      <Pager n="06" of="06" next="Kolofon" />
     </section>
   );
 }
