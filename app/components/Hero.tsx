@@ -12,7 +12,7 @@ export default function Hero() {
       <Dateline
         left="Vol. I · Beta · Maj 2026"
         mid="København · Danmark"
-        right="For mid-market CEOs"
+        right="For kommercielle ledere i mid-market"
       />
 
       <div className="max-w-editorial mx-auto w-full grid md:grid-cols-[1.15fr_1fr] gap-0 px-6 md:px-14 pt-14 md:pt-16 pb-14">
