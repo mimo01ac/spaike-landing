@@ -60,7 +60,7 @@ export default function Hero() {
             <span className="text-amber-dark not-italic font-semibold">
               kombinationen
             </span>{" "}
-            af forretnings­forståelse og hands-on AI-byggeri."
+            af forretnings­forståelse og hands-on AI-implementering."
           </blockquote>
 
           <div className="flex items-center gap-4">
@@ -72,7 +72,7 @@ export default function Hero() {
                 Michael Mortensen
               </div>
               <div className="font-mono text-[10px] tracking-wider uppercase text-muted mt-1">
-                Founder · 15 år: McKinsey · Nilfisk · GetWhy · home
+                Founder · 15+ år kommerciel erfaring · McKinsey · Nilfisk · GetWhy · home
               </div>
             </div>
           </div>
