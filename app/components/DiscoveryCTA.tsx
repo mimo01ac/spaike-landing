@@ -3,20 +3,26 @@ import { SectionLabel, DoubleRule, SpaikeWordmark } from "./EditorialUI";
 const steps = [
   {
     n: "01",
+    title: "Strategisk alignment",
+    body: "30 min med ledelsen om jeres 2-3 vigtigste strategiske mål.",
+    dur: "30 min",
+  },
+  {
+    n: "02",
     title: "Tilmeld",
     body: "Vi sætter Discovery op til jeres virksomhed.",
     dur: "15 min",
   },
   {
-    n: "02",
+    n: "03",
     title: "Interviews",
-    body: "3-5 medarbejdere har en kort AI-samtale om hverdagen.",
+    body: "3-5 medarbejdere interviewet med afsæt i jeres strategiske mål.",
     dur: "15-20 min · pr. person",
   },
   {
-    n: "03",
+    n: "04",
     title: "Handlingsplan",
-    body: "I får en konkret rapport med 3-5 prioriterede automation-muligheder.",
+    body: "Prioriteret rapport koblet til jeres strategiske mål.",
     dur: "48 timer",
   },
 ];
@@ -32,19 +38,25 @@ export default function DiscoveryCTA() {
           <em className="italic font-normal text-amber-dark">48 timers</em> klarhed.
         </h2>
         <p className="font-serif text-base md:text-lg text-ink-soft mt-5 max-w-3xl leading-relaxed">
-          <SpaikeWordmark size="sm" /> Discovery interviewer 3-5 medarbejdere via
-          AI-samtaler, analyserer hvor tiden går, og leverer en konkret
-          handlingsplan med 3-5 prioriterede automation-muligheder.
+          <SpaikeWordmark size="sm" /> Discovery starter med jeres strategiske mål,
+          interviewer 3-5 medarbejdere, og leverer en handlingsplan der viser
+          hvor AI kan frigøre ressourcer og hvor de bør lande for at accelerere
+          det der er vigtigst for jeres forretning.
         </p>
       </div>
 
-      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-3 border-t border-rule">
-        {steps.map((s, i) => (
+      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-rule">
+        {steps.map((s, i) => {
+          const borders = [
+            "",
+            "border-t border-rule md:border-t-0 md:border-l",
+            "border-t border-rule lg:border-t-0 lg:border-l",
+            "border-t border-rule md:border-l lg:border-t-0",
+          ][i];
+          return (
           <div
             key={s.n}
-            className={`px-9 py-9 flex flex-col gap-3.5 ${
-              i > 0 ? "border-t md:border-t-0 md:border-l border-rule" : ""
-            }`}
+            className={`px-9 py-9 flex flex-col gap-3.5 ${borders}`}
           >
             <div className="flex justify-between items-baseline">
               <span className="font-mono text-[11px] tracking-wider text-amber-dark">
@@ -61,7 +73,8 @@ export default function DiscoveryCTA() {
               {s.body}
             </p>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-12 border-t border-rule">

@@ -43,7 +43,7 @@ export default function Waitlist() {
         {submitted ? (
           <div className="bg-white border border-rule p-8 self-start">
             <p className="font-serif text-2xl font-medium mb-3">
-              Tak — vi har modtaget din tilmelding.
+              Tak. Vi har modtaget din tilmelding.
             </p>
             <p className="font-sans text-base text-ink-soft">
               Jeg vender personligt tilbage inden for et par hverdage.
@@ -77,7 +77,7 @@ export default function Waitlist() {
               <UnderlineField name="email" label="Email*" placeholder="navn@firma.dk" type="email" required />
             </div>
             <div className="md:col-span-2">
-              <UnderlineField name="problem" label="Hvilken proces har I i tankerne?" placeholder="Kort beskrivelse — valgfrit" />
+              <UnderlineField name="problem" label="Hvilken proces har I i tankerne?" placeholder="Kort beskrivelse, valgfrit" />
             </div>
             <button
               type="submit"

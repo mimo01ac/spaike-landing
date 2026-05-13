@@ -30,12 +30,13 @@ export default function WhatWeBuild() {
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-16 pb-9">
         <SectionLabel>Hvad vi bygger</SectionLabel>
         <h2 className="font-serif text-4xl md:text-6xl font-normal leading-none tracking-tight max-w-4xl">
-          AI-automation hvor jeres virksomhed{" "}
-          <em className="italic font-normal">sidder fast.</em>
+          AI-automation aligned med jeres{" "}
+          <em className="italic font-normal">strategiske mål.</em>
         </h2>
         <p className="font-serif text-base md:text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
-          Hvad det bliver for jer afhænger af jeres Discovery-rapport. Vi har
-          leveret alle fire kategorier hos eksisterende klienter.
+          Hvad det bliver for jer afhænger af jeres Discovery-rapport og jeres
+          strategiske prioriteter. Vi har leveret alle fire kategorier hos
+          eksisterende klienter.
         </p>
       </div>
 

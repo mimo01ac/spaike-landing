@@ -3,18 +3,18 @@ import { SectionLabel, DoubleRule } from "./EditorialUI";
 const points = [
   {
     n: "01",
-    title: "AI er ikke magi — det er infrastruktur.",
+    title: "AI er ikke magi. Det er infrastruktur.",
     body: "ROI først, hype senere. Vi bygger det der virker, ikke det der lyder smart.",
   },
   {
     n: "02",
-    title: "Start med data, ikke meninger.",
-    body: "Ingen seks-ugers discovery før vi kan levere værdi. Assessment kører på 48 timer.",
+    title: "Start med strategien, ikke teknologien.",
+    body: "Hvis du ikke ved hvad du vil opnå, kan du ikke vide hvad du skal automatisere.",
   },
   {
     n: "03",
-    title: "Commercial-first, ikke tech-first.",
-    body: "Løsningen tjener forretningen, ikke omvendt. 15 år på den kommercielle side bag os.",
+    title: "Frigjort tid er kun værdifuld hvis den lander det rigtige sted.",
+    body: "Vi kobler altid automation til strategiske mål. Ikke bare effektivisering.",
   },
   {
     n: "04",
