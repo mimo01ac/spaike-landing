@@ -13,7 +13,7 @@ export default function Footer() {
               kommercielle roller i 15+ år.
             </p>
             <p className="font-mono text-[10px] tracking-widest uppercase text-muted mt-4">
-              Drevet af mimoco ApS · Spiken er i kombinationen · AI + Commercial
+              Drevet af SpAIke ApS · Spiken er i kombinationen · AI + Commercial
             </p>
           </div>
           <div>
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-9 pt-4 border-t border-rule flex justify-between font-mono text-[10px] tracking-widest uppercase text-muted">
-          <span>© {new Date().getFullYear()} mimoco ApS</span>
+          <span>© {new Date().getFullYear()} SpAIke ApS</span>
           <span>spaike.dk</span>
         </div>
       </div>
