@@ -4,7 +4,7 @@ const cases = [
   {
     num: "01",
     title: "Kundeservice der ikke kræver flere ansættelser",
-    company: "Hos JUC Service ApS",
+    company: "Hos JUC",
     sector: "Juridisk uddannelse",
     before: "Syv parallelle kundeservice-indbakker hvor admin og kategorisering tog halvdelen af medarbejdernes dag. Når én var syg, byggede arbejdet sig op.",
     after: "AI håndterer kategorisering, prioritering og udkast på alle syv. Teamet fokuserer på de samtaler der reelt kræver et menneske.",
@@ -14,7 +14,7 @@ const cases = [
   {
     num: "02",
     title: "Fra papirbestillinger til scan-og-bekræft",
-    company: "Hos Audiovox Hørecenter",
+    company: "Hos Audiovox",
     sector: "Audio & hørerprodukter",
     before: "Papirbaserede bestillinger med manuel dataoverførsel mellem formularer, CRM og produktion. Fejl-spredning, ingen sporbarhed fra bestilling til levering.",
     after: "QR-baseret web-app der samler hele flowet. Kunden scanner, data flyder automatisk gennem hele kæden — fra ordre til produktion til leverance.",
@@ -24,7 +24,7 @@ const cases = [
   {
     num: "03",
     title: "Når de samme spørgsmål rammer support igen og igen",
-    company: "Hos JUC Service ApS",
+    company: "Hos JUC",
     sector: "Juridisk uddannelse",
     before: "Kunder kontaktede support på simple spørgsmål om kursusdatoer, tilmeldinger og certificeringer — selv om svarene fandtes på website. Support-tid gik til at gentage de samme svar.",
     after: "AI-chatbot på website besvarer typiske kunde-spørgsmål direkte fra eget content. Kunder får svar instant. Support-teamet får tid til de samtaler der reelt kræver et menneske.",
