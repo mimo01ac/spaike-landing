@@ -48,14 +48,6 @@ export default function Footer() {
                   LinkedIn
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://assessment.spaike.dk"
-                  className="hover:text-amber-dark transition-colors"
-                >
-                  SpAIke Discovery →
-                </a>
-              </li>
             </ul>
           </div>
         </div>
