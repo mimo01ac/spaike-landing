@@ -23,7 +23,6 @@ export default function Footer() {
             <ul className="font-serif text-base space-y-2">
               <li><a href="#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">Hvad vi bygger</a></li>
               <li><a href="#manifest" className="hover:text-amber-dark transition-colors">Manifest</a></li>
-              <li><a href="#waitlist" className="hover:text-amber-dark transition-colors">Waitlist</a></li>
             </ul>
           </div>
           <div>
