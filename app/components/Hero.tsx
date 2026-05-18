@@ -3,14 +3,14 @@ import { Dateline, SectionLabel, SpaikeWordmark } from "./EditorialUI";
 const stats: [string, string][] = [
   ["48 t", "fra kick-off til handlingsplan"],
   ["3-5", "medarbejdere AI-interviewet"],
-  ["10", "gratis Discovery-spots i beta"],
+  ["15+", "år kommerciel erfaring i ryggen"],
 ];
 
 export default function Hero() {
   return (
     <section id="top" className="flex flex-col">
       <Dateline
-        left="Vol. I · Beta · Maj 2026"
+        left="Vol. I · Maj 2026"
         mid="København · Danmark"
         right="For kommercielle ledere i mid-market"
       />
@@ -37,10 +37,10 @@ export default function Hero() {
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
             <a
-              href="#waitlist"
+              href="mailto:michael@spaike.dk?subject=Book%20m%C3%B8de%20med%20SpAIke"
               className="bg-ink text-cream px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink/85 transition-colors"
             >
-              Kom på waitlist →
+              Book møde →
             </a>
           </div>
         </div>

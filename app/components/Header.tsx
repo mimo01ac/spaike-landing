@@ -17,15 +17,12 @@ export default function Header() {
           <a href="#manifest" className="hover:text-amber-dark transition-colors">
             Manifest
           </a>
-          <a href="#waitlist" className="hover:text-amber-dark transition-colors">
-            Om
-          </a>
         </nav>
         <a
-          href="#waitlist"
+          href="mailto:michael@spaike.dk?subject=Book%20m%C3%B8de%20med%20SpAIke"
           className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
         >
-          Waitlist →
+          Book møde →
         </a>
       </div>
     </header>
