@@ -1,11 +1,5 @@
 import { Dateline, SectionLabel, SpaikeWordmark } from "./EditorialUI";
 
-const stats: [string, string][] = [
-  ["48 t", "fra kick-off til handlingsplan"],
-  ["3-5", "medarbejdere AI-interviewet"],
-  ["15+", "år kommerciel erfaring i ryggen"],
-];
-
 export default function Hero() {
   return (
     <section id="top" className="flex flex-col">
@@ -71,24 +65,6 @@ export default function Hero() {
                 Founder · 15+ år kommerciel erfaring · McKinsey · Nilfisk · GetWhy · home
               </div>
             </div>
-          </div>
-
-          <div className="h-px bg-rule mt-auto" />
-
-          <div className="grid grid-cols-3 gap-0">
-            {stats.map(([n, l], i) => (
-              <div
-                key={i}
-                className={`px-4 md:px-5 pt-1 ${i ? "border-l border-rule" : ""}`}
-              >
-                <div className="font-serif text-4xl md:text-5xl font-medium leading-none tracking-tight">
-                  {n}
-                </div>
-                <div className="font-sans text-xs text-muted mt-2 leading-snug">
-                  {l}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
