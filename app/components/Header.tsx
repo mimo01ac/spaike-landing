@@ -14,12 +14,6 @@ export default function Header() {
           <a href="#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">
             Hvad vi bygger
           </a>
-          <a href="#cases" className="hover:text-amber-dark transition-colors">
-            Cases
-          </a>
-          <a href="#discovery" className="hover:text-amber-dark transition-colors">
-            Discovery
-          </a>
           <a href="#manifest" className="hover:text-amber-dark transition-colors">
             Manifest
           </a>
