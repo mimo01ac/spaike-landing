@@ -11,7 +11,7 @@ export default function About() {
               <span className="text-sm text-neutral-400">[Foto kommer]</span>
             </div>
             <a
-              href="https://www.linkedin.com/in/michaelsbm/"
+              href="https://www.linkedin.com/in/michaelmortensen/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block text-spaike-blue-dark hover:text-spaike-blue font-medium text-sm underline-offset-4 hover:underline"

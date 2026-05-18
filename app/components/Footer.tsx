@@ -40,7 +40,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.linkedin.com/in/michaelsbm/"
+                  href="https://www.linkedin.com/in/michaelmortensen/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-amber-dark transition-colors"
