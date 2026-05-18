@@ -37,7 +37,9 @@ export default function Hero() {
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
             <a
-              href="mailto:michael@spaike.dk?subject=Book%20m%C3%B8de%20med%20SpAIke"
+              href="https://calendly.com/michael-spaike/new-meeting"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-ink text-cream px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink/85 transition-colors"
             >
               Book møde →

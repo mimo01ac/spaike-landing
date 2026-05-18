@@ -19,7 +19,9 @@ export default function Header() {
           </a>
         </nav>
         <a
-          href="mailto:michael@spaike.dk?subject=Book%20m%C3%B8de%20med%20SpAIke"
+          href="https://calendly.com/michael-spaike/new-meeting"
+          target="_blank"
+          rel="noopener noreferrer"
           className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
         >
           Book møde →
