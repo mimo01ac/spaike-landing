@@ -27,7 +27,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "SpAIke — Commercial impact, drevet af AI",
   description:
-    "Vi hjælper danske mid-market virksomheder med at alignere AI-automation med strategiske mål. SpAIke Discovery starter med jeres vigtigste mål og leverer en konkret handlingsplan på 48 timer.",
+    "Vi hjælper danske mid-market virksomheder med at aligne AI-automation med strategiske mål. SpAIke Discovery starter med jeres vigtigste mål og leverer en konkret handlingsplan på 48 timer.",
   openGraph: {
     title: "SpAIke — Commercial impact, drevet af AI",
     description:

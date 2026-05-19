@@ -24,7 +24,7 @@ export default function Hero() {
 
           <p className="font-serif text-lg md:text-xl leading-relaxed text-ink-soft max-w-[500px]">
             De fleste virksomheder har afprøvet AI. Få har set det reelt flytte
-            tallene. SpAIke hjælper danske mid-market virksomheder med at alignere
+            tallene. SpAIke hjælper danske mid-market virksomheder med at aligne
             AI-automation med deres strategiske mål, så frigjorte ressourcer lander
             der, hvor de faktisk accelererer <em className="italic">forretningen.</em>
           </p>
