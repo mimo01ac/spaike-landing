@@ -33,6 +33,7 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:michael@spaike.dk"
+                  data-umami-event="email_click"
                   className="hover:text-amber-dark transition-colors"
                 >
                   michael@spaike.dk
@@ -43,6 +44,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/in/michaelmortensen/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-umami-event="linkedin_click"
                   className="hover:text-amber-dark transition-colors"
                 >
                   LinkedIn

@@ -22,6 +22,8 @@ export default function Header() {
           href="https://calendly.com/michael-spaike/new-meeting"
           target="_blank"
           rel="noopener noreferrer"
+          data-umami-event="book_moede_click"
+          data-umami-event-location="header"
           className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
         >
           Book møde →

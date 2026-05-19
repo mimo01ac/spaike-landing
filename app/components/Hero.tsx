@@ -34,6 +34,8 @@ export default function Hero() {
               href="https://calendly.com/michael-spaike/new-meeting"
               target="_blank"
               rel="noopener noreferrer"
+              data-umami-event="book_moede_click"
+              data-umami-event-location="hero"
               className="bg-ink text-cream px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink/85 transition-colors"
             >
               Book møde →

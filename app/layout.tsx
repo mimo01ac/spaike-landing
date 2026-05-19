@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
+import Analytics from "./components/Analytics";
 import "./globals.css";
 
 const serif = Source_Serif_4({
@@ -47,6 +49,13 @@ export default function RootLayout({
     <html lang="da" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body className="font-sans bg-cream text-ink antialiased">
         {children}
+        <Script
+          src="https://analytics.spaike.dk/script.js"
+          data-website-id="0b7517b0-d5a4-4785-aaff-009e05e85ba7"
+          strategy="afterInteractive"
+          defer
+        />
+        <Analytics />
       </body>
     </html>
   );
