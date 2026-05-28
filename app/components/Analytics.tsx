@@ -2,12 +2,6 @@
 
 import { useEffect } from "react";
 
-declare global {
-  interface Window {
-    umami?: { track: (name: string, data?: Record<string, unknown>) => void };
-  }
-}
-
 export default function Analytics() {
   useEffect(() => {
     const fired = new Set<number>();

@@ -6,9 +6,10 @@ interface Props {
   summary: string;
   note?: React.ReactNode;
   prompt: string;
+  name?: string;
 }
 
-export default function StarterPrompt({ summary, note, prompt }: Props) {
+export default function StarterPrompt({ summary, note, prompt, name }: Props) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const codeRef = useRef<HTMLElement>(null);
@@ -17,6 +18,7 @@ export default function StarterPrompt({ summary, note, prompt }: Props) {
     try {
       await navigator.clipboard.writeText(prompt);
       setCopied(true);
+      window.umami?.track("starter_prompt_copy", { name: name ?? summary });
       setTimeout(() => setCopied(false), 1600);
     } catch {
       if (codeRef.current) {
@@ -26,6 +28,7 @@ export default function StarterPrompt({ summary, note, prompt }: Props) {
         window.getSelection()?.addRange(range);
         document.execCommand("copy");
         setCopied(true);
+        window.umami?.track("starter_prompt_copy", { name: name ?? summary });
         setTimeout(() => setCopied(false), 1600);
       }
     }

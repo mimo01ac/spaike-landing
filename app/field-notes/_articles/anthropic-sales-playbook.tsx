@@ -254,6 +254,7 @@ export default function AnthropicSalesPlaybook() {
         </div>
 
         <StarterPrompt
+          name="daily_prep"
           summary="Starter prompt · save as a Claude Skill"
           note={
             <>
@@ -318,6 +319,7 @@ export default function AnthropicSalesPlaybook() {
         </div>
 
         <StarterPrompt
+          name="weekly_forecast"
           summary="Starter prompt · save as a Claude Skill"
           note={
             <>
@@ -369,6 +371,7 @@ export default function AnthropicSalesPlaybook() {
         </div>
 
         <StarterPrompt
+          name="account_scoring"
           summary="Starter scoring rubric · adapt for your market"
           note={
             <>
@@ -434,6 +437,8 @@ export default function AnthropicSalesPlaybook() {
           </a>
           <a
             href="https://spaike.dk"
+            data-umami-event="field_note_closer_more_click"
+            data-umami-event-article="anthropic-sales-playbook"
             className="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
           >
             More from SpAIke
@@ -446,6 +451,8 @@ export default function AnthropicSalesPlaybook() {
         Primary source:{" "}
         <a
           href="https://claude.com/blog/how-an-anthropic-sales-leader-uses-claude-cowork-to-run-a-4-000-account-book"
+          data-umami-event="field_note_source_click"
+          data-umami-event-source="claude-blog"
           className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           target="_blank"
           rel="noopener noreferrer"
@@ -457,6 +464,8 @@ export default function AnthropicSalesPlaybook() {
         Companion:{" "}
         <a
           href="https://anthropic.ondemand.goldcast.io/on-demand/8928734f-e18b-4d7e-82af-a58cf01a288e"
+          data-umami-event="field_note_source_click"
+          data-umami-event-source="webcast"
           className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           target="_blank"
           rel="noopener noreferrer"
