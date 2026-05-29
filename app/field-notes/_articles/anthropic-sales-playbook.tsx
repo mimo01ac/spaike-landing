@@ -16,7 +16,7 @@ export const metadata: Metadata = {
       "Three plays from Travis Bryant's 4,000-account week. With paste-ready Claude Skill prompts to run each in an SMB stack like SuperOffice, Lime, or HubSpot — without a sales ops function in the middle.",
     type: "article",
     locale: "en_US",
-    url: "https://spaike.dk/field-notes/anthropic-sales-playbook",
+    url: "https://www.spaike.dk/field-notes/anthropic-sales-playbook",
     images: [
       {
         url: "/og/anthropic-sales-playbook.png",

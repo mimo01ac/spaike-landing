@@ -27,7 +27,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://spaike.dk"),
+  metadataBase: new URL("https://www.spaike.dk"),
   title: "SpAIke — Commercial impact, drevet af AI",
   description:
     "Vi hjælper danske mid-market virksomheder med at aligne AI-automation med strategiske mål. SpAIke Discovery starter med jeres vigtigste mål og leverer en konkret handlingsplan på 48 timer.",
