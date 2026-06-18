@@ -31,6 +31,7 @@ const COLLECTIONS = [
       { name: "name", type: "text" },
       { name: "email", type: "email" },
       { name: "company", type: "text" },
+      { name: "website", type: "text" },
       { name: "size", type: "text" },
       { name: "transcript", type: "json", maxSize: 2000000 },
       { name: "case_brief", type: "json", maxSize: 2000000 },
@@ -53,6 +54,7 @@ const COLLECTIONS = [
       { name: "email", type: "email", required: true },
       { name: "phone", type: "text" },
       { name: "company", type: "text" },
+      { name: "website", type: "text" },
       { name: "case_brief", type: "json", maxSize: 2000000 },
       { name: "notes", type: "text" },
       { name: "consent", type: "bool" },
@@ -108,7 +110,25 @@ async function main() {
       token,
     );
     if (existing.ok) {
-      console.log(`• ${col.name}: findes allerede — springer over`);
+      // Findes allerede: sørg for at evt. nye felter tilføjes (idempotent schema-evolution).
+      const have = new Set((existing.body.fields || []).map((f) => f.name));
+      const missing = col.fields.filter((f) => !have.has(f.name));
+      if (missing.length === 0) {
+        console.log(`• ${col.name}: findes, alle felter ok`);
+        continue;
+      }
+      const merged = [...existing.body.fields, ...missing];
+      const upd = await api(
+        `/api/collections/${existing.body.id}`,
+        { method: "PATCH", body: JSON.stringify({ fields: merged }) },
+        token,
+      );
+      if (upd.ok) {
+        console.log(`✓ ${col.name}: tilføjede felter [${missing.map((f) => f.name).join(", ")}]`);
+      } else {
+        console.error(`✗ ${col.name}: kunne ikke tilføje felter`, upd.status, JSON.stringify(upd.body));
+        process.exitCode = 1;
+      }
       continue;
     }
     const created = await api(

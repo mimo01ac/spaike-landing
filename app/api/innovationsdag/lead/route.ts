@@ -27,6 +27,7 @@ type Body = {
   name?: string;
   email?: string;
   company?: string;
+  website?: string;
   consent?: boolean;
   want_help?: boolean;
   case_brief?: unknown;
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
   const name = (body.name ?? "").trim();
   const email = (body.email ?? "").trim();
   const company = (body.company ?? "").trim();
+  const website = (body.website ?? "").trim().slice(0, 300);
   const wantHelp = body.want_help === true;
 
   if (!name || name.length > 120) {
@@ -68,6 +70,7 @@ export async function POST(req: Request) {
       name,
       email,
       company,
+      website,
       consent: true,
       path_chosen: wantHelp ? "apply" : "diy",
       case_brief: body.case_brief ?? null,
@@ -79,6 +82,7 @@ export async function POST(req: Request) {
         name,
         email,
         company,
+        website,
         consent: true,
         case_brief: body.case_brief ?? null,
         notes: "Via discovery-tool: ønsker hjælp til at køre en innovationsdag.",

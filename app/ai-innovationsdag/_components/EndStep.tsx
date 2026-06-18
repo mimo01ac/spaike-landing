@@ -7,10 +7,11 @@ interface Props {
   token: string;
   brief: CaseBriefData;
   transcript: ChatMsg[];
+  website?: string;
   onDone: (wantHelp: boolean) => void;
 }
 
-export default function EndStep({ token, brief, transcript, onDone }: Props) {
+export default function EndStep({ token, brief, transcript, website, onDone }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState(brief.virksomhed || "");
@@ -36,6 +37,7 @@ export default function EndStep({ token, brief, transcript, onDone }: Props) {
           name,
           email,
           company,
+          website,
           consent,
           want_help: wantHelp,
           case_brief: brief,

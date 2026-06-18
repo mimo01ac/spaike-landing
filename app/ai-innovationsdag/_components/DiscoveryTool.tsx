@@ -34,6 +34,7 @@ interface Store {
   brief?: CaseBriefData;
   transcript?: ChatMsg[];
   companyContext?: string;
+  website?: string;
 }
 
 function loadStore(): Store {
@@ -45,10 +46,12 @@ function loadStore(): Store {
   }
 }
 
-function saveStore(s: Store) {
+function saveStore(partial: Store) {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    // Merge, så et delvist gem ikke overskriver andre felter (messages, website ...).
+    const cur = loadStore();
+    window.localStorage.setItem(STORE_KEY, JSON.stringify({ ...cur, ...partial }));
   } catch {
     /* localStorage utilgængelig (privat-tilstand e.l.) */
   }
@@ -72,37 +75,35 @@ export default function DiscoveryTool() {
   const [done, setDone] = useState<null | { wantHelp: boolean }>(null);
   const [startError, setStartError] = useState<string | null>(null);
   const [companyContext, setCompanyContext] = useState<string>(restored.companyContext ?? "");
+  const [website, setWebsite] = useState<string>(restored.website ?? "");
   const [websiteUrl, setWebsiteUrl] = useState("");
-  const [researching, setResearching] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
-  // Valgfrit website-opslag før chatten: giver agenten branchekontekst.
-  async function researchAndStart(skip: boolean) {
-    if (researching) return;
-    if (skip || !websiteUrl.trim()) {
-      setStage("chat");
-      return;
-    }
-    setResearching(true);
-    try {
-      const res = await fetch("/api/innovationsdag/research", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, url: websiteUrl }),
+  // Åbn chatten MED DET SAMME; research kører i baggrunden og bruges fra næste
+  // tur når den er klar, så brugeren ikke venter på opslaget.
+  function startChat(skip: boolean) {
+    const url = websiteUrl.trim();
+    setStage("chat");
+    if (skip || !url) return;
+    setWebsite(url);
+    saveStore({ website: url });
+    fetch("/api/innovationsdag/research", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, url }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        const ctx = (data?.context ?? "").trim();
+        if (ctx) {
+          setCompanyContext(ctx);
+          saveStore({ companyContext: ctx });
+        }
+      })
+      .catch(() => {
+        /* fejler blødt: fortsæt uden kontekst */
       });
-      const data = await res.json().catch(() => ({}));
-      const ctx = (data?.context ?? "").trim();
-      if (ctx) {
-        setCompanyContext(ctx);
-        saveStore({ companyContext: ctx });
-      }
-    } catch {
-      /* fejler blødt: fortsæt uden kontekst */
-    } finally {
-      setResearching(false);
-      setStage("chat");
-    }
   }
 
   function resetAll() {
@@ -203,27 +204,24 @@ export default function DiscoveryTool() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  void researchAndStart(false);
+                  startChat(false);
                 }
               }}
               placeholder="jeres-website.dk"
-              disabled={researching}
-              className="flex-1 bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none disabled:opacity-60"
+              className="flex-1 bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none"
             />
             <button
               type="button"
-              onClick={() => void researchAndStart(false)}
-              disabled={researching}
-              className="bg-ink text-cream px-6 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors disabled:opacity-60 whitespace-nowrap"
+              onClick={() => startChat(false)}
+              className="bg-ink text-cream px-6 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors whitespace-nowrap"
             >
-              {researching ? "Kigger på siden …" : "Start →"}
+              Start →
             </button>
           </div>
           <button
             type="button"
-            onClick={() => void researchAndStart(true)}
-            disabled={researching}
-            className="mt-4 font-mono text-[11px] tracking-wider uppercase text-muted hover:text-amber-dark transition-colors disabled:opacity-60"
+            onClick={() => startChat(true)}
+            className="mt-4 font-mono text-[11px] tracking-wider uppercase text-muted hover:text-amber-dark transition-colors"
           >
             Spring over og start
           </button>
@@ -309,6 +307,7 @@ export default function DiscoveryTool() {
                   token={token}
                   brief={brief}
                   transcript={transcript}
+                  website={website}
                   onDone={(wantHelp) => {
                     clearStore();
                     setDone({ wantHelp });
