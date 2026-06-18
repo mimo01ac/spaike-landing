@@ -1,0 +1,211 @@
+import type { Metadata } from "next";
+import Logo from "../components/Logo";
+import DiscoveryTool from "./_components/DiscoveryTool";
+
+export const metadata: Metadata = {
+  title: "AI-innovationsdag: byg en løsning på ét problem på én dag | SpAIke",
+  description:
+    "En AI-innovationsdag: et lille team bygger en rigtig løsning på ét konkret problem på én dag med vibe coding. Brug det gratis værktøj til at finde og skærpe jeres case.",
+  alternates: { canonical: "https://www.spaike.dk/ai-innovationsdag" },
+  openGraph: {
+    title: "AI-innovationsdag: fra problem til prototype på én dag",
+    description:
+      "Find en god case fra jeres egen hverdag, og se konkret hvad vi kan bygge sammen på en dag.",
+    type: "website",
+    locale: "da_DK",
+    url: "https://www.spaike.dk/ai-innovationsdag",
+  },
+};
+
+const AGENDA: { time: string; label: string }[] = [
+  { time: "09:00", label: "Velkomst + intro til vibe coding" },
+  { time: "09:45", label: "Problem-framing: teamet skærper casen" },
+  { time: "10:15", label: "Byg-session 1 (løbende sparring)" },
+  { time: "12:00", label: "Frokost" },
+  { time: "12:45", label: "Byg-session 2" },
+  { time: "15:00", label: "Test & færdiggør" },
+  { time: "15:45", label: "Demo" },
+  { time: "16:15", label: "Næste skridt: hvordan kommer det i drift" },
+  { time: "16:30", label: "Tak" },
+];
+
+const REQUIREMENTS: string[] = [
+  "3-4 personer der deler ét konkret problem",
+  "Et reelt, aktuelt problem, ikke hypotetisk",
+  "Kan afgrænses til en MVP på én dag",
+  "Software- eller automatiserings-formet (ikke hardware)",
+  "Ledelsens opbakning + deltagerne fri fra daglige opgaver den dag",
+  "Adgang til vibe coding-værktøjer + API-adgang til relevante systemer",
+  "Adgang til relevant data (jeg laver gerne syntetisk data, så følsomt ikke røres)",
+  "Laptops + internet",
+];
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-3">
+      {children}
+    </p>
+  );
+}
+
+export default function Page() {
+  return (
+    <main className="bg-cream text-ink min-h-screen">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-rule no-print">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-5 flex items-center justify-between gap-6">
+          <a href="/" aria-label="SpAIke" className="flex items-baseline gap-3.5">
+            <Logo size="md" />
+            <span className="hidden md:inline font-mono text-[10px] tracking-widest uppercase text-muted">
+              AI advisory
+            </span>
+          </a>
+          <a
+            href="#vaerktoej"
+            className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
+          >
+            Find din case →
+          </a>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="max-w-content mx-auto px-6 md:px-12 pt-16 md:pt-24 pb-14">
+        <div className="max-w-2xl">
+          <SectionLabel>AI-innovationsdag</SectionLabel>
+          <h1 className="font-serif text-4xl md:text-5xl leading-[1.08] text-ink mb-6">
+            Et problem. Ét team. Én dag.{" "}
+            <span className="italic">En løsning I kan se virke.</span>
+          </h1>
+          <p className="text-lg text-ink-soft leading-relaxed mb-5">
+            Vibe coding har gjort det muligt at bygge rigtige løsninger på timer, ikke måneder.
+            Men det skal nå ud til de kommercielle folk, ikke kun udviklerne. En AI-innovationsdag
+            åbner den dør: et lille team tager ét konkret problem fra jeres hverdag og bygger en
+            fungerende prototype på én dag.
+          </p>
+          <p className="text-lg text-ink-soft leading-relaxed mb-8">
+            Det starter med at finde den rigtige case. Det hjælper værktøjet herunder jer med, og
+            I går fra det med en brugbar brief uanset hvad.
+          </p>
+          <a
+            href="#vaerktoej"
+            className="inline-block bg-ink text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
+          >
+            Find din case →
+          </a>
+        </div>
+      </section>
+
+      {/* Sådan kører en dag */}
+      <section className="border-t border-rule bg-cream-deep">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16">
+          <SectionLabel>Sådan kører en AI-innovationsdag</SectionLabel>
+          <h2 className="font-serif text-3xl text-ink leading-tight mb-8 max-w-2xl">
+            Transparent fra start til slut
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10">
+            <div className="border border-rule rounded bg-cream p-6">
+              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-3">
+                Før dagen (1-2 uger før)
+              </p>
+              <ul className="space-y-3 text-[15px] text-ink-soft leading-relaxed">
+                <li>Problemet defineres via værktøjet herunder.</li>
+                <li>Team på 3-4 vælges, med den der ejer problemet.</li>
+                <li>
+                  Data og adgang klargøres. Jeg laver et syntetisk datasæt i samme form som jeres
+                  rigtige data, så vi ikke rører følsomt på dagen.
+                </li>
+              </ul>
+            </div>
+
+            <div className="border border-rule rounded bg-cream p-6">
+              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-3">
+                Selve dagen
+              </p>
+              <ul className="space-y-2">
+                {AGENDA.map((a) => (
+                  <li key={a.time} className="flex gap-4 text-[14px]">
+                    <span className="font-mono text-amber-dark shrink-0 w-12">{a.time}</span>
+                    <span className="text-ink">{a.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Forberedelse */}
+      <section className="border-t border-rule">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16">
+          <SectionLabel>Sådan forbereder I jer</SectionLabel>
+          <h2 className="font-serif text-3xl text-ink leading-tight mb-3 max-w-2xl">
+            Hvad der skal til for at en dag flyver
+          </h2>
+          <p className="text-ink-soft leading-relaxed mb-8 max-w-2xl">
+            Det er ikke gatekeeping, det er readiness. Jo flere af disse I har på plads, jo mere
+            får I ud af dagen.
+          </p>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-3 max-w-3xl">
+            {REQUIREMENTS.map((r) => (
+              <li key={r} className="flex gap-3 text-[15px] text-ink leading-relaxed">
+                <span className="text-amber-dark mt-0.5">✓</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Værktøjet (centerpiece) */}
+      <section id="vaerktoej" className="border-t border-rule bg-cream-deep scroll-mt-20">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16 md:py-20">
+          <DiscoveryTool />
+        </div>
+      </section>
+
+      {/* Footer + privatlivsnote */}
+      <footer id="privatliv" className="border-t border-rule no-print">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-10">
+            <div>
+              <Logo size="md" />
+              <p className="font-serif italic text-base text-ink-soft leading-snug mt-4 max-w-sm">
+                Commercial impact, drevet af{" "}
+                <span className="not-italic font-sans font-bold text-amber">AI</span>.
+              </p>
+              <p className="font-mono text-[10px] tracking-widest uppercase text-muted mt-4">
+                Drevet af SpAIke ApS
+              </p>
+            </div>
+            <div>
+              <p className="font-mono text-[10px] tracking-widest uppercase text-muted mb-3">
+                Privatliv
+              </p>
+              <p className="text-[13px] text-ink-soft leading-relaxed max-w-md">
+                Jeg gemmer kun det nødvendige: dit navn, din mail og samtalen, så jeg kan hjælpe dig
+                videre. Data ligger EU-hosted. Jeg deler det ikke med tredjepart og bruger det ikke
+                til andet. Vil du have dine data slettet, så skriv til{" "}
+                <a
+                  href="mailto:michael@spaike.dk"
+                  className="text-amber-dark underline"
+                  data-umami-event="email_click"
+                >
+                  michael@spaike.dk
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+          <div className="mt-8 pt-4 border-t border-rule flex justify-between font-mono text-[10px] tracking-widest uppercase text-muted">
+            <span>© {new Date().getFullYear()} SpAIke ApS</span>
+            <a href="/" className="hover:text-amber-dark transition-colors">
+              spaike.dk
+            </a>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
+}

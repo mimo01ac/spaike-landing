@@ -11,3 +11,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+/* Print/PDF af case-briefen: vis kun .brief-print, skjul resten.
+   Data-drevet print (ingen html2canvas/oklch-crash). */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .brief-print,
+  .brief-print * {
+    visibility: visible;
+  }
+  .brief-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 24px;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
