@@ -155,7 +155,11 @@ export default function Page() {
               hvor et lille team fra jeres egen virksomhed bygger en fungerende løsning på ét
               konkret problem, med AI-værktøjer og hands-on sparring fra mig. Ingen kodebaggrund
               nødvendig. I går fra dagen med en prototype og en helt ny fornemmelse for, hvad I selv
-              kan bygge. Vil I køre den selv, får I også min guide med jeres best practices.
+              kan bygge. Vil I køre den selv, har jeg lavet en{" "}
+              <a href="/ai-innovationsdag/guide" className="text-amber-dark underline">
+                gratis guide til hele dagen
+              </a>
+              .
             </p>
           </div>
         </div>

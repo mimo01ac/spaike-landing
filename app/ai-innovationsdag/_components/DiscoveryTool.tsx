@@ -6,9 +6,8 @@ import Chat from "./Chat";
 import CaseBrief from "./CaseBrief";
 import EndStep from "./EndStep";
 
-// TODO Michael: indsæt linket til den gratis DIY-guide (best practices til at
-// køre din egen innovationsdag) her, når den er klar.
-const DIY_PLAYBOOK_URL = "";
+// DIY-guiden (best practices til at køre din egen innovationsdag).
+const DIY_PLAYBOOK_URL = "/ai-innovationsdag/guide";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -135,11 +134,17 @@ export default function DiscoveryTool() {
               <h3 className="font-serif text-xl text-ink leading-snug mb-2">
                 Få min guide til at køre din egen innovationsdag
               </h3>
-              <p className="text-[15px] text-ink-soft leading-relaxed">
+              <p className="text-[15px] text-ink-soft leading-relaxed mb-4">
                 Jeg har samlet mine best practices i en praktisk guide, så I kan køre dagen selv,
                 trin for trin (mange kalder det et hackathon). Sammen med jeres case-brief har I så
                 både et godt udgangspunkt og en opskrift. I får begge dele tilsendt.
               </p>
+              <a
+                href={DIY_PLAYBOOK_URL}
+                className="inline-block border border-ink text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors"
+              >
+                Læs guiden →
+              </a>
             </div>
 
             {!done ? (
