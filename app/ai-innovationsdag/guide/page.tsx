@@ -108,17 +108,17 @@ export default function GuidePage() {
             {/* 1 */}
             <H2 id="s1">Først: vær ærlig om hvad en innovationsdag er (og ikke er)</H2>
             <p className="text-ink-soft leading-relaxed mb-4">
-              En innovationsdag er et <strong className="text-ink font-semibold">pit-stop, ikke en
-              leverance.</strong> Et lille team tager ét konkret problem fra jeres egen hverdag og
-              bygger en fungerende prototype på det med AI-værktøjer i løbet af en dag. Forvent at I
-              når omkring 25% af det I tror I kan, og det er helt fint. Værdien er at I oplever på
-              egen krop hvad AI kan, lærer værktøjerne, og går derfra med en rå prototype og en klar
-              idé om næste skridt.
+              En innovationsdag er en byg-dag: et lille team tager ét konkret problem fra jeres egen
+              hverdag og bygger en fungerende prototype på det med AI-værktøjer i løbet af en dag.
+              Med vibe coding når I længere end de fleste tror. I går ikke fra dagen med en skitse,
+              men med en demo-bar løsning på én værdifuld feature, I kan se virke. En reel andel af
+              de cases der bygges på den slags dage, ender med at komme i drift bagefter.
             </p>
             <p className="text-ink-soft leading-relaxed mb-4">
-              Sælg det ikke internt som &laquo;vi løser problemet på en dag&raquo;. Sælg det som en
-              træningsdag der skaber energi, læring og en synlig prototype. Det fjerner det pres der
-              ellers skræmmer ikke-tekniske deltagere væk.
+              Vær samtidig ærlig om hvad det ikke er: ikke et færdigt, produktionsklart system fra
+              dag ét. I står med en prototype af én feature plus en klar vej videre, ikke en hærdet
+              løsning. Den ærlighed fjerner presset der ellers skræmmer ikke-tekniske deltagere væk,
+              uden at I behøver at tale dagen ned.
             </p>
             <p className="text-ink-soft leading-relaxed mb-4">
               <strong className="text-ink font-semibold">Den vigtigste indsigt i hele guiden:</strong>{" "}
@@ -146,10 +146,10 @@ export default function GuidePage() {
                 god ramme.
               </li>
               <li>
-                <strong className="text-ink font-semibold">Mentor-ratio ca. 1 pr. 3 til 4
-                deltagere.</strong>{" "}
-                Begyndere har brug for mere håndholdning end udviklere. Minimum: én teknisk mentor +
-                én forretnings-/domæne-mentor.
+                <strong className="text-ink font-semibold">Facilitering:</strong> i jeres skala kan
+                én facilitator klare dagen, hvis builds holdes enkle (se punkt 4) og adgang og data
+                er sat op på forhånd. Hav jeres egen IT på standby på dagen. Først ved større hold
+                eller meget tekniske cases giver en ekstra mentor mening.
               </li>
             </ul>
 
@@ -233,8 +233,8 @@ export default function GuidePage() {
             {/* 5 */}
             <H2 id="s5">Forberedelse: 2-ugers nedtælling (hackathonet starter før hackathonet)</H2>
             <p className="text-ink-soft leading-relaxed mb-4">
-              Al &laquo;plumbing&raquo; skal være sat op og testet end-to-end ca. 2 uger før. Den
-              hyppigste fejl er at undervurdere adgang:{" "}
+              Alt det tekniske (adgang, data, værktøjer og API&apos;er) skal være sat op og testet
+              fra ende til anden ca. 2 uger før. Den hyppigste fejl er at undervurdere adgang:{" "}
               <strong className="text-ink font-semibold">tilladelser tager altid længere end man
               tror.</strong>
             </p>
@@ -308,17 +308,18 @@ export default function GuidePage() {
             <H2 id="s7">Roller på dagen</H2>
             <ul className="space-y-2.5 text-ink-soft leading-relaxed mb-4 list-disc pl-5">
               <li>
-                <strong className="text-ink font-semibold">Facilitator (dig):</strong> framing,
-                tids-styring, tvinger scoping, holder energi og synlighed.
+                <strong className="text-ink font-semibold">Facilitator (én person er nok):</strong>{" "}
+                rammesætter dagen, introducerer værktøjet, går rundt og hjælper holdene i gang,
+                tvinger scoping til én feature, og holder energien. Det er rollen du selv kan stå i.
               </li>
               <li>
-                <strong className="text-ink font-semibold">Teknisk/tools-mentor</strong> +{" "}
-                <strong className="text-ink font-semibold">forretnings-/domæne-mentor</strong>{" "}
-                (mindst én af hver).
+                <strong className="text-ink font-semibold">Deltagerne er domæne-eksperterne:</strong>{" "}
+                de kender problemet og former casen. I behøver ikke en separat forretnings-mentor.
               </li>
               <li>
-                <strong className="text-ink font-semibold">Data-/IT-support</strong> der kan give
-                ad-hoc adgang på dagen, så ingen blokeres af en adgangs-ticket.
+                <strong className="text-ink font-semibold">IT på standby:</strong> aftal med jeres
+                egen IT, at de kan give hurtig adgang på dagen, så ingen blokeres af en
+                adgangs-ticket. Det aftales på forhånd, det er ikke en bemandet rolle.
               </li>
             </ul>
 
@@ -351,9 +352,9 @@ export default function GuidePage() {
                 allerede i idé-fasen</strong>, så der er en sponsor på dag ét.
               </li>
               <li>
-                <strong className="text-ink font-semibold">Behandl al kode som en
-                throwaway-POC.</strong> 62% af AI-byggede apps har kritiske sårbarheder. Intet i
-                produktion uden et sikkerhedsreview. Ingen hardcodede nøgler.
+                <strong className="text-ink font-semibold">Behandl al kode som en prototype, ikke
+                som færdig produktionskode.</strong> 62% af AI-byggede apps har kritiske
+                sårbarheder. Intet i produktion uden et sikkerhedsreview. Ingen hardcodede nøgler.
               </li>
               <li>
                 <strong className="text-ink font-semibold">Rut 1 til 2 vindende cases</strong> ind i
@@ -381,8 +382,8 @@ export default function GuidePage() {
                     ["«Intet sker bagefter»", "Aftalt vej videre + navngiven ejer FØR dagen"],
                     ["Over-scoping", "Facilitatorens kernejob: tving narrowing til én feature"],
                     ["Usynlige builds", "Push mod noget visuelt; krav om live-demo"],
-                    ["AI-sikkerhed", "Throwaway-POC, ingen hardcodede nøgler, review før drift"],
-                    ["«Falsk følelse af done»", "Sig højt at det er læring/pit-stop, ikke et færdigt produkt"],
+                    ["AI-sikkerhed", "Behandl koden som en prototype: ingen hardcodede nøgler, review før drift"],
+                    ["Falsk følelse af «done»", "Vær tydelig: det er en prototype af én feature, ikke et færdigt produkt"],
                     ["Værktøj fejler midt i build", "Mentor on-call + fallback-demo klar"],
                   ].map((r, i) => (
                     <tr key={i} className="border-b border-rule/60">
