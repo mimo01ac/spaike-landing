@@ -32,7 +32,7 @@ const AGENDA: { time: string; label: string }[] = [
 const REQUIREMENTS: string[] = [
   "3-4 personer der deler ét konkret problem",
   "Et reelt, aktuelt problem, ikke hypotetisk",
-  "Kan afgrænses til en MVP på én dag",
+  "Én afgrænset problemstilling, lille nok til at vi kan bygge noget på én dag (brug værktøjet nedenfor til at finde et par gode kandidater)",
   "Software- eller automatiserings-formet (ikke hardware)",
   "Ledelsens opbakning + deltagerne fri fra daglige opgaver den dag",
   "Adgang til vibe coding-værktøjer + API-adgang til relevante systemer",
