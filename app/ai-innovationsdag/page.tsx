@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Logo from "../components/Logo";
 import DiscoveryTool from "./_components/DiscoveryTool";
+import ValueAccordion from "./_components/ValueAccordion";
 
 export const metadata: Metadata = {
   title: "AI-innovationsdag: byg en løsning på ét problem på én dag | SpAIke",
@@ -179,27 +180,13 @@ export default function Page() {
               <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
                 For forretningen
               </p>
-              <div className="space-y-6">
-                {FOR_FORRETNINGEN.map((b) => (
-                  <div key={b.titel} className="border-l-2 border-rule pl-4">
-                    <h3 className="font-serif text-lg text-ink mb-1">{b.titel}</h3>
-                    <p className="text-[15px] text-ink-soft leading-relaxed">{b.tekst}</p>
-                  </div>
-                ))}
-              </div>
+              <ValueAccordion items={FOR_FORRETNINGEN} />
             </div>
             <div>
               <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
                 For dem der deltager
               </p>
-              <div className="space-y-6">
-                {FOR_DELTAGERNE.map((b) => (
-                  <div key={b.titel} className="border-l-2 border-rule pl-4">
-                    <h3 className="font-serif text-lg text-ink mb-1">{b.titel}</h3>
-                    <p className="text-[15px] text-ink-soft leading-relaxed">{b.tekst}</p>
-                  </div>
-                ))}
-              </div>
+              <ValueAccordion items={FOR_DELTAGERNE} />
             </div>
           </div>
 
