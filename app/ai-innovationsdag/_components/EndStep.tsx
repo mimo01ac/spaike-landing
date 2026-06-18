@@ -1,20 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import type { CaseBriefData, GateInfo } from "../_types";
+import type { CaseBriefData, ChatMsg } from "../_types";
 
 interface Props {
-  gate: GateInfo;
+  token: string;
   brief: CaseBriefData;
-  onSubmitted: () => void;
+  transcript: ChatMsg[];
+  onDone: (wantHelp: boolean) => void;
 }
 
-export default function ApplicationForm({ gate, brief, onSubmitted }: Props) {
-  const [name, setName] = useState(gate.name);
-  const [email, setEmail] = useState(gate.email);
-  const [phone, setPhone] = useState("");
-  const [company, setCompany] = useState(gate.company || brief.virksomhed || "");
-  const [notes, setNotes] = useState("");
+export default function EndStep({ token, brief, transcript, onDone }: Props) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState(brief.virksomhed || "");
+  const [wantHelp, setWantHelp] = useState(false);
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,28 +28,28 @@ export default function ApplicationForm({ gate, brief, onSubmitted }: Props) {
     }
     setBusy(true);
     try {
-      const res = await fetch("/api/innovationsdag/apply", {
+      const res = await fetch("/api/innovationsdag/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          token: gate.token,
-          recordId: gate.recordId,
+          token,
           name,
           email,
-          phone,
           company,
-          notes,
           consent,
+          want_help: wantHelp,
           case_brief: brief,
+          transcript,
         }),
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Kunne ikke sende. Prøv igen.");
+        setError(data.error ?? "Noget gik galt. Prøv igen.");
         setBusy(false);
         return;
       }
-      onSubmitted();
+      window.umami?.track(wantHelp ? "innovationsdag_lead_help" : "innovationsdag_lead_guide");
+      onDone(wantHelp);
     } catch {
       setError("Kunne ikke oprette forbindelse. Prøv igen.");
       setBusy(false);
@@ -58,13 +58,11 @@ export default function ApplicationForm({ gate, brief, onSubmitted }: Props) {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <p className="text-[13px] text-ink-soft leading-relaxed">
-        Din case-brief vedhæftes automatisk, så jeg kender jeres problem inden vi taler sammen.
-      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input
           type="text"
           required
+          maxLength={120}
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Navn"
@@ -73,33 +71,35 @@ export default function ApplicationForm({ gate, brief, onSubmitted }: Props) {
         <input
           type="email"
           required
+          maxLength={200}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail"
           className="bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none"
         />
-        <input
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="Telefon (valgfrit)"
-          className="bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none"
-        />
-        <input
-          type="text"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          placeholder="Virksomhed"
-          className="bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none"
-        />
       </div>
-      <textarea
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        placeholder="Andet jeg bør vide? (valgfrit)"
-        rows={3}
+      <input
+        type="text"
+        maxLength={120}
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
+        placeholder="Virksomhed (valgfrit)"
         className="w-full bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none"
       />
+
+      <label className="flex items-start gap-3 text-[14px] text-ink leading-relaxed">
+        <input
+          type="checkbox"
+          checked={wantHelp}
+          onChange={(e) => setWantHelp(e.target.checked)}
+          className="mt-1 accent-amber-dark"
+        />
+        <span>
+          Jeg vil gerne høre om hjælp til at køre en innovationsdag (jeg søger 1-2
+          pilotvirksomheder, gratis).
+        </span>
+      </label>
+
       <label className="flex items-start gap-3 text-[13px] text-ink-soft leading-relaxed">
         <input
           type="checkbox"
@@ -108,17 +108,23 @@ export default function ApplicationForm({ gate, brief, onSubmitted }: Props) {
           className="mt-1 accent-amber-dark"
         />
         <span>
-          Jeg accepterer, at SpAIke gemmer mine oplysninger og case-briefen for at behandle min
-          ansøgning.
+          Jeg accepterer, at SpAIke gemmer mine oplysninger, samtalen og case-briefen for at sende
+          mig materialet og hjælpe mig videre. Se{" "}
+          <a href="#privatliv" className="text-amber-dark underline">
+            privatlivsnoten
+          </a>
+          .
         </span>
       </label>
+
       {error && <p className="text-[13px] text-red-700">{error}</p>}
+
       <button
         type="submit"
         disabled={busy}
         className="bg-ink text-cream px-6 py-3 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors disabled:opacity-60"
       >
-        {busy ? "Sender …" : "Send ansøgning →"}
+        {busy ? "Sender …" : "Send mig brief + guide →"}
       </button>
     </form>
   );

@@ -142,6 +142,24 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Hvad er det — afklaring */}
+      <section className="border-t border-rule bg-cream-deep">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-10">
+          <div className="max-w-2xl">
+            <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
+              Hvad er en AI-innovationsdag?
+            </p>
+            <p className="text-[15px] text-ink-soft leading-relaxed">
+              Kært barn har mange navne. Nogle kalder det et hackathon. Kort sagt er det én dag,
+              hvor et lille team fra jeres egen virksomhed bygger en fungerende løsning på ét
+              konkret problem, med AI-værktøjer og hands-on sparring fra mig. Ingen kodebaggrund
+              nødvendig. I går fra dagen med en prototype og en helt ny fornemmelse for, hvad I selv
+              kan bygge. Vil I køre den selv, får I også min guide med jeres best practices.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Hvorfor — værdi */}
       <section className="border-t border-rule">
         <div className="max-w-content mx-auto px-6 md:px-12 py-16">

@@ -11,15 +11,17 @@ defineret problem.
 ## Arkitektur
 
 ```
-Gate (navn+mail+samtykke+Turnstile)
-  -> /api/innovationsdag/gate     udsteder signeret session-token, opretter lead
+Tool åbner -> /api/innovationsdag/start   udsteder signeret session-token (ingen mail-gate)
 Chat (streaming)
   -> /api/innovationsdag/chat     Claude Haiku 4.5, NDJSON-stream, brief som tool-kald
-Brief vist -> /api/innovationsdag/session   persisterer transcript + case_brief
-To veje:
-  - Gør det selv (DIY-playbook, TODO-link)  -> session path_chosen=diy
-  - Søg om pilot                            -> /api/innovationsdag/apply (+ brief vedhæftet)
+Brief vist (downloadbar) + slut-step:
+  navn+mail+samtykke (+ "vil have hjælp"-tjek)
+  -> /api/innovationsdag/lead     gemmer lead + transcript + brief; opretter application hvis hjælp ønskes
 ```
+
+> **Ingen mail-gate:** folk chatter med det samme. Persondata gemmes KUN i
+> slut-steppet, med eksplicit samtykke (GDPR). Mailen er et værdi-tilbud:
+> "få din brief + min DIY-guide tilsendt".
 
 - **Model:** `claude-haiku-4-5` (server-side, streaming, prompt caching). Skift i
   `_config/agent.ts`.
@@ -33,19 +35,20 @@ To veje:
 ## Filer
 
 - `_config/agent.ts` — system-prompt + brief-schema + model/grænser (rediger her).
-- `_components/` — `DiscoveryTool` (orkestrator), `Gate`, `Chat`, `CaseBrief`,
-  `ApplicationForm`.
+- `_components/` — `DiscoveryTool` (orkestrator), `Chat`, `CaseBrief`, `EndStep`.
 - `_types.ts` — delte typer.
-- `app/api/innovationsdag/{gate,chat,session,apply}/route.ts` — server-routes.
+- `app/api/innovationsdag/{start,chat,lead}/route.ts` — server-routes.
 - `lib/{turnstile,sessionToken,rateLimit,pocketbase}.ts` — sikkerhed + storage.
 - `scripts/setup-pocketbase.mjs` — idempotent collection-setup.
 
 ## Sikkerhed / cost
 
-- Gate udsteder HMAC-signeret session-token (1t TTL); chat kræver gyldigt token.
+- `/start` udsteder HMAC-signeret session-token (1t TTL); chat kræver gyldigt token.
 - Tur-loft (`MAX_TURNS`) + payload-størrelses-guard i chat-routen (stateless,
-  serverless-sikkert).
-- Cloudflare Turnstile på gaten (rigtig bot-beskyttelse; mail-feltet er lead-gen).
+  serverless-sikkert) + per-IP rate-limit på `/start` og `/chat`.
+- Cloudflare Turnstile er **valgfri** og verificeres i `/start` hvis keys er sat
+  (rendres usynligt i tool'et). Uden keys springes det over. Tilføj keys hvis
+  misbrug viser sig.
 - Best-effort per-IP rate-limit (in-memory; skift til Vercel KV for hård,
   distribueret grænse).
 - Sæt et **spend-limit** på Anthropic-nøglen i Console.
@@ -72,8 +75,12 @@ automatisk; det er Michaels beslutning.
 
 ## TODO før go-live
 
-- [ ] DIY-playbook-link i `_components/DiscoveryTool.tsx` (`DIY_PLAYBOOK_URL`).
-- [ ] Cloudflare Turnstile-widget (site-key + secret) -> env.
+- [ ] **DIY-guide:** indhold/fil/link (Michael har best practices samlet) ->
+  `DIY_PLAYBOOK_URL` i `_components/DiscoveryTool.tsx`.
+- [ ] **Mail-afsendelse:** slut-steppet lover "få brief + guide tilsendt", men
+  faktisk afsendelse kræver en mail-udbyder (fx Resend). Indtil da fanges leadet
+  i PocketBase og mailen sendes manuelt. Wire Resend når guiden er klar.
+- [ ] (Valgfrit) Cloudflare Turnstile (site-key + secret) -> env, hvis misbrug.
 - [ ] Alle env vars i Vercel.
 - [ ] Link siden i nav når soft-launch er slut (pt. kun direkte URL).
 ```

@@ -1,154 +1,184 @@
 "use client";
 
-import { useState } from "react";
-import type { CaseBriefData, ChatMsg, GateInfo } from "../_types";
-import Gate from "./Gate";
+import { useEffect, useRef, useState } from "react";
+import type { CaseBriefData, ChatMsg } from "../_types";
 import Chat from "./Chat";
 import CaseBrief from "./CaseBrief";
-import ApplicationForm from "./ApplicationForm";
+import EndStep from "./EndStep";
 
-// TODO Michael: indsæt linket til den gratis DIY-playbook her, når den er klar.
+// TODO Michael: indsæt linket til den gratis DIY-guide (best practices til at
+// køre din egen innovationsdag) her, når den er klar.
 const DIY_PLAYBOOK_URL = "";
 
-type Stage = "gate" | "chat" | "brief";
+const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-async function persistSession(payload: Record<string, unknown>) {
-  try {
-    await fetch("/api/innovationsdag/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-  } catch {
-    /* persistering må ikke vælte UI'et */
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        el: HTMLElement,
+        opts: { sitekey: string; callback: (t: string) => void; size?: string },
+      ) => string;
+    };
   }
 }
 
+type Stage = "loading" | "chat" | "brief";
+
 export default function DiscoveryTool() {
-  const [stage, setStage] = useState<Stage>("gate");
-  const [gate, setGate] = useState<GateInfo | null>(null);
+  const [stage, setStage] = useState<Stage>("loading");
+  const [token, setToken] = useState<string | null>(null);
   const [brief, setBrief] = useState<CaseBriefData | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [applied, setApplied] = useState(false);
-  const [diyChosen, setDiyChosen] = useState(false);
+  const [transcript, setTranscript] = useState<ChatMsg[]>([]);
+  const [done, setDone] = useState<null | { wantHelp: boolean }>(null);
+  const [startError, setStartError] = useState<string | null>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const startedRef = useRef(false);
 
-  function onGatePass(info: GateInfo) {
-    setGate(info);
-    setStage("chat");
-  }
-
-  function onBrief(b: CaseBriefData, transcript: ChatMsg[]) {
-    setBrief(b);
-    setStage("brief");
-    if (gate) {
-      void persistSession({
-        token: gate.token,
-        recordId: gate.recordId,
-        transcript,
-        case_brief: b,
-        company: b.virksomhed,
-        size: b.stoerrelse,
+  async function start(turnstileToken?: string) {
+    try {
+      const res = await fetch("/api/innovationsdag/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ turnstileToken }),
       });
+      const data = await res.json();
+      if (!res.ok) {
+        setStartError(data.error ?? "Kunne ikke starte. Genindlæs siden.");
+        return;
+      }
+      setToken(data.token);
+      setStage("chat");
+    } catch {
+      setStartError("Kunne ikke oprette forbindelse. Genindlæs siden.");
     }
   }
 
-  function chooseDiy() {
-    setDiyChosen(true);
-    if (gate) {
-      void persistSession({ token: gate.token, recordId: gate.recordId, path_chosen: "diy" });
-    }
-    window.umami?.track("innovationsdag_path_diy");
-  }
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
 
-  const initialUserMessage = gate
-    ? `Hej! Jeg hedder ${gate.name}${gate.company ? ` fra ${gate.company}` : ""}. Jeg vil gerne finde en god case til en AI-innovationsdag.`
-    : "";
+    if (!SITE_KEY) {
+      void start();
+      return;
+    }
+    // Turnstile konfigureret: render usynligt og start når vi har et token.
+    const render = () => {
+      if (window.turnstile && widgetRef.current && !widgetRef.current.hasChildNodes()) {
+        window.turnstile.render(widgetRef.current, {
+          sitekey: SITE_KEY,
+          size: "flexible",
+          callback: (t) => void start(t),
+        });
+      }
+    };
+    if (window.turnstile) {
+      render();
+    } else {
+      const s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      s.async = true;
+      s.onload = render;
+      document.head.appendChild(s);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const initialUserMessage =
+    "Hej! Jeg vil gerne finde en god case fra vores hverdag til en AI-innovationsdag.";
 
   return (
     <div>
-      {stage === "gate" && <Gate onPass={onGatePass} />}
-
-      {stage === "chat" && gate && (
-        <Chat token={gate.token} initialUserMessage={initialUserMessage} onBrief={onBrief} />
+      {stage === "loading" && (
+        <div className="max-w-2xl mx-auto text-center py-10">
+          {startError ? (
+            <p className="text-red-700 text-sm">{startError}</p>
+          ) : (
+            <p className="text-muted text-sm italic">Starter Innovationsdag-guiden …</p>
+          )}
+          {SITE_KEY && <div ref={widgetRef} className="mt-4 flex justify-center" />}
+        </div>
       )}
 
-      {stage === "brief" && brief && gate && (
+      {stage === "chat" && token && (
+        <div className="max-w-2xl mx-auto">
+          <div className="mb-6 text-center">
+            <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
+              Innovationsdag-guiden
+            </p>
+            <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-2">
+              Find jeres egen AI-case
+            </h3>
+            <p className="text-ink-soft leading-relaxed">
+              Svar på et par spørgsmål om jeres hverdag, så hjælper jeg jer med at finde 1-3
+              konkrete cases. I går fra det med en færdig brief.
+            </p>
+          </div>
+          <Chat token={token} initialUserMessage={initialUserMessage} onBrief={(b, t) => {
+            setBrief(b);
+            setTranscript(t);
+            setStage("brief");
+          }} />
+        </div>
+      )}
+
+      {stage === "brief" && brief && token && (
         <div className="space-y-12">
           <CaseBrief brief={brief} />
 
           <div className="no-print max-w-2xl mx-auto border-t border-rule pt-10">
-            <h3 className="font-serif text-2xl text-ink leading-tight mb-2 text-center">
-              To veje herfra
-            </h3>
-            <p className="text-ink-soft text-center mb-8 leading-relaxed">
-              Din brief er din uanset hvad. Vælg den vej der passer jer.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Gør det selv */}
-              <div className="border border-rule rounded bg-cream p-6 flex flex-col">
-                <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
-                  Gør det selv
-                </p>
-                <p className="text-[14px] text-ink-soft leading-relaxed flex-1">
-                  Tag briefen og kør jeres egen innovationsdag. Jeg har lavet en gratis playbook,
-                  der tager jer gennem dagen, trin for trin. I kan få værdi helt uden mig.
-                </p>
-                {DIY_PLAYBOOK_URL ? (
-                  <a
-                    href={DIY_PLAYBOOK_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={chooseDiy}
-                    className="mt-5 inline-block border border-ink text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors text-center"
-                  >
-                    Hent playbook →
-                  </a>
-                ) : (
-                  <button
-                    onClick={chooseDiy}
-                    className="mt-5 border border-ink text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors"
-                  >
-                    {diyChosen ? "Playbook kommer snart, jeg sender den" : "Jeg vil gøre det selv"}
-                  </button>
-                )}
-              </div>
-
-              {/* Søg om gratis innovationsdag */}
-              <div className="border border-amber-dark rounded bg-cream-deep p-6 flex flex-col">
-                <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
-                  Søg om en gratis innovationsdag
-                </p>
-                <p className="text-[14px] text-ink-soft leading-relaxed flex-1">
-                  Jeg søger 1-2 pilotvirksomheder for at finpudse processen og bygge rigtige cases.
-                  Ansøger du, kommer du med et defineret problem og jeg kender allerede jeres
-                  forretning.
-                </p>
-                {!showForm && !applied && (
-                  <button
-                    onClick={() => {
-                      setShowForm(true);
-                      window.umami?.track("innovationsdag_path_apply");
-                    }}
-                    className="mt-5 bg-ink text-cream px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
-                  >
-                    Søg om pilot →
-                  </button>
-                )}
-              </div>
+            {/* DIY-guide som det centrale værdi-tilbud */}
+            <div className="border border-amber-dark rounded bg-cream-deep p-6 mb-8">
+              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
+                Kør den selv
+              </p>
+              <h3 className="font-serif text-xl text-ink leading-snug mb-2">
+                Få min guide til at køre din egen innovationsdag
+              </h3>
+              <p className="text-[15px] text-ink-soft leading-relaxed">
+                Jeg har samlet mine best practices i en praktisk guide, så I kan køre dagen selv,
+                trin for trin (mange kalder det et hackathon). Sammen med jeres case-brief har I så
+                både et godt udgangspunkt og en opskrift. I får begge dele tilsendt.
+              </p>
             </div>
 
-            {showForm && !applied && (
-              <div className="mt-8 border border-rule rounded bg-cream p-6">
-                <ApplicationForm gate={gate} brief={brief} onSubmitted={() => setApplied(true)} />
-              </div>
-            )}
-
-            {applied && (
-              <div className="mt-8 border border-amber-dark rounded bg-cream-deep p-6 text-center">
-                <p className="font-serif text-xl text-ink mb-1.5">Tak, jeg har modtaget din ansøgning.</p>
+            {!done ? (
+              <>
+                <h3 className="font-serif text-2xl text-ink leading-tight mb-2">
+                  Vil du have det hele tilsendt?
+                </h3>
+                <p className="text-ink-soft mb-6 leading-relaxed">
+                  Skriv din mail, så sender jeg din case-brief og min guide til dig. Kryds af hvis du
+                  også vil høre om hjælp til at køre dagen.
+                </p>
+                <EndStep
+                  token={token}
+                  brief={brief}
+                  transcript={transcript}
+                  onDone={(wantHelp) => setDone({ wantHelp })}
+                />
+              </>
+            ) : (
+              <div className="border border-amber-dark rounded bg-cream-deep p-6 text-center">
+                <p className="font-serif text-xl text-ink mb-1.5">Tak, det er på vej.</p>
                 <p className="text-ink-soft text-[14px]">
-                  Jeg vender tilbage på {gate.email} hurtigst muligt.
+                  {done.wantHelp
+                    ? "Du får din brief og guide, og jeg vender tilbage om en mulig innovationsdag."
+                    : "Du får din case-brief og min guide til at køre dagen selv."}
+                  {DIY_PLAYBOOK_URL && (
+                    <>
+                      {" "}
+                      <a
+                        href={DIY_PLAYBOOK_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-amber-dark underline"
+                      >
+                        Hent guiden nu
+                      </a>
+                      .
+                    </>
+                  )}
                 </p>
               </div>
             )}
