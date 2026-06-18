@@ -7,10 +7,19 @@ interface Props {
   token: string;
   initialUserMessage: string;
   onBrief: (brief: CaseBriefData, transcript: ChatMsg[]) => void;
+  restoredMessages?: ChatMsg[];
+  onMessagesChange?: (messages: ChatMsg[]) => void;
 }
 
-export default function Chat({ token, initialUserMessage, onBrief }: Props) {
-  const [messages, setMessages] = useState<ChatMsg[]>([]);
+export default function Chat({
+  token,
+  initialUserMessage,
+  onBrief,
+  restoredMessages,
+  onMessagesChange,
+}: Props) {
+  const hasRestored = !!(restoredMessages && restoredMessages.length > 0);
+  const [messages, setMessages] = useState<ChatMsg[]>(hasRestored ? restoredMessages! : []);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,9 +30,17 @@ export default function Chat({ token, initialUserMessage, onBrief }: Props) {
   useEffect(() => {
     if (started.current) return;
     started.current = true;
+    // Genoptaget samtale: send IKKE intro-beskeden igen.
+    if (hasRestored) return;
     void send(initialUserMessage, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Persistér samtalen (op til parent -> localStorage) så et reload ikke taber den.
+  useEffect(() => {
+    onMessagesChange?.(messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });

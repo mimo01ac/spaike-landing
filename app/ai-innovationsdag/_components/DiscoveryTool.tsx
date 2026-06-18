@@ -24,15 +24,59 @@ declare global {
 
 type Stage = "loading" | "chat" | "brief";
 
+// Gem igangværende samtale i browseren, så reload/refresh/genstart ikke taber
+// den. Det er brugerens egne data på egen maskine (ikke server-side), så ingen
+// samtykke-krav; ryddes når leadet sendes eller man starter forfra.
+const STORE_KEY = "spaike_innovationsdag_v1";
+
+interface Store {
+  messages?: ChatMsg[];
+  brief?: CaseBriefData;
+  transcript?: ChatMsg[];
+}
+
+function loadStore(): Store {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(STORE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveStore(s: Store) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORE_KEY, JSON.stringify(s));
+  } catch {
+    /* localStorage utilgængelig (privat-tilstand e.l.) */
+  }
+}
+
+function clearStore() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(STORE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 export default function DiscoveryTool() {
+  const [restored] = useState<Store>(() => loadStore());
   const [stage, setStage] = useState<Stage>("loading");
   const [token, setToken] = useState<string | null>(null);
-  const [brief, setBrief] = useState<CaseBriefData | null>(null);
-  const [transcript, setTranscript] = useState<ChatMsg[]>([]);
+  const [brief, setBrief] = useState<CaseBriefData | null>(restored.brief ?? null);
+  const [transcript, setTranscript] = useState<ChatMsg[]>(restored.transcript ?? []);
   const [done, setDone] = useState<null | { wantHelp: boolean }>(null);
   const [startError, setStartError] = useState<string | null>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+
+  function resetAll() {
+    clearStore();
+    window.location.reload();
+  }
 
   async function start(turnstileToken?: string) {
     try {
@@ -47,7 +91,8 @@ export default function DiscoveryTool() {
         return;
       }
       setToken(data.token);
-      setStage("chat");
+      // Genskab brief-stadiet hvis der lå en færdig brief i localStorage.
+      setStage(restored.brief ? "brief" : "chat");
     } catch {
       setStartError("Kunne ikke oprette forbindelse. Genindlæs siden.");
     }
@@ -113,11 +158,27 @@ export default function DiscoveryTool() {
               konkrete cases. I går fra det med en færdig brief.
             </p>
           </div>
-          <Chat token={token} initialUserMessage={initialUserMessage} onBrief={(b, t) => {
-            setBrief(b);
-            setTranscript(t);
-            setStage("brief");
-          }} />
+          <Chat
+            token={token}
+            initialUserMessage={initialUserMessage}
+            restoredMessages={restored.messages}
+            onMessagesChange={(m) => saveStore({ messages: m })}
+            onBrief={(b, t) => {
+              saveStore({ brief: b, transcript: t });
+              setBrief(b);
+              setTranscript(t);
+              setStage("brief");
+            }}
+          />
+          <div className="text-center mt-4">
+            <button
+              type="button"
+              onClick={resetAll}
+              className="font-mono text-[11px] tracking-wider uppercase text-muted hover:text-amber-dark transition-colors"
+            >
+              Start forfra
+            </button>
+          </div>
         </div>
       )}
 
@@ -160,7 +221,10 @@ export default function DiscoveryTool() {
                   token={token}
                   brief={brief}
                   transcript={transcript}
-                  onDone={(wantHelp) => setDone({ wantHelp })}
+                  onDone={(wantHelp) => {
+                    clearStore();
+                    setDone({ wantHelp });
+                  }}
                 />
               </>
             ) : (
