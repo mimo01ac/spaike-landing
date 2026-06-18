@@ -90,12 +90,29 @@ export default function Gate({ onPass }: Props) {
         Innovationsdag-guiden
       </p>
       <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-3">
-        Find en god case fra jeres egen hverdag
+        Find jeres egen AI-case, gratis
       </h3>
-      <p className="text-ink-soft leading-relaxed mb-7">
-        Skriv dit navn og din mail, så går vi i gang. Du går fra det med en konkret,
-        brugbar case-brief, du kan beholde uanset hvad du vælger bagefter.
+      <p className="text-ink-soft leading-relaxed mb-6">
+        Når du skriver din mail, åbner jeg Innovationsdag-guiden: en AI der stiller jer et
+        par spørgsmål om jeres hverdag og hjælper jer med at finde 1-3 konkrete problemer,
+        der egner sig til en innovationsdag, lige til jeres virksomhed. I går fra det med en
+        færdig case-brief, I kan beholde uanset hvad I vælger bagefter.
       </p>
+
+      <ol className="mb-7 space-y-2.5">
+        {[
+          "Skriv navn og mail, så låser du guiden op.",
+          "AI-guiden interviewer jer (5-10 min) og skærper jeres bedste cases.",
+          "I får en konkret case-brief, klar til at gå i gang ud fra.",
+        ].map((step, i) => (
+          <li key={i} className="flex gap-3 text-[14px] text-ink leading-relaxed">
+            <span className="font-mono text-[12px] text-amber-dark shrink-0 mt-0.5">
+              {i + 1}.
+            </span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
 
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -161,7 +178,7 @@ export default function Gate({ onPass }: Props) {
           disabled={submitting}
           className="bg-ink text-cream px-6 py-3 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors disabled:opacity-60"
         >
-          {submitting ? "Et øjeblik …" : "Start →"}
+          {submitting ? "Åbner …" : "Åbn guiden →"}
         </button>
       </form>
     </div>

@@ -88,12 +88,32 @@ export async function POST(req: Request) {
   const client = new Anthropic();
 
   const encoder = new TextEncoder();
+  let claudeStream: ReturnType<Anthropic["messages"]["stream"]> | null = null;
+
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (obj: unknown) =>
-        controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"));
+      let closed = false;
+      const safeClose = () => {
+        if (closed) return;
+        closed = true;
+        try {
+          controller.close();
+        } catch {
+          /* allerede lukket */
+        }
+      };
+      // Guard mod enqueue på en lukket/afbrudt controller (klienten kan droppe
+      // forbindelsen mens Claude stadig streamer).
+      const send = (obj: unknown) => {
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"));
+        } catch {
+          closed = true;
+        }
+      };
       try {
-        const claudeStream = client.messages.stream({
+        claudeStream = client.messages.stream({
           model: MODEL,
           max_tokens: MAX_TOKENS,
           system: [
@@ -103,9 +123,9 @@ export async function POST(req: Request) {
           messages: anthropicMessages,
         });
 
-        claudeStream.on("text", (delta) => send({ type: "text", text: delta }));
+        claudeStream.on("text", (delta: string) => send({ type: "text", text: delta }));
 
-        const final = await claudeStream.finalMessage();
+        const final: Anthropic.Message = await claudeStream.finalMessage();
         const briefBlock = final.content.find(
           (b): b is Anthropic.ToolUseBlock =>
             b.type === "tool_use" && b.name === BRIEF_TOOL_NAME,
@@ -118,7 +138,15 @@ export async function POST(req: Request) {
         console.error("Claude stream-fejl:", (e as Error).message);
         send({ type: "error", error: "Der opstod en fejl. Prøv igen." });
       } finally {
-        controller.close();
+        safeClose();
+      }
+    },
+    cancel() {
+      // Klienten afbrød: stop Claude-streamen så vi ikke spilder tokens.
+      try {
+        claudeStream?.abort();
+      } catch {
+        /* ignore */
       }
     },
   });

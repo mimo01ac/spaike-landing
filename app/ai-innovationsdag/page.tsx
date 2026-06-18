@@ -40,6 +40,52 @@ const REQUIREMENTS: string[] = [
   "Laptops + internet",
 ];
 
+const FOR_FORRETNINGEN: { titel: string; tekst: string }[] = [
+  {
+    titel: "En konkret intern succescase",
+    tekst:
+      "I går fra dagen med en fungerende prototype på et problem I selv kender. Ikke en abstrakt demo, men beviset på at det kan lade sig gøre hos jer.",
+  },
+  {
+    titel: "AI-kompetencen spredes ud i huset",
+    tekst:
+      "Forståelsen sidder ikke længere kun hos IT. I får mennesker på tværs af funktioner der kan drive forandringen indefra bagefter.",
+  },
+  {
+    titel: "Problemer og talent kommer frem",
+    tekst:
+      "Når folk fra forskellige funktioner bygger sammen, brydes siloerne, og I ser hvor de reelle muligheder og kræfter ligger.",
+  },
+  {
+    titel: "En kvalificeret vej videre",
+    tekst:
+      "Efter dagen ved I præcis hvad der er værd at bygge videre på og automatisere. I gætter ikke længere.",
+  },
+];
+
+const FOR_DELTAGERNE: { titel: string; tekst: string }[] = [
+  {
+    titel: "Den tekniske barriere falder",
+    tekst:
+      "Den største bremse for AI er ofte troen på at det er for svært at lære. En dag med hænderne i værktøjet fjerner den følelse for folk der aldrig har prøvet det.",
+  },
+  {
+    titel: "De forstår hvad AI faktisk kan",
+    tekst:
+      "Ikke hvad de har hørt det kan, men hvad de selv har set virke. Det flytter folk fra usikkerhed til handlekraft.",
+  },
+  {
+    titel: "En ny måde at tænke på",
+    tekst:
+      "Når man selv har bygget noget, begynder man at se muligheder overalt. Deltagerne bliver ambassadører for forandringen, ikke skeptikere.",
+  },
+  {
+    titel: "Færdigheder de tager med",
+    tekst:
+      "De konkrete greb fra dagen følger med tilbage i hverdagen og bruges på de næste opgaver.",
+  },
+];
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-3">
@@ -93,6 +139,56 @@ export default function Page() {
           >
             Find din case →
           </a>
+        </div>
+      </section>
+
+      {/* Hvorfor — værdi */}
+      <section className="border-t border-rule">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16">
+          <SectionLabel>Hvorfor en AI-innovationsdag</SectionLabel>
+          <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-4 max-w-2xl">
+            Den hurtigste vej fra <span className="italic">&laquo;AI er svært&raquo;</span> til{" "}
+            <span className="italic">&laquo;det kan vi godt&raquo;</span>
+          </h2>
+          <p className="text-lg text-ink-soft leading-relaxed mb-12 max-w-2xl">
+            At sætte 4-5 mennesker af en hel dag skal kunne betale sig. Det gør det, fordi I ikke
+            kun løser ét problem. I åbner en helt ny måde at arbejde på, og I gør det på et problem
+            der betyder noget for jer.
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div>
+              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
+                For forretningen
+              </p>
+              <div className="space-y-6">
+                {FOR_FORRETNINGEN.map((b) => (
+                  <div key={b.titel} className="border-l-2 border-rule pl-4">
+                    <h3 className="font-serif text-lg text-ink mb-1">{b.titel}</h3>
+                    <p className="text-[15px] text-ink-soft leading-relaxed">{b.tekst}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
+                For dem der deltager
+              </p>
+              <div className="space-y-6">
+                {FOR_DELTAGERNE.map((b) => (
+                  <div key={b.titel} className="border-l-2 border-rule pl-4">
+                    <h3 className="font-serif text-lg text-ink mb-1">{b.titel}</h3>
+                    <p className="text-[15px] text-ink-soft leading-relaxed">{b.tekst}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <p className="font-serif text-xl md:text-2xl text-ink leading-snug italic mt-12 max-w-3xl border-t border-rule pt-8">
+            Resultatet er ikke en rapport der samler støv. Det er en løsning I kan se virke, et team
+            der har prøvet det på egen krop, og en ny tro på hvad I selv kan bygge.
+          </p>
         </div>
       </section>
 
