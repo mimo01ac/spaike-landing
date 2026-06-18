@@ -9,6 +9,7 @@ interface Props {
   onBrief: (brief: CaseBriefData, transcript: ChatMsg[]) => void;
   restoredMessages?: ChatMsg[];
   onMessagesChange?: (messages: ChatMsg[]) => void;
+  companyContext?: string;
 }
 
 export default function Chat({
@@ -17,6 +18,7 @@ export default function Chat({
   onBrief,
   restoredMessages,
   onMessagesChange,
+  companyContext,
 }: Props) {
   const hasRestored = !!(restoredMessages && restoredMessages.length > 0);
   const [messages, setMessages] = useState<ChatMsg[]>(hasRestored ? restoredMessages! : []);
@@ -59,7 +61,7 @@ export default function Chat({
       const res = await fetch("/api/innovationsdag/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, messages: history }),
+        body: JSON.stringify({ token, messages: history, companyContext }),
       });
 
       if (!res.ok || !res.body) {

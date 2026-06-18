@@ -12,6 +12,8 @@ defineret problem.
 
 ```
 Tool åbner -> /api/innovationsdag/start   udsteder signeret session-token (ingen mail-gate)
+Intro (valgfri): indtast website
+  -> /api/innovationsdag/research  web_fetch (Sonnet) -> kort branchekontekst, fodres ind i agenten
 Chat (streaming)
   -> /api/innovationsdag/chat     Claude Haiku 4.5, NDJSON-stream, brief som tool-kald
 Brief vist (downloadbar) + slut-step:
@@ -37,7 +39,9 @@ Brief vist (downloadbar) + slut-step:
 - `_config/agent.ts` — system-prompt + brief-schema + model/grænser (rediger her).
 - `_components/` — `DiscoveryTool` (orkestrator), `Chat`, `CaseBrief`, `EndStep`.
 - `_types.ts` — delte typer.
-- `app/api/innovationsdag/{start,chat,lead}/route.ts` — server-routes.
+- `app/api/innovationsdag/{start,research,chat,lead}/route.ts` — server-routes.
+  - `research` slår virksomhedens website op (Anthropic web_fetch, Sonnet) og
+    returnerer kort branchekontekst; chat-routen tager den som `companyContext`.
 - `lib/{turnstile,sessionToken,rateLimit,pocketbase}.ts` — sikkerhed + storage.
 - `scripts/setup-pocketbase.mjs` — idempotent collection-setup.
 

@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-type Stage = "loading" | "chat" | "brief";
+type Stage = "loading" | "intro" | "chat" | "brief";
 
 // Gem igangværende samtale i browseren, så reload/refresh/genstart ikke taber
 // den. Det er brugerens egne data på egen maskine (ikke server-side), så ingen
@@ -33,6 +33,7 @@ interface Store {
   messages?: ChatMsg[];
   brief?: CaseBriefData;
   transcript?: ChatMsg[];
+  companyContext?: string;
 }
 
 function loadStore(): Store {
@@ -70,8 +71,39 @@ export default function DiscoveryTool() {
   const [transcript, setTranscript] = useState<ChatMsg[]>(restored.transcript ?? []);
   const [done, setDone] = useState<null | { wantHelp: boolean }>(null);
   const [startError, setStartError] = useState<string | null>(null);
+  const [companyContext, setCompanyContext] = useState<string>(restored.companyContext ?? "");
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [researching, setResearching] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+
+  // Valgfrit website-opslag før chatten: giver agenten branchekontekst.
+  async function researchAndStart(skip: boolean) {
+    if (researching) return;
+    if (skip || !websiteUrl.trim()) {
+      setStage("chat");
+      return;
+    }
+    setResearching(true);
+    try {
+      const res = await fetch("/api/innovationsdag/research", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, url: websiteUrl }),
+      });
+      const data = await res.json().catch(() => ({}));
+      const ctx = (data?.context ?? "").trim();
+      if (ctx) {
+        setCompanyContext(ctx);
+        saveStore({ companyContext: ctx });
+      }
+    } catch {
+      /* fejler blødt: fortsæt uden kontekst */
+    } finally {
+      setResearching(false);
+      setStage("chat");
+    }
+  }
 
   function resetAll() {
     clearStore();
@@ -91,8 +123,14 @@ export default function DiscoveryTool() {
         return;
       }
       setToken(data.token);
-      // Genskab brief-stadiet hvis der lå en færdig brief i localStorage.
-      setStage(restored.brief ? "brief" : "chat");
+      // Genskab tidligere stadie fra localStorage; ellers vis intro-skærmen.
+      setStage(
+        restored.brief
+          ? "brief"
+          : restored.messages && restored.messages.length
+            ? "chat"
+            : "intro",
+      );
     } catch {
       setStartError("Kunne ikke oprette forbindelse. Genindlæs siden.");
     }
@@ -144,6 +182,54 @@ export default function DiscoveryTool() {
         </div>
       )}
 
+      {stage === "intro" && (
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
+            Innovationsdag-guiden
+          </p>
+          <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-2">
+            Find jeres egen AI-case
+          </h3>
+          <p className="text-ink-soft leading-relaxed mb-6">
+            Inden vi går i gang: smid gerne jeres website ind, så sætter jeg mig hurtigt ind i jeres
+            branche, før vi snakker. Det er helt valgfrit.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+            <input
+              type="url"
+              inputMode="url"
+              value={websiteUrl}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  void researchAndStart(false);
+                }
+              }}
+              placeholder="jeres-website.dk"
+              disabled={researching}
+              className="flex-1 bg-cream border border-rule rounded px-3.5 py-2.5 text-ink focus:border-amber-dark focus:outline-none disabled:opacity-60"
+            />
+            <button
+              type="button"
+              onClick={() => void researchAndStart(false)}
+              disabled={researching}
+              className="bg-ink text-cream px-6 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors disabled:opacity-60 whitespace-nowrap"
+            >
+              {researching ? "Kigger på siden …" : "Start →"}
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={() => void researchAndStart(true)}
+            disabled={researching}
+            className="mt-4 font-mono text-[11px] tracking-wider uppercase text-muted hover:text-amber-dark transition-colors disabled:opacity-60"
+          >
+            Spring over og start
+          </button>
+        </div>
+      )}
+
       {stage === "chat" && token && (
         <div className="max-w-2xl mx-auto">
           <div className="mb-6 text-center">
@@ -154,17 +240,19 @@ export default function DiscoveryTool() {
               Find jeres egen AI-case
             </h3>
             <p className="text-ink-soft leading-relaxed">
-              Svar på et par spørgsmål om jeres hverdag, så hjælper jeg jer med at finde 1-3
-              konkrete cases. I går fra det med en færdig brief.
+              {companyContext
+                ? "Jeg har kigget på jeres website. Lad os finde 1-3 konkrete cases. I går fra det med en færdig brief."
+                : "Svar på et par spørgsmål om jeres hverdag, så hjælper jeg jer med at finde 1-3 konkrete cases. I går fra det med en færdig brief."}
             </p>
           </div>
           <Chat
             token={token}
             initialUserMessage={initialUserMessage}
             restoredMessages={restored.messages}
-            onMessagesChange={(m) => saveStore({ messages: m })}
+            companyContext={companyContext}
+            onMessagesChange={(m) => saveStore({ messages: m, companyContext })}
             onBrief={(b, t) => {
-              saveStore({ brief: b, transcript: t });
+              saveStore({ brief: b, transcript: t, companyContext });
               setBrief(b);
               setTranscript(t);
               setStage("brief");

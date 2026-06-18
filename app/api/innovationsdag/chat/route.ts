@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     return json({ type: "error", error: "For mange anmodninger. Vent lidt." }, 429);
   }
 
-  let body: { token?: string; messages?: ClientMsg[] };
+  let body: { token?: string; messages?: ClientMsg[]; companyContext?: string };
   try {
     body = await req.json();
   } catch {
@@ -85,6 +85,20 @@ export async function POST(req: Request) {
     };
   });
 
+  // System-prompt + valgfri virksomheds-kontekst (fra research-routen).
+  const system: Anthropic.TextBlockParam[] = [
+    { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
+  ];
+  const ctx = (body.companyContext ?? "").trim();
+  if (ctx) {
+    system.push({
+      type: "text",
+      text:
+        `KONTEKST OM VIRKSOMHEDEN (research fra deres website, indtastet på forhånd):\n${ctx.slice(0, 4000)}\n\n` +
+        `Brug konteksten til at åbne med forståelse for deres branche. Spring spørgsmål over som konteksten allerede besvarer (fx hvad virksomheden laver). Bekræft kort din forståelse af branchen frem for at udspørge om den.`,
+    });
+  }
+
   const client = new Anthropic();
 
   const encoder = new TextEncoder();
@@ -116,9 +130,7 @@ export async function POST(req: Request) {
         claudeStream = client.messages.stream({
           model: MODEL,
           max_tokens: MAX_TOKENS,
-          system: [
-            { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
-          ],
+          system,
           tools: [BRIEF_TOOL],
           messages: anthropicMessages,
         });
