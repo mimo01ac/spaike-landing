@@ -175,20 +175,12 @@ export default function Page() {
             der betyder noget for jer.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div>
-              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
-                For forretningen
-              </p>
-              <ValueAccordion items={FOR_FORRETNINGEN} />
-            </div>
-            <div>
-              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-5">
-                For dem der deltager
-              </p>
-              <ValueAccordion items={FOR_DELTAGERNE} />
-            </div>
-          </div>
+          <ValueAccordion
+            groups={[
+              { label: "For forretningen", items: FOR_FORRETNINGEN },
+              { label: "For dem der deltager", items: FOR_DELTAGERNE },
+            ]}
+          />
 
           <p className="font-serif text-xl md:text-2xl text-ink leading-snug italic mt-12 max-w-3xl border-t border-rule pt-8">
             Resultatet er ikke en rapport der samler støv. Det er en løsning I kan se virke, et team
