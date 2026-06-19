@@ -107,12 +107,20 @@ export default function Page() {
               AI advisory
             </span>
           </a>
-          <a
-            href="#vaerktoej"
-            className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
-          >
-            Find din case →
-          </a>
+          <div className="flex items-center gap-5">
+            <a
+              href="/ai-innovationsdag/ideer"
+              className="hidden sm:inline font-mono text-[11px] tracking-widest uppercase text-ink-soft hover:text-amber-dark transition-colors"
+            >
+              Idékatalog
+            </a>
+            <a
+              href="#vaerktoej"
+              className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
+            >
+              Find din case →
+            </a>
+          </div>
         </div>
       </header>
 
@@ -143,9 +151,9 @@ export default function Page() {
             </a>
             <a
               href="/ai-innovationsdag/ideer"
-              className="inline-block font-mono text-[12px] tracking-wider uppercase text-ink-soft hover:text-amber-dark transition-colors sm:px-2"
+              className="inline-block border border-ink text-ink px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors text-center"
             >
-              Eller se idékataloget
+              Se idékataloget
             </a>
           </div>
         </div>
@@ -198,6 +206,41 @@ export default function Page() {
             Resultatet er ikke en rapport der samler støv. Det er en løsning I kan se virke, et team
             der har prøvet det på egen krop, og en ny tro på hvad I selv kan bygge.
           </p>
+        </div>
+      </section>
+
+      {/* Idékatalog-teaser */}
+      <section className="border-t border-rule">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16">
+          <div className="max-w-2xl">
+            <SectionLabel>Idékatalog</SectionLabel>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-4">
+              Brug for inspiration? Se hvad andre har bygget
+            </h2>
+            <p className="text-lg text-ink-soft leading-relaxed mb-7">
+              Det sværeste er ofte at se hvad der overhovedet er muligt. Jeg har samlet konkrete
+              cases, som kommercielle teams kan bygge på en dag, på tværs af salg, RevOps,
+              marketing, customer success og onboarding.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {["Salg", "RevOps", "Marketing", "Customer Success", "Onboarding", "Internt & data"].map(
+              (c) => (
+                <span
+                  key={c}
+                  className="font-mono text-[11px] tracking-wider uppercase px-3.5 py-1.5 rounded-full border border-rule text-ink-soft"
+                >
+                  {c}
+                </span>
+              ),
+            )}
+          </div>
+          <a
+            href="/ai-innovationsdag/ideer"
+            className="inline-block bg-ink text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
+          >
+            Se idékataloget →
+          </a>
         </div>
       </section>
 
