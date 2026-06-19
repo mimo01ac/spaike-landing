@@ -256,7 +256,13 @@ export default function DiscoveryTool() {
               setStage("brief");
             }}
           />
-          <div className="text-center mt-4">
+          <div className="flex items-center justify-center gap-5 mt-4">
+            <a
+              href="/ai-innovationsdag/ideer"
+              className="font-mono text-[11px] tracking-wider uppercase text-muted hover:text-amber-dark transition-colors"
+            >
+              Mangler du inspiration? Se idékataloget
+            </a>
             <button
               type="button"
               onClick={resetAll}

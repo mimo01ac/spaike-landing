@@ -134,12 +134,20 @@ export default function Page() {
             Det starter med at finde den rigtige case. Det hjælper værktøjet herunder jer med, og
             I går fra det med en brugbar brief uanset hvad.
           </p>
-          <a
-            href="#vaerktoej"
-            className="inline-block bg-ink text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
-          >
-            Find din case →
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+            <a
+              href="#vaerktoej"
+              className="inline-block bg-ink text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors text-center"
+            >
+              Find din case →
+            </a>
+            <a
+              href="/ai-innovationsdag/ideer"
+              className="inline-block font-mono text-[12px] tracking-wider uppercase text-ink-soft hover:text-amber-dark transition-colors sm:px-2"
+            >
+              Eller se idékataloget
+            </a>
+          </div>
         </div>
       </section>
 
