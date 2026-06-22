@@ -98,7 +98,7 @@ export default function EndStep({ token, brief, transcript, website, onDone }: P
         />
         <span>
           Jeg vil gerne høre om hjælp til at køre en innovationsdag (jeg søger 1-2
-          pilotvirksomheder, gratis).
+          pilotvirksomheder).
         </span>
       </label>
 

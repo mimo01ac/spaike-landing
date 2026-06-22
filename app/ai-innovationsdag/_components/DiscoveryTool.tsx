@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CaseBriefData, ChatMsg } from "../_types";
 import Chat from "./Chat";
-import CaseBrief from "./CaseBrief";
 import EndStep from "./EndStep";
 
 // DIY-guiden (best practices til at køre din egen innovationsdag).
@@ -275,76 +274,51 @@ export default function DiscoveryTool() {
       )}
 
       {stage === "brief" && brief && token && (
-        <div className="space-y-12">
-          <CaseBrief brief={brief} />
-
-          <div className="no-print max-w-2xl mx-auto border-t border-rule pt-10">
-            {/* DIY-guide som det centrale værdi-tilbud */}
-            <div className="border border-amber-dark rounded bg-cream-deep p-6 mb-8">
-              <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
-                Kør den selv
-              </p>
-              <h3 className="font-serif text-xl text-ink leading-snug mb-2">
-                Få min guide til at køre din egen innovationsdag
-              </h3>
-              <p className="text-[15px] text-ink-soft leading-relaxed mb-4">
-                Jeg har samlet mine best practices i en praktisk guide, så I kan køre dagen selv,
-                trin for trin (mange kalder det et hackathon). Sammen med jeres case-brief har I så
-                både et godt udgangspunkt og en opskrift. I får begge dele tilsendt.
-              </p>
-              <a
-                href={DIY_PLAYBOOK_URL}
-                className="inline-block border border-ink text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors"
-              >
-                Læs guiden →
-              </a>
-            </div>
-
-            {!done ? (
-              <>
-                <h3 className="font-serif text-2xl text-ink leading-tight mb-2">
-                  Vil du have det hele tilsendt?
-                </h3>
-                <p className="text-ink-soft mb-6 leading-relaxed">
-                  Skriv din mail, så sender jeg din case-brief og min guide til dig. Kryds af hvis du
-                  også vil høre om hjælp til at køre dagen.
+        <div className="max-w-2xl mx-auto">
+          {!done ? (
+            <>
+              <div className="text-center mb-8">
+                <p className="font-mono text-[11px] tracking-widest uppercase text-amber-dark mb-2">
+                  Din case-brief er klar
                 </p>
-                <EndStep
-                  token={token}
-                  brief={brief}
-                  transcript={transcript}
-                  website={website}
-                  onDone={(wantHelp) => {
-                    clearStore();
-                    setDone({ wantHelp });
-                  }}
-                />
-              </>
-            ) : (
-              <div className="border border-amber-dark rounded bg-cream-deep p-6 text-center">
-                <p className="font-serif text-xl text-ink mb-1.5">Tak, det er på vej.</p>
-                <p className="text-ink-soft text-[14px]">
-                  {done.wantHelp
-                    ? "Du får din brief og guide, og jeg vender tilbage om en mulig innovationsdag."
-                    : "Du får din case-brief og min guide til at køre dagen selv."}
-                  {DIY_PLAYBOOK_URL && (
-                    <>
-                      {" "}
-                      <a
-                        href={DIY_PLAYBOOK_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-amber-dark underline"
-                      >
-                        Hent guiden nu
-                      </a>
-                      .
-                    </>
-                  )}
+                <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-3">
+                  {brief.cases.length}{" "}
+                  {brief.cases.length === 1 ? "problemstilling" : "problemstillinger"}, der ville
+                  være gode at bygge på
+                </h3>
+                <p className="text-ink-soft leading-relaxed">
+                  Skriv din mail, så sender jeg din brief med kandidaterne, plus min guide til selv
+                  at køre en innovationsdag. Kryds af hvis du også vil høre om hjælp til at køre
+                  dagen.
                 </p>
               </div>
-            )}
-          </div>
+              <EndStep
+                token={token}
+                brief={brief}
+                transcript={transcript}
+                website={website}
+                onDone={(wantHelp) => {
+                  clearStore();
+                  setDone({ wantHelp });
+                }}
+              />
+            </>
+          ) : (
+            <div className="border border-amber-dark rounded bg-cream-deep p-6 text-center">
+              <p className="font-serif text-2xl text-ink mb-1.5">Tak, din brief er på vej.</p>
+              <p className="text-ink-soft leading-relaxed">
+                Du får din case-brief og min guide til at køre dagen selv på mail.
+                {done.wantHelp
+                  ? " Jeg vender også tilbage om en mulig innovationsdag."
+                  : ""}{" "}
+                Vil du allerede nu i gang, kan du{" "}
+                <a href={DIY_PLAYBOOK_URL} className="text-amber-dark underline">
+                  læse guiden her
+                </a>
+                .
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -404,7 +404,7 @@ export default function GuidePage() {
                 Det her er hele opskriften, og du kan køre den selv. Vil du hellere have, at jeg står
                 for forberedelsen, faciliteringen og mentorerne, så I bare skal møde op og bygge, så
                 hjælper jeg gerne. Lige nu søger jeg 1 til 2 pilotvirksomheder, jeg kan køre en
-                gratis AI-innovationsdag med, for at finpudse processen og bygge rigtige cases
+                AI-innovationsdag med, for at finpudse processen og bygge rigtige cases
                 sammen.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -412,7 +412,7 @@ export default function GuidePage() {
                   href="/ai-innovationsdag#vaerktoej"
                   className="inline-block bg-ink text-cream px-5 py-3 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors text-center"
                 >
-                  Søg om en gratis innovationsdag →
+                  Søg om en innovationsdag →
                 </a>
                 <a
                   href="/ai-innovationsdag#vaerktoej"
