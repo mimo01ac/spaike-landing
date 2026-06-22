@@ -17,6 +17,8 @@
 import { NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/sessionToken";
 import { createRecord } from "@/lib/pocketbase";
+import { sendEmail, renderBriefEmail } from "@/lib/email";
+import type { CaseBriefData } from "@/app/ai-innovationsdag/_types";
 
 export const runtime = "nodejs";
 
@@ -88,6 +90,14 @@ export async function POST(req: Request) {
         notes: "Via discovery-tool: ønsker hjælp til at køre en innovationsdag.",
         status: "new",
       });
+    }
+
+    // Send briefen + guide-link på mail (best-effort: leadet er gemt uanset).
+    const brief = body.case_brief as CaseBriefData | undefined;
+    if (brief && Array.isArray(brief.cases) && brief.cases.length > 0) {
+      const { subject, html } = renderBriefEmail(brief);
+      const sent = await sendEmail({ to: email, toName: name, subject, html });
+      if (!sent.ok) console.warn("Brief-mail ikke sendt:", sent.reason);
     }
 
     return NextResponse.json({ ok: true });

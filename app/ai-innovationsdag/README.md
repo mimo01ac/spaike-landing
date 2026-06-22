@@ -81,9 +81,11 @@ automatisk; det er Michaels beslutning.
 
 - [ ] **DIY-guide:** indhold/fil/link (Michael har best practices samlet) ->
   `DIY_PLAYBOOK_URL` i `_components/DiscoveryTool.tsx`.
-- [ ] **Mail-afsendelse:** slut-steppet lover "få brief + guide tilsendt", men
-  faktisk afsendelse kræver en mail-udbyder (fx Resend). Indtil da fanges leadet
-  i PocketBase og mailen sendes manuelt. Wire Resend når guiden er klar.
+- [ ] **Mail-afsendelse (Brevo):** integrationen er bygget (`lib/email.ts`,
+  sendes fra `/lead`). Mangler kun: `BREVO_API_KEY` i env + en **verificeret
+  afsender** i Brevo (`EMAIL_FROM_ADDRESS`, default michael@spaike.dk). Uden
+  nøgle gemmes leadet stadig i PocketBase, men mailen sendes ikke. NB: briefen
+  vises ikke længere på skærm, så mailen er eneste leverings-vej.
 - [ ] (Valgfrit) Cloudflare Turnstile (site-key + secret) -> env, hvis misbrug.
 - [ ] Alle env vars i Vercel.
 - [ ] Link siden i nav når soft-launch er slut (pt. kun direkte URL).
