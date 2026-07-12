@@ -121,7 +121,7 @@ export default function VibeCodingGuide() {
             { href: "#replit", text: "Replit: mest kraft, mest bøvl", tag: "Tool 03" },
             { href: "#v0", text: "v0: kun til flotte skærmbilleder", tag: "Tool 04" },
             { href: "#bolt", text: "Bolt: svær at anbefale lige nu", tag: "Tool 05" },
-            { href: "#sammenligning", text: "Sammenligningen på én skærm", tag: "Tabel" },
+            { href: "#sammenligning", text: "Det samlede overblik", tag: "Tabel" },
             { href: "#tre-ting", text: "De tre ting, demoerne ikke fortæller dig", tag: "Vigtigst" },
             { href: "#kom-i-gang", text: "Sådan kommer I i gang", tag: "Playbook" },
           ].map((item, i) => (
@@ -370,7 +370,7 @@ export default function VibeCodingGuide() {
       {/* ============ SAMMENLIGNING ============ */}
       <section className="my-16 scroll-mt-10" id="sammenligning">
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Sammenligningen på én skærm
+          Det samlede overblik
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-[14px]">
@@ -387,7 +387,7 @@ export default function VibeCodingGuide() {
             <tbody>
               {[
                 ["Sværhedsgrad (1-5)", "1", "2", "4", "4", "3"],
-                ["En hel app der virker", "Ja", "Ja", "Ja", "Nej, kun skærmbilleder", "Ja, med bump"],
+                ["En hel app der virker", "Ja", "Ja", "Ja", "Nej, kun skærmbilleder", "Ja, med bøvl"],
                 ["Kan en udvikler overtage den senere?", "Nej, reelt ikke", "Ja", "Delvist", "Delvist", "Ja"],
                 ["Betalt fra (ca.)", "110 kr./md.", "175 kr./md.", "175 kr./md. + forbrug", "210 kr./md.", "175 kr./md."],
                 ["Gratis at prøve", "Ja", "Ja", "Begrænset", "Ja", "Ja"],
