@@ -229,6 +229,18 @@ export default function GuidePage() {
               kan løbe op i $200+. Tjek aktuelle priser på værktøjets egen side ugen før, for de
               ændrer sig ofte.
             </p>
+            <p className="text-ink-soft leading-relaxed mb-4">
+              Vil du dybere ned i værktøjsvalget, har jeg skrevet en{" "}
+              <a
+                href="/field-notes/vibe-coding-guide"
+                className="text-amber-dark underline"
+                data-umami-event="guide_to_field_note_click"
+              >
+                guide til de fem største vibe coding-værktøjer
+              </a>{" "}
+              i almindeligt dansk, baseret på 20+ uafhængige tests: hvad de kan, hvad de koster, og
+              hvornår du vælger hvilket.
+            </p>
 
             {/* 5 */}
             <H2 id="s5">Forberedelse: 2-ugers nedtælling (hackathonet starter før hackathonet)</H2>
