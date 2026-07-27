@@ -115,6 +115,12 @@ export default function Page() {
               Idékatalog
             </a>
             <a
+              href="#kontakt"
+              className="hidden sm:inline font-mono text-[11px] tracking-widest uppercase text-ink-soft hover:text-amber-dark transition-colors"
+            >
+              Kontakt
+            </a>
+            <a
               href="#vaerktoej"
               className="bg-ink text-cream px-4 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink/85 transition-colors"
             >
@@ -156,6 +162,13 @@ export default function Page() {
               Se idékataloget
             </a>
           </div>
+          <p className="text-[14px] text-muted mt-5">
+            Klar til at booke dagen, eller vil I bare høre mere?{" "}
+            <a href="#kontakt" className="text-amber-dark underline">
+              Tag fat i mig her
+            </a>
+            .
+          </p>
         </div>
       </section>
 
@@ -310,6 +323,48 @@ export default function Page() {
       <section id="vaerktoej" className="border-t border-rule bg-cream-deep scroll-mt-20">
         <div className="max-w-content mx-auto px-6 md:px-12 py-16 md:py-20">
           <DiscoveryTool />
+        </div>
+      </section>
+
+      {/* Kontakt / book dagen */}
+      <section id="kontakt" className="border-t border-rule bg-ink scroll-mt-20">
+        <div className="max-w-content mx-auto px-6 md:px-12 py-16 md:py-20">
+          <div className="max-w-2xl">
+            <p className="font-mono text-[11px] tracking-widest uppercase text-amber mb-3">
+              Skal vi holde den hos jer?
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-cream leading-tight mb-5">
+              Book en uforpligtende snak om jeres AI-innovationsdag
+            </h2>
+            <p className="text-lg text-cream/85 leading-relaxed mb-8">
+              30 minutter, hvor vi vender jeres situation: har I en oplagt case, hvem skal
+              med på dagen, og giver formatet mening for jer. I får min ærlige vurdering,
+              også hvis svaret er, at I skal starte et andet sted.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+              <a
+                href="https://calendly.com/michael-spaike/new-meeting"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-umami-event="book_moede_click"
+                data-umami-event-location="ai-innovationsdag-kontakt"
+                className="inline-block bg-amber text-ink px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-amber-dark hover:text-cream transition-colors text-center"
+              >
+                Book en snak →
+              </a>
+              <a
+                href="mailto:michael@spaike.dk?subject=AI-innovationsdag"
+                data-umami-event="email_click"
+                data-umami-event-location="ai-innovationsdag-kontakt"
+                className="inline-block border border-cream text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-cream hover:text-ink transition-colors text-center"
+              >
+                Skriv til mig
+              </a>
+            </div>
+            <p className="font-mono text-[11px] tracking-wider text-cream/60 mt-6">
+              Ikke klar endnu? Brug værktøjet ovenfor og få en gratis case-brief først.
+            </p>
+          </div>
         </div>
       </section>
 
