@@ -12,6 +12,9 @@ import AiPaaTegnestuen, {
 import AiITransport, {
   metadata as aiITransportMetadata,
 } from "./ai-i-transport";
+import AiIFertilitet, {
+  metadata as aiIFertilitetMetadata,
+} from "./ai-i-fertilitet";
 
 export interface FieldNoteEntry {
   component: ComponentType;
@@ -34,6 +37,11 @@ export const articles: Record<string, FieldNoteEntry> = {
   "ai-i-transport": {
     component: AiITransport,
     metadata: aiITransportMetadata,
+  },
+  // Skjult: kun nåbar via direkte link (/field-notes/ai-i-fertilitet), ikke linket fra forsiden. Til fertilitets-outreach.
+  "ai-i-fertilitet": {
+    component: AiIFertilitet,
+    metadata: aiIFertilitetMetadata,
   },
 };
 
