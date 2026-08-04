@@ -3,20 +3,20 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Field Notes: AI i transport — SpAIke",
   description:
-    "Hvad tallene viser, og hvem der allerede gør det. Kildebelagte tal og navngivne cases om AI i transport og logistik, med vægt på den kommercielle side: tilbud, forespørgsler og udbud.",
+    "Tallene og de navngivne cases. Hvad transportvirksomheder som C.H. Robinson faktisk har opnået med AI, kildebelagt og med vægt på den kommercielle side: tilbud, forespørgsler og udbud.",
   openGraph: {
-    title: "AI i transport — hvad tallene viser, og hvem der allerede gør det",
+    title: "AI i transport — tallene og de firmaer der allerede gør det",
     description:
-      "Kildebelagte tal (Descartes, McKinsey) og navngivne cases (C.H. Robinson, Uber Freight, DSV) om AI i transport, kurateret for danske transportvirksomheder.",
+      "Kildebelagte tal (Penske, Descartes) og navngivne cases med konkrete resultater (C.H. Robinson, Uber Freight) om AI i transport og logistik.",
     type: "article",
     locale: "da_DK",
     url: "https://www.spaike.dk/field-notes/ai-i-transport",
   },
   twitter: {
     card: "summary",
-    title: "AI i transport — hvad tallene viser, og hvem der allerede gør det",
+    title: "AI i transport — tallene og de firmaer der allerede gør det",
     description:
-      "Kildebelagte tal og navngivne cases om AI i transport og logistik, kurateret for danske transportvirksomheder.",
+      "Kildebelagte tal og navngivne cases med konkrete resultater om AI i transport og logistik.",
   },
 };
 
@@ -33,13 +33,13 @@ export default function AiITransport() {
       <h1 className="font-serif font-semibold text-[36px] md:text-[54px] leading-[1.08] tracking-tight text-ink mb-6">
         AI i transport:{" "}
         <em className="italic font-medium text-amber-dark">
-          hvad tallene viser, og hvem der allerede gør det
+          tallene, og de firmaer der allerede gør det
         </em>
       </h1>
 
       {/* DECK */}
       <p className="font-serif text-[22px] italic leading-[1.45] text-ink-soft mb-8 max-w-[620px]">
-        Ikke endnu et &ldquo;AI er fremtiden&rdquo;-oplæg. Her er de tal og
+        Ikke endnu et &ldquo;AI er fremtiden&rdquo;-oplæg. Her er de tal og de
         navngivne cases, der faktisk er dokumenteret i branchen, med kilder du
         selv kan klikke på. Med vægt på den kommercielle side: tilbud,
         forespørgsler og udbud.
@@ -49,8 +49,8 @@ export default function AiITransport() {
       <div className="flex flex-col gap-1.5 font-mono text-[12px] tracking-wider text-muted border-t border-b border-rule py-3.5 mb-12">
         <span>Kurateret af Michael Mortensen · SpAIke · august 2026</span>
         <span>
-          Kilder: Descartes Transportation Benchmark · McKinsey · C.H. Robinson
-          · Uber Freight · DSV
+          Kilder: Penske Transportation Leaders Survey · Descartes · Forbes ·
+          C.H. Robinson · Uber Freight
         </span>
         <span>
           AI-automatisering for danske virksomheder, af{" "}
@@ -67,10 +67,11 @@ export default function AiITransport() {
       <section className="lede">
         <p className="mb-[18px] first-letter:font-serif first-letter:text-[64px] first-letter:font-semibold first-letter:float-left first-letter:leading-[0.9] first-letter:mt-1 first-letter:mr-2 first-letter:-mb-1 first-letter:text-amber-dark">
           Det korte svar fra tallene: AI er ikke længere et forspring i
-          transport, det er ved at blive udgangspunktet. Men de fleste
-          virksomheder er stadig kun delvist automatiserede, og forskellen på de
-          bedste og de svageste er enorm. Vinduet for at komme foran er stadig
-          åbent, især for de mellemstore.
+          transport, det er ved at blive udgangspunktet. Syv ud af ti
+          transportvirksomheder bruger det nu, en firedobling på ét år. Men de
+          fleste er stadig kun delvist automatiserede, og 84% mener selv, de
+          sakker bagud. Vinduet for at komme foran er stadig åbent, især for de
+          mellemstore.
         </p>
       </section>
 
@@ -86,49 +87,51 @@ export default function AiITransport() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
           <div className="bg-cream-deep border border-rule rounded px-5 py-6">
             <div className="font-serif font-bold text-[32px] leading-none text-amber-dark">
-              96%
+              70%
             </div>
             <div className="text-[14px] text-ink-soft mt-2.5">
-              af transportvirksomheder bruger allerede generativ AI til
-              transport management (Descartes, 616 virksomheder NA og EU)
+              af transportvirksomheder bruger nu AI, en firedobling på ét år
+              (Penske, 255 transportledere, 2025)
             </div>
           </div>
           <div className="bg-cream-deep border border-rule rounded px-5 py-6">
             <div className="font-serif font-bold text-[32px] leading-none text-amber-dark">
-              Kun 3%
+              84%
             </div>
             <div className="text-[14px] text-ink-soft mt-2.5">
-              af europæiske afskibere og logistikoperatører bruger IKKE AI
-              (Descartes European Benchmark)
+              mener deres egen branche sakker bagud på AI, op 20 point på ét år.
+              Vinduet lukker (Penske)
             </div>
           </div>
           <div className="bg-cream-deep border border-rule rounded px-5 py-6">
             <div className="font-serif font-bold text-[32px] leading-none text-amber-dark">
-              17 → 51%
+              40%
             </div>
             <div className="text-[14px] text-ink-soft mt-2.5">
-              fuldt automatiserede processer: 17% blandt alle, men 51% hos de
-              finansielt bedste, mod 5% hos de svageste. Gabet er eksekvering
+              af dem der har taget AI i brug ser 50%+ forbedring i brændstof,
+              omkostning eller ruteafstand (Penske)
             </div>
           </div>
           <div className="bg-cream-deep border border-rule rounded px-5 py-6">
             <div className="font-serif font-bold text-[32px] leading-none text-amber-dark">
-              5-20%
+              Kun 17%
             </div>
             <div className="text-[14px] text-ink-soft mt-2.5">
-              lavere logistikomkostninger som McKinseys estimat for AI i
-              distributionsdrift. En ramme, ikke et løfte
+              er fuldt automatiserede, selvom 96% bruger generativ AI. Gabet er
+              eksekvering, ikke vilje (Descartes)
             </div>
           </div>
         </div>
 
         <p className="mb-[18px]">
-          De mest udbredte anvendelser er ikke science fiction, men det
-          administrative arbejde der spiser dagen: dataindtastning (41%), rute-
-          og lastoptimering (39%), fragtprognoser (35%) og automatisk
-          load-matching (35%). Tallene kommer fra Descartes&rsquo; årlige globale
-          og europæiske benchmark-undersøgelser blandt afskibere og
-          logistikoperatører.
+          Tallene kommer fra to navngivne undersøgelser: Penskes 2025
+          Transportation Leaders Survey blandt 255 transport- og
+          logistikledere, og Descartes&rsquo; årlige globale benchmark blandt
+          over 600 afskibere og logistikoperatører. Billedet er det samme i
+          begge: næsten alle er i gang, men meget få er færdige. De mest
+          udbredte anvendelser er ikke science fiction, men det administrative
+          arbejde der spiser dagen, dataindtastning, rute- og lastoptimering og
+          fragtprognoser.
         </p>
       </section>
 
@@ -140,28 +143,29 @@ export default function AiITransport() {
           <span>Hvor det skaber værdi</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-8">
-          Tre steder det rent faktisk rykker på den kommercielle side
+          Tre firmaer, tre konkrete resultater
         </h2>
 
         {[
           {
             n: "1",
             title:
-              "C.H. Robinson: mailforespørgsler besvaret på under 90 sekunder",
-            body: "Verdens største fragtformidler lod AI-agenter læse indkommende mailforespørgsler, skelne mellem fragttyper og behandle ordren. Over 5.200 kunder får nu deres læs behandlet på under 90 sekunder, mod tidligere op til fire timer i mail-køen. Over en million pristilbud er leveret af AI, og antallet vokser 30% om måneden.",
-            src: "Kilde: C.H. Robinson pressemeddelelse marts 2025 · Trucking Dive",
+              "C.H. Robinson: fra 65% til 100% af tilbud, besvaret på cirka 30 sekunder",
+            body: "Verdens største fragtformidler satte en flåde af AI-agenter på indkommende forespørgsler. De gik fra at nå 65% af tilbuddene til at svare på dem alle, døgnet rundt, på cirka 30 sekunder, mod op til fire timer i mail-køen før. Resultatet er 40% flere forsendelser pr. medarbejder siden 2022, og over en million tilbud og en million ordrer behandlet af AI. Tallene er bekræftet uafhængigt af Forbes, ikke kun i virksomhedens egen pressemeddelelse.",
+            src: "Kilde: Forbes (Steve Banker, dec. 2025) · C.H. Robinson pressemeddelelse",
           },
           {
             n: "2",
-            title: "Uber Freight: modellér bud-strategier på minutter, ikke uger",
-            body: "Uber Freight kører 30+ AI-agenter over hele forsendelsens livscyklus, fra indkøb og prissætning til tracking og afregning. Over 1,6 mia. USD fragt er kørt gennem AI-infrastrukturen på ét år, og deres tender-værktøj modellerer bud-strategier på minutter i stedet for uger. Relevant for enhver der byder på tilbagevendende kørsel og udbud.",
-            src: "Kilde: Uber Freight newsroom",
+            title:
+              "Et europæisk logistikfirma: tilbud fra dage til minutter",
+            body: "Et mellemstort logistikfirma lod AI læse indkommende mail- og PDF-forespørgsler, trække rute, gods og betingelser ud automatisk og lægge dem i kø til hurtig godkendelse. Med over 20.000 tilbudsforespørgsler om året faldt tilbudscyklussen fra dage til minutter. Det er den mest direkte skabelon for en almindelig vognmand: hurtige, konsistente tilbud vinder opgaver, og det kan piloteres på uger.",
+            src: "Kilde: Datsugi case study (leverandør-case, klienten er anonym)",
           },
           {
             n: "3",
-            title: "DSV: AI i den daglige drift (dansk)",
-            body: "DSV bruger dagligt AI til toldbehandling, fakturahåndtering, lastoptimering, ruteplanlægning og prognoser, med tyngde på dokumenthåndtering. Et dansk eksempel på, at det ikke kun er de amerikanske giganter, der er i gang, men at det er blevet driftsstandard i store nordiske transportvirksomheder.",
-            src: "Kilde: PwC CXO-magasinet · Transportmagasinet (anvendelses-eksempel, ikke besparelsestal)",
+            title: "Uber Freight: modellér bud-strategier på minutter, ikke uger",
+            body: "Uber Freight kører 30+ AI-agenter over hele forsendelsens livscyklus, fra indkøb og prissætning til tracking og afregning, og har kørt over 1,6 mia. USD fragt gennem AI-infrastrukturen på ét år. Deres udbudsværktøj modellerer flere bud-strategier side om side på minutter i stedet for uger. Relevant for enhver der byder på tilbagevendende kørsel og entreprenør-udbud.",
+            src: "Kilde: Uber Freight newsroom (virksomhedens egne tal)",
           },
         ].map((c) => (
           <div key={c.n} className="border-l-[3px] border-amber px-5 py-4 my-7">
@@ -265,6 +269,18 @@ export default function AiITransport() {
         <ul className="list-none p-0 m-0 space-y-2.5 normal-case tracking-normal text-[12px] leading-[1.55]">
           <li>
             <a
+              href="https://www.truckinginfo.com/10241279/ai-in-logistics-penske-survey-uncovers-surging-adoption-rising-concerns"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              Penske 2025 Transportation Leaders Survey
+            </a>
+            : 70% bruger AI (firedoblet på ét år), 84% mener de sakker bagud, 40%
+            ser 50%+ forbedring.
+          </li>
+          <li>
+            <a
               href="https://www.thescxchange.com/tech-infrastructure/technology/annual-survey-shows-widespread-adoption-of-generative-ai-in-transportation-operations"
               target="_blank"
               rel="noopener noreferrer"
@@ -272,19 +288,52 @@ export default function AiITransport() {
             >
               Descartes / SAPIO, Global Transportation Benchmark Survey 2025
             </a>
-            : 96% generativ AI, 17% vs 51% automatisering, mest udbredte
-            anvendelser.
+            : 96% bruger generativ AI, men kun 17% er fuldt automatiserede.
           </li>
           <li>
             <a
-              href="https://www.loginext.nl/en/artikelen/descartes-onderzoek-slechts-3-van-de-europese-verladers-en-logistiek-dienstverleners-gebruikt-nog-geen-ai"
+              href="https://www.forbes.com/sites/stevebanker/2025/12/03/ch-robinson-capitalizes-on-ai-to-grow-market-share-and-reduce-costs/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
             >
-              Descartes European Transport Management Benchmark Survey 2025
+              Forbes, Steve Banker (dec. 2025)
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://www.chrobinson.com/en-us/about-us/newsroom/press-releases/2025/ai-performs-over-three-million-shipping-tasks/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              C.H. Robinson pressemeddelelse
             </a>
-            : kun 3% af europæiske operatører bruger ikke AI.
+            : 100% af tilbud på ~30 sek., 40% flere forsendelser pr. medarbejder
+            siden 2022.
+          </li>
+          <li>
+            <a
+              href="https://datsugi.com/case-studies/ai-agent-quoting-tool"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              Datsugi, AI-agent quoting tool case study
+            </a>
+            : logistikfirma med 20.000+ forespørgsler/år, tilbud fra dage til
+            minutter (leverandør-case).
+          </li>
+          <li>
+            <a
+              href="https://www.uberfreight.com/en-US/newsroom/uber-freight-launches-industry-first-ai-logistics-network-at-scale-ushering"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              Uber Freight newsroom
+            </a>
+            : 30+ AI-agenter, 1,6 mia. USD fragt gennem AI-infrastrukturen,
+            udbudsværktøj.
           </li>
           <li>
             <a
@@ -295,35 +344,7 @@ export default function AiITransport() {
             >
               McKinsey, Harnessing the power of AI in distribution operations
             </a>
-            : 5-20% lavere logistikomkostninger.
-          </li>
-          <li>
-            <a
-              href="https://www.chrobinson.com/en-us/about-us/newsroom/press-releases/2025/ai-performs-over-three-million-shipping-tasks/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
-            >
-              C.H. Robinson pressemeddelelse, marts 2025
-            </a>{" "}
-            ·{" "}
-            <a
-              href="https://www.truckingdive.com/news/ch-robinson-ltl-price-quotes-truck-capacity-appointments/745434/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
-            >
-              Trucking Dive
-            </a>
-            : svar under 90 sekunder, 1 mio.+ AI-tilbud.
-          </li>
-          <li>
-            Uber Freight newsroom: 30+ AI-agenter, 1,6 mia. USD fragt,
-            tender-værktøj.
-          </li>
-          <li>
-            PwC CXO-magasinet · Transportmagasinet: DSV&rsquo;s AI-anvendelser i
-            drift.
+            : 5-20% lavere logistikomkostninger som ramme, ikke løfte.
           </li>
         </ul>
         <div className="mt-6">
