@@ -6,6 +6,9 @@ import AnthropicSalesPlaybook, {
 import VibeCodingGuide, {
   metadata as vibeCodingGuideMetadata,
 } from "./vibe-coding-guide";
+import AiPaaTegnestuen, {
+  metadata as aiPaaTegnestuenMetadata,
+} from "./ai-paa-tegnestuen";
 
 export interface FieldNoteEntry {
   component: ComponentType;
@@ -20,6 +23,10 @@ export const articles: Record<string, FieldNoteEntry> = {
   "vibe-coding-guide": {
     component: VibeCodingGuide,
     metadata: vibeCodingGuideMetadata,
+  },
+  "ai-paa-tegnestuen": {
+    component: AiPaaTegnestuen,
+    metadata: aiPaaTegnestuenMetadata,
   },
 };
 
