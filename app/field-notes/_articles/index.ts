@@ -9,6 +9,9 @@ import VibeCodingGuide, {
 import AiPaaTegnestuen, {
   metadata as aiPaaTegnestuenMetadata,
 } from "./ai-paa-tegnestuen";
+import AiITransport, {
+  metadata as aiITransportMetadata,
+} from "./ai-i-transport";
 
 export interface FieldNoteEntry {
   component: ComponentType;
@@ -27,6 +30,10 @@ export const articles: Record<string, FieldNoteEntry> = {
   "ai-paa-tegnestuen": {
     component: AiPaaTegnestuen,
     metadata: aiPaaTegnestuenMetadata,
+  },
+  "ai-i-transport": {
+    component: AiITransport,
+    metadata: aiITransportMetadata,
   },
 };
 
