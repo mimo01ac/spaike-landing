@@ -15,6 +15,9 @@ import AiITransport, {
 import AiIFertilitet, {
   metadata as aiIFertilitetMetadata,
 } from "./ai-i-fertilitet";
+import AiILandmaaling, {
+  metadata as aiILandmaalingMetadata,
+} from "./ai-i-landmaaling";
 
 export interface FieldNoteEntry {
   component: ComponentType;
@@ -42,6 +45,11 @@ export const articles: Record<string, FieldNoteEntry> = {
   "ai-i-fertilitet": {
     component: AiIFertilitet,
     metadata: aiIFertilitetMetadata,
+  },
+  // Skjult: kun nåbar via direkte link (/field-notes/ai-i-landmaaling), ikke linket fra forsiden. Til landmåler-/landinspektør-outreach.
+  "ai-i-landmaaling": {
+    component: AiILandmaaling,
+    metadata: aiILandmaalingMetadata,
   },
 };
 
