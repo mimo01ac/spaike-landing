@@ -3,20 +3,20 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Field Notes: AI i landmåling — SpAIke",
   description:
-    "Tallene og de navngivne firmaer. Hvad landinspektør- og opmålingsvirksomheder som LE34 faktisk har opnået med AI, kildebelagt og med vægt på felt-til-leverance: punktsky, volumen og optegning.",
+    "De nemme AI-gevinster ligger i kontoret, ikke i luften. Hvordan landinspektør- og opmålingsvirksomheder kan automatisere tilbud, rapporter og dokumenter uden drone eller hardware, med kilder du selv kan klikke på.",
   openGraph: {
-    title: "AI i landmåling — tallene og de firmaer der allerede gør det",
+    title: "AI i landmåling — de nemme gevinster ligger i kontoret",
     description:
-      "Kildebelagte tal (EAASI, RICS) og navngivne cases (LE34, Langan, Lerch Weber) om AI hos landinspektører og opmålingsvirksomheder.",
+      "Kildebelagte tal (EAASI, RICS) + konkrete kontor-cases (Survey Booker, Go Report, V7): tilbud, rapporter og dokumenter uden drone eller hardware.",
     type: "article",
     locale: "da_DK",
     url: "https://www.spaike.dk/field-notes/ai-i-landmaaling",
   },
   twitter: {
     card: "summary",
-    title: "AI i landmåling — tallene og de firmaer der allerede gør det",
+    title: "AI i landmåling — de nemme gevinster ligger i kontoret",
     description:
-      "Kildebelagte tal og navngivne cases om AI hos landinspektører og opmålingsvirksomheder.",
+      "Kildebelagte tal og konkrete kontor-cases om AI hos landinspektører og opmålingsvirksomheder, uden hardware.",
   },
 };
 
@@ -33,22 +33,21 @@ export default function AiILandmaaling() {
       <h1 className="font-serif font-semibold text-[36px] md:text-[54px] leading-[1.08] tracking-tight text-ink mb-6">
         AI i landmåling:{" "}
         <em className="italic font-medium text-amber-dark">
-          tallene, og de firmaer der allerede gør det
+          de nemme gevinster ligger i kontoret, ikke i luften
         </em>
       </h1>
 
       {/* DECK */}
       <p className="font-serif text-[22px] italic leading-[1.45] text-ink-soft mb-8 max-w-[620px]">
-        Ikke endnu et &ldquo;AI er fremtiden&rdquo;-oplæg. Her er de tal og de
-        navngivne cases, der faktisk er dokumenteret i branchen, med kilder du
-        selv kan klikke på. Med vægt på det der lander hurtigst: felt-til-leverance,
-        punktsky og volumen.
+        Ikke endnu et AI-oplæg om droner og punktskyer. De hurtigste gevinster
+        kræver ingen hardware: de ligger i tilbuddene, rapporterne og
+        dokumenterne, på data I allerede har. Med kilder du selv kan klikke på.
       </p>
 
       {/* BYLINE */}
       <div className="flex flex-col gap-1.5 font-mono text-[12px] tracking-wider text-muted border-t border-b border-rule py-3.5 mb-12">
         <span>Kurateret af Michael Mortensen · SpAIke · august 2026</span>
-        <span>Kilder: EAASI · RICS · Trimble / LE34 · Mach9 · Wingtra</span>
+        <span>Kilder: EAASI · RICS · Survey Booker · Go Report · V7</span>
         <span>
           AI-automatisering for danske virksomheder, af{" "}
           <a
@@ -63,11 +62,13 @@ export default function AiILandmaaling() {
       {/* LEDE */}
       <section className="lede">
         <p className="mb-[18px] first-letter:font-serif first-letter:text-[64px] first-letter:font-semibold first-letter:float-left first-letter:leading-[0.9] first-letter:mt-1 first-letter:mr-2 first-letter:-mb-1 first-letter:text-amber-dark">
-          Det korte svar fra tallene: AI er stadig i en tidlig fase i
-          opmålingsbranchen, men de førende firmaer bruger det allerede til at
-          halvere kontor-timerne efter feltarbejdet. Intenten er høj, den reelle
-          brug er lav, og barriererne er praktiske, ikke principielle. Vinduet
-          for at komme foran er stadig åbent.
+          Det korte svar: du behøver ikke en drone for at komme i gang med AI.
+          Den tunge felt-tech, LiDAR, punktsky og kalibrering, er reel, men
+          kompleks og langt fra hverdagen. De nemme, hurtige gevinster ligger i
+          kontoret: at svare på en forespørgsel med et tilbud på minutter, at
+          gøre felt-noter til en færdig rapport, og at trække data ud af
+          dokumenter i stedet for at taste om. Software, ingen hardware, payback
+          i uger.
         </p>
       </section>
 
@@ -125,8 +126,8 @@ export default function AiILandmaaling() {
           RICS&rsquo; AI in Construction 2025 blandt over 2.200 fagfolk, inklusive
           landmålere. Billedet er tydeligt: næsten alle vil investere, men de
           færreste er kommet i gang for alvor. Og barriererne er ikke skepsis,
-          men kompetencer, integration og data, altså praktiske ting der kan
-          løses.
+          men kompetencer, integration og data, altså praktiske ting man løser i
+          kontoret, ikke i luften.
         </p>
       </section>
 
@@ -138,30 +139,28 @@ export default function AiILandmaaling() {
           <span>Hvor det skaber værdi</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-8">
-          Tre firmaer, tre konkrete resultater
+          Tre nemme kontor-gevinster, ingen hardware
         </h2>
 
         {[
           {
             n: "1",
             title:
-              "LE34 (Danmark, landets største landinspektørfirma): volumen på halvdelen af tiden",
-            body: "LE34 lod AI klassificere punktskyer og trække stakke ud automatisk i Trimble Business Center, blandt andet på drone-opmåling af cirka 350 muld-stakke tre gange om året. Den automatiske volumenberegning tager omtrent halvdelen af tiden i forhold til manuelt, og skel kan tegnes med et enkelt klik ved 80 til 90% nøjagtighed. Et navngivet dansk eksempel, ikke en amerikansk gigant.",
-            src: "Rapporteret af Trimble (René Bundgaard Christensen, Land Inspector, LE34)",
+              "Tilbud på minuttet, direkte fra forespørgslen",
+            body: "Survey Booker, et system bygget til opmålingsfirmaer, fanger en forespørgsel fra hjemmesiden eller mailen, genererer automatisk et tilbud mod jeres prisskala og sender et svar med det samme. Det britiske opmålingsfirma Streetwise Surveyors bruger det og melder om markant mindre admin-tid. Til sammenligning er et tilbud fra en fritekst-mail i nabobrancher gået fra 45 til 90 minutter til under et minut med AI, der læser mailen og udfylder tilbuddet. Hurtigt svar vinder opgaven.",
+            src: "Kilde: Survey Booker (opmålings-CRM, kunde Streetwise Surveyors), leverandør-tal. Magnitude fra nabobranche.",
           },
           {
             n: "2",
-            title:
-              "Lerch Weber (Schweiz): felttid fra en dag til en time, samme nøjagtighed",
-            body: "På en 20 hektar grusgrav sammenlignede Lerch Weber en opmålingsdrone med fotogrammetri mod en klassisk terrestrisk scanner. Feltarbejdet faldt fra cirka en fuld dag til omkring en time, og de to volumenresultater lå 0,24 m³ fra hinanden, altså i praksis samme nøjagtighed. Hurtigere i felten uden at give køb på præcisionen.",
-            src: "Rapporteret af Wingtra",
+            title: "Fra felt-noter til færdig rapport",
+            body: "Go Report, lavet til bygnings- og opmålingsrapporter, tager landmålerens stikord og fotos og skriver dem ud til en færdig, skabelon-styret rapport, med korrektur og konsistens-tjek inden den sendes. En praksis kan vende en rapport på 48 timer, hvor mange bruger op mod to uger, og AI halverer typisk selve skrivetiden. Landmåleren er stadig den, der godkender.",
+            src: "Kilde: Go Report (rapport-værktøj til survey), leverandør-tal",
           },
           {
             n: "3",
-            title:
-              "Langan (USA): leveret en uge før tid og 30% under budget",
-            body: "Langan brugte AI-automatisk feature-ekstraktion fra LiDAR (striber, master, brønde) på en design-grade topografisk opmåling i ørkenterræn. Projektet blev leveret en uge før tid og 30% under budget. Det operationelle resultat der faktisk tæller for en kunde: til tiden og til prisen.",
-            src: "Rapporteret af Mach9",
+            title: "Træk data ud af dokumenter i stedet for at taste om",
+            body: "AI læser skøder, matrikeludskrifter og gamle PDF'er og trækker mål, servitutter og beskrivelser ud i struktureret form med kilde-henvisning, i stedet for manuel gennemtastning. På dokument- og title-gennemgang er tiden faldet fra to til fire timer til femten til tredive minutter. Software alene, på dokumenter I allerede har liggende.",
+            src: "Kilde: V7 (AI-dokument-udtræk, title-nært værktøj), leverandør-tal",
           },
         ].map((c) => (
           <div key={c.n} className="border-l-[3px] border-amber px-5 py-4 my-7">
@@ -181,9 +180,9 @@ export default function AiILandmaaling() {
         ))}
 
         <blockquote className="font-serif italic text-[22px] leading-[1.4] text-ink my-9 pl-7 border-l-2 border-ink">
-          Det spændende er ikke, at en drone kan flyve. Det er, at AI kan fjerne
-          kontor-timerne bagefter: klassifikationen, volumen og optegningen, så I
-          kommer hurtigere videre til næste opgave.
+          Du behøver ikke en drone for at komme i gang. De hurtigste gevinster
+          ligger i kontoret: tilbuddene, rapporterne og dokumenterne, på data I
+          allerede har.
         </blockquote>
       </section>
 
@@ -195,16 +194,16 @@ export default function AiILandmaaling() {
           <span>Sådan griber de kloge det an</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Start på kontoret, hvor dataen allerede er i huset
+          Start med ét kontor-flow, ikke med en dronepark
         </h2>
         <p className="mb-[18px]">
-          De firmaer det lykkes for, kaster sig ikke ud i alt på én gang. De
-          tager ét kontor-flow, ofte punktsky-klassifikation eller volumen og
-          optegning på data de allerede har liggende, kører det i drift, måler
-          før og efter, og skalerer derfra. Og fordi kun cirka 12% bruger AI
-          regelmæssigt, er der en reel fordel i at komme foran nu, mens de fleste
-          stadig kun overvejer det. Mennesket bliver i loopet: AI foreslår
-          klassifikationen, landmåleren godkender.
+          De firmaer det lykkes for, starter dér hvor der ingen hardware er: ét
+          flow som automatiske tilbud på indkommende forespørgsler eller
+          hurtigere rapporter, på data de allerede har. De måler før og efter, og
+          skalerer derfra. Det kræver ingen investering i droner, scannere eller
+          kalibrering, og det kan piloteres på uger. Den tunge felt-tech kan
+          komme bagefter, når kontoret først kører. Og fordi kun cirka 12% bruger
+          AI regelmæssigt, er der en reel fordel i at komme foran nu.
         </p>
       </section>
 
@@ -214,18 +213,19 @@ export default function AiILandmaaling() {
           <span>Min holdning</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          AI hører til i opmålingen, ikke i myndighedsarbejdet
+          Start i kontoret, ikke i luften
         </h2>
         <p className="mb-[18px]">
-          Jeg leder med ROI, ikke med hype. Den matrikulære kerne, skelforretning
-          og myndighedsarbejde, rører jeg ikke, den skal og bliver hos
-          landinspektøren. Jeg hjælper med opmålings- og kontor-laget, hvor
-          gevinsten er umiddelbar og risikoen lav: punktsky-klassifikation,
-          volumen, optegning, rapport og tilbud. Barriererne fra undersøgelserne,
-          kompetencer, integration og data, er præcis dem jeg løser. Og har I
-          allerede en strømlinet workflow fra felt til leverance, så siger jeg
-          det. Pointen er ROI på jeres tal, ikke et AI-projekt for projektets
-          skyld.
+          Jeg leder med ROI, ikke med hype. Den avancerede felt-tech,
+          drone-opmåling og AI-punktsky, som fx danske LE34 bruger til
+          volumenberegning, er reel, men den er tung, kræver hardware og
+          kalibrering, og er ikke der man kommer nemmest i gang. Jeg hjælper med
+          kontor-laget, hvor gevinsten er umiddelbar og risikoen lav: tilbud,
+          rapporter, kunde-mails og dokumenthåndtering, software alene, på data I
+          allerede har. Barriererne fra undersøgelserne, kompetencer, integration
+          og data, er præcis dem jeg løser. Og har I allerede strømlinet det, så
+          siger jeg det. Pointen er ROI på jeres tal, ikke et AI-projekt for
+          projektets skyld.
         </p>
       </section>
 
@@ -235,12 +235,12 @@ export default function AiILandmaaling() {
           Er noget af det relevant for jer?
         </div>
         <h3 className="font-serif font-medium text-[30px] leading-[1.2] text-cream mb-5">
-          Vil I finde jeres hurtigste gevinst efter feltarbejdet?
+          Vil I finde jeres nemmeste kontor-gevinst?
         </h3>
         <p className="text-[16px] text-cream/85 mb-6">
-          Jeg viser gerne konkret, hvordan ét enkelt flow som punktsky-klassifikation
-          eller volumen og optegning kan se ud hos jer, og hvad det realistisk er
-          værd i sparet kontor-tid.
+          Jeg viser gerne konkret, hvordan ét enkelt flow som automatiske tilbud
+          på forespørgsler eller hurtigere rapporter kan se ud hos jer, og hvad
+          det realistisk er værd i sparet kontor-tid. Ingen droner nødvendige.
         </p>
         <div className="flex gap-4 flex-wrap">
           <a
@@ -277,8 +277,7 @@ export default function AiILandmaaling() {
             >
               EAASI First Industry Survey (2026, via GIM International)
             </a>
-            : 49% AI-databehandling som top-investeringsprioritet, 44% AI som
-            kritisk kompetence.
+            : 49% AI-databehandling som top-investeringsprioritet.
           </li>
           <li>
             <a
@@ -289,44 +288,62 @@ export default function AiILandmaaling() {
             >
               RICS, AI in Construction 2025
             </a>
-            : 45% bruger intet AI, kun ~12% regelmæssigt, ~70% tror på værdien,
-            barrierer 46/37/30%.
+            : kun ~12% bruger AI regelmæssigt, ~70% tror på værdien, barrierer
+            46/37/30%.
           </li>
           <li>
             <a
-              href="https://geospatial.trimble.com/blog/geospatial/en-US/article/ai-based-feature-extraction-in-tbc-adds-value-to-collected-data"
+              href="https://surveybooker.co.uk/customer-testimonials/streetwise-surveyors-testimonial/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
             >
-              Trimble Resource Center
-            </a>
-            : LE34 (volumen på ~halvdelen af tiden, one-click skel 80-90%),
-            GeoVerra (~30% tidsbesparelse), Severino (85% hurtigere DTM).
-          </li>
-          <li>
+              Survey Booker, Streetwise Surveyors case
+            </a>{" "}
+            ·{" "}
             <a
-              href="https://mach9.ai/customers/case-studies/langan"
+              href="https://surveybooker.co.uk/optimising-processes/save-time-providing-quotes-and-respond-faster-to-enquiries/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
             >
-              Mach9, Langan case
+              tilbud og svartid
             </a>
-            : AI feature-ekstraktion fra LiDAR, leveret en uge før tid og 30%
-            under budget.
+            : automatiske tilbud og intake for opmålingsfirmaer.
           </li>
           <li>
             <a
-              href="https://wingtra.com/surveying-gis/"
+              href="https://goreport.com/ai-driven-survey-reporting/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
             >
-              Wingtra
+              Go Report, AI-drevet survey-rapportering
             </a>
-            : Lerch Weber (felttid fra en dag til en time, nøjagtighed matchet),
-            Idaho Forest Group (måletid -80%, &gt;50.000 USD/år sparet).
+            : felt-noter til færdig rapport, rapport på 48 timer vs op mod to uger.
+          </li>
+          <li>
+            <a
+              href="https://www.v7labs.com/automations/land-title-surveys"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              V7, land-title survey-analyse
+            </a>
+            : AI-dokument-udtræk, gennemgang 2-4 timer ned til 15-30 minutter.
+          </li>
+          <li>
+            <a
+              href="https://www.infomazeelite.com/blog/ai-generated-rfq-forms-from-unstructured-customer-emails/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
+            >
+              Infomaze (nabobranche)
+            </a>
+            : tilbud fra fritekst-mail fra 45-90 min til under et minut. Markeret
+            som nabobranche, ikke opmåling.
           </li>
         </ul>
         <div className="mt-6">
