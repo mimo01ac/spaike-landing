@@ -26,10 +26,10 @@ function beacon(name: string, data?: Record<string, string | number>) {
         ...(data && Object.keys(data).length ? { data } : {}),
       },
     };
-    navigator.sendBeacon(
-      SEND_URL,
-      new Blob([JSON.stringify(payload)], { type: "application/json" })
-    );
+    // Ren streng sendes som text/plain: ingen CORS-preflight, saa beaconen er
+    // et enkelt POST der overlever page unload. Umami parser body'en som JSON
+    // uanset content-type.
+    navigator.sendBeacon(SEND_URL, JSON.stringify(payload));
   } catch {
     // Analytics må aldrig kunne vælte siden.
   }
