@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spaike.dk · Fuldt site-overblik · 27. juli 2026</title>
+<style>
+  :root {
+    --ink: #0f1a2e;
+    --ink-soft: #3a3f4e;
+    --cream: #f3eee2;
+    --cream-deep: #ece6d6;
+    --rule: #d8d3c7;
+    --rule-dark: #2a3142;
+    --muted: #6b6650;
+    --amber: #d4a857;
+    --amber-dark: #b88f3f;
+    --green: #3d7a4a;
+    --red: #a8402f;
+    --serif: "Source Serif Pro", Georgia, "Times New Roman", serif;
+    --sans: Inter, -apple-system, "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); line-height: 1.55; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  .dateline { border-bottom: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .dateline .wrap { display: flex; justify-content: space-between; padding: 12px 28px; gap: 16px; flex-wrap: wrap; }
+  .doublerule { border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); height: 6px; }
+  header.masthead { padding: 52px 0 40px; }
+  .label { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--amber-dark); margin-bottom: 14px; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(38px, 6vw, 72px); line-height: .98; letter-spacing: -0.01em; }
+  h1 em { font-style: italic; }
+  h1 .amber { color: var(--amber-dark); font-style: normal; }
+  .lede { font-family: var(--serif); font-size: 19px; color: var(--ink-soft); max-width: 760px; margin-top: 22px; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.05; letter-spacing: -0.01em; }
+  h2 em { font-style: italic; }
+  section { padding: 48px 0 56px; }
+  section + section { border-top: 1px solid var(--rule); }
+  .sub { font-family: var(--serif); font-size: 16px; color: var(--ink-soft); max-width: 720px; margin-top: 14px; }
+
+  /* funnel */
+  .funnel { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); margin-top: 34px; background: #fff8; }
+  .funnel .track { padding: 26px 28px 30px; }
+  .funnel .track + .track { border-left: 1px solid var(--rule); }
+  .track h3 { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; }
+  .track .tagline { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  .step { display: flex; gap: 14px; padding: 10px 0; align-items: baseline; }
+  .step + .step { border-top: 1px dotted var(--rule); }
+  .step .n { font-family: var(--mono); font-size: 11px; color: var(--amber-dark); min-width: 22px; }
+  .step .t b { font-weight: 600; }
+  .step .t span { color: var(--ink-soft); font-size: 13.5px; display: block; }
+  .converge { grid-column: 1 / -1; border-top: 1px solid var(--rule); background: var(--ink); color: var(--cream); padding: 18px 28px; font-family: var(--serif); font-size: 17px; }
+  .converge b { color: var(--amber); font-weight: 600; }
+
+  /* cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 0; border: 1px solid var(--rule); border-bottom: none; margin-top: 34px; }
+  .card { border-bottom: 1px solid var(--rule); border-right: 1px solid var(--rule); padding: 24px 24px 26px; background: #fffdf866; display: flex; flex-direction: column; gap: 10px; }
+  .card .url { font-family: var(--mono); font-size: 12.5px; color: var(--ink); word-break: break-all; }
+  .card .url a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--amber); }
+  .card h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; line-height: 1.15; }
+  .card p { font-size: 13.5px; color: var(--ink-soft); }
+  .card .meta { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); margin-top: auto; padding-top: 10px; border-top: 1px dotted var(--rule); }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 8px 3px; border: 1px solid; border-radius: 2px; }
+  .b-green  { color: var(--green); border-color: var(--green); background: #3d7a4a12; }
+  .b-amber  { color: var(--amber-dark); border-color: var(--amber-dark); background: #b88f3f14; }
+  .b-red    { color: var(--red); border-color: var(--red); background: #a8402f12; }
+  .b-ink    { color: var(--ink); border-color: var(--ink); background: #0f1a2e0d; }
+  .b-muted  { color: var(--muted); border-color: var(--rule); background: transparent; }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; margin-top: 30px; background: #fff8; border: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--ink); }
+  td { padding: 12px 16px; font-size: 13.5px; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+  td:first-child { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+
+  /* findings */
+  .finding { display: grid; grid-template-columns: 92px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--rule); }
+  .finding:last-child { border-bottom: none; }
+  .finding .prio { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding-top: 4px; }
+  .p-red { color: var(--red); } .p-amber { color: var(--amber-dark); } .p-green { color: var(--green); }
+  .finding h3 { font-family: var(--serif); font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .finding p { font-size: 14px; color: var(--ink-soft); max-width: 860px; }
+  .finding code { font-family: var(--mono); font-size: 12px; background: var(--cream-deep); padding: 1px 5px; border-radius: 2px; }
+
+  .darksec { background: var(--ink); color: var(--cream); }
+  .darksec .label { color: var(--amber); }
+  .darksec .sub, .darksec p { color: #f3eee2aa; }
+  .darksec table { background: transparent; border-color: var(--rule-dark); }
+  .darksec th { border-color: var(--amber); color: #f3eee288; }
+  .darksec td { border-color: var(--rule-dark); color: #f3eee2cc; }
+  .darksec td:first-child { color: var(--cream); }
+
+  footer { border-top: 3px solid var(--ink); margin-top: 0; padding: 22px 0 40px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: block; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  @media (max-width: 760px) { .funnel { grid-template-columns: 1fr; } .funnel .track + .track { border-left: none; border-top: 1px solid var(--rule); } .finding { grid-template-columns: 1fr; gap: 6px; } }
+</style>
+</head>
+<body>
+
+<div class="dateline"><div class="wrap">
+  <span>Site-review · spaike.dk</span>
+  <span>27. juli 2026</span>
+  <span>Kilde: repo spaike-landing @ main (b1387ca) + live-tjek af alle URL'er</span>
+</div></div>
+
+<header class="masthead"><div class="wrap">
+  <div class="label">Fuldt overblik</div>
+  <h1>Alt hvad der ligger på <em>spaike.dk</em>, og <span class="amber">hvorfor</span>.</h1>
+  <p class="lede">10 sider og redirects, 4 API-endpoints, 3 skjulte forside-sektioner og 4 glemte designudkast. Her er hele kortet: hvad der er synligt, hvad der er bevidst gemt, hvad der er klar men upubliceret, og hvad der bør ryddes op.</p>
+</div></header>
+
+<div class="doublerule"></div>
+
+<section><div class="wrap">
+  <div class="label">01 · Budskabslogikken</div>
+  <h2>To spor mod samme mål: <em>en booket samtale.</em></h2>
+  <p class="sub">Forsiden er bygget som en avisforside for kommercielle ledere i mid-market. Positioneringen er "commercial impact, drevet af AI" med Michaels 15+ års kommercielle erfaring som troværdighedsanker. Derfra deler sitet sig i to spor, der begge ender i kontakt:</p>
+
+  <div class="funnel">
+    <div class="track">
+      <h3>Spor A · "Byg for mig"</h3>
+      <div class="tagline">Done-for-you · direkte konvertering</div>
+      <div class="step"><span class="n">01</span><div class="t"><b>Hero + "Hvad vi bygger"</b><span>4 genkendelige problemkategorier (kundeservice, CRM, videndeling, manuelle processer)</span></div></div>
+      <div class="step"><span class="n">02</span><div class="t"><b>Manifest</b><span>Filosofi og ærlighed som differentiator ("det duer ikke her" lige så ofte som "det kan vi løse")</span></div></div>
+      <div class="step"><span class="n">03</span><div class="t"><b>Book møde (Calendly)</b><span>CTA i header + hero, tracket med Umami-events</span></div></div>
+    </div>
+    <div class="track">
+      <h3>Spor B · "Byg selv"</h3>
+      <div class="tagline">Content-drevet lead-gen · længere funnel</div>
+      <div class="step"><span class="n">01</span><div class="t"><b>Vibe coding-guiden (field note)</b><span>Værktøjsvalg i almindeligt dansk, tillidsopbygning</span></div></div>
+      <div class="step"><span class="n">02</span><div class="t"><b>Idékataloget (17 idéer)</b><span>"Hvad skal I bygge" + chat med case-finderen</span></div></div>
+      <div class="step"><span class="n">03</span><div class="t"><b>AI-innovationsdagen + discovery-agent</b><span>Chat → mail-gated case-brief → Brevo-mail med brief + guide = lead i PocketBase</span></div></div>
+    </div>
+    <div class="converge">Begge spor konvergerer i <b>kontakt</b>: Calendly-booking, michael@spaike.dk eller et kvalificeret lead med et allerede defineret problem. Logikken holder: Spor B sælger ikke, den demonstrerer, og ansøgere ankommer selv-kvalificerede.</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">02 · Alle sider på domænet</div>
+  <h2>10 offentlige stier, <em>4 statusser.</em></h2>
+
+  <div class="grid">
+    <div class="card">
+      <div class="badges"><span class="badge b-green">Synlig · nav + footer</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/">/</a></div>
+      <h3>Forsiden</h3>
+      <p>Hero → Hvad vi bygger (4 kategorier) → Byg selv med AI (3 indgange) → Manifest → Footer. Tre sektioner er kommenteret ud for soft-launch (se afsnit 04).</p>
+      <div class="meta">Linker til: /ai-innovationsdag, /ai-innovationsdag/ideer, /field-notes/vibe-coding-guide, Calendly, mail, LinkedIn</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-green">Synlig fra forsiden</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/ai-innovationsdag">/ai-innovationsdag</a></div>
+      <h3>AI-innovationsdag (landing)</h3>
+      <p>Hero, værdi-accordion, agenda, forberedelse, embedded discovery-agent (chat → brief → Brevo-mail), kontakt-CTA. Featurens hovedside og Spor B's konverteringspunkt.</p>
+      <div class="meta">Linker til: /ideer, /guide, forsiden, Calendly, mail · Egen header (ikke site-nav)</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-amber">Live · kun via undersider</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/ai-innovationsdag/guide">/ai-innovationsdag/guide</a></div>
+      <h3>DIY-guide til innovationsdagen</h3>
+      <p>Gratis komplet guide: rolle-model, agenda, best practices, print-til-PDF. Ikke linket fra forsiden, men fra innovationsdag-siden, vibe coding-guiden og Brevo-mailen.</p>
+      <div class="meta">Del af værditilbuddet i discovery-flowets slut-step</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-green">Synlig fra forsiden</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/ai-innovationsdag/ideer">/ai-innovationsdag/ideer</a></div>
+      <h3>GTM-idékatalog</h3>
+      <p>16-17 kommercielle byg-selv-cases fordelt på Salg, RevOps, Marketing, CS, Onboarding og Internt, med kategori-selector. Indgang 02 i "Byg selv"-sektionen.</p>
+      <div class="meta">Linker tilbage til /ai-innovationsdag + #vaerktoej (discovery-agenten)</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-muted">Redirect</span><span class="badge b-ink">307 → /ai-innovationsdag</span></div>
+      <div class="url"><a href="https://www.spaike.dk/hackathon">/hackathon</a></div>
+      <h3>Hackathon-alias</h3>
+      <p>Internt ord er "hackathon", kundevendt navn er altid "AI-innovationsdag". Redirect så gamle omtaler og mundtlige referencer lander rigtigt. Bevidst og fint.</p>
+      <div class="meta">app/hackathon/page.tsx · server-redirect</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-green">Synlig fra forsiden</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/field-notes/vibe-coding-guide">/field-notes/vibe-coding-guide</a></div>
+      <h3>Field note 02 · Vibe coding-guiden</h3>
+      <p>Dansk guide til de 5 store vibe coding-værktøjer (Base44, Lovable, Replit, v0, Bolt) baseret på 20+ tests. Indgang 01 i "Byg selv"-sektionen og content-motor for Spor B.</p>
+      <div class="meta">Krydslinker flittigt til /ai-innovationsdag, /ideer og /guide</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-amber">Live · forældreløs</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/field-notes/anthropic-sales-playbook">/field-notes/anthropic-sales-playbook</a></div>
+      <h3>Field note 01 · Anthropic sales playbook</h3>
+      <p>Engelsk artikel (en_US) om Travis Bryants salgsuge med paste-ready Claude Skill-prompts. Ingen intern side linker til den; den findes kun via direkte URL, fx LinkedIn-deling.</p>
+      <div class="meta">Eneste engelske indhold på sitet · Lighthouse: SEO 100, A11y 95</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-amber">Klar · upubliceret</span><span class="badge b-red">404</span></div>
+      <div class="url">/field-notes/fra-prototype-til-drift</div>
+      <h3>Field note 03 · Fra prototype til drift</h3>
+      <p>Artiklen er skrevet og committet (340 linjer), men bevidst holdt ude af artikel-indekset, så den giver 404. Klar til publicering: tilføj den i <span style="font-family:var(--mono);font-size:12px">_articles/index.ts</span>.</p>
+      <div class="meta">Krydslinker allerede til vibe-coding-guiden</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-red">Hul i strukturen</span><span class="badge b-red">404</span></div>
+      <div class="url">/field-notes</div>
+      <h3>Field notes-indeks mangler</h3>
+      <p>Der findes ingen oversigtsside, så alle der trimmer URL'en (eller gætter den) rammer 404. Med 2 publicerede + 1 klar artikel er der nok til en lille indeksside.</p>
+      <div class="meta">Kun app/field-notes/[slug]/page.tsx eksisterer</div>
+    </div>
+    <div class="card">
+      <div class="badges"><span class="badge b-red">Utilsigtet offentlig</span><span class="badge b-ink">200 OK</span></div>
+      <div class="url"><a href="https://www.spaike.dk/design-index.html">/design-index.html</a> + design-1/2/3.html</div>
+      <h3>Gamle designudkast på production</h3>
+      <p>Fire statiske HTML-filer fra design-fasen ligger i <span style="font-family:var(--mono);font-size:12px">public/</span> og serveres derfor på det live domæne. Ikke linket nogen steder, men tilgængelige og potentielt indekserbare.</p>
+      <div class="meta">Anbefaling: flyt til design-explorations/ (ikke serveret) og slet fra public/</div>
+    </div>
+  </div>
+</div></section>
+
+<section class="darksec"><div class="wrap">
+  <div class="label">03 · Maskinrummet</div>
+  <h2 style="color:var(--cream)">Funktionalitet uden egen <em>side.</em></h2>
+  <p class="sub">Det her er ikke synligt indhold, men det kører på domænet og driver discovery-flowet.</p>
+  <table>
+    <tr><th>Endpoint / system</th><th>Hvad det gør</th><th>Beskyttelse</th></tr>
+    <tr><td>/api/innovationsdag/start</td><td>Udsteder signeret session-token (1t TTL) når discovery-tool åbnes. Ingen mail-gate up front.</td><td>HMAC-token, per-IP rate-limit, valgfri Turnstile (keys ikke sat endnu)</td></tr>
+    <tr><td>/api/innovationsdag/research</td><td>Valgfrit website-opslag: Anthropic web_fetch (Sonnet) laver kort branchekontekst, mens chatten allerede kører.</td><td>Kræver gyldigt session-token</td></tr>
+    <tr><td>/api/innovationsdag/chat</td><td>Discovery-agenten: Claude Haiku 4.5, NDJSON-streaming, case-brief som garanteret tool-kald.</td><td>Token, tur-loft, payload-guard, rate-limit</td></tr>
+    <tr><td>/api/innovationsdag/lead</td><td>Gemmer lead + transcript + brief i PocketBase, sender brief + guide-link via Brevo. Kun ved samtykke.</td><td>GDPR: persondata kun i slut-steppet</td></tr>
+    <tr><td>PocketBase (spaike-crm)</td><td>Fly.io, EU. Collections: discovery_sessions + applications. Alle rules låst til superuser.</td><td>Credentials i .env.local + Vercel env</td></tr>
+    <tr><td>Brevo</td><td>Mail-levering af case-brief. Verificeret virkende, men domænet er ikke DKIM/SPF-verificeret endnu ("Sent with Brevo"-footer).</td><td>Åben TODO fra sidste handoff</td></tr>
+    <tr><td>Umami (analytics.spaike.dk)</td><td>Selvhostet analytics, events på alle CTA'er (book_moede_click, byg_selv_click, email_click m.fl.).</td><td>Cookieløs</td></tr>
+    <tr><td>Calendly</td><td>Book møde-flowet bag alle primære CTA'er (calendly.com/michael-spaike/new-meeting).</td><td>Ekstern</td></tr>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">04 · Bevidst gemt væk</div>
+  <h2>Tre forside-sektioner ligger <em>klar i koden.</em></h2>
+  <p class="sub">Kommenteret ud i app/page.tsx med noten "hidden for soft-launch". De koster ingenting at have liggende, men to af dem er reelt værdifulde at genoverveje:</p>
+  <table>
+    <tr><th>Komponent</th><th>Indhold</th><th>Vurdering</th></tr>
+    <tr><td>Cases.tsx</td><td>3 navngivne kundecases: JUC (7 kundeservice-indbakker automatiseret, chatbot) og Audiovox (papir → QR-flow, 8 → 2 manuelle trin).</td><td>Sitets eneste sociale bevis. "Hvad vi bygger" påstår "vi har leveret alle fire kategorier hos eksisterende klienter" uden at vise det. Overvej at aktivere, evt. efter OK fra kunderne.</td></tr>
+    <tr><td>DiscoveryCTA.tsx</td><td>SpAIke Discovery-produktet: 4-trins flow (alignment → tilmeld → interviews → handlingsplan, 48 timer).</td><td>Site-metadata sælger stadig dette produkt (se afsnit 05), men selve sektionen er skjult. Enten aktivér eller ret metadata.</td></tr>
+    <tr><td>Waitlist.tsx</td><td>Venteliste-formular. Submit er ikke wired op (TODO SPA-461: Airtable + Brevo).</td><td>Fint at holde skjult; virker ikke endnu.</td></tr>
+    <tr><td>About.tsx</td><td>Gammel om-sektion fra tidligere design ("[Foto kommer]"), bruger forældede klasser.</td><td>Død kode, kan slettes.</td></tr>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">05 · Observationer og anbefalinger</div>
+  <h2>Prioriteret <em>oprydningsliste.</em></h2>
+
+  <div style="margin-top: 26px;">
+    <div class="finding">
+      <div class="prio p-red">Bør fixes</div>
+      <div>
+        <h3>Metadata lover et produkt, siden ikke viser</h3>
+        <p>Site-description (Google-snippet + delinger) siger "SpAIke Discovery starter med jeres vigtigste mål og leverer en konkret handlingsplan på 48 timer" og OG-teksten "Gratis Discovery på 48 timer". Discovery-sektionen er skjult, så besøgende fra søgning lander på en side, der ikke nævner det. Ret <code>app/layout.tsx</code> til den aktuelle fortælling (byg selv + innovationsdag), eller aktivér DiscoveryCTA.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-red">Bør fixes</div>
+      <div>
+        <h3>Fire designudkast serveres på production</h3>
+        <p><code>/design-index.html</code>, <code>/design-1.html</code>, <code>/design-2.html</code> og <code>/design-3.html</code> er offentligt tilgængelige rester fra design-fasen. Flyt dem til <code>design-explorations/</code> (som ikke serveres) og slet dem fra <code>public/</code>.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-amber">Overvej</div>
+      <div>
+        <h3>/field-notes giver 404</h3>
+        <p>Ingen indeksside, selvom der er to publicerede artikler og en tredje klar. En simpel oversigtsside ville både fange trimmede URL'er og give field notes en delbar hjemmebane. Alternativ på 5 minutter: redirect til <code>/#byg-selv</code>.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-amber">Overvej</div>
+      <div>
+        <h3>"Vi" og "jeg" blandes på tværs af sitet</h3>
+        <p>Forsiden siger "Hvad vi bygger", "Vi har leveret", "Vi bygger med jer, ikke til jer". Byg selv-sektionen og hele innovationsdag-universet siger konsekvent "jeg/mig" ("Med mig som sparringspartner"). Din egen regel er jeg-form for SpAIke. Beslut én stemme; jeg-formen matcher soloprofilen og founder-fortællingen i hero'en bedst.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-amber">Overvej</div>
+      <div>
+        <h3>Ingen robots.txt eller sitemap.xml</h3>
+        <p>Begge giver 404. Med App Router er det to små filer (<code>app/robots.ts</code> + <code>app/sitemap.ts</code>). Et sitemap ville også gøre det eksplicit, hvad der må indekseres, og holde designudkastene ude.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-amber">Overvej</div>
+      <div>
+        <h3>Footer siger "SpAIke ApS"</h3>
+        <p>Juridisk enhed er mimoco ApS (SpAIke er brandet). "© 2026 SpAIke ApS" og "Drevet af SpAIke ApS" i footeren er formelt et forkert selskabsnavn. Enten "SpAIke · en del af mimoco ApS" eller bare "SpAIke".</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-green">Når det passer</div>
+      <div>
+        <h3>Field note 03 er klar til publicering</h3>
+        <p>"Fra prototype til drift" mangler kun en linje i <code>_articles/index.ts</code>. Den forlænger byg selv-fortællingen naturligt (guide → byg → drift) og krydslinker allerede korrekt.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="prio p-green">Når det passer</div>
+      <div>
+        <h3>Småting</h3>
+        <p>Hero-datelinen siger statisk "Vol. I · Maj 2026" (bliver gammel). Anthropic-playbook-artiklen er forældreløs og på engelsk; fint hvis den er ren LinkedIn-distribution, men et link fra en kommende /field-notes-indeksside ville give den et hjem. About.tsx er død kode. Fra sidste handoff udestår desuden: Brevo DKIM/SPF-verifikation, Turnstile-keys og PowerPoint-template i slut-steppet.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Genereret af Claude · repo-gennemgang + live-verifikation</span>
+  <span>spaike.dk · 27.07.2026</span>
+</div></footer>
+
+</body>
+</html>
