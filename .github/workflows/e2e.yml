@@ -1,0 +1,45 @@
+name: E2E
+
+# Kører hele Playwright-suiten på hvert push (alle branches). Ingen tests
+# rammer betalte API'er: chat/research/lead mockes, og session-secretten er
+# en engangs-dummy pr. kørsel (kun brugt til at signere tokens i selve CI).
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      APP_SESSION_SECRET: ci-dummy-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installér dependencies
+        run: npm ci
+
+      - name: Installér Playwright-browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Kør E2E-suiten (bygger prod-build først)
+        run: npx playwright test
+
+      - name: Upload rapport ved fejl
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
