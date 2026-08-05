@@ -2,6 +2,39 @@
 
 import { useEffect } from "react";
 
+const WEBSITE_ID = "0b7517b0-d5a4-4785-aaff-009e05e85ba7";
+const SEND_URL = "https://analytics.spaike.dk/api/send";
+
+// Events på samme-fane-links sendes med sendBeacon i stedet for Umamis
+// data-umami-event-interception: den preventDefault'er og venter på svar fra
+// analytics-serveren før den navigerer, så et nede endpoint blokerer al
+// navigation. sendBeacon overlever page unload og kan aldrig holde et klik
+// tilbage. _blank-links interceptes ikke og beholder data-umami-event.
+function beacon(name: string, data?: Record<string, string | number>) {
+  try {
+    const payload = {
+      type: "event",
+      payload: {
+        website: WEBSITE_ID,
+        hostname: location.hostname,
+        screen: `${screen.width}x${screen.height}`,
+        language: navigator.language,
+        title: document.title,
+        url: location.pathname + location.search,
+        referrer: document.referrer,
+        name,
+        ...(data && Object.keys(data).length ? { data } : {}),
+      },
+    };
+    navigator.sendBeacon(
+      SEND_URL,
+      new Blob([JSON.stringify(payload)], { type: "application/json" })
+    );
+  } catch {
+    // Analytics må aldrig kunne vælte siden.
+  }
+}
+
 export default function Analytics() {
   useEffect(() => {
     const fired = new Set<number>();
@@ -13,12 +46,31 @@ export default function Analytics() {
       [25, 50, 75, 100].forEach((threshold) => {
         if (pct >= threshold && !fired.has(threshold)) {
           fired.add(threshold);
-          window.umami?.track("scroll_depth", { percent: threshold });
+          beacon("scroll_depth", { percent: threshold });
         }
       });
     }
+
+    function onClick(e: MouseEvent) {
+      const target = e.target instanceof Element ? e.target : null;
+      const el = target?.closest("[data-track-event]");
+      if (!(el instanceof HTMLElement)) return;
+      const name = el.getAttribute("data-track-event");
+      if (!name) return;
+      const data: Record<string, string> = {};
+      for (const attr of el.getAttributeNames()) {
+        const m = attr.match(/^data-track-(?!event$)(.+)/);
+        if (m) data[m[1]] = el.getAttribute(attr) ?? "";
+      }
+      beacon(name, data);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("click", onClick, true);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("click", onClick, true);
+    };
   }, []);
 
   return null;

@@ -259,8 +259,8 @@ export default function AiILandmaaling() {
           </a>
           <a
             href="https://spaike.dk"
-            data-umami-event="field_note_closer_more_click"
-            data-umami-event-article="ai-i-landmaaling"
+            data-track-event="field_note_closer_more_click"
+            data-track-article="ai-i-landmaaling"
             className="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
           >
             Mere fra SpAIke

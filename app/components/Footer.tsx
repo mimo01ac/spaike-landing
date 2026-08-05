@@ -33,7 +33,7 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:michael@spaike.dk"
-                  data-umami-event="email_click"
+                  data-track-event="email_click"
                   className="hover:text-amber-dark transition-colors"
                 >
                   michael@spaike.dk

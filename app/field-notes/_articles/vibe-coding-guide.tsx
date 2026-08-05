@@ -178,8 +178,8 @@ export default function VibeCodingGuide() {
           kundeservice, marketing og onboarding, i{" "}
           <a
             href="/ai-innovationsdag/ideer"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="idekatalog"
+            data-track-event="field_note_universe_click"
+            data-track-target="idekatalog"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             idékataloget
@@ -187,8 +187,8 @@ export default function VibeCodingGuide() {
           . Og er du i tvivl om, hvor I skulle starte, kan du{" "}
           <a
             href="/ai-innovationsdag#vaerktoej"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="case-finder"
+            data-track-event="field_note_universe_click"
+            data-track-target="case-finder"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             chatte med min case-finder
@@ -502,8 +502,8 @@ export default function VibeCodingGuide() {
           Til punkt 2: se{" "}
           <a
             href="/ai-innovationsdag/ideer"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="idekatalog-playbook"
+            data-track-event="field_note_universe_click"
+            data-track-target="idekatalog-playbook"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             idékataloget
@@ -511,8 +511,8 @@ export default function VibeCodingGuide() {
           eller{" "}
           <a
             href="/ai-innovationsdag#vaerktoej"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="case-finder-playbook"
+            data-track-event="field_note_universe_click"
+            data-track-target="case-finder-playbook"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             case-finderen
@@ -520,8 +520,8 @@ export default function VibeCodingGuide() {
           . Til punkt 5: læs om{" "}
           <a
             href="/ai-innovationsdag"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="innovationsdag"
+            data-track-event="field_note_universe_click"
+            data-track-target="innovationsdag"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             AI-innovationsdagen
@@ -529,8 +529,8 @@ export default function VibeCodingGuide() {
           , eller kør den selv med{" "}
           <a
             href="/ai-innovationsdag/guide"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="diy-guide"
+            data-track-event="field_note_universe_click"
+            data-track-target="diy-guide"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
           >
             min gratis gør-det-selv-guide
@@ -557,8 +557,8 @@ export default function VibeCodingGuide() {
         <div className="flex gap-4 flex-wrap">
           <a
             href="/ai-innovationsdag"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="innovationsdag-closer"
+            data-track-event="field_note_universe_click"
+            data-track-target="innovationsdag-closer"
             className="inline-flex items-center gap-2 px-5 py-3 bg-amber text-ink hover:bg-amber-dark hover:text-cream no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
           >
             Se AI-innovationsdagen →

@@ -50,8 +50,8 @@ export default function BuildItYourself() {
           <a
             key={e.n}
             href={e.href}
-            data-umami-event="byg_selv_click"
-            data-umami-event-target={e.event}
+            data-track-event="byg_selv_click"
+            data-track-target={e.event}
             className={`group px-6 md:px-7 py-8 flex flex-col gap-3.5 min-h-[240px] no-underline hover:bg-cream-deep transition-colors ${
               i > 0 ? "border-t md:border-t-0 md:border-l border-rule" : ""
             }`}

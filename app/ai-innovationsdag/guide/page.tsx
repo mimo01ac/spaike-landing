@@ -234,7 +234,7 @@ export default function GuidePage() {
               <a
                 href="/field-notes/vibe-coding-guide"
                 className="text-amber-dark underline"
-                data-umami-event="guide_to_field_note_click"
+                data-track-event="guide_to_field_note_click"
               >
                 guide til de fem største vibe coding-værktøjer
               </a>{" "}

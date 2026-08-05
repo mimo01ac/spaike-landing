@@ -354,8 +354,8 @@ export default function Page() {
               </a>
               <a
                 href="mailto:michael@spaike.dk?subject=AI-innovationsdag"
-                data-umami-event="email_click"
-                data-umami-event-location="ai-innovationsdag-kontakt"
+                data-track-event="email_click"
+                data-track-location="ai-innovationsdag-kontakt"
                 className="inline-block border border-cream text-cream px-6 py-3.5 font-sans text-[13px] font-medium tracking-wider uppercase hover:bg-cream hover:text-ink transition-colors text-center"
               >
                 Skriv til mig
@@ -393,7 +393,7 @@ export default function Page() {
                 <a
                   href="mailto:michael@spaike.dk"
                   className="text-amber-dark underline"
-                  data-umami-event="email_click"
+                  data-track-event="email_click"
                 >
                   michael@spaike.dk
                 </a>

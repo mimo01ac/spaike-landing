@@ -302,8 +302,8 @@ export default function FraPrototypeTilDrift() {
           </a>
           <a
             href="/field-notes/vibe-coding-guide"
-            data-umami-event="field_note_universe_click"
-            data-umami-event-target="guide-fra-drift"
+            data-track-event="field_note_universe_click"
+            data-track-target="guide-fra-drift"
             className="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
           >
             Læs værktøjsguiden
