@@ -53,6 +53,7 @@ export default function RootLayout({
         <Script
           src="https://analytics.spaike.dk/script.js"
           data-website-id="0b7517b0-d5a4-4785-aaff-009e05e85ba7"
+          data-domains="www.spaike.dk,spaike.dk"
           strategy="afterInteractive"
           defer
         />

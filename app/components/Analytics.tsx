@@ -12,6 +12,9 @@ const SEND_URL = "https://analytics.spaike.dk/api/send";
 // tilbage. _blank-links interceptes ikke og beholder data-umami-event.
 function beacon(name: string, data?: Record<string, string | number>) {
   try {
+    // Track kun produktionsdomænet: localhost/preview/E2E-tests må ikke
+    // forurene statistikken (spejler data-domains på Umami-script-tagget).
+    if (!/(^|\.)spaike\.dk$/.test(location.hostname)) return;
     const payload = {
       type: "event",
       payload: {
