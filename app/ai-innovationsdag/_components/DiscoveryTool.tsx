@@ -33,7 +33,30 @@ interface Store {
   brief?: CaseBriefData;
   transcript?: ChatMsg[];
   companyContext?: string;
+  companyName?: string;
   website?: string;
+}
+
+// Udled et vist-navn fra domænet MED DET SAMME (før research er færdig), så
+// åbningen kan nævne virksomheden fra tur 1. "https://www.acme.dk" -> "Acme".
+function companyNameFromUrl(raw: string): string {
+  const v = raw.trim();
+  if (!v) return "";
+  try {
+    const host = new URL(/^https?:\/\//i.test(v) ? v : `https://${v}`).hostname
+      .replace(/^www\./i, "")
+      .toLowerCase();
+    const parts = host.split(".").filter(Boolean);
+    if (parts.length < 2) return "";
+    // Registrerbart domæne: hop over second-level-suffikser som co.uk/com.au.
+    const secondLevel = new Set(["co", "com", "net", "org", "gov", "edu"]);
+    let name = parts[parts.length - 2];
+    if (parts.length >= 3 && secondLevel.has(name)) name = parts[parts.length - 3];
+    if (!name) return "";
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  } catch {
+    return "";
+  }
 }
 
 function loadStore(): Store {
@@ -74,6 +97,7 @@ export default function DiscoveryTool() {
   const [done, setDone] = useState<null | { wantHelp: boolean }>(null);
   const [startError, setStartError] = useState<string | null>(null);
   const [companyContext, setCompanyContext] = useState<string>(restored.companyContext ?? "");
+  const [companyName, setCompanyName] = useState<string>(restored.companyName ?? "");
   const [website, setWebsite] = useState<string>(restored.website ?? "");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -85,8 +109,12 @@ export default function DiscoveryTool() {
     const url = websiteUrl.trim();
     setStage("chat");
     if (skip || !url) return;
+    // Navnet udledes af domænet med det samme, så åbningen kan bruge det på
+    // tur 1; den fulde research-kontekst kommer asynkront og bruges fra næste tur.
+    const name = companyNameFromUrl(url);
     setWebsite(url);
-    saveStore({ website: url });
+    setCompanyName(name);
+    saveStore({ website: url, companyName: name });
     fetch("/api/innovationsdag/research", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -247,6 +275,7 @@ export default function DiscoveryTool() {
             initialUserMessage={initialUserMessage}
             restoredMessages={restored.messages}
             companyContext={companyContext}
+            companyName={companyName}
             onMessagesChange={(m) => saveStore({ messages: m, companyContext })}
             onBrief={(b, t) => {
               saveStore({ brief: b, transcript: t, companyContext });

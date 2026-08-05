@@ -45,7 +45,12 @@ export async function POST(req: Request) {
     return json({ type: "error", error: "For mange anmodninger. Vent lidt." }, 429);
   }
 
-  let body: { token?: string; messages?: ClientMsg[]; companyContext?: string };
+  let body: {
+    token?: string;
+    messages?: ClientMsg[];
+    companyContext?: string;
+    companyName?: string;
+  };
   try {
     body = await req.json();
   } catch {
@@ -89,6 +94,18 @@ export async function POST(req: Request) {
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
   ];
+  // Vist-navn udledt af website-domænet klient-side. Er der med det samme
+  // (modsat researchen, som er asynkron), så åbningen kan nævne virksomheden.
+  const companyName = String(body.companyName ?? "")
+    .replace(/[\r\n"]/g, "")
+    .trim()
+    .slice(0, 60);
+  if (companyName) {
+    system.push({
+      type: "text",
+      text: `VIRKSOMHEDSNAVN: Brugeren kommer fra virksomheden "${companyName}" (navnet er udledt af deres website-domæne og kan afvige let fra det officielle navn). Brug navnet naturligt i din åbning og undervejs.`,
+    });
+  }
   const ctx = (body.companyContext ?? "").trim();
   if (ctx) {
     system.push({

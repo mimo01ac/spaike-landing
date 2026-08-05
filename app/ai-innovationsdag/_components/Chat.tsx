@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { CaseBriefData, ChatMsg } from "../_types";
 
 interface Props {
@@ -10,7 +12,21 @@ interface Props {
   restoredMessages?: ChatMsg[];
   onMessagesChange?: (messages: ChatMsg[]) => void;
   companyContext?: string;
+  companyName?: string;
 }
+
+// Assistant-svar er markdown (fed, bullets); render dem pænt i brand-typografi.
+// Bruger-beskeder forbliver ren tekst (whitespace-pre-wrap).
+const markdownComponents: Components = {
+  p: ({ node: _n, ...props }) => <p className="mb-2.5 last:mb-0" {...props} />,
+  strong: ({ node: _n, ...props }) => <strong className="font-semibold" {...props} />,
+  ul: ({ node: _n, ...props }) => (
+    <ul className="list-disc pl-5 space-y-1 mb-2.5 last:mb-0" {...props} />
+  ),
+  ol: ({ node: _n, ...props }) => (
+    <ol className="list-decimal pl-5 space-y-1 mb-2.5 last:mb-0" {...props} />
+  ),
+};
 
 export default function Chat({
   token,
@@ -19,6 +35,7 @@ export default function Chat({
   restoredMessages,
   onMessagesChange,
   companyContext,
+  companyName,
 }: Props) {
   const hasRestored = !!(restoredMessages && restoredMessages.length > 0);
   const [messages, setMessages] = useState<ChatMsg[]>(hasRestored ? restoredMessages! : []);
@@ -61,7 +78,7 @@ export default function Chat({
       const res = await fetch("/api/innovationsdag/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, messages: history, companyContext }),
+        body: JSON.stringify({ token, messages: history, companyContext, companyName }),
       });
 
       if (!res.ok || !res.body) {
@@ -147,10 +164,22 @@ export default function Chat({
               className={
                 m.role === "user"
                   ? "max-w-[85%] bg-ink text-cream rounded-lg rounded-br-sm px-4 py-2.5 text-[14px] leading-relaxed whitespace-pre-wrap"
-                  : "max-w-[90%] text-ink text-[15px] leading-relaxed whitespace-pre-wrap"
+                  : "max-w-[90%] text-ink text-[15px] leading-relaxed"
               }
             >
-              {m.content || (m.role === "assistant" && busy ? "…" : "")}
+              {m.role === "assistant" ? (
+                m.content ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                    {m.content}
+                  </ReactMarkdown>
+                ) : busy ? (
+                  "…"
+                ) : (
+                  ""
+                )
+              ) : (
+                m.content
+              )}
             </div>
           </div>
         ))}
