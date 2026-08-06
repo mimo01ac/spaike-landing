@@ -3,20 +3,20 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Field Notes: AI i landmåling — SpAIke",
   description:
-    "Ikke en liste over software du skal købe. Hvad rigtige virksomheder har bygget med AI til kontor-arbejdet (rapporter, tilbud, dokumenter), fortalt firma-først, for landinspektør- og opmålingsvirksomheder.",
+    "Hvad AI allerede klarer i landmålerens kontor: rapporter, tilbud og dokumenter. Rigtige eksempler med kilder du selv kan klikke på. Ingen droner nødvendige.",
   openGraph: {
-    title: "AI i landmåling — hvad firmaer har bygget, ikke købt",
+    title: "AI i landmåling — hvad AI allerede klarer i kontoret",
     description:
-      "Firma-først cases (Landbrugsstyrelsen, Arup, Talbots Law): AI bygget omkring egne data til rapporter, tilbud og dokumenter. Ikke droner, ikke produkter du skal købe.",
+      "Rigtige eksempler (Landbrugsstyrelsen, Arup, Talbots Law) på AI der tager kontor-timer: rapporter, tilbud og dokumenter. Ingen droner.",
     type: "article",
     locale: "da_DK",
     url: "https://www.spaike.dk/field-notes/ai-i-landmaaling",
   },
   twitter: {
     card: "summary",
-    title: "AI i landmåling — hvad firmaer har bygget, ikke købt",
+    title: "AI i landmåling — hvad AI allerede klarer i kontoret",
     description:
-      "Firma-først cases om AI bygget omkring egne data til kontor-arbejdet, for landinspektør- og opmålingsvirksomheder.",
+      "Rigtige eksempler på AI der tager kontor-timer for landinspektør- og opmålingsvirksomheder.",
   },
 };
 
@@ -33,16 +33,15 @@ export default function AiILandmaaling() {
       <h1 className="font-serif font-semibold text-[36px] md:text-[54px] leading-[1.08] tracking-tight text-ink mb-6">
         AI i landmåling:{" "}
         <em className="italic font-medium text-amber-dark">
-          hvad firmaer har bygget, ikke hvad de har købt
+          hvad AI allerede klarer i kontoret, ikke i luften
         </em>
       </h1>
 
       {/* DECK */}
       <p className="font-serif text-[22px] italic leading-[1.45] text-ink-soft mb-8 max-w-[620px]">
-        Ikke et AI-oplæg om droner, og ikke en liste over software I skal købe.
-        Her er hvad rigtige virksomheder har bygget med AI til kontor-arbejdet,
-        rapporter, tilbud og dokumenter, fortalt firma-først, med kilder du selv
-        kan klikke på.
+        Ikke et AI-oplæg om droner. Det her handler om kontor-arbejdet,
+        rapporter, tilbud og dokumenter, og hvad AI konkret kan tage af det, med
+        rigtige eksempler og kilder du selv kan klikke på.
       </p>
 
       {/* BYLINE */}
@@ -66,14 +65,12 @@ export default function AiILandmaaling() {
       {/* LEDE */}
       <section className="lede">
         <p className="mb-[18px] first-letter:font-serif first-letter:text-[64px] first-letter:font-semibold first-letter:float-left first-letter:leading-[0.9] first-letter:mt-1 first-letter:mr-2 first-letter:-mb-1 first-letter:text-amber-dark">
-          Det korte svar: du behøver hverken en drone eller et nyt stykke
-          software for at komme i gang. Den tunge felt-tech er reel, men kompleks,
-          og de færdige værktøjer gør dig til køber, ikke til ejer. Det
-          interessante er, hvad firmaer har BYGGET med AI omkring deres egne data:
-          rapporter skrevet fra eget arkiv, forespørgsler læst og besvaret,
-          dokumenter der før blev tjekket i hånden. Næsten ingen landmålere har
-          vist det offentligt endnu, så her er de nærmeste eksempler, og den
-          first-mover-fordel der ligger og venter.
+          Det korte svar: du behøver ingen drone for at få noget ud af AI. Den
+          tunge felt-tech er reel, men kompleks. Det interessante for jer ligger i
+          kontoret, dér hvor timerne forsvinder: rapporter skrevet fra jeres eget
+          arkiv, forespørgsler læst og besvaret, dokumenter der før blev tjekket i
+          hånden. Næsten ingen landmålere har taget hul på det endnu, så her er de
+          nærmeste eksempler, og den fordel der venter på den, der går først.
         </p>
       </section>
 
@@ -130,9 +127,9 @@ export default function AiILandmaaling() {
           brancheundersøgelse blandt geospatiale virksomheder (2026) og
           RICS&rsquo; AI in Construction 2025 blandt over 2.200 fagfolk. Billedet
           er tydeligt: næsten alle vil investere, men de færreste er i gang for
-          alvor, og endnu færre har vist deres AI-arbejde offentligt. Det er
-          præcis derfor de næste tre eksempler er værd at kigge på, selvom to af
-          dem kommer fra nabofag: de viser bevægelsen, ikke et produkt.
+          alvor. Derfor er de næste tre eksempler værd at kigge på: de viser
+          konkret, hvad AI gør ved den slags kontor-arbejde, I også har, selvom to
+          af dem kommer fra nabofag.
         </p>
       </section>
 
@@ -144,7 +141,7 @@ export default function AiILandmaaling() {
           <span>Hvor det skaber værdi</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-8">
-          Tre firmaer, ikke tre produkter
+          Tre steder AI allerede tager kontor-timer
         </h2>
 
         {[
@@ -152,13 +149,14 @@ export default function AiILandmaaling() {
             n: "1",
             title:
               "Landbrugsstyrelsen (Danmark): AI screener 450.000 markblokke, der før blev tjekket i hånden",
-            body: "En dansk myndighed byggede sammen med Alexandra Instituttet en deep-learning-model, der automatisk screener og afgrænser cirka 450.000 markblokke ud fra luftfotos, grundlaget for arealstøtte, som før var en tung, delvist manuel GIS-proces. Pointen er ikke et købt produkt, men en model bygget til deres egne data og eget GIS. Så tæt på landmåling som en case kommer: arealer, geodata, opmåling.",
+            body: "En dansk myndighed byggede sammen med Alexandra Instituttet en deep-learning-model, der automatisk screener og afgrænser cirka 450.000 markblokke ud fra luftfotos, grundlaget for arealstøtte, som før var en tung, delvist manuel GIS-proces. Så tæt på landmåling som en case kommer: arealer, geodata, opmåling, hvor AI tager det tunge screeningsarbejde.",
             src: "Kilde: Alexandra Instituttet. Ærligt: en prototype, uden et offentliggjort tidstal.",
           },
           {
             n: "2",
-            title: "Arup (global ingeniørvirksomhed): byggede sit eget AI, købte det ikke",
-            body: "Arup byggede to egne AI-værktøjer frem for at købe et produkt. Det ene er trænet på årtiers egne projekter, standarder og regler og bruges til at slå viden op og skrive udkast til rapporter. Det andet læser indkommende forespørgsler, opsummerer kravene og finder relevante tidligere projekter og folk på tværs af 150.000 projekter, så de hurtigt kan afgøre hvad de skal byde på, 16.000 forespørgsler om året. Præcis en landmålers hverdag: skrive rapporter fra egen viden, og vurdere hvilke opgaver der er værd at give tilbud på.",
+            title:
+              "Arup (global ingeniørvirksomhed): AI skriver rapport-udkast fra firmaets eget arkiv",
+            body: "Arup satte AI til to ting i kontoret. Det ene værktøj er trænet på årtiers egne projekter, standarder og regler, og bruges til at slå viden op og skrive udkast til rapporter. Det andet læser indkommende forespørgsler, opsummerer kravene og finder relevante tidligere projekter og folk på tværs af 150.000 projekter, så de hurtigt kan afgøre hvad de skal byde på, 16.000 forespørgsler om året. Præcis en landmålers hverdag: skrive rapporter fra egen viden, og vurdere hvilke opgaver der er værd at give tilbud på.",
             src: "Kilde: Microsoft-story, firma-fortalt. Ærligt: kvalitativt, ikke ét hårdt tal.",
           },
           {
@@ -185,8 +183,9 @@ export default function AiILandmaaling() {
         ))}
 
         <blockquote className="font-serif italic text-[22px] leading-[1.4] text-ink my-9 pl-7 border-l-2 border-ink">
-          Værktøjerne findes. Fordelen ligger ikke i at købe et produkt, men i at
-          bygge AI omkring jeres egne data, jeres skabeloner og jeres arkiv.
+          Det spændende er ikke dronen. Det er, at AI kan tage kontor-timerne
+          bagefter: rapporterne, tilbuddene og dokumenterne, på data I allerede
+          har.
         </blockquote>
       </section>
 
@@ -198,16 +197,15 @@ export default function AiILandmaaling() {
           <span>Sådan griber de kloge det an</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          De bygger om deres egne data, de køber ikke et produkt
+          Start med ét kontor-flow, på data I allerede har
         </h2>
         <p className="mb-[18px]">
           De firmaer der får noget ud af det, starter dér hvor deres egen data
-          ligger: tidligere rapporter, skabeloner, dokument-arkivet. De bygger ét
-          smalt AI-flow omkring det, måler før og efter, og skalerer derfra. Det
-          er ikke et produkt man installerer, men en evne formet til firmaet,
-          sådan som Arup og Landbrugsstyrelsen gjorde. Og fordi næsten ingen
-          landmålere har vist det offentligt endnu, er der en reel
-          first-mover-fordel i at komme i gang nu.
+          ligger: tidligere rapporter, skabeloner, dokument-arkivet. De tager ét
+          smalt flow, måler før og efter, og skalerer derfra. AI&rsquo;en formes
+          til jeres egne skabeloner og sager, ikke omvendt. Og fordi næsten ingen
+          landmålere har taget hul på det endnu, er der en reel first-mover-fordel
+          i at komme i gang nu.
         </p>
       </section>
 
@@ -217,18 +215,16 @@ export default function AiILandmaaling() {
           <span>Min holdning</span>
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Jeg bygger det, jeg sælger jer ikke en licens
+          Start i kontoret, ikke i luften
         </h2>
         <p className="mb-[18px]">
-          Jeg leder med ROI, ikke med hype. Der findes masser af færdige
-          værktøjer, men den reelle værdi ligger ikke i at installere et produkt,
-          den ligger i at bygge AI omkring netop jeres skabeloner, jeres tidligere
-          rapporter og jeres dokumenter, sådan som Arup og Landbrugsstyrelsen
-          gjorde det. Det er dét jeg laver: løsningen bygges om jeres data, den
-          sælges ikke som en licens. Den tunge felt-tech med drone og punktsky er
-          reel, men det er ikke der man starter. Og har I allerede bygget det, så
-          siger jeg det. Pointen er ROI på jeres tal, ikke et AI-projekt for
-          projektets skyld.
+          Jeg leder med ROI, ikke med hype. Den tunge felt-tech med drone og
+          punktsky er reel, men det er ikke der man kommer nemmest i gang.
+          Gevinsten ligger i kontoret, hvor timerne forsvinder: rapporter, tilbud,
+          kunde-mails og dokumenter, formet til netop jeres skabeloner og jeres
+          arkiv. Nogle ting egner sig glimrende til det, andre gør ikke, og har I
+          allerede strømlinet det, så siger jeg det. Pointen er ROI på jeres tal,
+          ikke et AI-projekt for projektets skyld.
         </p>
       </section>
 
@@ -238,12 +234,12 @@ export default function AiILandmaaling() {
           Er noget af det relevant for jer?
         </div>
         <h3 className="font-serif font-medium text-[30px] leading-[1.2] text-cream mb-5">
-          Vil I bygge jeres første kontor-AI?
+          Vil I finde jeres nemmeste kontor-gevinst?
         </h3>
         <p className="text-[16px] text-cream/85 mb-6">
           Jeg viser gerne konkret, hvordan ét enkelt flow som rapporter fra jeres
-          eget arkiv eller tilbud på indkommende forespørgsler kan bygges om jeres
-          data, og hvad det realistisk er værd i sparet kontor-tid. Ingen droner
+          eget arkiv eller tilbud på indkommende forespørgsler kan se ud hos jer,
+          og hvad det realistisk er værd i sparet kontor-tid. Ingen droner
           nødvendige.
         </p>
         <div className="flex gap-4 flex-wrap">
@@ -293,8 +289,8 @@ export default function AiILandmaaling() {
             >
               Microsoft UK Stories, Arup
             </a>
-            : egne AI-værktøjer til rapport-udkast fra eget arkiv + triage af
-            16.000 forespørgsler/år.
+            : AI til rapport-udkast fra eget arkiv + triage af 16.000
+            forespørgsler/år.
           </li>
           <li>
             <a
