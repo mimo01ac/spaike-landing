@@ -54,10 +54,16 @@ td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
 .herostrip figcaption{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);text-align:center;margin-top:7px}
 ul{margin:14px 0;padding-left:22px} li{margin:8px 0}
 .limits{border:1px solid var(--rule);background:var(--cream-deep);padding:16px 22px;margin:22px 0;font-size:15px;color:var(--ink-soft)}
-.cta{border:2px solid var(--ink);padding:30px 28px;margin:44px 0 0;text-align:center;background:#fff}
-.cta h3{margin:0 0 10px;font-size:24px}
-.cta p{margin:0 auto;max-width:560px;color:var(--ink-soft);font-size:16px}
-.cta a{display:inline-block;margin-top:18px;background:var(--ink);color:var(--cream);text-decoration:none;font-weight:600;padding:12px 26px;font-family:'Inter'}
+.closer{background:var(--ink);color:var(--cream);padding:48px 46px;margin:56px 0 0;border-radius:6px}
+.closer .ck{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-soft);margin-bottom:16px}
+.closer h3{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:30px;line-height:1.2;color:var(--cream);margin:0 0 18px}
+.closer p{color:rgba(243,238,226,.85);font-size:16px;line-height:1.6;margin:0 0 26px;max-width:640px}
+.cbtns{display:flex;gap:16px;flex-wrap:wrap}
+.cbtns a{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;text-decoration:none;font-weight:600;font-size:15px;border-radius:3px;transition:background .12s,color .12s}
+.cbtns .bp{background:var(--amber);color:var(--ink)}
+.cbtns .bp:hover{background:var(--amber-dark);color:var(--cream)}
+.cbtns .bs{background:transparent;border:1px solid var(--cream);color:var(--cream)}
+.cbtns .bs:hover{background:var(--cream);color:var(--ink)}
 .foot{color:var(--muted);font-size:13px;margin-top:34px;padding-top:16px;border-top:1px solid var(--rule)}
 .tagC{color:var(--amber-dark)} .tagB{color:var(--ink-soft)} .tagA{color:var(--muted)}
 /* site header (matches spaike.dk) */
@@ -88,7 +94,7 @@ article img:hover,.herostrip img:hover{filter:brightness(1.04)}
 <a href="https://spaike.dk">Hvad jeg bygger</a>
 <a href="https://spaike.dk">Byg selv</a>
 <a href="https://spaike.dk">Manifest</a>
-<a class="book" href="https://spaike.dk">BOOK MØDE →</a>
+<a class="book" href="https://calendly.com/michael-spaike/new-meeting" target="_blank" rel="noopener noreferrer">BOOK MØDE →</a>
 </nav>
 </div></div>
 
@@ -220,10 +226,14 @@ article img:hover,.herostrip img:hover{filter:brightness(1.04)}
 <p>If your work lives inside Microsoft 365 and you are happy to drive it program by program, Copilot earns its seat. It is genuinely capable inside each app. If you would rather hand one assistant the whole messy task, of mixed file types, and have it come back with a finished result while you get on with your day, that is a different job, and right now it has a clear leader.</p>
 <p>The useful question was never which AI is smartest. It is which one actually takes the work off your desk.</p>
 
-<div class="cta">
-<h3 class="serif">This is the kind of test I run for a living.</h3>
-<p>I help commercial teams cut through the AI noise with tests built on their own everyday work, not demos, so they adopt the tool that actually moves their day. If that sounds useful, let us talk.</p>
-<a href="https://spaike.dk">spaike.dk</a>
+<div class="closer">
+<div class="ck">Want the same test on your own work?</div>
+<h3>This is the kind of test I run for a living.</h3>
+<p>I help commercial teams cut through the AI noise with hands-on tests built on their own everyday work, not vendor demos, so they adopt the tool that actually moves their day. If that sounds useful, let us book a short meeting.</p>
+<div class="cbtns">
+<a class="bp" href="https://calendly.com/michael-spaike/new-meeting" target="_blank" rel="noopener noreferrer" data-umami-event="book_moede_click" data-umami-event-location="benchmark-article">Book a short meeting →</a>
+<a class="bs" href="https://spaike.dk">More from SpAIke</a>
+</div>
 </div>
 
 <p class="foot mono">Method: nine everyday deliverables, identical inputs to all three tools. Outputs anonymised to A/B/C with tool fingerprints removed. Each set blind-scored by fresh Claude, ChatGPT and Copilot sessions (3x3). Hard numbers auto-checked against a known answer key. Deck and brief images rendered one-to-one from the actual files. Identities revealed only after scoring. SpAIke 2026.</p>
