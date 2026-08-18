@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { mockChat, mockResearch, mockLead, TEST_BRIEF } from "./helpers";
 
 /**

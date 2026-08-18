@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "../../components/track";
 import type { CaseBriefData, ChatMsg } from "../_types";
 
 interface Props {
@@ -50,7 +51,7 @@ export default function EndStep({ token, brief, transcript, website, onDone }: P
         setBusy(false);
         return;
       }
-      window.umami?.track(wantHelp ? "innovationsdag_lead_help" : "innovationsdag_lead_guide");
+      trackEvent("lead_sendt", { vil_have_hjaelp: wantHelp ? "ja" : "nej" });
       onDone(wantHelp);
     } catch {
       setError("Kunne ikke oprette forbindelse. Prøv igen.");

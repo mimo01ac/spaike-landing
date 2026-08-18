@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackEvent } from "../../components/track";
 import type { CaseBriefData, ChatMsg } from "../_types";
 import Chat from "./Chat";
 import EndStep from "./EndStep";
@@ -108,6 +109,8 @@ export default function DiscoveryTool() {
   function startChat(skip: boolean) {
     const url = websiteUrl.trim();
     setStage("chat");
+    // Funnel-event, anonym tæller: hvor mange starter overhovedet chatten.
+    trackEvent("chat_aabnet", { website_angivet: skip || !url ? "nej" : "ja" });
     if (skip || !url) return;
     // Navnet udledes af domænet med det samme, så åbningen kan bruge det på
     // tur 1; den fulde research-kontekst kommer asynkront og bruges fra næste tur.
@@ -278,6 +281,7 @@ export default function DiscoveryTool() {
             companyName={companyName}
             onMessagesChange={(m) => saveStore({ messages: m, companyContext })}
             onBrief={(b, t) => {
+              trackEvent("brief_klar", { antal_cases: b.cases.length });
               saveStore({ brief: b, transcript: t, companyContext });
               setBrief(b);
               setTranscript(t);

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { trackEvent } from "../../components/track";
 import type { CaseBriefData, ChatMsg } from "../_types";
 
 interface Props {
@@ -69,6 +70,12 @@ export default function Chat({
     if (busy) return;
     setError(null);
     setBusy(true);
+
+    // Funnel-event: brugerens FØRSTE egne svar (den syntetiske åbningsbesked
+    // er skjult og tæller ikke). Måler om folk reelt engagerer sig i chatten.
+    if (!hideUser && !messages.some((m) => m.role === "user")) {
+      trackEvent("chat_foerste_svar");
+    }
 
     const history: ChatMsg[] = [...messages, { role: "user", content: text }];
     // Skjul den syntetiske intro-besked i UI'et, men send den til modellen.

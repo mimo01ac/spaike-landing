@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { trackEvent } from "../track";
 
 interface Props {
   summary: string;
@@ -18,7 +19,7 @@ export default function StarterPrompt({ summary, note, prompt, name }: Props) {
     try {
       await navigator.clipboard.writeText(prompt);
       setCopied(true);
-      window.umami?.track("starter_prompt_copy", { name: name ?? summary });
+      trackEvent("starter_prompt_copy", { name: name ?? summary });
       setTimeout(() => setCopied(false), 1600);
     } catch {
       if (codeRef.current) {
@@ -28,7 +29,7 @@ export default function StarterPrompt({ summary, note, prompt, name }: Props) {
         window.getSelection()?.addRange(range);
         document.execCommand("copy");
         setCopied(true);
-        window.umami?.track("starter_prompt_copy", { name: name ?? summary });
+        trackEvent("starter_prompt_copy", { name: name ?? summary });
         setTimeout(() => setCopied(false), 1600);
       }
     }

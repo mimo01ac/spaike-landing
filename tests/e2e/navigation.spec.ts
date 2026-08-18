@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 /**
  * Navigation og klik-flows. Byg selv-kortene testes med RIGTIGE klik som
