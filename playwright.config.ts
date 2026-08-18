@@ -25,7 +25,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run build && npm run start -- --port 3031",
+    command: "npm run build && DISABLE_RATE_LIMIT=1 npm run start -- --port 3031",
     url: "http://localhost:3031",
     timeout: 240_000,
     reuseExistingServer: !process.env.CI,

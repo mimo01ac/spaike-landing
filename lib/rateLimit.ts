@@ -20,6 +20,11 @@ export function checkRateLimit(
   limit: number,
   windowMs: number,
 ): { allowed: boolean; retryAfterMs: number } {
+  // E2E-suiten laver langt flere sideloads fra 127.0.0.1 end en rigtig bruger.
+  // Sættes KUN af Playwrights webServer (playwright.config.ts), aldrig i prod.
+  if (process.env.DISABLE_RATE_LIMIT === "1") {
+    return { allowed: true, retryAfterMs: 0 };
+  }
   const now = Date.now();
   const b = buckets.get(key);
 

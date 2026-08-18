@@ -12,6 +12,9 @@ export const PUBLIC_PAGES = [
   "/field-notes/ai-i-transport",
   "/field-notes/ai-i-fertilitet",
   "/field-notes/ai-i-landmaaling",
+  "/benchmark",
+  "/brancher/landinspektorer",
+  "/brancher/raadgivende-ingenioerer",
 ] as const;
 
 /** Stier der BEVIDST skal give 404 (upubliceret/ikke-eksisterende). */
