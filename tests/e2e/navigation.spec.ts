@@ -62,7 +62,7 @@ test.describe("forsiden", () => {
       .first();
     await expect(sektionCta).toHaveAttribute("target", "_blank");
     await expect(sektionCta).toHaveAttribute("rel", /noopener/);
-    await expect(sektionCta).toContainText(/gratis Discovery/i);
+    await expect(sektionCta).toContainText(/Kør Discovery/);
   });
 
   test("Book møde-CTA peger på Calendly i ny fane", async ({ page }) => {

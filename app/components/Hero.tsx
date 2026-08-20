@@ -48,7 +48,7 @@ export default function Hero() {
               data-umami-event-location="hero"
               className="border border-ink text-ink px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink hover:text-cream transition-colors"
             >
-              Kør gratis Discovery
+              Prøv Discovery (beta)
             </a>
           </div>
         </div>
