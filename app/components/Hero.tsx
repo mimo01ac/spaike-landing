@@ -40,6 +40,16 @@ export default function Hero() {
             >
               Book møde →
             </a>
+            <a
+              href="https://assessment.spaike.dk"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-umami-event="discovery_cta_click"
+              data-umami-event-location="hero"
+              className="border border-ink text-ink px-8 py-5 font-sans text-base md:text-lg font-medium hover:bg-ink hover:text-cream transition-colors"
+            >
+              Kør gratis Discovery
+            </a>
           </div>
         </div>
 

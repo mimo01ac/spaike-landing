@@ -12,6 +12,7 @@ test.describe("forsiden", () => {
     await page.goto("/");
     for (const [label, id] of [
       ["Hvad vi bygger", "hvad-vi-bygger"],
+      ["Discovery", "discovery"],
       ["Byg selv", "byg-selv"],
       ["Manifest", "manifest"],
     ] as const) {
@@ -43,9 +44,25 @@ test.describe("forsiden", () => {
     await page.goto("/");
     await expect(page.locator("header nav")).toBeHidden();
     await expect(page.getByRole("banner").getByRole("link", { name: /Book møde/ })).toBeVisible();
-    for (const id of ["hvad-vi-bygger", "byg-selv", "manifest"]) {
+    for (const id of ["hvad-vi-bygger", "discovery", "byg-selv", "manifest"]) {
       await expect(page.locator(`[id="${id}"]`)).toBeAttached();
     }
+  });
+
+  test("Discovery-sektionen og hero-CTA'en peger på assessment-appen i ny fane", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const heroCta = page
+      .locator('#top a[href="https://assessment.spaike.dk"]')
+      .first();
+    await expect(heroCta).toHaveAttribute("target", "_blank");
+    const sektionCta = page
+      .locator('#discovery a[href="https://assessment.spaike.dk"]')
+      .first();
+    await expect(sektionCta).toHaveAttribute("target", "_blank");
+    await expect(sektionCta).toHaveAttribute("rel", /noopener/);
+    await expect(sektionCta).toContainText(/gratis Discovery/i);
   });
 
   test("Book møde-CTA peger på Calendly i ny fane", async ({ page }) => {

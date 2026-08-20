@@ -1,6 +1,7 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import WhatWeBuild from "./components/WhatWeBuild";
+import DiscoveryCTA from "./components/DiscoveryCTA";
 import BuildItYourself from "./components/BuildItYourself";
 import Manifest from "./components/Manifest";
 import Footer from "./components/Footer";
@@ -12,8 +13,9 @@ export default function Home() {
       <main>
         <Hero />
         <WhatWeBuild />
+        <DiscoveryCTA />
         <BuildItYourself />
-        {/* Cases + DiscoveryCTA + Waitlist hidden for soft-launch — re-enable when ready */}
+        {/* Cases + Waitlist hidden for soft-launch — re-enable when ready */}
         <Manifest />
       </main>
       <Footer />

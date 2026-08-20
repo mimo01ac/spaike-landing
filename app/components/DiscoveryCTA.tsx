@@ -10,7 +10,7 @@ const steps = [
   {
     n: "02",
     title: "Tilmeld",
-    body: "Vi sætter Discovery op til jeres virksomhed.",
+    body: "Jeg sætter Discovery op til jeres virksomhed.",
     dur: "15 min",
   },
   {
@@ -104,11 +104,15 @@ export default function DiscoveryCTA() {
       <div className="bg-cream-deep border-t border-rule">
         <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-5 flex flex-col md:flex-row items-start md:items-center md:justify-between gap-4">
           <p className="font-serif text-base italic text-ink">
-            Gratis i opstartsfasen for vores første 10 partnere · ingen sælger
+            Gratis i opstartsfasen for mine første 10 partnere · ingen sælger
             på linjen.
           </p>
           <a
             href="https://assessment.spaike.dk"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-umami-event="discovery_cta_click"
+            data-umami-event-location="discovery-sektion"
             className="bg-ink text-cream px-5 py-3.5 font-sans text-[13px] font-medium hover:bg-ink/85 transition-colors whitespace-nowrap"
           >
             Kør gratis Discovery →
