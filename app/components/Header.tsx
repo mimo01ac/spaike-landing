@@ -25,6 +25,9 @@ export default function Header() {
           <a href="/#manifest" className="hover:text-amber-dark transition-colors">
             Manifest
           </a>
+          <a href="/#kontakt" className="hover:text-amber-dark transition-colors">
+            Kontakt
+          </a>
         </nav>
         <a
           href="https://calendly.com/michael-spaike/new-meeting"

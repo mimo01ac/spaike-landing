@@ -80,6 +80,17 @@ const COLLECTIONS = [
     ],
   },
   {
+    name: "kontakt_beskeder",
+    type: "base",
+    fields: [
+      { name: "navn", type: "text", required: true },
+      { name: "email", type: "email", required: true },
+      { name: "besked", type: "text", max: 4000 },
+      { name: "consent", type: "bool" },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+    ],
+  },
+  {
     name: "ai_tjek_leads",
     type: "base",
     fields: [

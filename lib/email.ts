@@ -19,6 +19,8 @@ export async function sendEmail(opts: {
   toName?: string;
   subject: string;
   html: string;
+  /** Valgfrit: svar-adresse (fx kontaktformularens afsender, så "Besvar" rammer rigtigt). */
+  replyTo?: { email: string; name?: string };
 }): Promise<{ ok: boolean; reason?: string }> {
   const key = process.env.BREVO_API_KEY;
   if (!key) {
@@ -39,7 +41,9 @@ export async function sendEmail(opts: {
       body: JSON.stringify({
         sender: { name: fromName, email: fromEmail },
         to: [{ email: opts.to, name: opts.toName || opts.to }],
-        replyTo: { email: fromEmail, name: fromName },
+        replyTo: opts.replyTo
+          ? { email: opts.replyTo.email, name: opts.replyTo.name || opts.replyTo.email }
+          : { email: fromEmail, name: fromName },
         subject: opts.subject,
         htmlContent: opts.html,
       }),

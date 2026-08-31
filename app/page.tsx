@@ -4,6 +4,7 @@ import WhatWeBuild from "./components/WhatWeBuild";
 import DiscoveryCTA from "./components/DiscoveryCTA";
 import BuildItYourself from "./components/BuildItYourself";
 import Manifest from "./components/Manifest";
+import Kontakt from "./components/Kontakt";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <BuildItYourself />
         {/* Cases + Waitlist hidden for soft-launch — re-enable when ready */}
         <Manifest />
+        <Kontakt />
       </main>
       <Footer />
     </>
