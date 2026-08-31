@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead-generator-værktøj · superagent-research & dom · 30. august 2026</title>
+<style>
+  :root { --ink:#0f1a2e; --ink-soft:#3a3f4e; --cream:#f3eee2; --cream-deep:#ece6d6; --rule:#d8d3c7; --muted:#6b6650; --amber:#d4a857; --amber-dark:#b88f3f; --green:#3d7a4a; --red:#a8402f; --serif:Georgia,"Source Serif Pro",serif; --sans:Inter,-apple-system,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--cream); color:var(--ink); font-family:var(--sans); line-height:1.55; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 28px; }
+  .dateline { border-bottom:1px solid var(--rule); font-family:var(--mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  .dateline .wrap { display:flex; justify-content:space-between; padding:12px 28px; gap:16px; flex-wrap:wrap; }
+  .doublerule { border-top:3px solid var(--ink); border-bottom:1px solid var(--ink); height:6px; }
+  header.masthead { padding:46px 0 34px; }
+  .label { font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--amber-dark); margin-bottom:12px; }
+  h1 { font-family:var(--serif); font-weight:400; font-size:clamp(32px,4.6vw,56px); line-height:1.02; }
+  h1 em { font-style:italic; color:var(--amber-dark); }
+  .lede { font-family:var(--serif); font-size:17.5px; color:var(--ink-soft); max-width:780px; margin-top:16px; }
+  h2 { font-family:var(--serif); font-weight:400; font-size:clamp(23px,3vw,34px); }
+  h2 em { font-style:italic; }
+  section { padding:34px 0 42px; }
+  section + section { border-top:1px solid var(--rule); }
+  .sub { font-family:var(--serif); font-size:15px; color:var(--ink-soft); max-width:780px; margin-top:8px; }
+  .sub b, td b { color:var(--ink); }
+  table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff8; border:1px solid var(--rule); }
+  th { font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:1px solid var(--ink); }
+  td { padding:10px 12px; font-size:13px; border-bottom:1px solid var(--rule); vertical-align:top; color:var(--ink-soft); }
+  tr:last-child td { border-bottom:none; }
+  tr.winner td { background:#d4a85718; color:var(--ink); }
+  .num { font-family:var(--mono); font-size:12px; text-align:center; }
+  .vinderbox { border:2px solid var(--amber-dark); background:#d4a85712; padding:22px 26px; margin-top:24px; }
+  .vinderbox h3 { font-family:var(--serif); font-size:22px; margin-bottom:8px; }
+  .vinderbox p { font-size:14px; color:var(--ink-soft); max-width:900px; }
+  ol.steps { margin:14px 0 0 0; padding-left:0; list-style:none; counter-reset:s; }
+  ol.steps li { counter-increment:s; display:grid; grid-template-columns:30px 1fr; gap:10px; padding:8px 0; font-size:13.5px; color:var(--ink-soft); border-bottom:1px dotted var(--rule); }
+  ol.steps li::before { content:"0" counter(s); font-family:var(--mono); font-size:11px; color:var(--amber-dark); padding-top:2px; }
+  ol.steps li b { color:var(--ink); }
+  ul.tight { margin:14px 0 0 18px; font-size:14px; color:var(--ink-soft); }
+  ul.tight li { margin-bottom:8px; max-width:880px; }
+  ul.tight b { color:var(--ink); }
+  .roadmap { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; align-items:stretch; }
+  .roadmap .box { border:1px solid var(--rule); background:#fff8; padding:12px 16px; font-family:var(--serif); font-size:15px; }
+  .roadmap .box small { display:block; font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .roadmap .box.first { border:2px solid var(--amber-dark); background:#d4a85715; }
+  .roadmap .arrow { align-self:center; color:var(--muted); font-family:var(--mono); }
+  footer { border-top:3px solid var(--ink); padding:18px 0 34px; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+</head>
+<body>
+
+<div class="dateline"><div class="wrap">
+  <span>Superagent-research · lead-generator</span>
+  <span>30. august 2026</span>
+  <span>8 agenter · vault-inventar + markedsscan + 14 kandidater → dom</span>
+</div></div>
+
+<header class="masthead"><div class="wrap">
+  <div class="label">"Indtast din URL"-værktøjet</div>
+  <h1>Vinderen: det gratis <em>AI-synlighedstjek.</em></h1>
+  <p class="lede">Spørgsmålet var: hvilket selvbetjenings-værktøj a la linkgap.io/spend-estimatorerne kunne SpAIke bygge som lead-generator? Superagenten scannede alt, hvad SpAIke har bygget, spec'et og diskuteret, kortlagde markedet og datakilderne, genererede 14 kandidater og dømte. Klar vinder: <b>"Hvordan ser AI-søgemaskinerne din virksomhed?"</b>, og motoren bag findes allerede.</p>
+</div></header>
+
+<div class="doublerule"></div>
+
+<section><div class="wrap">
+  <div class="label">01 · Scoretavlen (8 unikke kandidater efter dedup)</div>
+  <table>
+    <tr><th>Kandidat</th><th>Målgruppe</th><th>Værdi 1. rapport</th><th>Byg (5=lille)</th><th>Drift/misbrug</th><th>Lead-kvalitet</th><th>DK-diff.</th><th>Link-magnet</th><th>Sum /35</th></tr>
+    <tr class="winner"><td><b>AI-synlighedstjek</b></td><td class="num">5</td><td class="num">5</td><td class="num">3</td><td class="num">3</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num"><b>31</b></td></tr>
+    <tr><td>Køb-klar-tjekket (købsrejse-score)</td><td class="num">4</td><td class="num">4</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">3</td><td class="num">28</td></tr>
+    <tr><td>Automations-/tidsrøver-scan</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">5</td><td class="num">3</td><td class="num">3</td><td class="num">27</td></tr>
+    <tr><td>Mail-troværdighedstjek (DMARC/SPF)</td><td class="num">3</td><td class="num">3</td><td class="num">5</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">25</td></tr>
+    <tr><td>EAA-tilgængelighedstjek</td><td class="num">2</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num">1</td><td class="num">3</td><td class="num">4</td><td class="num">24</td></tr>
+    <tr><td>Tech-stack-røntgen</td><td class="num">3</td><td class="num">3</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="num">23</td></tr>
+    <tr><td>Købssignal-spejlet</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td class="num">23</td></tr>
+  </table>
+  <p class="sub">"SpAIke Graderen" (alle moduler samlet, 29) er slutvisionen, ikke v1: den opstår gradvist, når modulerne skibes på samme rapport-platform.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">02 · Hvorfor AI-synlighedstjekket vinder</div>
+  <div class="vinderbox">
+    <h3>"Bliver din virksomhed anbefalet af ChatGPT, eller bliver din konkurrent?"</h3>
+    <p><b>1) Dansk whitespace:</b> Der findes ingen dansk self-serve AI-synligheds-checker, kun bureauer der laver det manuelt. <b>2) Motoren findes:</b> AI-synligheds-jobbet kører allerede månedligt mod Vouch (prompt-panel → Perplexity/Claude-opslag → brandet rapport), så 60-70% af byggeriet er genbrug. <b>3) Upsell-sporet er allerede prissat</b> i produkt-spec'en: audit 20-30k → remediering 40-60k → monitorering 3-6k/md. Værktøjet er gratis-toppen af en eksisterende trappe. <b>4) Hook'et er emotionelt:</b> "ChatGPT anbefaler din konkurrent, fordi..." er en skærmdump, folk deler, hvilket gør det til den eneste kandidat med reelt viral-/presse-/link-potentiale (og gratis værktøjer er i forvejen den stærkeste linkbare aktiv-type, jf. backlink-researchen). <b>5) Ikke ren marketing:</b> AI-synlighed rammer direktionens "er vi med på AI?"-nerve, præcis den spredning væk fra ren marketing, du efterspurgte.</p>
+  </div>
+
+  <h2 style="margin-top:28px">To-trins-designet <em>(løser driftsrisikoen)</em></h2>
+  <ol class="steps">
+    <li><b>Instant, gratis, nul LLM-kald:</b> URL ind → eget crawl → deterministisk score 0-100 på AI-parathed (blokerer robots.txt AI-crawlerne? Renderer sitet uden JavaScript? Schema? llms.txt? CWV via gratis Google-API). Svar på 5-10 sekunder + delbar rapport-URL. Koster ~0 kr, kan ikke misbruges til dyre kald.</li>
+    <li><b>Fuldt AI-panel, bag verificeret arbejdsmail:</b> 8-12 auto-genererede "penge-prompts" køres mod Perplexity + Claude web search (kun officielle API'er): nævnes brandet, hvem anbefales i stedet, hvorfor, hvilke kilder citeres. Leveres som Boardroom-HTML-rapport på mail; lead lander i PocketBase. Eneste CTA: book 20 min.</li>
+  </ol>
+  <p class="sub"><b>Økonomi:</b> ~0 kr pr. instant-scan, 2-5 kr pr. fuld rapport. <b>Cost-guards:</b> mail-verifikation FØR alle LLM-kald, dagligt loft (50 paneler), domæne-cache (7 dage), kø med max 2 samtidige, spend-cap + kill-switch. <b>Byggetid: 2-3 dage.</b></p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">03 · Roadmap: moduler på samme platform</div>
+  <div class="roadmap">
+    <div class="box first"><small>Nu · 2-3 dage</small>AI-synlighedstjek (/ai-tjek)</div>
+    <div class="arrow">→</div>
+    <div class="box"><small>+1 dag · ungated bonus</small>Mail-troværdighedstjek (DMARC)</div>
+    <div class="arrow">→</div>
+    <div class="box"><small>Modul 2 · S-M</small>Køb-klar-tjekket (købsrejse-score → Email Agent-samtalen)</div>
+    <div class="arrow">→</div>
+    <div class="box"><small>Når trafik · teaser</small>Automations-scan (fødekanal til Snapshot → Discovery)</div>
+  </div>
+  <p class="sub">Alle moduler deler rapport-skal, gating, cost-guards og Umami-funnel. Sådan opstår "Graderen"-visionen gradvist uden det store byg. Bemærk koblingen til kernetragten fra i dag: Snapshot-tjekket (Tier 1) og Discovery (Tier 2) er samtale-baserede; AI-tjekket er den URL-baserede dørklokke, der fanger folk, som ikke gider svare på spørgsmål endnu.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="label">04 · Bevidst fravalgt</div>
+  <ul class="tight">
+    <li><b>Meta ad-spend-estimatoren (dit oprindelige eksempel):</b> juridisk blindgyde. Ad Library-API'et udleverer kun spend-tal for politiske annoncer; de kommercielle estimator-værktøjer scraper = brud på Metas vilkår. Ingen compliant self-serve-vej, så den efterlignes ikke.</li>
+    <li><b>Ren SEO-checker:</b> mættet rødt ocean, også på dansk. Nul differentiering.</li>
+    <li><b>EAA-tilgængelighedstjek:</b> billigt at bygge, men SpAIke sælger ikke web-remediering, så leads'ene er ubrugelige (medmindre der findes en henvisningspartner med provision, jf. partnerprogram-reglen).</li>
+    <li><b>Tech-stack-røntgen:</b> Wappalyzer/BuiltWith findes gratis. Byg kun fingerprint-delen som internt berigelses-modul til Signals.</li>
+    <li><b>Inbox-analyse/Copilot-tjek som gratis-værktøj:</b> kræver adgang til kundens systemer, det er upsell-produkterne BAG værktøjet, ikke dørklokken.</li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Superagent: 8 agenter, 4 faser · fuld dom gemt i vaulten (03 Products/AI-synlighed)</span>
+  <span>spaike.dk · 30.08.2026</span>
+</div></footer>
+
+</body>
+</html>

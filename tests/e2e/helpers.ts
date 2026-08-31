@@ -15,6 +15,7 @@ export const PUBLIC_PAGES = [
   "/benchmark",
   "/brancher/landinspektorer",
   "/brancher/raadgivende-ingenioerer",
+  "/ai-tjek",
 ] as const;
 
 /** Stier der BEVIDST skal give 404 (upubliceret/ikke-eksisterende). */

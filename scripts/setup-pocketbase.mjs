@@ -68,6 +68,35 @@ const COLLECTIONS = [
       { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
     ],
   },
+  {
+    name: "ai_tjek_scans",
+    type: "base",
+    fields: [
+      { name: "url", type: "text", required: true },
+      { name: "domaene", type: "text" },
+      { name: "score", type: "number" },
+      { name: "checks", type: "json", maxSize: 500000 },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+    ],
+  },
+  {
+    name: "ai_tjek_leads",
+    type: "base",
+    fields: [
+      { name: "email", type: "email", required: true },
+      { name: "scan", type: "text" },
+      { name: "domaene", type: "text" },
+      { name: "consent", type: "bool" },
+      {
+        name: "status",
+        type: "select",
+        maxSelect: 1,
+        values: ["new", "sent", "booked"],
+      },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+      { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
+    ],
+  },
 ];
 
 async function api(path, opts = {}, token) {
