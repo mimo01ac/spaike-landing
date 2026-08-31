@@ -266,7 +266,7 @@ export async function koerTjek(rawUrl: string): Promise<TjekResultat | { fejl: s
     status: metaPoint >= 12 ? "ok" : metaPoint >= 5 ? "delvist" : "problem",
     point: metaPoint,
     maxPoint: 12,
-    fund: `Titel: ${harTitle ? "ja" : "nej"} · Meta description: ${harDesc ? "ja" : "nej"} · Canonical: ${harCanonical ? "ja" : "nej"}.`,
+    fund: `Titel: ${harTitle ? "ja (4/4)" : "nej (0/4)"} · Meta description: ${harDesc ? "ja (5/5)" : "nej (0/5)"} · Canonical: ${harCanonical ? "ja (3/3)" : "nej (0/3)"}.`,
     betydning:
       "Basal metadata er stadig det, både Google og AI-motorer bruger til at forstå og præsentere siden.",
   });
@@ -303,7 +303,7 @@ export async function koerTjek(rawUrl: string): Promise<TjekResultat | { fejl: s
     status: harH1 && harLang ? "ok" : harH1 || harLang ? "delvist" : "problem",
     point: (harH1 ? 5 : 0) + (harLang ? 5 : 0),
     maxPoint: 10,
-    fund: `H1: ${harH1 ? "ja" : "nej"} · lang-attribut: ${harLang ? "ja" : "nej"}.`,
+    fund: `H1: ${harH1 ? "ja (5/5)" : "nej (0/5)"} · lang-attribut: ${harLang ? "ja (5/5)" : "nej (0/5)"}.`,
     betydning: "Tydelig struktur og sprogmarkering hjælper maskiner med at forstå, hvad og for hvem siden er.",
   });
 
@@ -318,7 +318,7 @@ export async function koerTjek(rawUrl: string): Promise<TjekResultat | { fejl: s
     status: ogPoint >= 8 ? "ok" : ogPoint > 0 ? "delvist" : "problem",
     point: ogPoint,
     maxPoint: 8,
-    fund: `og:title: ${ogTitle ? "ja" : "nej"} · og:description: ${ogDesc ? "ja" : "nej"} · og:image: ${ogImage ? "ja" : "nej"}.`,
+    fund: `og:title: ${ogTitle ? "ja (3/3)" : "nej (0/3)"} · og:description: ${ogDesc ? "ja (2/2)" : "nej (0/2)"} · og:image: ${ogImage ? "ja (3/3)" : "nej (0/3)"}.`,
     betydning:
       "Deles jeres sider på LinkedIn eller citeres med preview, afgør OG-tags om I ligner en professionel afsender.",
   });

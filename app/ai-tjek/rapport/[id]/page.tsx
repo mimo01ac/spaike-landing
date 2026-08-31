@@ -57,8 +57,12 @@ const STATUS_TEGN: Record<TjekCheck["status"], { tegn: string; farve: string }> 
 export default async function RapportPage({ params }: Params) {
   const scan = await hentScan(params.id);
   if (!scan) notFound();
-  const dom = scoreDom(scan.score);
   const checks = Array.isArray(scan.checks) ? scan.checks : [];
+  // Én kilde til sandhed: score OG maksimum udregnes af selve tjekkene, så
+  // toptallet pr. definition altid stemmer med summen af rækkerne nedenfor.
+  const score = checks.reduce((s, c) => s + (c.point || 0), 0);
+  const maxScore = checks.reduce((s, c) => s + (c.maxPoint || 0), 0) || 100;
+  const dom = scoreDom(Math.round((score / maxScore) * 100));
 
   return (
     <>
