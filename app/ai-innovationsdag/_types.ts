@@ -5,6 +5,11 @@ export interface CaseItem {
   problem: string;
   hvorfor_godt_fit: string;
   mulig_loesning: string;
+  /** Vurderingslag (tilføjet sep 2026; valgfrit for ældre briefs). */
+  datakrav_niveau?: "lav" | "mellem" | "høj";
+  datakrav?: string;
+  faldgrube?: string;
+  kategori?: "effektivisere" | "forstærke" | "transformere";
 }
 
 export interface CaseBriefData {
