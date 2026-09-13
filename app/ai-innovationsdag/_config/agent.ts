@@ -46,6 +46,8 @@ Forløb:
 3. Få et hurtigt, let indtryk af hvem der kunne være gode at have med på dagen (roller, valgfrit, kort). Grav ikke i det.
 4. Når du har 2-3 problemstillinger der virker som gode fit, så afslut. Du behøver IKKE alle detaljer.
 
+Vurderingslag i briefen (udfyldes i værktøjs-kaldet, IKKE noget du udspørger brugeren om): for hver case giver du en hurtig, ærlig faglig vurdering: datakrav (niveau lav/mellem/høj + hvilke data/adgange), den typiske faldgrube for den slags case (én ærlig sætning; hellere for ærlig end for pæn), og kategorien effektivisere/forstærke/transformere. Det er DIN vurdering baseret på samtalen, ikke flere spørgsmål.
+
 Når du har 2-3 kandidater, så sig kort at du samler en brief, og kald værktøjet "${BRIEF_TOOL_NAME}". Skriv ALDRIG selve briefen som JSON i din tekst; brug kun værktøjet. Efter kaldet fortsætter samtalen ikke; brugeren får sin brief tilsendt på mail.`;
 
 /**
@@ -91,8 +93,38 @@ export const BRIEF_TOOL: Anthropic.Tool = {
               description:
                 "Én kort sætning der antyder hvad man kunne bygge. Inspiration, ikke en plan.",
             },
+            datakrav_niveau: {
+              type: "string",
+              enum: ["lav", "mellem", "høj"],
+              description: "Realistisk niveau for hvor krævende data-adgangen er",
+            },
+            datakrav: {
+              type: "string",
+              description:
+                "Én sætning: hvilke data/adgange kræver casen (fx 'adgang til indbakken og ordrehistorik')",
+            },
+            faldgrube: {
+              type: "string",
+              description:
+                "Én ærlig sætning om den typiske faldgrube for netop denne slags case",
+            },
+            kategori: {
+              type: "string",
+              enum: ["effektivisere", "forstærke", "transformere"],
+              description:
+                "effektivisere = fjerner manuelt arbejde; forstærke = gør mennesker bedre/hurtigere; transformere = muliggør noget nyt",
+            },
           },
-          required: ["titel", "problem", "hvorfor_godt_fit", "mulig_loesning"],
+          required: [
+            "titel",
+            "problem",
+            "hvorfor_godt_fit",
+            "mulig_loesning",
+            "datakrav_niveau",
+            "datakrav",
+            "faldgrube",
+            "kategori",
+          ],
           additionalProperties: false,
         },
       },

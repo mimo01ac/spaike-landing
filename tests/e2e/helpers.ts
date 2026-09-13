@@ -15,6 +15,7 @@ export const PUBLIC_PAGES = [
   "/benchmark",
   "/brancher/landinspektorer",
   "/brancher/raadgivende-ingenioerer",
+  "/ai-tjek",
 ] as const;
 
 /** Stier der BEVIDST skal give 404 (upubliceret/ikke-eksisterende). */
@@ -112,12 +113,20 @@ export const TEST_BRIEF = {
       problem: "Sælgerne bruger timer på at samle tilbud manuelt.",
       hvorfor_godt_fit: "Konkret, afgrænset og rører flere.",
       mulig_loesning: "En lille tilbudsbygger.",
+      datakrav_niveau: "lav",
+      datakrav: "Adgang til prisliste og tidligere tilbud.",
+      faldgrube: "Særaftaler pr. kunde kan kræve manuel kontrol.",
+      kategori: "effektivisere",
     },
     {
       titel: "Rapporter tager en dag",
       problem: "Ugerapporten samles manuelt fra tre regneark.",
       hvorfor_godt_fit: "Gentaget manuelt arbejde.",
       mulig_loesning: "Automatisk rapport-generator.",
+      datakrav_niveau: "mellem",
+      datakrav: "Læseadgang til de tre regneark eller deres kilder.",
+      faldgrube: "Regnearkene ændrer struktur, så generatoren skal være robust.",
+      kategori: "effektivisere",
     },
   ],
   samlet_anbefaling: "Start med tilbudsbyggeren.",

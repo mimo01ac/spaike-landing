@@ -61,6 +61,23 @@ export async function createRecord(
   return rec.id;
 }
 
+/** Hent en record (null hvis den ikke findes). */
+export async function getRecord<T = Record<string, unknown>>(
+  collection: string,
+  id: string,
+): Promise<T | null> {
+  const token = await getToken();
+  const res = await fetch(`${URL}/api/collections/${collection}/records/${id}`, {
+    headers: { Authorization: token },
+    cache: "no-store",
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new Error(`PocketBase get (${collection}/${id}) fejlede: ${res.status}`);
+  }
+  return (await res.json()) as T;
+}
+
 /** Opdater en record. */
 export async function updateRecord(
   collection: string,

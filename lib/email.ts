@@ -19,6 +19,8 @@ export async function sendEmail(opts: {
   toName?: string;
   subject: string;
   html: string;
+  /** Valgfrit: svar-adresse (fx kontaktformularens afsender, så "Besvar" rammer rigtigt). */
+  replyTo?: { email: string; name?: string };
 }): Promise<{ ok: boolean; reason?: string }> {
   const key = process.env.BREVO_API_KEY;
   if (!key) {
@@ -39,7 +41,9 @@ export async function sendEmail(opts: {
       body: JSON.stringify({
         sender: { name: fromName, email: fromEmail },
         to: [{ email: opts.to, name: opts.toName || opts.to }],
-        replyTo: { email: fromEmail, name: fromName },
+        replyTo: opts.replyTo
+          ? { email: opts.replyTo.email, name: opts.replyTo.name || opts.replyTo.email }
+          : { email: fromEmail, name: fromName },
         subject: opts.subject,
         htmlContent: opts.html,
       }),
@@ -71,20 +75,35 @@ export function renderBriefEmail(brief: CaseBriefData): { subject: string; html:
   const rule = "#d8d3c7";
   const cream = "#f3eee2";
 
+  const KATEGORI_LABEL: Record<string, string> = {
+    effektivisere: "Effektivisere",
+    forstærke: "Forstærke",
+    transformere: "Transformere",
+  };
   const cases = Array.isArray(brief?.cases) ? brief.cases : [];
   const caseBlocks = cases
-    .map(
-      (c: CaseItem, i: number) => `
+    .map((c: CaseItem, i: number) => {
+      const kategori = c.kategori ? KATEGORI_LABEL[c.kategori] ?? c.kategori : "";
+      const vurdering =
+        c.datakrav || c.faldgrube || kategori
+          ? `
+          <div style="border-top:1px dotted ${rule};margin-top:12px;padding-top:10px;">
+            ${kategori ? `<span style="display:inline-block;font:600 10px/1 Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:${amber};border:1px solid ${amber};padding:4px 8px;border-radius:2px;margin-bottom:8px;">${esc(kategori)}</span>` : ""}
+            ${c.datakrav ? `<p style="font:400 13px/1.6 Arial,sans-serif;color:${soft};margin:0 0 4px;"><strong style="color:${ink};">Datakrav${c.datakrav_niveau ? ` (${esc(c.datakrav_niveau)})` : ""}:</strong> ${esc(c.datakrav)}</p>` : ""}
+            ${c.faldgrube ? `<p style="font:400 13px/1.6 Arial,sans-serif;color:${soft};margin:0;"><strong style="color:${ink};">Vær opmærksom på:</strong> ${esc(c.faldgrube)}</p>` : ""}
+          </div>`
+          : "";
+      return `
       <tr><td style="padding:0 0 22px 0;">
         <div style="border:1px solid ${rule};border-radius:6px;padding:18px 20px;background:#ffffff;">
           <div style="font:600 11px/1.4 Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:${amber};margin-bottom:6px;">Case ${i + 1}</div>
           <div style="font:600 18px/1.3 Georgia,serif;color:${ink};margin-bottom:10px;">${esc(c.titel)}</div>
           <p style="font:400 14px/1.6 Arial,sans-serif;color:${soft};margin:0 0 8px;"><strong style="color:${ink};">Problem:</strong> ${esc(c.problem)}</p>
           <p style="font:400 14px/1.6 Arial,sans-serif;color:${soft};margin:0 0 8px;"><strong style="color:${ink};">Hvorfor godt fit:</strong> ${esc(c.hvorfor_godt_fit)}</p>
-          <p style="font:400 14px/1.6 Arial,sans-serif;color:${soft};margin:0;"><strong style="color:${ink};">Mulig løsning:</strong> ${esc(c.mulig_loesning)}</p>
+          <p style="font:400 14px/1.6 Arial,sans-serif;color:${soft};margin:0;"><strong style="color:${ink};">Mulig løsning:</strong> ${esc(c.mulig_loesning)}</p>${vurdering}
         </div>
-      </td></tr>`,
-    )
+      </td></tr>`;
+    })
     .join("");
 
   const deltagere =

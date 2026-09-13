@@ -15,6 +15,7 @@ test.describe("forsiden", () => {
       ["Discovery", "discovery"],
       ["Byg selv", "byg-selv"],
       ["Manifest", "manifest"],
+      ["Kontakt", "kontakt"],
     ] as const) {
       await page.getByRole("navigation").getByRole("link", { name: label }).click();
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
@@ -44,7 +45,7 @@ test.describe("forsiden", () => {
     await page.goto("/");
     await expect(page.locator("header nav")).toBeHidden();
     await expect(page.getByRole("banner").getByRole("link", { name: /Book møde/ })).toBeVisible();
-    for (const id of ["hvad-vi-bygger", "discovery", "byg-selv", "manifest"]) {
+    for (const id of ["hvad-vi-bygger", "discovery", "byg-selv", "manifest", "kontakt"]) {
       await expect(page.locator(`[id="${id}"]`)).toBeAttached();
     }
   });
