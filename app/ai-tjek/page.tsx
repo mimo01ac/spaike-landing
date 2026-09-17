@@ -7,11 +7,11 @@ import TjekForm from "./_components/TjekForm";
 export const metadata: Metadata = {
   title: "Gratis AI-tjek · Kan ChatGPT og AI-søgning finde jeres virksomhed?",
   description:
-    "Indtast jeres webadresse og få på 10 sekunder en AI-parathedsscore: kan AI-crawlere læse jeres site, er I blokeret i robots.txt, og har I den metadata, AI-svar bygger på? Gratis, dansk, ingen konto.",
+    "Indtast jeres webadresse og se på 10 sekunder, om AI-søgning kan finde, læse og anbefale jer, eller om jeres priser og tilbud er usynlige for ChatGPT. Gratis, dansk, ingen konto.",
   openGraph: {
     title: "Gratis AI-tjek · Bliver jeres virksomhed fundet af AI-søgning?",
     description:
-      "AI-parathedsscore på 10 sekunder: crawlbarhed, robots.txt, struktureret data og delingskort. Gratis og på dansk.",
+      "Kan ChatGPT og AI-søgning finde, læse og anbefale jer, eller bliver det konkurrenten? Få en AI-parathedsscore på 10 sekunder. Gratis og på dansk.",
     url: "https://www.spaike.dk/ai-tjek",
     locale: "da_DK",
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 const FAQ = [
   {
     q: "Hvad tjekker AI-tjekket?",
-    a: "Otte tekniske forudsætninger for at blive fundet og citeret af AI-søgemaskiner: om jeres indhold kan læses uden JavaScript, om AI-crawlere (GPTBot, ClaudeBot, PerplexityBot m.fl.) er blokeret i robots.txt, struktureret data, metadata, sitemap, overskriftsstruktur og delingskort.",
+    a: "Om AI-søgemaskiner overhovedet kan finde, læse og anbefale jer: kan jeres indhold og priser læses uden JavaScript, er AI-crawlere (GPTBot, ClaudeBot, PerplexityBot m.fl.) blokeret, forstår AI hvem I er og hvad I sælger, og fremstår I rigtigt når I bliver delt. I får en score og en konkret liste over, hvad der spænder ben.",
   },
   {
     q: "Koster det noget, og skal jeg oprette en konto?",
@@ -89,10 +89,10 @@ export default function AiTjekPage() {
           <SectionLabel>Det tjekker vi</SectionLabel>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8 mt-6">
             {[
-              ["Læsbarhed uden JavaScript", "AI-crawlere kører ikke JS. Er jeres indhold usynligt for dem, findes I ikke i AI-svar."],
-              ["AI-crawlere i robots.txt", "Blokerer I GPTBot, ClaudeBot eller PerplexityBot, kan de hverken citere eller anbefale jer."],
-              ["Struktureret data", "Schema.org-markup gør jeres fakta maskinlæsbare og styrker jeres brand-entitet."],
-              ["Metadata & delingskort", "Titel, beskrivelse, sitemap og OpenGraph: fundamentet både Google og AI-motorer bygger på."],
+              ["Kan AI læse jeres tilbud og priser?", "Loader jeres priser og ydelser først med JavaScript, ser AI en tom side og kan ikke sende kunder videre til jer."],
+              ["Lukker I AI ude uden at vide det?", "Én linje kode kan blokere ChatGPT og Google AI fra jeres site. Så bliver I aldrig anbefalet, uanset hvor godt indholdet er."],
+              ["Ved AI hvem I er, og hvad I sælger?", "Kan AI koble navn, ydelser og priser sammen, bliver I et klart svar i stedet for et gæt."],
+              ["Fremstår I rigtigt, når I bliver delt?", "Titel, beskrivelse og delekort afgør, hvordan I ser ud i AI-svar, på Google og når en kunde sender jer videre."],
             ].map(([t, b]) => (
               <div key={t} className="flex flex-col gap-2">
                 <h3 className="font-serif text-xl font-medium leading-tight">{t}</h3>

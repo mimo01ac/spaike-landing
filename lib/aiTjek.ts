@@ -112,8 +112,8 @@ async function hent(url: string): Promise<{ status: number; text: string } | nul
 }
 
 /** Synlig tekst i rå HTML (uden JS-eksekvering) — proxyen for AI-crawler-læsbarhed. */
-export function synligTekstLaengde(html: string): number {
-  const stripped = html
+export function synligTekst(html: string): string {
+  return html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
@@ -122,7 +122,41 @@ export function synligTekstLaengde(html: string): number {
     .replace(/&[a-z#0-9]+;/gi, " ")
     .replace(/\s+/g, " ")
     .trim();
-  return stripped.length;
+}
+
+export function synligTekstLaengde(html: string): number {
+  return synligTekst(html).length;
+}
+
+/**
+ * Prissignal i AI-læsbar tekst: valuta + tal (fx "1.995 kr", "kr. 499",
+ * "1995,-", "€99"). Bruges til at afgøre, om priser overhovedet står i den
+ * rå HTML, som AI-crawlerne læser — ikke gemt i et billede eller JavaScript.
+ */
+const PRIS_RE =
+  /(?:(?:kr\.?|dkk|eur|usd|kroner|€|\$|£)\s?\d[\d.,]*)|(?:\d[\d.,]*\s?(?:kr\.?|dkk|eur|usd|kroner|,-|€))/i;
+
+export function harPrissignal(tekst: string): boolean {
+  return PRIS_RE.test(tekst);
+}
+
+/** Finder et internt link til en pris-/prisliste-side i forsidens HTML. */
+export function findPrisLink(html: string, base: string): string | null {
+  const re = /href=["']([^"']*(?:pris|pricing|priser|abonnement|plans?)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    const href = m[1];
+    if (/^(mailto:|tel:|#|javascript:)/i.test(href)) continue;
+    try {
+      const u = new URL(href, base);
+      if (u.protocol !== "http:" && u.protocol !== "https:") continue;
+      if (new URL(base).host !== u.host) continue;
+      return u.toString();
+    } catch {
+      continue;
+    }
+  }
+  return null;
 }
 
 interface RobotsAnalyse {
@@ -185,11 +219,13 @@ export async function koerTjek(rawUrl: string): Promise<TjekResultat | { fejl: s
   }
 
   const base = `${u.protocol}//${u.host}`;
-  const [forside, robots, sitemap, llms] = await Promise.all([
+  const [forside, robots, sitemap, llms, prisPriser, prisPricing] = await Promise.all([
     hent(u.toString()),
     hent(`${base}/robots.txt`),
     hent(`${base}/sitemap.xml`),
     hent(`${base}/llms.txt`),
+    hent(`${base}/priser`),
+    hent(`${base}/pricing`),
   ]);
 
   const checks: TjekCheck[] = [];
@@ -209,6 +245,37 @@ export async function koerTjek(rawUrl: string): Promise<TjekResultat | { fejl: s
       : `${tekst.toLocaleString("da-DK")} tegn synlig tekst i den rå HTML.`,
     betydning:
       "De fleste AI-crawlere kører IKKE JavaScript. Er teksten kun synlig efter JS, findes jeres indhold reelt ikke for ChatGPT, Perplexity og AI Overviews.",
+  });
+
+  // Pris-synlighed (0 point — spotlight-fund, tæller ikke i scoren, men er
+  // ofte det mest forretningskritiske: kan AI læse jeres priser?)
+  const forsideTekst = synligTekst(html);
+  const prisSider = [prisPriser, prisPricing].filter(
+    (p): p is { status: number; text: string } => !!p && p.status < 400,
+  );
+  const prisLink = html ? findPrisLink(html, base) : null;
+  const prisPaaForside = harPrissignal(forsideTekst);
+  const prisPaaPrisside = prisSider.some((p) => harPrissignal(synligTekst(p.text)));
+  const prisSideFindes = prisSider.length > 0 || !!prisLink;
+  const prisSynlig = prisPaaForside || prisPaaPrisside;
+  const prisStatus: TjekCheck["status"] = prisSynlig
+    ? "ok"
+    : prisSideFindes
+      ? "problem"
+      : "info";
+  checks.push({
+    key: "priser",
+    titel: "Kan AI læse jeres priser?",
+    status: prisStatus,
+    point: 0,
+    maxPoint: 0,
+    fund: prisSynlig
+      ? "Priser står i den tekst, AI-crawlerne faktisk kan læse."
+      : prisSideFindes
+        ? "I har en prisside, men selve prisen står ikke i den rå HTML. Den ligger sandsynligvis i JavaScript, et billede eller bag et klik — og er dermed usynlig for AI."
+        : "Ingen offentlige priser fundet i den læsbare tekst. Publicerer I priser, så sørg for at de står som tekst i HTML'en, ikke kun i et billede eller via JavaScript.",
+    betydning:
+      "Flere og flere købere spørger AI om pris før de vælger leverandør. Kan ChatGPT ikke læse jeres priser, falder den tilbage på konkurrenternes tal eller forældede tredjeparts-sider.",
   });
 
   // 2. AI-crawlere i robots.txt (20)
