@@ -9,3 +9,8 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Fuld E2E af scan→rapport mod rigtig PocketBase · scope: E2E mocker scan-API'et; motoren dækkes af CLI-harness (scripts/ai-tjek-cli.mjs) + manuel verifikation · det rigtige: test-PB-instans eller PB-mock i webServer · effort M
 - Globalt dagsloft er in-memory pr. serverless-instans (best effort) · fart: rigeligt ved lav trafik, og scan-trinnet er gratis (ingen LLM) · det rigtige: delt tæller i PocketBase/KV · effort S
 - Dynamisk OG-billede pr. rapport ("sell the screenshot") · fart · det rigtige: @vercel/og med score-kort · effort S
+
+## 2026-09-17 · Pris-synligheds-tjek
+
+- Pris-detektion er heuristisk (valuta+tal-regex på rå HTML) og prober kun forsiden, /priser, /pricing + ét prislink fundet i forsidens HTML · fart: rammer de fleste danske sites uden ekstra latenstid · det rigtige: følg prislink i sitemap/nav dybere + evt. price/Offer-schema-parse, så prissider på atypiske stier (fx /abonnement, /produkter) også fanges · effort S
+- Pris-tjekket er 0-point (spotlight), tæller ikke i scoren · bevidst: undgår at rebalancere 100-skalaen og bryde gemte scores/forventninger · det rigtige: overvej en vægtet pris-akse i en score-v2 · effort M
