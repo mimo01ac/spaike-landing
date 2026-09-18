@@ -16,6 +16,9 @@ export const PUBLIC_PAGES = [
   "/brancher/landinspektorer",
   "/brancher/raadgivende-ingenioerer",
   "/ai-tjek",
+  "/privatlivspolitik",
+  "/databehandleraftale",
+  "/slutbrugervilkaar",
 ] as const;
 
 /** Stier der BEVIDST skal give 404 (upubliceret/ikke-eksisterende). */

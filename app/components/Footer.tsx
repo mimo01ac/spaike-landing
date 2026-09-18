@@ -56,8 +56,13 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-9 pt-4 border-t border-rule flex justify-between font-mono text-[10px] tracking-widest uppercase text-muted">
+        <div className="mt-9 pt-4 border-t border-rule flex flex-col gap-3 md:flex-row md:items-center md:justify-between font-mono text-[10px] tracking-widest uppercase text-muted">
           <span>© {new Date().getFullYear()} SpAIke ApS</span>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <a href="/privatlivspolitik" className="hover:text-amber-dark transition-colors">Privatlivspolitik</a>
+            <a href="/databehandleraftale" className="hover:text-amber-dark transition-colors">Databehandleraftale</a>
+            <a href="/slutbrugervilkaar" className="hover:text-amber-dark transition-colors">Vilkår</a>
+          </div>
           <span>spaike.dk</span>
         </div>
       </div>

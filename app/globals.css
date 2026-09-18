@@ -33,3 +33,55 @@ body {
     display: none !important;
   }
 }
+
+/* Juridiske sider (privatlivspolitik, databehandleraftale, vilkår) */
+.legal-prose {
+  color: #3a3f4e;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.legal-prose h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: #0f1a2e;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #d8d3c7;
+}
+.legal-prose h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.legal-prose h3 {
+  color: #0f1a2e;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+.legal-prose p {
+  margin-top: 0.9rem;
+}
+.legal-prose ul {
+  margin-top: 0.7rem;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+.legal-prose li {
+  margin-top: 0.4rem;
+}
+.legal-prose a {
+  color: #b88f3f;
+  text-decoration: underline;
+}
+.legal-prose a:hover {
+  color: #0f1a2e;
+}
+.legal-prose strong {
+  color: #0f1a2e;
+}
+.legal-prose .meta {
+  color: #6b6650;
+  font-size: 0.85rem;
+}
