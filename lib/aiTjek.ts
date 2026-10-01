@@ -44,6 +44,32 @@ const AI_BOTS = [
   "CCBot",
 ];
 
+/**
+ * Jargon-fri "hvad er det"-forklaring pr. tjek, keyet på check.key.
+ * Ligger adskilt fra scoringen, så rapporten kan vise den for ALLE scans
+ * (også gamle, allerede gemte) uden at tjekket skal køres igen. Sproget er
+ * bevidst ikke-teknisk: en kunde der ikke er CMO skal kunne forstå det.
+ */
+export const HVAD_ER_DET: Record<string, string> = {
+  render:
+    "AI-robotterne henter jeres side som ren tekst og kører sjældent den kode, der først bygger siden færdig inde i en browser. Vi tjekker, om jeres tekst allerede står der, før koden kører.",
+  ai_bots:
+    "robots.txt er en lille fil på jeres website, der fortæller robotterne fra fx ChatGPT, Claude og Google, hvilke sider de må besøge. Her tjekker vi, om I ved et uheld har spærret dem ude.",
+  schema:
+    "Struktureret data er skjulte mærker i koden, der fortæller maskiner præcis hvad der er hvad (jeres navn, ydelser, adresse), i et format de kan stole på i stedet for at gætte ud fra teksten.",
+  meta:
+    "Titel og beskrivelse er den overskrift og tekst, der vises i Google og når siden deles. Canonical er et skjult mærke, der udpeger den rigtige adresse for en side, så den samme side ikke tæller som flere forskellige.",
+  sitemap:
+    "Et sitemap er en indholdsfortegnelse over alle jeres sider, som robotterne kan læse, så de hurtigt finder det hele, også nye sider.",
+  robots:
+    "robots.txt er den fil, robotterne læser allerførst. Her tjekker vi helt enkelt, om den overhovedet findes på jeres website.",
+  grundstruktur:
+    "H1 er sidens vigtigste overskrift, den der med det samme siger, hvad siden handler om. Sprogangivelse er et skjult mærke, der fortæller, at siden er på dansk, så maskiner ikke er i tvivl.",
+  og: "Et delingskort er det lille billede med titel og tekst, der dukker op, når nogen deler jeres side på fx LinkedIn eller Facebook, i stedet for bare et nøgent link.",
+  llms:
+    "llms.txt er en ny, endnu uofficiel fil, som nogle foreslår for at guide AI-modeller. Vi viser den til orientering; den tæller ikke med i scoren.",
+};
+
 export function normalizeUrl(raw: string): URL | null {
   const v = (raw || "").trim();
   if (!v || v.length > 300) return null;

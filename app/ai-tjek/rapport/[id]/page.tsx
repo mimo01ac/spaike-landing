@@ -4,7 +4,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { DoubleRule, SectionLabel } from "../../../components/EditorialUI";
 import { getRecord } from "@/lib/pocketbase";
-import type { TjekCheck } from "@/lib/aiTjek";
+import { HVAD_ER_DET, type TjekCheck } from "@/lib/aiTjek";
 import LeadForm from "./LeadForm";
 
 export const dynamic = "force-dynamic";
@@ -100,8 +100,15 @@ export default async function RapportPage({ params }: Params) {
                   <div className={`font-mono text-lg ${s.farve}`}>{s.tegn}</div>
                   <div>
                     <h3 className="font-serif text-lg font-medium leading-tight">{c.titel}</h3>
-                    <p className="font-sans text-[13.5px] text-ink mt-1">{c.fund}</p>
+                    {HVAD_ER_DET[c.key] && (
+                      <p className="font-sans text-[13px] text-muted mt-1 max-w-2xl">
+                        <span className="font-medium text-ink-soft">Hvad det er: </span>
+                        {HVAD_ER_DET[c.key]}
+                      </p>
+                    )}
+                    <p className="font-sans text-[13.5px] text-ink mt-2">{c.fund}</p>
                     <p className="font-sans text-[13px] text-ink-soft mt-1 max-w-2xl">
+                      <span className="font-medium">Derfor betyder det noget: </span>
                       {c.betydning}
                     </p>
                   </div>
