@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI-analyse · 21-5.dk · SpAIke</title>
+<meta property="og:title" content="AI-analyse for 21-5.dk · SpAIke">
+<meta property="og:description" content="To analyser i én: teknisk AI-parathed (85/100) og AI-synlighed, bliver 21-5 anbefalet når kunderne spørger AI?">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f1a2e'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23d4a857' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#0f1a2e; --ink-soft:#3a3f4e; --cream:#f3eee2; --cream-deep:#ece6d6;
+    --rule:#d8d3c7; --rule-dark:#2a3142; --muted:#6b6650;
+    --amber:#d4a857; --amber-dark:#b88f3f; --amber-soft:#e8c98a;
+    --green:#3f7d53; --red:#9a4a3a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);line-height:1.55;
+    font-family:"Source Serif Pro",Georgia,"Times New Roman",serif;font-size:17px}
+  .sans{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .mono{font-family:ui-monospace,Menlo,monospace}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 90px}
+  header{background:var(--ink);color:var(--cream);margin:0 -24px 0;padding:44px 24px 34px;
+    border-bottom:3px solid var(--amber)}
+  .kick{font-family:ui-monospace,Menlo,monospace;color:var(--amber);font-size:12px;
+    letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
+  h1{margin:0;font-size:34px;font-weight:600;line-height:1.1}
+  h1 em{font-style:italic;color:var(--amber-soft)}
+  .meta{font-family:Inter,sans-serif;color:#b9c0cf;font-size:14px;margin:14px 0 0}
+
+  /* Faner */
+  .tabs{position:sticky;top:0;z-index:5;background:var(--cream);margin:0 -24px;padding:0 24px;
+    border-bottom:1px solid var(--rule);display:flex;gap:0}
+  .tab{appearance:none;background:none;border:none;cursor:pointer;font-family:Inter,sans-serif;
+    padding:18px 4px;margin-right:34px;font-size:15px;color:var(--muted);font-weight:600;
+    border-bottom:3px solid transparent;margin-bottom:-1px;text-align:left}
+  .tab small{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:3px}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--amber)}
+  .tab[aria-selected="true"] small{color:var(--ink-soft)}
+  .panel[hidden]{display:none}
+
+  h2{font-size:22px;font-weight:600;margin:38px 0 6px;border-bottom:1px solid var(--rule);padding-bottom:8px}
+  h3{font-size:18px;font-weight:600;margin:0 0 2px}
+  p{margin:10px 0}
+  .lead{font-size:18px;color:var(--ink-soft)}
+
+  /* Score-hero */
+  .scorewrap{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 40px;margin:28px 0 6px}
+  .score{font-size:96px;line-height:.9;letter-spacing:-.02em}
+  .score span{font-size:30px;color:var(--muted)}
+  .scoredom{font-style:italic;font-size:22px;color:var(--green)}
+  .scorenote{font-family:Inter,sans-serif;font-size:14px;color:var(--ink-soft);max-width:26em}
+
+  /* Tjek */
+  .check{display:grid;grid-template-columns:30px 1fr auto;gap:4px 14px;padding:20px 0;border-bottom:1px solid var(--rule)}
+  .check .tegn{font-family:ui-monospace,Menlo,monospace;font-size:20px;line-height:1.3}
+  .tegn.ok{color:var(--green)} .tegn.delvist{color:var(--amber-dark)}
+  .tegn.problem{color:var(--red)} .tegn.info{color:var(--muted)}
+  .check .pts{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);white-space:nowrap;text-align:right}
+  .check .hvad{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin:5px 0 0;max-width:48em}
+  .check .hvad b{color:var(--ink-soft);font-weight:600}
+  .check .fund{font-family:Inter,sans-serif;font-size:14px;color:var(--ink);margin:9px 0 0}
+  .check .betyd{font-family:Inter,sans-serif;font-size:13px;color:var(--ink-soft);margin:4px 0 0;max-width:48em}
+  .check .betyd b{font-weight:600}
+
+  /* Panel */
+  .verdict{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--amber);
+    border-radius:10px;padding:20px 22px;margin:22px 0}
+  .pill{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;
+    letter-spacing:.04em;padding:2px 9px;border-radius:20px;vertical-align:middle}
+  .pill.ja{background:#e7f1ea;color:var(--green)}
+  .pill.nej{background:#f6e7e3;color:var(--red)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-family:Inter,sans-serif;font-size:14.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:700;background:var(--cream-deep)}
+  td.q{font-weight:600;color:var(--ink);width:38%}
+  .card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .sans-list{font-family:Inter,sans-serif;font-size:15px}
+  .rec{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--rule);
+    border-radius:10px;padding:16px 18px;margin:12px 0}
+  .rec .n{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--amber-dark);font-size:20px;line-height:1.2}
+  .rec .b{flex:1}
+  .rec p{margin:4px 0 0;font-family:Inter,sans-serif;font-size:14.5px;color:var(--ink-soft)}
+  a{color:var(--amber-dark);text-decoration:underline;text-underline-offset:2px}
+  a:hover{color:var(--ink)}
+  ul{padding-left:20px} li{margin:5px 0}
+  .note{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);background:var(--cream-deep);
+    border-radius:8px;padding:14px 16px;margin:26px 0 0}
+  .foot{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);
+    text-align:center;margin:44px 0 0;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kick">SpAIke · AI-analyse</p>
+  <h1>AI-analyse for <em>21-5.dk</em></h1>
+  <p class="meta">deleejerskab af ferieboliger · 1. oktober 2026 · to analyser: teknisk AI-parathed og synlighed i AI-svar</p>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab" id="t-teknisk" role="tab" aria-selected="true" aria-controls="p-teknisk" onclick="visFane('teknisk')">
+    Teknisk AI-tjek<small>Kan AI læse jeres side? · 85/100</small>
+  </button>
+  <button class="tab" id="t-panel" role="tab" aria-selected="false" aria-controls="p-panel" onclick="visFane('panel')">
+    AI-panel<small>Bliver I anbefalet af AI?</small>
+  </button>
+</div>
+
+<!-- ============ FANE 1: TEKNISK ============ -->
+<section class="panel" id="p-teknisk" role="tabpanel" aria-labelledby="t-teknisk">
+  <div class="scorewrap">
+    <div>
+      <div class="mono" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">21-5.dk</div>
+      <div class="score">85<span>/100</span></div>
+      <div class="scoredom">Godt AI-fundament</div>
+    </div>
+    <p class="scorenote">Scoren måler de tekniske forudsætninger for at blive læst, forstået og citeret af AI-søgemaskiner (ChatGPT, Perplexity, Google AI Overviews). Den er en indikator, ikke en facitliste.</p>
+  </div>
+
+  <h2>De 9 tjek</h2>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>Kan AI-crawlere læse jeres indhold uden JavaScript?</h3>
+      <p class="hvad"><b>Hvad det er: </b>AI-robotterne henter jeres side som ren tekst og kører sjældent den kode, der først bygger siden færdig inde i en browser. Vi tjekker, om jeres tekst allerede står der, før koden kører.</p>
+      <p class="fund">5.771 tegn synlig tekst i den rå HTML.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>De fleste AI-crawlere kører IKKE JavaScript. Er teksten kun synlig efter JS, findes jeres indhold reelt ikke for ChatGPT, Perplexity og AI Overviews.</p>
+    </div>
+    <div class="pts">25/25 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>Er AI-crawlerne lukket inde eller ude i robots.txt?</h3>
+      <p class="hvad"><b>Hvad det er: </b>robots.txt er en lille fil på jeres website, der fortæller robotterne fra fx ChatGPT, Claude og Google, hvilke sider de må besøge. Her tjekker vi, om I ved et uheld har spærret dem ude.</p>
+      <p class="fund">Ingen AI-crawlere er blokeret.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>GPTBot, ClaudeBot, PerplexityBot m.fl. skal kunne hente jeres sider, ellers kan AI-motorerne hverken citere eller anbefale jer.</p>
+    </div>
+    <div class="pts">20/20 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn problem">✕</div>
+    <div>
+      <h3>Struktureret data (schema.org)</h3>
+      <p class="hvad"><b>Hvad det er: </b>Struktureret data er skjulte mærker i koden, der fortæller maskiner præcis hvad der er hvad (jeres navn, ydelser, adresse), i et format de kan stole på i stedet for at gætte ud fra teksten.</p>
+      <p class="fund">Ingen JSON-LD fundet.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Struktureret data gør jeres fakta (navn, ydelser, priser) maskinlæsbare og fodrer brand-entiteten, som AI-svar læner sig op ad.</p>
+    </div>
+    <div class="pts">0/12 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn delvist">!</div>
+    <div>
+      <h3>Titel, beskrivelse og canonical</h3>
+      <p class="hvad"><b>Hvad det er: </b>Titel og beskrivelse er den overskrift og tekst, der vises i Google og når siden deles. Canonical er et skjult mærke, der udpeger den rigtige adresse for en side, så den samme side ikke tæller som flere forskellige.</p>
+      <p class="fund">Titel: ja (4/4) · Meta description: ja (5/5) · Canonical: nej (0/3).</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Basal metadata er stadig det, både Google og AI-motorer bruger til at forstå og præsentere siden.</p>
+    </div>
+    <div class="pts">9/12 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>sitemap.xml</h3>
+      <p class="hvad"><b>Hvad det er: </b>Et sitemap er en indholdsfortegnelse over alle jeres sider, som robotterne kan læse, så de hurtigt finder det hele, også nye sider.</p>
+      <p class="fund">Sitemap fundet og gyldigt.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Sitemappet er crawlernes indholdsfortegnelse; uden det opdages nye sider langsomt.</p>
+    </div>
+    <div class="pts">8/8 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>robots.txt</h3>
+      <p class="hvad"><b>Hvad det er: </b>robots.txt er den fil, robotterne læser allerførst. Her tjekker vi helt enkelt, om den overhovedet findes på jeres website.</p>
+      <p class="fund">robots.txt findes.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Filen er jeres kontrakt med crawlerne, også de nye AI-crawlere.</p>
+    </div>
+    <div class="pts">5/5 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>H1-overskrift og sprogangivelse</h3>
+      <p class="hvad"><b>Hvad det er: </b>H1 er sidens vigtigste overskrift, den der med det samme siger, hvad siden handler om. Sprogangivelse er et skjult mærke, der fortæller, at siden er på dansk, så maskiner ikke er i tvivl.</p>
+      <p class="fund">H1: ja (5/5) · lang-attribut: ja (5/5).</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Tydelig struktur og sprogmarkering hjælper maskiner med at forstå, hvad og for hvem siden er.</p>
+    </div>
+    <div class="pts">10/10 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn ok">✓</div>
+    <div>
+      <h3>Delingskort (OpenGraph)</h3>
+      <p class="hvad"><b>Hvad det er: </b>Et delingskort er det lille billede med titel og tekst, der dukker op, når nogen deler jeres side på fx LinkedIn eller Facebook, i stedet for bare et nøgent link.</p>
+      <p class="fund">og:title: ja (3/3) · og:description: ja (2/2) · og:image: ja (3/3).</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Deles jeres sider på LinkedIn eller citeres med preview, afgør OG-tags om I ligner en professionel afsender.</p>
+    </div>
+    <div class="pts">8/8 p</div>
+  </div>
+
+  <div class="check">
+    <div class="tegn info">i</div>
+    <div>
+      <h3>llms.txt</h3>
+      <p class="hvad"><b>Hvad det er: </b>llms.txt er en ny, endnu uofficiel fil, som nogle foreslår for at guide AI-modeller. Vi viser den til orientering; den tæller ikke med i scoren.</p>
+      <p class="fund">llms.txt findes.</p>
+      <p class="betyd"><b>Derfor betyder det noget: </b>Omdiskuteret standard uden målt effekt hos de store AI-motorer endnu; medtaget til orientering, tæller ikke i scoren.</p>
+    </div>
+    <div class="pts">info</div>
+  </div>
+
+  <p class="note"><b>Kort sagt:</b> 21-5 har et solidt teknisk fundament (85/100). Det tydeligste hul er struktureret data (0/12) plus et manglende canonical-tag. Det er netop det maskinlæsbare fakta-lag, AI-motorerne læner sig på, så det er det billigste løft med størst effekt. Mere om hvorfor det betyder noget i praksis, under fanen AI-panel.</p>
+</section>
+
+<!-- ============ FANE 2: AI-PANEL ============ -->
+<section class="panel" id="p-panel" role="tabpanel" aria-labelledby="t-panel" hidden>
+  <h2>Bliver 21-5 anbefalet, når kunderne spørger AI til råds?</h2>
+  <div class="verdict">
+    <p class="lead" style="margin-top:0"><b>21-5 er synlig i AI-svar for kategorien, men taber de afgørende beslutnings-spørgsmål.</b></p>
+    <p>Når jeg stiller AI-motorerne de spørgsmål en kommende kunde faktisk stiller ("hvordan deler man en feriebolig med andre familier?", "køb af andel i feriebolig i udlandet"), bliver 21-5 <b>nævnt side om side med de store danske delekoncept-udbydere</b>, og I har endda uafhængige autoritetssider (fx Nykredit og Jyske Bank), som AI læner sig på. Det er stærkt.</p>
+    <p>Men på <b>sammenlignings- og beslutningsspørgsmålene</b>, det stadie hvor folk vælger leverandør ("timeshare eller deleejerskab?", "alternativ til selv at eje en feriebolig"), <b>dukker 21-5 ikke op</b>. Dér ejer Simply Sun og Villa 8 svaret, fordi de har skrevet indholdet. Kombineret med at den tekniske scanning fandt <b>0/12 på struktureret data</b>, er det her det næste løft ligger.</p>
+  </div>
+
+  <h2>Hvad AI svarede på kundernes spørgsmål</h2>
+  <p class="sans-list">Fire kategori-spørgsmål kørt mod AI-/web-søgning. Kolonnen "21-5 nævnt" viser, om I kom med i svaret.</p>
+  <table>
+    <thead><tr><th>Kundens spørgsmål</th><th>21-5 nævnt</th><th>Hvem anbefales ellers</th></tr></thead>
+    <tbody>
+      <tr><td class="q">"Hvordan deler man en feriebolig med andre familier i Danmark?"</td><td><span class="pill ja">Ja</span></td><td>OURhaus, Simply Sun, Five2one, Fristeder, 15-3</td></tr>
+      <tr><td class="q">"Køb af andel i feriebolig i udlandet / medejerskab"</td><td><span class="pill ja">Ja, fremhævet</span></td><td>MyHomes, Five2one, Simply Sun, Villa 8, Domos Plus</td></tr>
+      <tr><td class="q">"Fractional ownership holiday home Denmark" (engelsk)</td><td><span class="pill ja">Ja, med detaljer</span></td><td>MYNE, Fraxioned, August Collections (internationale)</td></tr>
+      <tr><td class="q">"Timeshare eller deleejerskab? Alternativ til egen feriebolig"</td><td><span class="pill nej">Nej</span></td><td>Simply Sun, Villa 8, Andelshotellet, ExclusiveOnline, Spanien i Dag</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Konkurrenter AI anbefaler i jeres kategori</h2>
+  <div class="card sans-list">
+    <ul>
+      <li><b>Simply Sun</b> — den mest AI-synlige konkurrent. Dukker op på næsten alle spørgsmål og ejer både sammenligningsindhold ("timeshare vs delebolig") og finansieringsindhold.</li>
+      <li><b>Villa 8 (villa-8.dk)</b> — stærk på beslutnings-/skat-indhold ("medejerskab i Sydeuropa"), 1/8-andele.</li>
+      <li><b>Five2one</b>, <b>MyHomes</b>, <b>OURhaus</b>, <b>Domos Plus</b> — går igen som alternativer på "køb andel i udlandet".</li>
+      <li><b>Fristeder</b> og <b>15-3</b> — danske delekoncepter, 15-3 ligger navnemæssigt tæt på jer.</li>
+      <li><b>MYNE</b> — international spiller der nævnes på engelske søgninger.</li>
+    </ul>
+  </div>
+
+  <h2>Kilder AI læner sig på</h2>
+  <p class="sans-list">AI citerer tredjepart højere end virksomheders egen marketing. Det her er de uafhængige sider, der optræder i kategoriens svar, og hvor I står stærkt:</p>
+  <div class="card sans-list">
+    <ul>
+      <li><a href="https://www.nykredit.dk/private/21-5-delebolig/" target="_blank" rel="noopener">Nykredit: "21-5 · Bliv medejer af flere unikke ferieboliger i Europa"</a> — en bank-side dedikeret til jer. Guld værd for AI-citation.</li>
+      <li><a href="https://www.jyskebank.dk/nyheder/privatoekonomi/jyske-bank-indgaar-samarbejde-om-ferieboliger-i-udlandet" target="_blank" rel="noopener">Jyske Bank: delekøb af feriebolig i udlandet</a></li>
+      <li><a href="https://mitoesterbro.dk/delt-ejerskab-er-fremtidens-feriebolig-i-udlandet/" target="_blank" rel="noopener">Mit Østerbro: "Delt ejerskab er fremtidens feriebolig"</a></li>
+      <li><a href="https://exclusiveonline.dk/2025/04/04/feriebolig-uden-boevl-derfor-vaelger-flere-at-eje-sammen/" target="_blank" rel="noopener">ExclusiveOnline: "Feriebolig uden bøvl"</a></li>
+      <li><a href="https://www.liebhaverboligen.dk/events/2023/07/26/drommer-du-om-at-eje-en-feriebolig-i-udlandet/" target="_blank" rel="noopener">Liebhaverboligen</a> · <a href="https://www.spanienidag.es/spanske/nyheder/premium/det-geniale-i-dele-en-bolig" target="_blank" rel="noopener">Spanien i Dag</a></li>
+    </ul>
+  </div>
+
+  <h2>Anbefalinger: fra synlig til foretrukken</h2>
+  <div class="rec"><div class="n">1</div><div class="b">
+    <h3>Vind beslutnings-spørgsmålene</h3>
+    <p>I er med på "hvad er det?"-spørgsmålene, men væk på "hvad skal jeg vælge?". Skriv jeres egne, tydelige guide-/sammenligningssider: "Deleejerskab vs timeshare", "Er en 21-5 andel noget for os?", "Deleejerskab vs selv at eje". Det er præcis dét indhold, der gør Simply Sun og Villa 8 til AI'ens svar i dag.</p>
+  </div></div>
+  <div class="rec"><div class="n">2</div><div class="b">
+    <h3>Luk schema-hullet (0/12 i den tekniske analyse)</h3>
+    <p>21-5.dk har ingen struktureret data (JSON-LD). Det er det maskinlæsbare fakta-lag AI bruger til at forstå og citere en virksomhed. Tilføj Organization + FAQ (og gerne Product/Offer på foreningstyperne). Billigt teknisk løft, direkte effekt på hvor sikkert AI gengiver jeres fakta.</p>
+  </div></div>
+  <div class="rec"><div class="n">3</div><div class="b">
+    <h3>Byg videre på tredjeparts-autoriteten</h3>
+    <p>I har allerede en Nykredit-side og Jyske Bank-omtale, det er sjældent stærkt. Få flere citerbare, uafhængige kilder: presseomtale, "bedste delekoncept"-oversigter, anmeldelser. AI vægter dem højere end jeres egen hjemmeside, og de trækker jer med på netop de spørgsmål, I mangler på i dag.</p>
+  </div></div>
+  <div class="rec"><div class="n">4</div><div class="b">
+    <h3>Hurtige tekniske fixes</h3>
+    <p>Tilføj canonical-tag og stram metadata op (de manglende point i den tekniske score sidder i schema, canonical og meta). Små ting, men de hører med til det fundament AI-motorerne læser.</p>
+  </div></div>
+
+  <p class="note"><b>Metode:</b> Panelet er kørt 1. oktober 2026 ved at stille AI-/websøgning de fire kundespørgsmål ovenfor og aflæse, om 21-5 optræder, hvem der ellers anbefales, og hvilke kilder der trækkes på. Det afspejler det landskab AI-motorerne bygger deres svar på, ikke én enkelt logget-ind ChatGPT-session. Søgeværktøjet har en vis international vægtning, så den danske dækning kan være lidt undervurderet.</p>
+</section>
+
+<p class="foot">spaike.dk · Commercial impact, powered by AI</p>
+</div>
+
+<script>
+  function visFane(navn){
+    var faner = {teknisk:"p-teknisk", panel:"p-panel"};
+    for (var key in faner){
+      var valgt = key === navn;
+      document.getElementById(faner[key]).hidden = !valgt;
+      document.getElementById("t-"+key).setAttribute("aria-selected", valgt ? "true" : "false");
+    }
+    if (history.replaceState) history.replaceState(null, "", "#"+navn);
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+  // Åbn direkte på en fane via #panel i URL'en.
+  if (location.hash === "#panel") visFane("panel");
+</script>
+</body>
+</html>
