@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <title>AI-analyse · 21-5.dk · SpAIke</title>
 <meta property="og:title" content="AI-analyse for 21-5.dk · SpAIke">
-<meta property="og:description" content="To analyser i én: teknisk AI-parathed (85/100) og AI-synlighed, bliver 21-5 anbefalet når kunderne spørger AI?">
+<meta property="og:description" content="To analyser i én: teknisk AI-parathed (85/100) og AI-panel, hvad ChatGPT, Perplexity, Gemini og Claude faktisk svarer om 21-5.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f1a2e'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23d4a857' stroke-width='3'/%3E%3C/svg%3E">
 <style>
@@ -30,7 +30,6 @@
   h1 em{font-style:italic;color:var(--amber-soft)}
   .meta{font-family:Inter,sans-serif;color:#b9c0cf;font-size:14px;margin:14px 0 0}
 
-  /* Faner */
   .tabs{position:sticky;top:0;z-index:5;background:var(--cream);margin:0 -24px;padding:0 24px;
     border-bottom:1px solid var(--rule);display:flex;gap:0}
   .tab{appearance:none;background:none;border:none;cursor:pointer;font-family:Inter,sans-serif;
@@ -46,14 +45,12 @@
   p{margin:10px 0}
   .lead{font-size:18px;color:var(--ink-soft)}
 
-  /* Score-hero */
   .scorewrap{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 40px;margin:28px 0 6px}
   .score{font-size:96px;line-height:.9;letter-spacing:-.02em}
   .score span{font-size:30px;color:var(--muted)}
   .scoredom{font-style:italic;font-size:22px;color:var(--green)}
   .scorenote{font-family:Inter,sans-serif;font-size:14px;color:var(--ink-soft);max-width:26em}
 
-  /* Tjek */
   .check{display:grid;grid-template-columns:30px 1fr auto;gap:4px 14px;padding:20px 0;border-bottom:1px solid var(--rule)}
   .check .tegn{font-family:ui-monospace,Menlo,monospace;font-size:20px;line-height:1.3}
   .tegn.ok{color:var(--green)} .tegn.delvist{color:var(--amber-dark)}
@@ -65,18 +62,19 @@
   .check .betyd{font-family:Inter,sans-serif;font-size:13px;color:var(--ink-soft);margin:4px 0 0;max-width:48em}
   .check .betyd b{font-weight:600}
 
-  /* Panel */
   .verdict{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--amber);
     border-radius:10px;padding:20px 22px;margin:22px 0}
-  .pill{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;
-    letter-spacing:.04em;padding:2px 9px;border-radius:20px;vertical-align:middle}
-  .pill.ja{background:#e7f1ea;color:var(--green)}
-  .pill.nej{background:#f6e7e3;color:var(--red)}
-  table{width:100%;border-collapse:collapse;margin:14px 0;font-family:Inter,sans-serif;font-size:14.5px}
-  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
-  th{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-family:Inter,sans-serif;font-size:14px}
+  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--rule);vertical-align:middle}
+  th{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
     color:var(--muted);font-weight:700;background:var(--cream-deep)}
-  td.q{font-weight:600;color:var(--ink);width:38%}
+  .matrix td,.matrix th{text-align:center}
+  .matrix td:first-child,.matrix th:first-child{text-align:left}
+  .matrix td:first-child{font-weight:600;color:var(--ink);font-size:13.5px}
+  .c-top{background:#e7f1ea;color:#2c5c3c;font-weight:700;border-radius:5px}
+  .c-mid{background:#fbf2dd;color:var(--amber-dark);font-weight:600;border-radius:5px}
+  .c-no{background:#f6e7e3;color:var(--red);font-weight:700;border-radius:5px}
+  .c-na{color:#b3ad9c}
   .card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:12px 0}
   .sans-list{font-family:Inter,sans-serif;font-size:15px}
   .rec{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--rule);
@@ -91,6 +89,19 @@
     border-radius:8px;padding:14px 16px;margin:26px 0 0}
   .foot{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);
     text-align:center;margin:44px 0 0;letter-spacing:.04em}
+
+  .qblock{margin:26px 0 0;padding:0 0 4px}
+  .qh{font-family:"Source Serif Pro",Georgia,serif;font-size:18px;font-weight:600;margin:0 0 2px}
+  .qfind{font-family:Inter,sans-serif;font-size:13.5px;color:var(--ink-soft);margin:2px 0 8px}
+  details{background:#fff;border:1px solid var(--rule);border-radius:9px;margin:7px 0}
+  summary{cursor:pointer;padding:10px 14px;font-family:Inter,sans-serif;font-size:13.5px;font-weight:600;color:var(--ink);list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸";color:var(--amber-dark);margin-right:8px;font-size:11px}
+  details[open] summary::before{content:"▾"}
+  summary .tag{font-family:ui-monospace,Menlo,monospace;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin-left:8px}
+  .tag.top{background:#e7f1ea;color:#2c5c3c} .tag.mid{background:#fbf2dd;color:var(--amber-dark)} .tag.no{background:#f6e7e3;color:var(--red)}
+  details .body{padding:0 15px 14px;font-family:Inter,sans-serif;font-size:13px;color:var(--ink-soft);line-height:1.55}
+  details .body i{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -98,7 +109,7 @@
 <header>
   <p class="kick">SpAIke · AI-analyse</p>
   <h1>AI-analyse for <em>21-5.dk</em></h1>
-  <p class="meta">deleejerskab af ferieboliger · 1. oktober 2026 · to analyser: teknisk AI-parathed og synlighed i AI-svar</p>
+  <p class="meta">deleejerskab af ferieboliger · 1. oktober 2026 · to analyser: teknisk AI-parathed og hvad AI-modellerne faktisk svarer</p>
 </header>
 
 <div class="tabs" role="tablist">
@@ -106,7 +117,7 @@
     Teknisk AI-tjek<small>Kan AI læse jeres side? · 85/100</small>
   </button>
   <button class="tab" id="t-panel" role="tab" aria-selected="false" aria-controls="p-panel" onclick="visFane('panel')">
-    AI-panel<small>Bliver I anbefalet af AI?</small>
+    AI-panel<small>Hvad svarer modellerne om jer?</small>
   </button>
 </div>
 
@@ -222,72 +233,104 @@
     <div class="pts">info</div>
   </div>
 
-  <p class="note"><b>Kort sagt:</b> 21-5 har et solidt teknisk fundament (85/100). Det tydeligste hul er struktureret data (0/12) plus et manglende canonical-tag. Det er netop det maskinlæsbare fakta-lag, AI-motorerne læner sig på, så det er det billigste løft med størst effekt. Mere om hvorfor det betyder noget i praksis, under fanen AI-panel.</p>
+  <p class="note"><b>Kort sagt:</b> 21-5 har et solidt teknisk fundament (85/100). Det tydeligste hul er struktureret data (0/12) plus et manglende canonical-tag. Det er netop det maskinlæsbare fakta-lag, AI-motorerne læner sig på, så det er det billigste løft med størst effekt. Hvad det betyder i praksis, ses under fanen AI-panel.</p>
 </section>
 
-<!-- ============ FANE 2: AI-PANEL ============ -->
+<!-- ============ FANE 2: AI-PANEL (multi-model) ============ -->
 <section class="panel" id="p-panel" role="tabpanel" aria-labelledby="t-panel" hidden>
-  <h2>Bliver 21-5 anbefalet, når kunderne spørger AI til råds?</h2>
+  <h2>Hvad svarer AI-modellerne, når kunderne spørger?</h2>
+  <p class="sans-list">Jeg stillede de samme købsspørgsmål til de fire modeller en dansk familie reelt bruger, og gemte deres <b>ordrette svar</b>. Du kan folde hvert svar ud nederst. Det er ikke et skøn, det er, hvad modellerne faktisk sagde 1. oktober 2026.</p>
+
   <div class="verdict">
-    <p class="lead" style="margin-top:0"><b>21-5 er synlig i AI-svar for kategorien, men taber de afgørende beslutnings-spørgsmål.</b></p>
-    <p>Når jeg stiller AI-motorerne de spørgsmål en kommende kunde faktisk stiller ("hvordan deler man en feriebolig med andre familier?", "køb af andel i feriebolig i udlandet"), bliver 21-5 <b>nævnt side om side med de store danske delekoncept-udbydere</b>, og I har endda uafhængige autoritetssider (fx Nykredit og Jyske Bank), som AI læner sig på. Det er stærkt.</p>
-    <p>Men på <b>sammenlignings- og beslutningsspørgsmålene</b>, det stadie hvor folk vælger leverandør ("timeshare eller deleejerskab?", "alternativ til selv at eje en feriebolig"), <b>dukker 21-5 ikke op</b>. Dér ejer Simply Sun og Villa 8 svaret, fordi de har skrevet indholdet. Kombineret med at den tekniske scanning fandt <b>0/12 på struktureret data</b>, er det her det næste løft ligger.</p>
+    <p class="lead" style="margin-top:0"><b>21-5 er stærkt synlig, men ikke i alle modeller, og taber de brede spørgsmål.</b></p>
+    <p>På det afgørende spørgsmål, <i>"hvilke danske virksomheder tilbyder deleejerskab af ferieboliger i udlandet?"</i>, sætter <b>ChatGPT, Perplexity og Google Gemini alle 21-5 som nr. 1</b> ("den ældste og mest kendte / mest etablerede danske spiller"). <b>Claude udelod derimod 21-5 helt</b> og nævnte MyHomes, Five2one og Domos Plus i stedet. Det er en konkret blind vinkel, der kan lukkes.</p>
+    <p>På troværdighed er modellerne enige: etableret, EY-revideret, 1.500+ familier, ikke et suspekt timeshare-setup, men alle rejser den <b>samme indvending, at gensalg/likviditet kan tage tid</b>. Og på de brede og sammenlignende spørgsmål ("en feriebolig uden selv at eje hele huset", "timeshare vs deleejerskab") er 21-5 svagere, dér fylder Simply Sun, Villa No. 8 og MyHomes mere.</p>
   </div>
 
-  <h2>Hvad AI svarede på kundernes spørgsmål</h2>
-  <p class="sans-list">Fire kategori-spørgsmål kørt mod AI-/web-søgning. Kolonnen "21-5 nævnt" viser, om I kom med i svaret.</p>
-  <table>
-    <thead><tr><th>Kundens spørgsmål</th><th>21-5 nævnt</th><th>Hvem anbefales ellers</th></tr></thead>
+  <h2>Model-matrix: er 21-5 med i svaret?</h2>
+  <p class="sans-list">Hver celle viser 21-5's placering i den pågældende models svar.</p>
+  <table class="matrix">
+    <thead><tr><th>Kundens spørgsmål</th><th>ChatGPT</th><th>Perplexity</th><th>Gemini</th><th>Claude</th></tr></thead>
     <tbody>
-      <tr><td class="q">"Hvordan deler man en feriebolig med andre familier i Danmark?"</td><td><span class="pill ja">Ja</span></td><td>OURhaus, Simply Sun, Five2one, Fristeder, 15-3</td></tr>
-      <tr><td class="q">"Køb af andel i feriebolig i udlandet / medejerskab"</td><td><span class="pill ja">Ja, fremhævet</span></td><td>MyHomes, Five2one, Simply Sun, Villa 8, Domos Plus</td></tr>
-      <tr><td class="q">"Fractional ownership holiday home Denmark" (engelsk)</td><td><span class="pill ja">Ja, med detaljer</span></td><td>MYNE, Fraxioned, August Collections (internationale)</td></tr>
-      <tr><td class="q">"Timeshare eller deleejerskab? Alternativ til egen feriebolig"</td><td><span class="pill nej">Nej</span></td><td>Simply Sun, Villa 8, Andelshotellet, ExclusiveOnline, Spanien i Dag</td></tr>
+      <tr><td>Hvilke danske virksomheder tilbyder deleejerskab?</td><td class="c-top">Nr. 1</td><td class="c-top">Nr. 1</td><td class="c-top">Nr. 1</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Bedste koncept til Italien/Spanien?</td><td class="c-mid">Nr. 2</td><td class="c-mid">Top-gruppe</td><td class="c-na">ikke kørt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Luksus i Toscana/Provence/Mallorca?</td><td class="c-na">ikke kørt</td><td class="c-top">Nr. 1</td><td class="c-na">ikke kørt</td><td class="c-mid">Nr. 3</td></tr>
+      <tr><td>Feriebolig uden selv at eje hele huset?</td><td class="c-na">ikke kørt</td><td class="c-mid">Nr. 4</td><td class="c-na">ikke kørt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Er 21-5 troværdig?</td><td class="c-top">Positiv</td><td class="c-top">Positiv</td><td class="c-na">ikke kørt</td><td class="c-mid">Nuanceret</td></tr>
     </tbody>
   </table>
+  <p class="sans-list" style="font-size:13px;color:var(--muted)">"ikke kørt" = spørgsmålet er endnu ikke stillet til netop den model. Jeg kan udvide til fuld dækning (alle spørgsmål på alle fire modeller).</p>
+
+  <h2>Svarene, ordret</h2>
+
+  <div class="qblock">
+    <div class="qh">"Hvilke danske virksomheder tilbyder deleejerskab af ferieboliger i udlandet?"</div>
+    <div class="qfind">Det vigtigste synligheds-spørgsmål. Tre af fire modeller sætter 21-5 først; Claude mangler jer.</div>
+    <details><summary>ChatGPT <span class="tag top">Nr. 1</span></summary><div class="body">"Hvis vi afgrænser til danske virksomheder, hvor du faktisk køber en ejerandel … især disse aktive aktører: <b>1. 21-5</b> … Det er nok den mest etablerede danske spiller … over 1.500 ejerfamilier og mere end 300 købte boliger … 2. MyHomes … 3. Villa No. 8 … 4. CASAL Co-Living … 5. Domos Plus+." <i>Kilder: 21-5.dk, 21-5.com, MyHomes, Villa No. 8, CASAL.</i></div></details>
+    <details><summary>Perplexity <span class="tag top">Nr. 1</span></summary><div class="body">"Flere danske virksomheder tilbyder i dag deleejerskab … Her er de mest kendte aktører: <b>21-5</b> (21 familier deler 5 boliger), MyHomes (samarbejdspartner med Jyske Bank), Simply Sun …" <i>Kilder: nykredit, jyskebank, simplysun.</i></div></details>
+    <details><summary>Google Gemini <span class="tag top">Nr. 1</span></summary><div class="body">"Porteføljemodellen … <b>21-5</b> — Den ældste og mest kendte aktør på det danske marked. Grundidéen er, at 21 familier ejer 5 ferieboliger sammen … MyHomes … Five2one Estate … Domos Plus … CASAL."</div></details>
+    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… <b>MyHomes</b> … <b>Five2one</b> … <b>Domos Plus</b> … <b>Investering &amp; Feriebolig A/S</b> …" <i>21-5 optræder slet ikke i Claudes svar. Claude trak på andre kilder end de tre øvrige modeller.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">"Hvilket delekoncept er bedst til at eje en feriebolig i Italien eller Spanien?"</div>
+    <div class="qfind">21-5 anbefales positivt, men deler toppen med nyere/internationale spillere (MYNE, August).</div>
+    <details><summary>ChatGPT <span class="tag mid">Nr. 2 (anbefalet)</span></summary><div class="body">"… tre modeller: <b>MYNE</b> (hvis I vil have ét fast sted, 1/8, fra ca. €119k), <b>21-5</b> ('den mest interessante alternative model for en dansk familie', fremhæver dansk skatte-/ejerstruktur og dansk ejerbase), <b>August</b>. 'For en dansker ville jeg have 21-5 foran August.'"</div></details>
+    <details><summary>Perplexity <span class="tag mid">Top-gruppe</span></summary><div class="body">"De mest udbredte modeller i Danmark: <b>MyHomes / 21-5</b> – medejer af 5 luksusboliger på 5 destinationer sammen med 21 familier … Bolig-Udland … Simply Sun … Five2one."</div></details>
+    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… MyHomes … Simplysun … Five2one Estate … Amoitalia … Hus i Italien … August …" <i>21-5 optræder ikke i Claudes svar på dette spørgsmål.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">"Hvem tilbyder luksus-ferieboliger i deleejerskab i Toscana, Provence eller på Mallorca?"</div>
+    <div class="qfind">Perplexity sætter 21-5 først med konkrete porteføljeeksempler; Claude nævner jer som tredje.</div>
+    <details><summary>Perplexity <span class="tag top">Nr. 1</span></summary><div class="body">"<b>21-5</b> … medejerskab i ferielejligheder og villaer på Mallorca, i Toscana og i Sydfrankrig/Provence … Eksempler: lejlighed på La Mola (Port d'Andratx), landvilla ved Montepulciano (Toscana), villa i Montauroux (Provence) … <b>Villa No. 8</b> …"</div></details>
+    <details><summary>Claude <span class="tag mid">Nr. 3</span></summary><div class="body">"<b>Villa No. 8</b> ejer luksusboliger i Toscana, Provence, Mallorca … <b>MyHomes</b> … <b>21-5</b> er en anden udbyder, hvor du kan blive en af de 21 familier, der sammen ejer 5 luksus ferieboliger i Europa … investere i en feriebolig i Toscana."</div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">"Hvordan kan min familie få en feriebolig i Sydeuropa uden selv at eje hele huset?"</div>
+    <div class="qfind">Bredt indgangsspørgsmål. Her er 21-5 svagere: nævnt sent hos Perplexity, slet ikke hos Claude. Simply Sun fylder mest.</div>
+    <details><summary>Perplexity <span class="tag mid">Nr. 4</span></summary><div class="body">"… <b>Simply Sun</b> (gennemgående eksempel) … <b>MyHomes</b> … <b>21-5</b>: Tilbyder medejerskab af ferieboliger i Frankrig, Spanien og Italien med forskellige pakker …" <i>Simply Sun bruges som det bærende eksempel gennem hele svaret.</i></div></details>
+    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… fractional ownership … timeshare … populære destinationer som Marbella, Malaga, Costa del Sol …" <i>Rent begrebssvar uden at nævne konkrete danske udbydere.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">"Er 21-5 en troværdig virksomhed, og hvad siger erfaringerne?"</div>
+    <div class="qfind">Modellerne er enige: etableret og reel, men alle nævner gensalg/likviditet som den ene bekymring.</div>
+    <details><summary>ChatGPT <span class="tag top">Positiv, med forbehold</span></summary><div class="body">"21-5 fremstår som en reel og etableret virksomhed med et gennemprøvet koncept, ikke som noget sketchy setup … siden 2010, ca. 117 medarbejdere, EY som revisor … Men jeg ville skelne mellem 'er virksomheden troværdig?' og 'er en 21-5-andel en ukompliceret og likvid investering?'." <i>Kilder: Proff, 21-5.</i></div></details>
+    <details><summary>Perplexity <span class="tag top">Positiv</span></summary><div class="body">"21-5 fremstår som en etableret og reel dansk virksomhed, ikke som et klassisk 'suspekt timeshare'-setup … stiftet i 2010 … seneste årsrapport revideret af EY uden forbehold … men bør vurderes som fælles ejerskab med begrænset likviditet, ikke en sikker investering." <i>24 kilder.</i></div></details>
+    <details><summary>Claude <span class="tag mid">Nuanceret</span></summary><div class="body">"21-5 A/S etableret i 2010, over 1.500 familier, vandt HBH-prisen 2019, 117 ansatte. Erfaringerne er <b>blandede</b>: positive (omsorg for ejerne, gensalg med ~50% gevinst i gennemsnit over 200 familier) og negative (udgifter stiger, kan tage flere år at sælge). Trustpilot 3,5-4,5."</div></details>
+  </div>
 
   <h2>Konkurrenter AI anbefaler i jeres kategori</h2>
   <div class="card sans-list">
     <ul>
-      <li><b>Simply Sun</b> — den mest AI-synlige konkurrent. Dukker op på næsten alle spørgsmål og ejer både sammenligningsindhold ("timeshare vs delebolig") og finansieringsindhold.</li>
-      <li><b>Villa 8 (villa-8.dk)</b> — stærk på beslutnings-/skat-indhold ("medejerskab i Sydeuropa"), 1/8-andele.</li>
-      <li><b>Five2one</b>, <b>MyHomes</b>, <b>OURhaus</b>, <b>Domos Plus</b> — går igen som alternativer på "køb andel i udlandet".</li>
-      <li><b>Fristeder</b> og <b>15-3</b> — danske delekoncepter, 15-3 ligger navnemæssigt tæt på jer.</li>
-      <li><b>MYNE</b> — international spiller der nævnes på engelske søgninger.</li>
-    </ul>
-  </div>
-
-  <h2>Kilder AI læner sig på</h2>
-  <p class="sans-list">AI citerer tredjepart højere end virksomheders egen marketing. Det her er de uafhængige sider, der optræder i kategoriens svar, og hvor I står stærkt:</p>
-  <div class="card sans-list">
-    <ul>
-      <li><a href="https://www.nykredit.dk/private/21-5-delebolig/" target="_blank" rel="noopener">Nykredit: "21-5 · Bliv medejer af flere unikke ferieboliger i Europa"</a> — en bank-side dedikeret til jer. Guld værd for AI-citation.</li>
-      <li><a href="https://www.jyskebank.dk/nyheder/privatoekonomi/jyske-bank-indgaar-samarbejde-om-ferieboliger-i-udlandet" target="_blank" rel="noopener">Jyske Bank: delekøb af feriebolig i udlandet</a></li>
-      <li><a href="https://mitoesterbro.dk/delt-ejerskab-er-fremtidens-feriebolig-i-udlandet/" target="_blank" rel="noopener">Mit Østerbro: "Delt ejerskab er fremtidens feriebolig"</a></li>
-      <li><a href="https://exclusiveonline.dk/2025/04/04/feriebolig-uden-boevl-derfor-vaelger-flere-at-eje-sammen/" target="_blank" rel="noopener">ExclusiveOnline: "Feriebolig uden bøvl"</a></li>
-      <li><a href="https://www.liebhaverboligen.dk/events/2023/07/26/drommer-du-om-at-eje-en-feriebolig-i-udlandet/" target="_blank" rel="noopener">Liebhaverboligen</a> · <a href="https://www.spanienidag.es/spanske/nyheder/premium/det-geniale-i-dele-en-bolig" target="_blank" rel="noopener">Spanien i Dag</a></li>
+      <li><b>Simply Sun</b> og <b>MyHomes</b> — går igen i næsten alle modeller; MyHomes nævnes som den nærmeste parallel til jer.</li>
+      <li><b>MYNE</b> og <b>August Collection</b> — fremhæves især af ChatGPT som stærke alternativer (MYNE til "ét fast sted", August som "international 21-5").</li>
+      <li><b>Villa No. 8</b> — stærk på luksus- og enkeltbolig-spørgsmål.</li>
+      <li><b>CASAL Co-Living</b>, <b>Five2one</b>, <b>Domos Plus</b> — nyere danske spillere, der nu dukker op i modellernes svar.</li>
     </ul>
   </div>
 
   <h2>Anbefalinger: fra synlig til foretrukken</h2>
   <div class="rec"><div class="n">1</div><div class="b">
-    <h3>Vind beslutnings-spørgsmålene</h3>
-    <p>I er med på "hvad er det?"-spørgsmålene, men væk på "hvad skal jeg vælge?". Skriv jeres egne, tydelige guide-/sammenligningssider: "Deleejerskab vs timeshare", "Er en 21-5 andel noget for os?", "Deleejerskab vs selv at eje". Det er præcis dét indhold, der gør Simply Sun og Villa 8 til AI'ens svar i dag.</p>
+    <h3>Luk Claude-blindpletten</h3>
+    <p>Claude udelod 21-5 på det direkte udbyder-spørgsmål og nævnte konkurrenterne i stedet. Claude trækker på andre kilder end ChatGPT/Perplexity/Gemini. Sørg for at 21-5 er stærkt og entydigt beskrevet dér, Claude typisk henter fra (Wikipedia-niveau fakta, uafhængig omtale, struktureret data), så I også kommer med, når en kunde spørger Claude.</p>
   </div></div>
   <div class="rec"><div class="n">2</div><div class="b">
-    <h3>Luk schema-hullet (0/12 i den tekniske analyse)</h3>
-    <p>21-5.dk har ingen struktureret data (JSON-LD). Det er det maskinlæsbare fakta-lag AI bruger til at forstå og citere en virksomhed. Tilføj Organization + FAQ (og gerne Product/Offer på foreningstyperne). Billigt teknisk løft, direkte effekt på hvor sikkert AI gengiver jeres fakta.</p>
+    <h3>Afvæbn gensalgs-indvendingen, modellerne rejser den hver gang</h3>
+    <p>Alle modeller nævner likviditet/gensalg som den ene bekymring. I har reelt gode tal (over 200 familier har gensolgt med knap 50% gevinst i gennemsnit). Lav tydeligt, citervenligt indhold om netop gensalg, så modellerne gengiver DET i stedet for at gætte på "det kan tage flere år".</p>
   </div></div>
   <div class="rec"><div class="n">3</div><div class="b">
-    <h3>Byg videre på tredjeparts-autoriteten</h3>
-    <p>I har allerede en Nykredit-side og Jyske Bank-omtale, det er sjældent stærkt. Få flere citerbare, uafhængige kilder: presseomtale, "bedste delekoncept"-oversigter, anmeldelser. AI vægter dem højere end jeres egen hjemmeside, og de trækker jer med på netop de spørgsmål, I mangler på i dag.</p>
+    <h3>Vind de brede og sammenlignende spørgsmål</h3>
+    <p>På "feriebolig uden selv at eje hele huset" og "timeshare vs deleejerskab" er I svagere, dér fylder Simply Sun og Villa No. 8. Skriv jeres egne guide-/sammenligningssider, så I også fanges tidligt i købsrejsen, ikke kun når nogen allerede søger "danske delekoncepter".</p>
   </div></div>
   <div class="rec"><div class="n">4</div><div class="b">
-    <h3>Hurtige tekniske fixes</h3>
-    <p>Tilføj canonical-tag og stram metadata op (de manglende point i den tekniske score sidder i schema, canonical og meta). Små ting, men de hører med til det fundament AI-motorerne læser.</p>
+    <h3>Luk schema-hullet (0/12 i den tekniske analyse)</h3>
+    <p>21-5.dk har ingen struktureret data (JSON-LD). Det er det maskinlæsbare fakta-lag, modellerne bruger til at forstå og citere en virksomhed, og en direkte hjælp til at komme med i fx Claudes svar. Tilføj Organization + FAQ + canonical. Billigt løft, bred effekt.</p>
   </div></div>
 
-  <p class="note"><b>Metode:</b> Panelet er kørt 1. oktober 2026 ved at stille AI-/websøgning de fire kundespørgsmål ovenfor og aflæse, om 21-5 optræder, hvem der ellers anbefales, og hvilke kilder der trækkes på. Det afspejler det landskab AI-motorerne bygger deres svar på, ikke én enkelt logget-ind ChatGPT-session. Søgeværktøjet har en vis international vægtning, så den danske dækning kan være lidt undervurderet.</p>
+  <p class="note"><b>Metode:</b> Spørgsmålene er stillet til de faktiske modeller 1. oktober 2026. ChatGPT, Perplexity og Google Gemini i browseren på en almindelig brugerkonto; Claude via Anthropics API med websøgning. Hver celle er modellens eget, ordrette svar (foldet ud ovenfor, forkortet for læsbarhed). Forbehold: ChatGPT og Gemini svarede på en indlogget konto, hvilket kan personalisere svaret let; modellerne opdaterer løbende, så det er et øjebliksbillede; og ikke alle spørgsmål er kørt på alle fire modeller endnu (markeret "ikke kørt" i matricen).</p>
 </section>
 
 <p class="foot">spaike.dk · Commercial impact, powered by AI</p>
@@ -304,7 +347,6 @@
     if (history.replaceState) history.replaceState(null, "", "#"+navn);
     window.scrollTo({top:0, behavior:"instant"});
   }
-  // Åbn direkte på en fane via #panel i URL'en.
   if (location.hash === "#panel") visFane("panel");
 </script>
 </body>
