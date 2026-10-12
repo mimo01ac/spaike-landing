@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Privatlivspolitik() {
   return (
-    <LegalPage title="Privatlivspolitik" updated="18. september 2026">
+    <LegalPage title="Privatlivspolitik" updated="12. oktober 2026">
       <p className="meta">
         mimoco ApS (SpAIke) &middot; CVR 39127709 &middot; Turistvej 177, 3460
         Birkerød &middot; michael@spaike.dk
@@ -52,6 +52,62 @@ export default function Privatlivspolitik() {
         fakturaudkast og skrive dem tilbage i kundens system. Vilkårene står i
         vores{" "}
         <a href="/databehandleraftale">databehandleraftale</a>.
+      </p>
+
+      <h2>Når du forbinder din e-mail og kalender</h2>
+      <p>
+        I nogle af vores løsninger kan du som bruger vælge at forbinde din egen
+        e-mail- og kalenderkonto hos <strong>Microsoft 365/Outlook</strong>{" "}
+        eller <strong>Google Workspace/Gmail</strong>, så assistenten kan hjælpe
+        med opfølgnings-mails og møder. Forbindelsen er frivillig, oprettes via
+        udbyderens officielle OAuth-login, og du kan afbryde den igen når som
+        helst.
+      </p>
+      <p>Når du forbinder en konto, beder vi kun om den adgang, funktionerne kræver:</p>
+      <ul>
+        <li>
+          <strong>Google:</strong> læse dine seneste Gmail-beskeder for kontekst
+          (<em>gmail.readonly</em>), sende mails du selv godkender
+          (<em>gmail.send</em>), oprette og opdatere kalenderaftaler
+          (<em>calendar.events</em>) og se din e-mailadresse
+          (<em>userinfo.email</em>).
+        </li>
+        <li>
+          <strong>Microsoft:</strong> læse dine seneste mails (<em>Mail.Read</em>),
+          sende mails du selv godkender (<em>Mail.Send</em>) og oprette/opdatere
+          kalenderaftaler (<em>Calendars.ReadWrite</em>).
+        </li>
+      </ul>
+      <p>
+        Vi bruger kun disse data til at levere de funktioner, du selv beder om:
+        at vise relevant kontekst, og at sende mails eller oprette møder, som du{" "}
+        <strong>udtrykkeligt godkender først</strong>. Vi gemmer ikke dine mails
+        eller kalenderaftaler hos os; de hentes kun i øjeblikket for at udføre
+        den konkrete handling. Vi sælger og deler aldrig dine mails eller
+        kalenderdata, og vi bruger dem ikke til annoncering eller til at træne
+        AI-modeller. Adgangstokens opbevares krypteret (AES-256-GCM) pr. bruger
+        og slettes, når du afbryder forbindelsen.
+      </p>
+      <p>
+        <strong>Google Limited Use:</strong> SpAIkes brug af oplysninger
+        modtaget fra Google API&apos;er overholder{" "}
+        <a
+          href="https://developers.google.com/terms/api-services-user-data-policy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Google API Services User Data Policy
+        </a>
+        , herunder kravene om <em>Limited Use</em>. In English: &quot;SpAIke&apos;s
+        use of information received from Google APIs will adhere to the{" "}
+        <a
+          href="https://developers.google.com/terms/api-services-user-data-policy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Google API Services User Data Policy
+        </a>
+        , including the Limited Use requirements.&quot;
       </p>
 
       <h2>Hvor data behandles</h2>
