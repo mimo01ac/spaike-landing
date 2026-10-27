@@ -25,6 +25,14 @@ const entries = [
     cta: "Se AI-innovationsdagen",
     event: "byg-selv-innovationsdag",
   },
+  {
+    n: "04",
+    title: "Få teamet i gang med Copilot",
+    body: "Et praktisk Copilot-forløb på tre timer, bygget på jeres egne opgaver. Folk bygger deres første agenter og lærer metoden, så de selv kan sætte flere op bagefter. Hands-on, ikke en demo.",
+    href: "/field-notes/hands-on-copilot-training",
+    cta: "Se forløbet",
+    event: "byg-selv-copilot-training",
+  },
 ];
 
 export default function BuildItYourself() {
@@ -45,16 +53,23 @@ export default function BuildItYourself() {
         </p>
       </div>
 
-      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-3 border-t border-rule">
-        {entries.map((e, i) => (
+      <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-rule">
+        {entries.map((e, i) => {
+          // Dividers across three layouts: 1 col (mobile), 2 cols (md), 4 cols (lg).
+          const topBorder =
+            i > 0
+              ? `border-t ${i >= 2 ? "md:border-t" : "md:border-t-0"} lg:border-t-0`
+              : "";
+          const leftBorder = `${i % 2 === 1 ? "md:border-l" : "md:border-l-0"} ${
+            i > 0 ? "lg:border-l" : ""
+          }`;
+          return (
           <a
             key={e.n}
             href={e.href}
             data-track-event="byg_selv_click"
             data-track-target={e.event}
-            className={`group px-6 md:px-7 py-8 flex flex-col gap-3.5 min-h-[240px] no-underline hover:bg-cream-deep transition-colors ${
-              i > 0 ? "border-t md:border-t-0 md:border-l border-rule" : ""
-            }`}
+            className={`group px-6 md:px-7 py-8 flex flex-col gap-3.5 min-h-[240px] no-underline hover:bg-cream-deep transition-colors border-rule ${topBorder} ${leftBorder}`}
           >
             <div className="font-mono text-[11px] text-amber-dark tracking-wider">
               {e.n}
@@ -69,7 +84,8 @@ export default function BuildItYourself() {
               {e.cta} →
             </span>
           </a>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

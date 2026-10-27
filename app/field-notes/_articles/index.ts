@@ -18,6 +18,9 @@ import AiIFertilitet, {
 import AiILandmaaling, {
   metadata as aiILandmaalingMetadata,
 } from "./ai-i-landmaaling";
+import HandsOnCopilotTraining, {
+  metadata as handsOnCopilotTrainingMetadata,
+} from "./hands-on-copilot-training";
 
 export interface FieldNoteEntry {
   component: ComponentType;
@@ -28,6 +31,10 @@ export const articles: Record<string, FieldNoteEntry> = {
   "anthropic-sales-playbook": {
     component: AnthropicSalesPlaybook,
     metadata: anthropicSalesPlaybookMetadata,
+  },
+  "hands-on-copilot-training": {
+    component: HandsOnCopilotTraining,
+    metadata: handsOnCopilotTrainingMetadata,
   },
   "vibe-coding-guide": {
     component: VibeCodingGuide,
