@@ -45,7 +45,7 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
       <div style="border:1px solid ${rule};border-radius:6px;padding:14px 16px;background:#fff;margin:0 0 10px;">
         <div style="font:600 15px/1.3 Georgia,serif;color:${ink};margin-bottom:6px;">${esc(k.titel)}</div>
         ${p(`<b style="color:${ink}">Problem:</b> ${esc(k.problem)}`)}
-        ${p(`<b style="color:${ink}">Gevinst:</b> ${esc(k.gevinst)}`)}
+        ${p(`<b style="color:${ink}">Mulig gevinst:</b> ${esc(k.gevinst)}`)}
         ${p(`<b style="color:${ink}">Teknologi:</b> ${esc(k.teknologi)}`)}
       </div>`,
     )
@@ -72,6 +72,9 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
       ${h("Projektoplæg")}
       <div style="font:600 17px/1.3 Georgia,serif;color:${ink};margin:0 0 6px;">${esc(v.projekt.titel)}</div>
       ${p(esc(v.projekt.formaal))}
+      ${v.projekt.omfang ? p(`<b style="color:${ink}">Omfang:</b> ${esc(v.projekt.omfang)}`) : ""}
+      ${v.projekt.analysespoergsmaal.length ? p(`<b style="color:${ink}">Det analysen skal svare på:</b>`) + li(v.projekt.analysespoergsmaal) : ""}
+      ${p(`<b style="color:${ink}">Hypoteser analysen tester:</b>`)}
       ${kandidater}
       ${p(`<b style="color:${ink}">Rådgivningsforløb:</b>`)}
       ${li(forloeb)}

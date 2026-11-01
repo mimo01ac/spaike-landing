@@ -568,12 +568,28 @@ function Resultat({
         <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Projektoplæg</p>
         <h3 className="font-serif text-2xl mt-1 leading-tight">{v.projekt.titel}</h3>
         <p className="font-sans text-[14px] text-ink-soft mt-2">{v.projekt.formaal}</p>
-        <div className="grid sm:grid-cols-2 gap-3 mt-4">
+        {v.projekt.omfang && (
+          <p className="font-sans text-[14px] text-ink-soft mt-2">
+            <b className="text-ink font-medium">Omfang:</b> {v.projekt.omfang}
+          </p>
+        )}
+        {v.projekt.analysespoergsmaal.length > 0 && (
+          <div className="mt-3">
+            <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Det analysen skal svare på</p>
+            <ul className="list-disc pl-5 mt-1 space-y-1 font-sans text-[13.5px] text-ink-soft">
+              {v.projekt.analysespoergsmaal.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted mt-4">Hypoteser analysen tester</p>
+        <div className="grid sm:grid-cols-2 gap-3 mt-1.5">
           {v.projekt.kandidater.map((k, i) => (
             <div key={i} className="bg-cream border border-rule rounded px-4 py-3">
               <p className="font-serif text-[16px] font-medium leading-snug">{k.titel}</p>
               <p className="font-sans text-[13px] text-ink-soft mt-1.5">
-                <b className="text-ink font-medium">Gevinst:</b> {k.gevinst}
+                <b className="text-ink font-medium">Mulig gevinst:</b> {k.gevinst}
               </p>
               <p className="font-sans text-[13px] text-ink-soft mt-1">
                 <b className="text-ink font-medium">Teknologi:</b> {k.teknologi}
