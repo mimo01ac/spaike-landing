@@ -127,7 +127,7 @@ export function standardNaesteSkridt(v: Vurdering): string[] {
     ];
   }
   return [
-    "Opret kladden online på puljeaabning.vudk.dk nu, for systemet er åbent før vinduet. Skriv selv ansøgningen med egne ord og brug projektbeskrivelsen som grundlag; I bekræfter i ansøgningen, at den er udarbejdet af jer selv.",
+    "Opret kladden online på puljeaabning.vudk.dk nu, for systemet er åbent før vinduet. Projektbeskrivelsen er ikke tekst til ansøgningen, men grundlaget med de informationer, I skal bruge: skriv selv ansøgningen med egne ord ud fra den. I bekræfter i ansøgningen, at den er udarbejdet af jer.",
     "Udfyld [udfyld]-markørerne med jeres egne tal (omsætning, vækstmål, ansatte, kapital). Konkrete tal styrker business casen og pointene.",
     "Indhent 2 til 3 tilbud fra rådgivere i SMV:Digitals rådgiverdatabase og dokumentér, hvordan I har sammenlignet dem på pris og kvalitet. SpAIke (Michael Mortensen) er godkendt rådgiver og kan være ét af tilbuddene; valget er jeres.",
     `Vær klar, når vinduet åbner: ${vindue}. Det er pointene, der afgør, ikke hvem der kommer først.`,

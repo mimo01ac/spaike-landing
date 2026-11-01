@@ -635,6 +635,10 @@ function KvalificeringKort({
             "Jeg sørger for, at I får tænkt alle de ting igennem, som ansøgningen spørger om, og samler dem i en projektbeskrivelse, I kan bygge jeres egen ansøgning på."}{" "}
           Tre til fire spørgsmål mere.
         </p>
+        <p className="font-sans text-[12.5px] text-muted mt-2">
+          Forberedelsen er ikke tekst til ansøgningen. Den hjælper jer med at få tankerne igennem og samler de
+          informationer, ansøgningen spørger om, struktureret så I let kan skrive den selv.
+        </p>
         <div className="flex flex-wrap gap-2.5 mt-4">
           <button type="button" onClick={onFortsaet} className={roed ? btnAmber : btnPrimary}>
             {roed ? "Fortsæt alligevel" : "Ja, fortsæt til forberedelsen"}
@@ -797,9 +801,10 @@ function Resultat({
       <LeadForm token={token} cvr={cvr} virksomhed={virksomhed} vurdering={v} kvalificering={null} transcript={transcript} />
 
       <p className="px-5 py-4 font-sans text-[12px] text-muted border-t border-rule">
-        Indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Åbenhed: SpAIke er
-        godkendt rådgiver i SMV:Digital og kan være én af de rådgivere, I indhenter tilbud fra; puljen kræver, at I
-        sammenligner flere.
+        Indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Tjekket er en hjælp til
+        at afklare, scope og samle informationer; det er ikke en ansøgningsservice, og ansøgningen skriver I selv.
+        Åbenhed: SpAIke er godkendt rådgiver i SMV:Digital og kan være én af de rådgivere, I indhenter tilbud fra;
+        puljen kræver, at I sammenligner flere.
       </p>
     </div>
   );
@@ -901,13 +906,12 @@ function LeadForm({
       {fuld ? (
         <>
           <p className="font-serif text-lg mt-1 leading-snug">
-            Inklusive en projektbeskrivelse, der kan danne grundlag for jeres ansøgning: struktureret efter
-            ansøgningens felter (udfordringer, projekt, nyhedsværdi, rådgivers opgaver, forankring, effekter) og
-            bygget på jeres egne svar.
+            Inklusive projektbeskrivelsen: de informationer, ansøgningen spørger om (udfordring, ambition, projekt,
+            nyhedsværdi, rådgivers opgaver, forankring, effekter), samlet og struktureret ud fra jeres egne svar.
           </p>
           <p className="font-sans text-[12.5px] text-muted mt-1.5">
-            Ansøgningen skriver I selv (det bekræfter I i den). Projektbeskrivelsen giver jer alt det, felterne
-            spørger om.
+            Det er ikke tekst til ansøgningen, men grundlaget I skriver den ud fra. Ansøgningen skriver I selv, og
+            det bekræfter I i den.
           </p>
         </>
       ) : (

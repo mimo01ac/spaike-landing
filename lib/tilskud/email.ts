@@ -93,9 +93,9 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
       ${p(`Kapacitet ${v.point.kapacitet}/5: ${esc(v.point.kapacitet_begrundelse)}`)}
       ${p(esc(v.point.samlet_indikation))}
 
-      ${h("Projektbeskrivelse: grundlag for jeres ansøgning")}
+      ${h("Projektbeskrivelse: grundlag for jeres egen ansøgning")}
       <div style="border:1px solid ${amber};border-radius:6px;padding:10px 14px;margin:0 0 12px;background:#fff8e8;">
-        ${p(`<b style="color:${ink}">Sådan bruger I den:</b> Ansøgningen skal I selv skrive, og I bekræfter i den, at den ikke er udarbejdet af en ekstern rådgiver. Projektbeskrivelsen her er bygget på jeres egne svar og er struktureret, så den dækker det, hvert felt i ansøgningen spørger om. Brug den som grundlag, når I skriver ansøgningen i det online system (puljeaabning.vudk.dk), og udfyld de steder der står [udfyld].`)}
+        ${p(`<b style="color:${ink}">Hvad det er:</b> en hjælp til at få tankerne igennem og få samlet og struktureret de informationer, ansøgningen spørger om, bygget på jeres egne svar. <b style="color:${ink}">Hvad det ikke er:</b> tekst til ansøgningen. Den skriver I selv i det online system (puljeaabning.vudk.dk), og I bekræfter i den, at den er udarbejdet af jer og ikke af en rådgiver. Brug afsnittene nedenfor som grundlag, skriv med jeres egne ord, og udfyld de steder der står [udfyld].`)}
       </div>
       ${noteFelt("Ambition på kort sigt, inden for 2 år (understøtter felt 1F)", v.projektgrundlag.f_vaekstambition_kort)}
       ${noteFelt("Ambition på længere sigt, 3-5 år (understøtter felt 1F)", v.projektgrundlag.f_vaekstambition_lang)}

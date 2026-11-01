@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Tilskudstjek · Kan staten betale halvdelen af jeres AI-automatisering?",
   description:
-    "Indtast jeres CVR-nummer og få på fem minutter en ærlig indikation af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, plus et konkret projektoplæg og en projektbeskrivelse som grundlag for jeres ansøgning. Gratis, dansk, ingen konto.",
+    "Indtast jeres CVR-nummer og få på fem minutter en ærlig indikation af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, hjælp til at scope det rigtige område og et struktureret grundlag med de informationer, I skal bruge til selv at skrive ansøgningen. Gratis, dansk, ingen konto.",
   openGraph: {
     title: "Tilskudstjek · AI-automatisering med 50 % tilskud",
     description:
@@ -31,6 +31,10 @@ const FAQ = [
   {
     q: "Er det gratis penge?",
     a: "Nej. I betaler selv den anden halvdel kontant, lægger hele regningen ud og får tilskuddet som refusion efter afrapportering. Og intet arbejde må starte, før I har fået tilsagn.",
+  },
+  {
+    q: "Skriver I ansøgningen for os?",
+    a: "Nej, og det må en rådgiver heller ikke: I bekræfter selv i ansøgningen, at den er udarbejdet af jer. Tilskudstjekket hjælper jer med at afklare, om det giver mening, scope et område, få kontekst og få tankerne igennem, og det samler og strukturerer de informationer, ansøgningen spørger om. Det er ikke tekst, I kan sætte ind i ansøgningen; det er grundlaget, I skriver den ud fra.",
   },
   {
     q: "Hvor sikker er vurderingen?",
@@ -93,6 +97,27 @@ export default function TilskudPage() {
           <p className="font-mono text-[11px] tracking-wider uppercase text-muted mt-4">
             Gratis · ingen konto · dansk · bygget på SMV:Digitals egne regler
           </p>
+          <p className="font-sans text-[13.5px] text-ink-soft mt-4 max-w-2xl">
+            Tjekket er ikke en ansøgningsservice. Det hjælper jer med at afklare, om det giver mening, scope et
+            område og samle de informationer, I skal bruge. Ansøgningen skriver I selv.
+          </p>
+        </section>
+
+        <DoubleRule />
+        <section className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-12 pb-10">
+          <SectionLabel>Hvad det er, og hvad det ikke er</SectionLabel>
+          <div className="grid md:grid-cols-3 gap-x-10 gap-y-8 mt-6">
+            {[
+              ["Det er en afklaring", "Kan I søge, giver det mening for jer, og hvilket område eller flow er det rigtige at få analyseret. Tænkt igennem sammen, i jeres eget tempo."],
+              ["Det er et grundlag", "Forberedelsen samler og strukturerer de informationer, ansøgningen spørger om: udfordring, ambition, projekt, forankring og effekter. Så har I det hele ved hånden."],
+              ["Det er ikke ansøgningstekst", "I bekræfter selv i ansøgningen, at den er udarbejdet af jer, og en rådgiver må ikke skrive den. Derfor får I ikke tekst til at kopiere, men et grundlag at skrive ud fra."],
+            ].map(([t, b]) => (
+              <div key={t} className="flex flex-col gap-2">
+                <h3 className="font-serif text-xl font-medium leading-tight">{t}</h3>
+                <p className="font-sans text-[13.5px] leading-relaxed text-ink-soft">{b}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <DoubleRule />
