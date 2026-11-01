@@ -38,6 +38,8 @@ export default function TilskudFlow() {
   const [stopEfterKval, setStopEfterKval] = useState(false);
   const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
   const [voice, setVoice] = useState(false);
+  // Stemmen bygges om (2026-11-01); indtil da kun synlig med ?stemme=1.
+  const [visStemme, setVisStemme] = useState(false);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
   const kvalRef = useRef<HTMLDivElement>(null);
@@ -88,6 +90,10 @@ export default function TilskudFlow() {
   }
 
   useEffect(() => {
+    setVisStemme(new URLSearchParams(window.location.search).get("stemme") === "1");
+  }, []);
+
+  useEffect(() => {
     if (vurdering) {
       trackEvent("tilskud_vurdering_klar", { status: vurdering.egnethed.status });
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
@@ -118,6 +124,7 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
+      {visStemme && (
       <div className="flex flex-wrap items-center gap-2 font-sans text-[12.5px]">
         <span className="text-muted">Sådan vil jeg tage samtalen:</span>
         <button
@@ -138,6 +145,7 @@ export default function TilskudFlow() {
           Tale med agenten
         </button>
       </div>
+      )}
       <Chat
         token={start.token}
         cvr={cvrBrugt}
