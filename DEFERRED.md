@@ -23,3 +23,11 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - CVR-data kan i fallback-stien komme fra klienten (browser-opslag hos cvrapi.dk, serveren validerer kun CVR-match og typer) · fart: Vercels IP er kvote-blokeret hos cvrapi.dk · LØST samme dag: Erhvervsstyrelsens CVR-ES er nu primær kilde (server-hentet); klient-fallback består kun hvis ES er nede/ukonfigureret · effort gjort
 - Navnesøgningen filtrerer på `sammensatStatus = NORMAL` og viser kun 8 hits uden paginering eller geo-/branche-filter · fart · det rigtige: "vis flere", filter på postnummer, og visning af binavn når det var binavnet der matchede · effort S
 - CLI-harnessen tester ikke browser-fallbacket (den rammer serverens opslag, som virker lokalt) · fart · det rigtige: `--cvr-fallback` flag der sender et cvrapi-svar med, eller Playwright-spec mod preview · effort S
+
+## 2026-11-01 · Tilskudstjek voice-tilstand v1
+
+- Talegenkendelse via browserens Web Speech API (da-DK; Google-baseret i Chrome, svag/ingen støtte i Firefox og dele af Safari) · fart: Michael skal teste i morgen · det rigtige: server-side STT (ElevenLabs Scribe eller Deepgram Nova-3) eller en rigtig realtidsagent (ElevenLabs Agents / Pipecat, jf. vault "Spotless dansk voice-agent") · effort M
+- Ingen barge-in (brugeren kan ikke tale oven i agenten; "Tal"-knappen afbryder) og ingen mikrofon-måler/enhedsvælger (vault-mønsteret) · fart · det rigtige: VAD + afbrydelse, mic-check før start · effort S-M
+- Tur-latens = Claude-svar (3-8 s) + TTS af hele svaret før afspilning · fart · det rigtige: sætningsvis TTS-streaming mens teksten streamer · effort M
+- Stemme = "Michael Stemme" (professionel klon af Michaels stemme, da) sat i env `TILSKUD_TTS_VOICE`; ikke øre-testet af native lyttere endnu · beslutning: Michael vurderer i morgen; alternativ "Mads SpAIke" (BIWC0507fYMfhPcAEIRP) · effort XS (kun env)
+- TTS-kald er ikke cost-cappet ud over rate-limit pr. IP (80/5 min) · fart · det rigtige: dagligt tegn-loft pr. session + global breaker · effort S. **Tjek ElevenLabs-forbrug sammen med Anthropic-forbruget ugentligt til 2026-12-01.**

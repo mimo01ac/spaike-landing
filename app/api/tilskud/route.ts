@@ -29,6 +29,7 @@ import {
   virksomhedSomTekst,
 } from "@/lib/tilskud/cvr";
 import { esKonfigureret, soegVirksomheder } from "@/lib/tilskud/cvr-es";
+import { syntetiser, tilTale, ttsKonfigureret } from "@/lib/tilskud/tts";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat } from "@/lib/tilskud/chat";
@@ -50,10 +51,29 @@ export async function POST(req: Request) {
   }
   const action = String(body.action ?? "");
   if (action === "soeg") return soeg(req, body);
+  if (action === "tts") return tts(req, body);
   if (action === "start") return start(req, body);
   if (action === "chat") return chat(req, body);
   if (action === "lead") return lead(req, body);
   return json({ error: "Ukendt handling." }, 400);
+}
+
+/** Voice-tilstand: læser et assistent-svar op (ElevenLabs, dansk stemme). Kræver session-token. */
+async function tts(req: Request, body: Record<string, unknown>) {
+  const ip = clientIp(req);
+  const rl = checkRateLimit(`tilskud-tts:${ip}`, 80, 5 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange anmodninger. Vent lidt." }, 429);
+  if (!verifySessionToken(body.token as string | undefined)) {
+    return json({ error: "Sessionen er udløbet. Genindlæs siden." }, 401);
+  }
+  if (!ttsKonfigureret()) return json({ error: "Tale er ikke sat op." }, 503);
+  const tekst = tilTale(String(body.text ?? ""));
+  if (tekst.length < 2) return json({ error: "Ingen tekst." }, 400);
+  const lyd = await syntetiser(tekst);
+  if (!lyd) return json({ error: "Kunne ikke lave tale lige nu." }, 502);
+  return new Response(lyd.body, {
+    headers: { "Content-Type": lyd.contentType, "Cache-Control": "no-store" },
+  });
 }
 
 /** Navnesøgning i CVR -> liste at vælge fra (for dem der ikke husker CVR-nummeret). */

@@ -157,6 +157,16 @@ async function lead(token, cvr, virksomhed, vurdering, transcript, kvalificering
 
 async function main() {
   const cvr = String(flag("cvr", ""));
+  if (cmd === "tts") {
+    const s = await start(cvr || "");
+    const res = await post({ action: "tts", token: s.token, text: flag("text", "Hej. Det her er en test af den danske stemme på tilskudstjekket.") });
+    if (!res.ok) throw new Error(`tts ${res.status}: ${await res.text()}`);
+    const buf = Buffer.from(await res.arrayBuffer());
+    const out = flag("out", "/tmp/tilskud-tts.mp3");
+    (await import("node:fs")).writeFileSync(out, buf);
+    console.log(`tts ok: ${buf.length} bytes -> ${out} (${res.headers.get("content-type")})`);
+    return;
+  }
   if (cmd === "soeg") {
     const res = await post({ action: "soeg", term: flag("term", "") });
     const data = await res.json();
