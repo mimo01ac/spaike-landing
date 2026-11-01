@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Privatlivspolitik() {
   return (
-    <LegalPage title="Privatlivspolitik" updated="18. september 2026">
+    <LegalPage title="Privatlivspolitik" updated="1. november 2026">
       <p className="meta">
         mimoco ApS (SpAIke) &middot; CVR 39127709 &middot; Turistvej 177, 3460
         Birkerød &middot; michael@spaike.dk
@@ -40,6 +40,25 @@ export default function Privatlivspolitik() {
         selv giver os (navn, e-mail, besked), alene for at kunne svare og følge
         op. Vi sælger aldrig oplysninger videre. Vi bruger kun nødvendige
         cookies og sætter ikke tredjeparts-marketing-cookies uden dit samtykke.
+      </p>
+
+      <h2>Når du bruger vores gratis værktøjer (AI-tjek og Tilskudstjek)</h2>
+      <p>
+        På <a href="/ai-tjek">spaike.dk/ai-tjek</a> gemmer vi kun selve
+        scan-resultatet (webadresse, score og fund), så rapport-linket virker.
+        På <a href="/tilskud">spaike.dk/tilskud</a> slår vi offentlige
+        CVR-data op ud fra det CVR-nummer eller virksomhedsnavn, du indtaster,
+        og du fører en samtale med en AI-assistent om jeres situation. Samtalen
+        og den vurdering, den ender i, gemmes <strong>kun</strong>, hvis du
+        selv beder om at få resultatet på mail. I så fald gemmer vi navn,
+        e-mail, eventuelt telefonnummer, CVR-nummer, samtalen og vurderingen
+        for at sende dig resultatet og følge op, og for at kunne give dig
+        besked om puljeåbning, hvis du har bedt om det. Svarene sendes til
+        vores AI-leverandør (Anthropic, behandlet i EU/USA efter deres
+        erhvervsvilkår uden træning på dine data) for at lave vurderingen.
+        Skriv ikke personfølsomme oplysninger i samtalen. Du kan altid få
+        indsigt i eller slettet det, vi har gemt, ved at skrive til
+        michael@spaike.dk.
       </p>
 
       <h2>Når vi leverer en løsning til en kunde</h2>
