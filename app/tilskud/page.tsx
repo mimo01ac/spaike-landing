@@ -38,7 +38,7 @@ const FAQ = [
   },
   {
     q: "Hvem står bag, og hvad får SpAIke ud af det?",
-    a: "SpAIke (Michael Mortensen) er godkendt rådgiver i SMV:Digital med speciale i AI og automatisering. Tjekket er gratis. Vil I videre, kan SpAIke være én af de rådgivere, I indhenter tilbud fra; puljen kræver, at I sammenligner flere, og det siger vi åbent.",
+    a: "SpAIke (Michael Mortensen) er godkendt rådgiver i SMV:Digital med speciale i AI og automatisering. Tjekket er gratis. Vil I videre, kan SpAIke være én af de rådgivere, I indhenter tilbud fra; puljen kræver, at I sammenligner flere, og det siger jeg åbent.",
   },
   {
     q: "Hvad gemmer I?",

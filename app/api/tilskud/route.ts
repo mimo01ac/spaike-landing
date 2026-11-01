@@ -18,7 +18,7 @@ import { checkRateLimit, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { createRecord } from "@/lib/pocketbase";
 import { sendEmail } from "@/lib/email";
-import { forhaandstjek, normaliserCvr, slaaCvrOp, virksomhedSomTekst } from "@/lib/tilskud/cvr";
+import { forhaandstjek, normaliserCvr, sidsteCvrFejl, slaaCvrOp, virksomhedSomTekst } from "@/lib/tilskud/cvr";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat } from "@/lib/tilskud/chat";
@@ -60,12 +60,14 @@ async function start(req: Request, body: Record<string, unknown>) {
   const tjek = virksomhed ? forhaandstjek(virksomhed) : null;
   const p = naesteRaadgivningspulje();
 
-  const svar: StartSvar = {
+  const svar: StartSvar & { cvrFejl?: string } = {
     token: issueSessionToken(),
     virksomhed,
     forhaandstjek: tjek,
     pulje: p ? { id: p.id, navn: p.navn, aabner: p.aabner, lukker: p.lukker, maksTilskudKr: p.maksTilskudKr } : null,
   };
+  // Diagnose (ingen persondata) så et fejlet opslag kan fejlsøges fra klienten/CLI.
+  if (cvr && !virksomhed && sidsteCvrFejl) svar.cvrFejl = sidsteCvrFejl;
   return json(svar, 200);
 }
 

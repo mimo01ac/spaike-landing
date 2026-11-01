@@ -55,4 +55,6 @@ export interface StartSvar {
   virksomhed: Virksomhed | null;
   forhaandstjek: Forhaandstjek | null;
   pulje: { id: string; navn: string; aabner: string; lukker?: string; maksTilskudKr: number } | null;
+  /** Kun sat når et CVR blev indtastet og opslaget fejlede (teknisk årsag, ingen persondata). */
+  cvrFejl?: string;
 }

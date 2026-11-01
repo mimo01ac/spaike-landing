@@ -172,9 +172,16 @@ function Virksomhedskort({ start }: { start: StartSvar }) {
           )}
         </>
       ) : (
-        <p className="font-sans text-[13.5px] text-ink-soft">
-          Intet CVR-opslag. Jeg spørger i stedet om det, jeg skal bruge.
-        </p>
+        <>
+          <p className="font-sans text-[13.5px] text-ink-soft">
+            {start.cvrFejl
+              ? "CVR-opslaget svarede ikke lige nu. Jeg spørger i stedet om det, jeg skal bruge."
+              : "Intet CVR-opslag. Jeg spørger i stedet om det, jeg skal bruge."}
+          </p>
+          {start.cvrFejl && (
+            <p className="font-mono text-[10.5px] text-muted mt-1.5 break-all">Teknisk: {start.cvrFejl}</p>
+          )}
+        </>
       )}
       {p && (
         <p className="font-sans text-[12.5px] text-muted mt-3 border-t border-rule pt-2.5">

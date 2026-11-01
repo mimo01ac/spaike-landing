@@ -93,18 +93,37 @@ export async function slaaCvrOp(cvrInput: string): Promise<Virksomhed | null> {
   return v;
 }
 
+/** Seneste fejlårsag (diagnose til start-svar og logs; ingen persondata). */
+export let sidsteCvrFejl: string | null = null;
+
 async function hentFraCvrApi(cvr: string): Promise<Virksomhed | null> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 8000);
+  sidsteCvrFejl = null;
   try {
     const res = await fetch(`${CVRAPI}?search=${cvr}&country=dk`, {
       headers: { "User-Agent": UA, Accept: "application/json" },
       signal: ctrl.signal,
       cache: "no-store",
     });
-    if (!res.ok) return null;
-    const data = (await res.json()) as CvrApiSvar;
-    if (!data || data.error || !data.name) return null;
+    const raw = await res.text();
+    if (!res.ok) {
+      sidsteCvrFejl = `HTTP ${res.status}: ${raw.slice(0, 120)}`;
+      console.warn("CVR-opslag fejlede:", sidsteCvrFejl);
+      return null;
+    }
+    let data: CvrApiSvar;
+    try {
+      data = JSON.parse(raw) as CvrApiSvar;
+    } catch {
+      sidsteCvrFejl = `Ikke-JSON svar: ${raw.slice(0, 120)}`;
+      console.warn("CVR-opslag fejlede:", sidsteCvrFejl);
+      return null;
+    }
+    if (!data || data.error || !data.name) {
+      sidsteCvrFejl = `Tomt/fejl-svar: ${JSON.stringify(data).slice(0, 120)}`;
+      return null;
+    }
     const { ansatte, interval } = parseAnsatte(data.employees);
     return {
       cvr,
