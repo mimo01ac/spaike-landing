@@ -24,6 +24,11 @@ export interface Vurdering {
   projekt: {
     titel: string;
     formaal: string;
+    /** Hvilket flow/område analysen dækker (fra hvor til hvor, systemer, afdelinger). */
+    omfang: string;
+    /** De spørgsmål analysen skal svare på. */
+    analysespoergsmaal: string[];
+    /** Hypoteser analysen tester (ikke besluttede løsninger). */
     kandidater: {
       titel: string;
       problem: string;

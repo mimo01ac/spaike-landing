@@ -101,8 +101,8 @@ export default function TilskudPage() {
           <div className="grid md:grid-cols-3 gap-x-10 gap-y-8 mt-6">
             {[
               ["1. CVR-opslag", "Jeg henter det, CVR allerede ved: størrelse, alder, branche. Så spørger jeg kun om det, data ikke kan svare på."],
-              ["2. Otte spørgsmål", "De hårde krav først (årsværk, regnskab, kontant medfinansiering, tidligere tilskud), så de opgaver der koster jer mest tid i dag."],
-              ["3. Vurdering og oplæg", "Grøn, gul eller rød med begrundelse, den rigtige pulje og dato, et projektoplæg med økonomi, pointindikation og udkast til ansøgningstekst."],
+              ["2. Otte spørgsmål", "De hårde krav først (årsværk, regnskab, kontant medfinansiering, tidligere tilskud), så hvilket flow eller område analysen skal dække, og hvor det gør ondt i dag."],
+              ["3. Vurdering og oplæg", "Grøn, gul eller rød med begrundelse, den rigtige pulje og dato, et oplæg til selve analysen (omfang, spørgsmål, hypoteser, økonomi), pointindikation og udkast til ansøgningstekst."],
             ].map(([t, b]) => (
               <div key={t} className="flex flex-col gap-2">
                 <h3 className="font-serif text-xl font-medium leading-tight">{t}</h3>

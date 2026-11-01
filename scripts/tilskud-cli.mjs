@@ -32,10 +32,10 @@ const FIXTURE = [
   "Ja, vi kan godt betale vores halvdel kontant og lægge beløbet ud.",
   "Nej, vi har ikke fået offentlige tilskud de seneste tre år.",
   "Nej, vi er ejet af de to stiftere, ingen store ejere.",
-  "Det der koster mest tid er at taste tilbud og ordrer fra mails ind i e-conomic, og at samle ugerapporter i Excel. Cirka 15 timer om ugen fordelt på to personer.",
-  "Vi bruger e-conomic, Outlook og Excel, og en webshop på Shopify.",
+  "Vi vil gerne have analyseret hele kundeflowet, fra et tilbud eller en ordre kommer ind, til den er leveret og faktureret. Om et år skal det meste køre uden manuel indtastning, og vi skal kunne se omsætning pr. kunde løbende.",
+  "Det gør mest ondt når tilbud og ordrer fra mails skal tastes ind i e-conomic, og når ugerapporter samles i Excel. Cirka 15 timer om ugen fordelt på to personer.",
+  "Flowet løber gennem Outlook, en webshop på Shopify, e-conomic og Excel.",
   "Vi prøvede en Zapier-kobling for to år siden, men den holdt ikke, når formaterne ændrede sig.",
-  "Om et år skal ordrer gå automatisk ind, og vi skal kunne se omsætning pr. kunde uden at samle det i hånden.",
 ];
 const FALLBACK = "Det ved jeg ikke præcist, tag dit bedste skøn og gå videre.";
 
