@@ -1,5 +1,10 @@
 # Handoff: Tilskudstjek voice-tilstand v1 (2026-11-01, aften)
 
+> **OPDATERING 2026-11-01 sen aften: v1 er erstattet af stemme v2 (PR #15, live på main).** Michael afviste oplæsning af chatten. Stemmen er nu sit eget flow: en coach-agent på ElevenLabs Agents (`lib/tilskud/voice-agent.ts`, agent `agent_4201m6ccgtb7e1d90w4q2p8x2hmf`, Sonnet 4.6), uden chat og transskript. I stedet en tjekliste, som agenten afkrydser via client tool, og efter samtalen laver Claude samme vurdering (`voice-resultat`). Toggle'en vises i produktion kun på `www.spaike.dk/tilskud?stemme=1`. Verificeret: simulationer med 3 personaer, CLI mod prod, og Chrome på prod (forbinder på 0,8 s, "Agenten taler" og derefter "Lytter", åbning med virksomhedsnavn, afslut, ingen lyd gemt). **Ikke verificeret: rigtig tale ind i mikrofonen, og svartiden med Sonnet 4.6.** Det er Michaels test 2026-11-02.
+> Samme PR: alle tjek gemmes fra start i PB `tilskud_sessioner` + mail til Michael. Lead er fail-soft. Privatlivspolitikken er opdateret.
+> **Åbent:** spaike-crm (PocketBase, Fly ARN) har svaret 502 udefra siden ~20:10 UTC, selvom maskinen er sund indefra og Fly melder "operational". Det fik ikke liv ved genstart eller koldstart. Forslag: fork volumen til en ny vært og lav en ny maskine. Indtil da gemmes sessioner/leads ikke i PB, men lead-mails går igennem.
+> Næste skridt efter Michaels test: justér prompt/LLM/stemme (`npm run tilskud:voice -- sync`), og fjern `?stemme=1`-gaten i `TilskudFlow.tsx`, når han godkender.
+
 Status: koden er færdig, type-tjekket og bygget (`npm run build` grøn), men IKKE merget til main. Ligger som WIP-commit på branch `mimo01ac/digitaliseringsst-tte-id-kritik`. Michael vil teste stemmen i morgen formiddag (2026-11-02) på www.spaike.dk/tilskud, så næste tråd skal merge og verificere i prod FØRST.
 
 ## Hvad er bygget (uncommitted før denne handoff, nu i WIP-commit)
