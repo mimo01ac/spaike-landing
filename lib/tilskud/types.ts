@@ -54,9 +54,24 @@ export interface Vurdering {
     kapacitet_begrundelse: string;
     samlet_indikation: string;
   };
-  ansoegningsudkast: {
-    projektbeskrivelse: string;
-    business_case: string;
+  /**
+   * Projektbeskrivelse som grundlag for virksomhedens EGEN ansøgning,
+   * struktureret efter SMV:Digitals skabelon (nøgler = skabelonens afsnit).
+   * Ansøgeren bekræfter selv at have udarbejdet ansøgningen, og en rådgiver
+   * må ikke skrive den; derfor neutral tredje person + [udfyld]-markører.
+   */
+  projektgrundlag: {
+    f_vaekstambition_kort: string;
+    f_vaekstambition_lang: string;
+    g_digitale_barrierer: string;
+    p_titel: string;
+    p_beskrivelse: string;
+    p_nyhedsvaerdi: string;
+    p_afkrydsning: string[];
+    p_raadgiveropgaver: string;
+    p_oekonomisk_forankring: string;
+    p_organisatorisk_forankring: string;
+    p_effekter: { effekt: string; horisont: string }[];
   };
   naeste_skridt: string[];
 }

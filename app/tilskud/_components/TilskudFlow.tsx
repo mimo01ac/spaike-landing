@@ -728,8 +728,8 @@ function LeadForm({
       <div className="px-5 py-6 bg-cream">
         <p className="font-serif text-xl">Sendt. Tjek din indbakke om et øjeblik.</p>
         <p className="font-sans text-[14px] text-ink-soft mt-2">
-          Mailen indeholder hele vurderingen og udkastet til ansøgningsteksten. Vil du have den gennemgået, inden
-          vinduet åbner, så book 20 minutter.
+          Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den
+          gennemgået, inden vinduet åbner, så book 20 minutter.
         </p>
         <a
           href={CALENDLY}
@@ -749,7 +749,13 @@ function LeadForm({
     <form onSubmit={submit} className="px-5 py-6 bg-cream">
       <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">Få hele vurderingen på mail</p>
       <p className="font-serif text-lg mt-1 leading-snug">
-        Inklusive udkastet til projektbeskrivelse og business case, klar til at rette til i ansøgningsskabelonen.
+        Inklusive en projektbeskrivelse, der kan danne grundlag for jeres ansøgning: struktureret efter
+        ansøgningens felter (udfordringer, projekt, nyhedsværdi, rådgivers opgaver, forankring, effekter) og bygget
+        på jeres egne svar.
+      </p>
+      <p className="font-sans text-[12.5px] text-muted mt-1.5">
+        Ansøgningen skriver I selv (det bekræfter I i den). Projektbeskrivelsen giver jer alt det, felterne spørger
+        om.
       </p>
       <div className="grid sm:grid-cols-2 gap-2.5 mt-4">
         <input className={inputCls} placeholder="Navn" value={navn} onChange={(e) => setNavn(e.target.value)} aria-label="Navn" />
