@@ -31,12 +31,17 @@ function secret(): string {
   return s;
 }
 
-export function issueSessionToken(): string {
+/**
+ * `sid` kan gives med, så det også er id'et på en record (fx
+ * tilskud_sessioner). Serveren læser det igen fra det signerede token, så
+ * klienten aldrig selv kan pege på en anden session.
+ */
+export function issueSessionToken(sid?: string): string {
   const now = Date.now();
   const payload: Payload = {
     iat: now,
     exp: now + TTL_MS,
-    sid: crypto.randomUUID(),
+    sid: sid ?? crypto.randomUUID(),
   };
   const body = b64url(Buffer.from(JSON.stringify(payload)));
   const sig = sign(body, secret());
@@ -59,5 +64,16 @@ export function verifySessionToken(token: string | undefined): boolean {
     return typeof payload.exp === "number" && payload.exp > Date.now();
   } catch {
     return false;
+  }
+}
+
+/** Session-id fra et gyldigt token, ellers null. */
+export function sessionIdFraToken(token: string | undefined): string | null {
+  if (!verifySessionToken(token)) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(token!.split(".")[0], "base64").toString()) as Payload;
+    return typeof payload.sid === "string" ? payload.sid : null;
+  } catch {
+    return null;
   }
 }

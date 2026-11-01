@@ -8,6 +8,10 @@
  *   node scripts/tilskud-cli.mjs chat  --cvr 39127709 [--auto] [--say "..."] [--json]
  *   node scripts/tilskud-cli.mjs lead  --cvr 39127709 --email test@example.com [--navn ..] [--alarm]
  *   node scripts/tilskud-cli.mjs flow  --cvr 39127709 [--email test@example.com] [--json]
+ *   node scripts/tilskud-cli.mjs voice-start    --cvr 39127709 [--json]
+ *   node scripts/tilskud-cli.mjs voice-resultat --cvr 39127709 [--conversation conv_...] [--json]
+ *
+ * Stemme-agentens samtale-logik (uden mikrofon): npm run tilskud:voice -- simuler.
  *
  * --auto spiller en fast fixture af svar ind, indtil agenten afgiver vurderingen
  * (eller der er brugt 14 ture). --json printer kun det strukturerede resultat.
@@ -42,7 +46,8 @@ const FALLBACK = "Det ved jeg ikke præcist, tag dit bedste skøn og gå videre.
 async function post(body) {
   const res = await fetch(`${BASE}/api/tilskud`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    // Test-kørsler gemmes som sessioner, men mailer ikke Michael.
+    headers: { "Content-Type": "application/json", "x-tilskud-test": "1" },
     body: JSON.stringify(body),
   });
   return res;
@@ -157,14 +162,35 @@ async function lead(token, cvr, virksomhed, vurdering, transcript, kvalificering
 
 async function main() {
   const cvr = String(flag("cvr", ""));
-  if (cmd === "tts") {
+  if (cmd === "voice-start") {
+    // Udsteder et WebRTC-token til stemme-agenten (selve samtalen kræver en browser/mikrofon;
+    // samtale-logikken testes med `npm run tilskud:voice -- simuler`).
     const s = await start(cvr || "");
-    const res = await post({ action: "tts", token: s.token, text: flag("text", "Hej. Det her er en test af den danske stemme på tilskudstjekket.") });
-    if (!res.ok) throw new Error(`tts ${res.status}: ${await res.text()}`);
-    const buf = Buffer.from(await res.arrayBuffer());
-    const out = flag("out", "/tmp/tilskud-tts.mp3");
-    (await import("node:fs")).writeFileSync(out, buf);
-    console.log(`tts ok: ${buf.length} bytes -> ${out} (${res.headers.get("content-type")})`);
+    const res = await post({ action: "voice-start", token: s.token, cvr, virksomhed: s.virksomhed });
+    const data = await res.json();
+    if (!res.ok) throw new Error(`voice-start ${res.status}: ${JSON.stringify(data)}`);
+    const ud = { conversationId: data.conversationId, token_laengde: data.conversationToken?.length ?? 0, dynamicVariables: data.dynamicVariables };
+    console.log(JSON_ONLY ? JSON.stringify(ud) : `voice-start ok: samtale ${ud.conversationId}, token ${ud.token_laengde} tegn\n${JSON.stringify(ud.dynamicVariables, null, 2)}`);
+    return;
+  }
+  if (cmd === "voice-resultat") {
+    // Udskrift -> kvalificering/vurdering, som efter en stemmesamtale. Uden --conversation
+    // bruges en fast fixture-udskrift (klientens fallback-kopi).
+    const s = await start(cvr || "");
+    const udskrift = [];
+    for (let i = 0; i < FIXTURE.length; i++) {
+      udskrift.push({ role: "assistant", content: i === 0 ? "Hvad fik jer til at kigge på det her lige nu?" : "Tak. Næste spørgsmål." });
+      udskrift.push({ role: "user", content: FIXTURE[i] });
+    }
+    const res = await post({ action: "voice-resultat", token: s.token, cvr, virksomhed: s.virksomhed, conversationId: flag("conversation", ""), udskrift, afklaringer: {} });
+    const data = await res.json();
+    if (!res.ok) throw new Error(`voice-resultat ${res.status}: ${JSON.stringify(data)}`);
+    const r = data.vurdering
+      ? { type: "vurdering", status: data.vurdering.egnethed.status, titel: data.vurdering.projekt.titel, tilskud: data.vurdering.projekt.tilskud_kr }
+      : data.kvalificering
+        ? { type: "kvalificering", status: data.kvalificering.status, opsummering: data.kvalificering.opsummering }
+        : data;
+    console.log(JSON.stringify(r, null, JSON_ONLY ? 0 : 2));
     return;
   }
   if (cmd === "soeg") {

@@ -13,19 +13,20 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 - Ansøgeren bekræfter selv at have udarbejdet ansøgningen → vi leverer en **projektbeskrivelse som grundlag** (neutral tredje person, strukturet efter skabelonens felter, `docs/smv-digital-ansoegningsskabelon-2026-11.md`), aldrig ansøgningstekst.
 
 ## Arkitektur-regler (gælder her)
-- Alt eksternt bag `lib/`: `lib/pocketbase.ts`, `lib/email.ts` (Brevo), `lib/tilskud/cvr.ts` + `cvr-es.ts` (CVR: Erhvervsstyrelsens Elasticsearch primært med env `CVR_USER`/`CVR_PASS`, cvrapi.dk fallback), `lib/tilskud/chat.ts` (Anthropic), `lib/tilskud/tts.ts` (ElevenLabs, env `ELEVENLABS_API_KEY`/`TILSKUD_TTS_VOICE`). Komponenter og routes kalder aldrig en SDK/API direkte.
+- Alt eksternt bag `lib/`: `lib/pocketbase.ts`, `lib/email.ts` (Brevo), `lib/tilskud/cvr.ts` + `cvr-es.ts` (CVR: Erhvervsstyrelsens Elasticsearch primært med env `CVR_USER`/`CVR_PASS`, cvrapi.dk fallback), `lib/tilskud/chat.ts` (Anthropic), `lib/tilskud/voice.ts` (ElevenLabs Agents, env `ELEVENLABS_API_KEY`/`TILSKUD_VOICE_AGENT_ID`), `lib/tilskud/session.ts` (alle tjek gemmes i PB `tilskud_sessioner` + mail til Michael ved start). Komponenter og routes kalder aldrig en SDK/API direkte.
 - Hvert endpoint har en CLI-vej: `scripts/ai-tjek-cli.mjs`, `scripts/tilskud-cli.mjs`.
 - Umami på alt nyt: sider i `app/` arver scriptet; samme-fane-links `data-track-event`, `_blank`-links `data-umami-event`. Ny side → `tests/e2e/helpers.ts` PUBLIC_PAGES + `app/sitemap.ts`.
 - Fravalg logges i `DEFERRED.md`, eksterne adgange i `DEPENDENCIES.md`.
 
 ## Fejlsøgning & evidens
-Sidst verificeret: 2026-11-01
+Sidst verificeret: 2026-11-01 (aften, stemme v2)
 
 **Logs/telemetri**
 - Serverless-logs: Vercel dashboard → projekt `spaike-landing` → Logs (filtrér på `/api/tilskud`, `/api/innovationsdag/*`, `/api/ai-tjek/*`). Routes logger med præfiks, fx `tilskud chat-fejl:`, `tilskud lead: PB-gem fejlede:`, `Brevo-fejl:`, `CVR-opslag fejlede:`.
 - Besøg/klik: Umami på `analytics.spaike.dk` (events: `tilskud_start`, `tilskud_chat_foerste_svar`, `tilskud_vurdering_klar`, `tilskud_lead_sendt`, `book_moede_click`).
 - Leads/data: PocketBase `spaike-crm.fly.dev` (collections `tilskud_leads`, `ai_tjek_leads`, `kontakt_beskeder`, `discovery_sessions`, `applications`). Creds i `.env.local` (hent med `vercel env pull .env.local --environment=production`; kræver `.vercel/project.json`, se hukommelsen "spaike-landing-vercel-deploy").
-- Voice: `/api/tilskud` action `tts` (ElevenLabs, dansk stemme) + browserens Web Speech API (da-DK) i `app/tilskud/_components/VoiceControls.tsx`. Test: `node scripts/tilskud-cli.mjs tts --cvr 39127709 --text "..."`. Forbrug: ElevenLabs-dashboard.
+- Stemme (eget flow, ikke oplæsning af chatten): coach-agent på ElevenLabs Agents, konfig som kode i `lib/tilskud/voice-agent.ts` (prompt, tjekliste-tools `noter_afklaring`/`vis_foreloebig_vurdering`, `end_call`, Sonnet 4.6, stemme fra `TILSKUD_TTS_VOICE`, privat agent, loft 50 samtaler/døgn, ingen lydoptagelse). Ændringer: `npm run tilskud:voice -- sync` (readback-diff) og `-- simuler --persona typisk|stop|roed [--resultat]` (samtale uden mikrofon via ElevenLabs agent-testing; `simulate-conversation` er fjernet 31-10-2026). Browser: `app/tilskud/_components/VoiceSamtale.tsx` (`@elevenlabs/react`, WebRTC). API: `voice-start` (token + dynamiske variabler) og `voice-resultat` (udskrift -> Claude -> kvalificering/vurdering). CLI: `node scripts/tilskud-cli.mjs voice-start|voice-resultat --cvr 39127709`. Samtaler/forbrug: ElevenLabs-dashboard -> Agents -> "Tilskudstjek: stemme-coach". Toggle'en vises i produktion kun med `?stemme=1`, indtil Michael godkender.
+- Sessioner: `start` opretter `tilskud_sessioner/<sid>` (sid = session-tokenets id) og mailer Michael; chat/stemme/lead skriver løbende til samme record. CLI sender `x-tilskud-test: 1` (gemmes med `test=true`, ingen mail).
 - Claude-forbrug: Anthropic Console (Usage). `/tilskud` bruger `claude-opus-5-5`, lav effort, prompt caching på system-prompt.
 
 **Test lokalt**
@@ -42,5 +43,6 @@ Sidst verificeret: 2026-11-01
 **Kendte gotchas**
 - Frisk Conductor-workspace mangler `.vercel/` og `.env.local` → API-routes giver 500 lokalt indtil env er hentet.
 - Rate-limit er in-memory pr. serverless-instans (best effort).
+- PocketBase (spaike-crm, Fly ARN) var nede 2026-11-01 ~20:10 UTC pga. Fly-hændelse ("Outbound IPv4 connectivity failures in ARN"); sund indefra, 502 udefra. Lead og sessioner er nu fail-soft (8 s timeout i `lib/pocketbase.ts`, sessioner højst 3 s), og lead-mailen går til Michael uanset.
 - Turnstile er ikke konfigureret i prod (nøgler mangler); gaten springer bot-tjek over.
 - CVR-ES (`distribution.virk.dk`) svarer kun på http; status for aktive virksomheder er `NORMAL` (ikke "Aktiv"); små selskaber har ofte hverken ansatte- eller årsværk-interval → forhåndstjek viser "?" og agenten spørger selv. Uden `CVR_USER`/`CVR_PASS` falder opslag tilbage til cvrapi.dk, som er kvote-blokeret fra Vercels IP'er (så sker opslaget i browseren).

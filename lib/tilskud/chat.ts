@@ -117,3 +117,57 @@ export function startTilskudChat(opts: {
     },
   };
 }
+
+/**
+ * Stemme-tilstanden: efter samtalen laver Claude den samme kvalificering eller
+ * vurdering som chatten, ud fra udskriften og tjeklisten. Agenten i samtalen
+ * er en anden model (ElevenLabs); her bruges den fulde faglige prompt.
+ */
+export async function udledResultatAfSamtale(opts: {
+  udskrift: ChatMsg[];
+  kontekst: string;
+  /** Tjeklisten som agenten afkrydsede den (id: status, note). */
+  afklaringer: string;
+}): Promise<{ kvalificering: Kvalificering | null; vurdering: Vurdering | null }> {
+  const client = new Anthropic();
+  const linjer = opts.udskrift
+    .map((m) => `${m.role === "assistant" ? "Assistent" : "Bruger"}: ${m.content}`)
+    .join("\n");
+  const system: Anthropic.TextBlockParam[] = [
+    { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
+    {
+      type: "text",
+      text: opts.kontekst.trim()
+        ? `CVR-KONTEKST (slået op automatisk, kan være ufuldstændig):\n${opts.kontekst.slice(0, 3000)}`
+        : "CVR-KONTEKST: ingen (opslaget fejlede eller blev sprunget over).",
+    },
+    {
+      type: "text",
+      text: `STEMMESAMTALE. Samtalen herunder er ført som en stemmesamtale med en anden assistent (talegenkendelse, så enkelte ord kan være hørt forkert). Din opgave nu er udelukkende at afgive resultatet ved at kalde ét af værktøjerne; skriv ingen tekst til brugeren, og svar aldrig uden et værktøjskald. Er forberedelsen gennemført (område, forventet effekt og forankring er drøftet efter at brugeren sagde ja til at fortsætte), så kald ${VURDERING_TOOL_NAME}. Ellers kald ${KVALIFICERING_TOOL_NAME} ud fra det, I nåede. Byg kun på det brugeren faktisk sagde; mangler noget, så skriv at det skal afklares.`,
+    },
+  ];
+  const final = await client.messages.create({
+    model: MODEL,
+    max_tokens: MAX_TOKENS,
+    system,
+    tools: [KVALIFICERING_TOOL, VURDERING_TOOL],
+    // Opus 5.5 afviser tvunget tool_choice (any/tool); prompten kræver kaldet.
+    tool_choice: { type: "auto" },
+    messages: [
+      {
+        role: "user",
+        content: `UDSKRIFT AF STEMMESAMTALEN:\n${linjer.slice(0, 50000)}\n\nTJEKLISTEN SOM DEN BLEV AFKRYDSET UNDERVEJS:\n${opts.afklaringer || "ingen"}`,
+      },
+    ],
+    ...(understoetterEffort(MODEL) ? { output_config: { effort: "low" } } : {}),
+  });
+  const tool = final.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
+  if (!tool || final.stop_reason === "max_tokens") {
+    console.warn("tilskud voice-resultat: intet komplet tool-kald", { stop_reason: final.stop_reason });
+    return { kvalificering: null, vurdering: null };
+  }
+  if (tool.name === KVALIFICERING_TOOL_NAME) return { kvalificering: normaliserKvalificering(tool.input), vurdering: null };
+  const vurdering = normaliserVurdering(tool.input);
+  if (!vurdering.naeste_skridt.length) vurdering.naeste_skridt = standardNaesteSkridt(vurdering);
+  return { kvalificering: null, vurdering: erKomplet(vurdering) ? vurdering : null };
+}
