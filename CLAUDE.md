@@ -6,6 +6,11 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 - `/` landing · `/ai-tjek` (lead-magnet, deterministisk scan) · `/ai-innovationsdag` (Claude discovery-agent) · `/tilskud` (Tilskudstjek: CVR + Claude-interview + lead, v1 2026-11-01) · juridiske sider.
 - Vercel Hobby: **12 serverless functions**. Tæl `app/api/**/route.ts` før du tilføjer (7 efter /tilskud). Nye handlinger lægges som `action` i et eksisterende endpoint, ikke som ny route.
 
+## /tilskud: faglige regler (Michael, 2026-11-01)
+- Tilskuddet betaler analysen (potentialeafklaring): interview og oplæg ligger på analysens niveau, aldrig en byggeliste.
+- Blødt discovery-interview med smerten som anker; højst 4 spørgsmål efter de formelle krav (smerte/område, forventet effekt, forankring). Spørg ikke "hvor i flowet går tiden" (det er analysens leverance).
+- Ansøgeren bekræfter selv at have udarbejdet ansøgningen → vi leverer en **projektbeskrivelse som grundlag** (neutral tredje person, strukturet efter skabelonens felter, `docs/smv-digital-ansoegningsskabelon-2026-11.md`), aldrig ansøgningstekst.
+
 ## Arkitektur-regler (gælder her)
 - Alt eksternt bag `lib/`: `lib/pocketbase.ts`, `lib/email.ts` (Brevo), `lib/tilskud/cvr.ts` + `cvr-es.ts` (CVR: Erhvervsstyrelsens Elasticsearch primært med env `CVR_USER`/`CVR_PASS`, cvrapi.dk fallback), `lib/tilskud/chat.ts` (Anthropic). Komponenter og routes kalder aldrig en SDK/API direkte.
 - Hvert endpoint har en CLI-vej: `scripts/ai-tjek-cli.mjs`, `scripts/tilskud-cli.mjs`.
