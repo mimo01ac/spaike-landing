@@ -20,7 +20,7 @@ export function normaliserVurdering(raw: unknown): Vurdering {
   const p = obj(r.pulje);
   const pr = obj(r.projekt);
   const pt = obj(r.point);
-  const au = obj(r.ansoegningsudkast);
+  const an = obj(r.projektgrundlag);
   const status = e.status === "groen" || e.status === "gul" || e.status === "roed" ? e.status : "gul";
 
   return {
@@ -59,9 +59,21 @@ export function normaliserVurdering(raw: unknown): Vurdering {
       kapacitet_begrundelse: str(pt.kapacitet_begrundelse),
       samlet_indikation: str(pt.samlet_indikation),
     },
-    ansoegningsudkast: {
-      projektbeskrivelse: str(au.projektbeskrivelse),
-      business_case: str(au.business_case),
+    projektgrundlag: {
+      f_vaekstambition_kort: str(an.f_vaekstambition_kort),
+      f_vaekstambition_lang: str(an.f_vaekstambition_lang),
+      g_digitale_barrierer: str(an.g_digitale_barrierer),
+      p_titel: str(an.p_titel),
+      p_beskrivelse: str(an.p_beskrivelse),
+      p_nyhedsvaerdi: str(an.p_nyhedsvaerdi),
+      p_afkrydsning: strArr(an.p_afkrydsning),
+      p_raadgiveropgaver: str(an.p_raadgiveropgaver),
+      p_oekonomisk_forankring: str(an.p_oekonomisk_forankring),
+      p_organisatorisk_forankring: str(an.p_organisatorisk_forankring),
+      p_effekter: (Array.isArray(an.p_effekter) ? an.p_effekter : []).map((e) => {
+        const o = obj(e);
+        return { effekt: str(o.effekt), horisont: str(o.horisont) };
+      }),
     },
     naeste_skridt: strArr(r.naeste_skridt),
   };
@@ -73,7 +85,7 @@ export function erKomplet(v: Vurdering): boolean {
     v.egnethed.opsummering &&
     v.projekt.titel &&
     v.projekt.kandidater.length &&
-    v.ansoegningsudkast.projektbeskrivelse &&
+    v.projektgrundlag.p_beskrivelse &&
     v.naeste_skridt.length
   );
 }

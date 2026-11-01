@@ -35,7 +35,7 @@ const FIXTURE = [
   "Nej, ingen offentlige tilskud de seneste tre år, og vi er ejet af de to stiftere.",
   "Det der fylder mest er, at Lene og Peter i administrationen drukner. Alt skal igennem dem, og når en af dem er syg, går det i stå. Og vi laver for mange fejl i fakturaerne. Det er nok faktureringsflowet, vi skal kigge på.",
   "Hvis det blev løst, kunne vi tage flere kunder ind uden at ansætte en tredje i administrationen, og pengene ville komme hurtigere ind. Det er nok en halv stilling i dag, tror jeg.",
-  "Det ville være mig og Lene, der driver det. Vi skiftede til e-conomic for tre år siden og satte selv Shopify op.",
+  "Det ville være mig som direktør og Lene fra administrationen, der driver det. Vi skiftede til e-conomic for tre år siden og satte selv Shopify op, men vi har ikke brugt AI eller automatisering til noget endnu. Til implementering bagefter kan vi nok finde 150-200.000 kr.",
 ];
 const FALLBACK = "Det ved jeg ikke præcist, tag dit bedste skøn og gå videre.";
 

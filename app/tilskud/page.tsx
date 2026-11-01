@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Tilskudstjek · Kan staten betale halvdelen af jeres AI-automatisering?",
   description:
-    "Indtast jeres CVR-nummer og få på fem minutter en ærlig indikation af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, plus et konkret projektoplæg og udkast til ansøgningsteksten. Gratis, dansk, ingen konto.",
+    "Indtast jeres CVR-nummer og få på fem minutter en ærlig indikation af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, plus et konkret projektoplæg og en projektbeskrivelse som grundlag for jeres ansøgning. Gratis, dansk, ingen konto.",
   openGraph: {
     title: "Tilskudstjek · AI-automatisering med 50 % tilskud",
     description:
@@ -84,7 +84,7 @@ export default function TilskudPage() {
           <p className="font-serif text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
             SMV:Digital dækker 50 % af rådgivning om automatisering og AI, op til 150.000 kr.
             Indtast jeres CVR-nummer, svar på et par spørgsmål, og få en ærlig indikation af om I
-            kan søge, et konkret projektoplæg og et udkast til ansøgningsteksten. Fem minutter,
+            kan søge, et konkret projektoplæg og en projektbeskrivelse som grundlag for jeres ansøgning. Fem minutter,
             ingen konto.
           </p>
           <div className="mt-8">
@@ -102,7 +102,7 @@ export default function TilskudPage() {
             {[
               ["1. CVR-opslag", "Jeg henter det, CVR allerede ved: størrelse, alder, branche. Så spørger jeg kun om det, data ikke kan svare på."],
               ["2. Otte spørgsmål", "De hårde krav først (årsværk, regnskab, kontant medfinansiering, tidligere tilskud), så hvilket flow eller område analysen skal dække, og hvor det gør ondt i dag."],
-              ["3. Vurdering og oplæg", "Grøn, gul eller rød med begrundelse, den rigtige pulje og dato, et oplæg til selve analysen (omfang, spørgsmål, hypoteser, økonomi), pointindikation og udkast til ansøgningstekst."],
+              ["3. Vurdering og oplæg", "Grøn, gul eller rød med begrundelse, den rigtige pulje og dato, et oplæg til selve analysen (omfang, spørgsmål, hypoteser, økonomi), pointindikation og en projektbeskrivelse som grundlag for jeres egen ansøgning."],
             ].map(([t, b]) => (
               <div key={t} className="flex flex-col gap-2">
                 <h3 className="font-serif text-xl font-medium leading-tight">{t}</h3>

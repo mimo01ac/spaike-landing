@@ -30,6 +30,11 @@ function li(items: string[]): string {
     .join("")}</ul>`;
 }
 
+function noteFelt(titel: string, tekst: string): string {
+  if (!tekst) return "";
+  return `<div style="margin:0 0 12px;"><div style="font:600 12px/1.4 Arial,sans-serif;color:${ink};margin:0 0 3px;">${esc(titel)}</div>${p(esc(tekst).replace(/\n/g, "<br>"))}</div>`;
+}
+
 const STATUS_LABEL: Record<string, string> = {
   groen: "Grøn: I kan sandsynligvis søge",
   gul: "Gul: I kan muligvis søge, med forbehold",
@@ -88,9 +93,22 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
       ${p(`Kapacitet ${v.point.kapacitet}/5: ${esc(v.point.kapacitet_begrundelse)}`)}
       ${p(esc(v.point.samlet_indikation))}
 
-      ${h("Udkast til ansøgningstekst")}
-      ${p(`<b style="color:${ink}">Projektbeskrivelse:</b><br>${esc(v.ansoegningsudkast.projektbeskrivelse).replace(/\n/g, "<br>")}`)}
-      ${p(`<b style="color:${ink}">Business case:</b><br>${esc(v.ansoegningsudkast.business_case).replace(/\n/g, "<br>")}`)}
+      ${h("Projektbeskrivelse: grundlag for jeres ansøgning")}
+      <div style="border:1px solid ${amber};border-radius:6px;padding:10px 14px;margin:0 0 12px;background:#fff8e8;">
+        ${p(`<b style="color:${ink}">Sådan bruger I den:</b> Ansøgningen skal I selv skrive, og I bekræfter i den, at den ikke er udarbejdet af en ekstern rådgiver. Projektbeskrivelsen her er bygget på jeres egne svar og er struktureret, så den dækker det, hvert felt i ansøgningen spørger om. Brug den som grundlag, når I skriver ansøgningen i det online system (puljeaabning.vudk.dk), og udfyld de steder der står [udfyld].`)}
+      </div>
+      ${noteFelt("Ambition på kort sigt, inden for 2 år (understøtter felt 1F)", v.projektgrundlag.f_vaekstambition_kort)}
+      ${noteFelt("Ambition på længere sigt, 3-5 år (understøtter felt 1F)", v.projektgrundlag.f_vaekstambition_lang)}
+      ${noteFelt("De digitale udfordringer der står i vejen (understøtter felt 1G)", v.projektgrundlag.g_digitale_barrierer)}
+      ${noteFelt("Projekttitel (felt 2A)", v.projektgrundlag.p_titel)}
+      ${noteFelt("Projektet: hvad analysen dækker, aktiviteter, resultater og deltagere (understøtter felt 2B)", v.projektgrundlag.p_beskrivelse)}
+      ${noteFelt("Hvorfor teknologien er ny for virksomheden (understøtter felt 2C)", v.projektgrundlag.p_nyhedsvaerdi)}
+      ${v.projektgrundlag.p_afkrydsning.length ? p(`<b style="color:${ink}">Rådgivers område, relevante afkrydsninger (felt 2D1):</b>`) + li(v.projektgrundlag.p_afkrydsning) : ""}
+      ${noteFelt("Rådgivers opgaver og kompetencer (understøtter felt 2D2)", v.projektgrundlag.p_raadgiveropgaver)}
+      ${p(`<b style="color:${ink}">Tilskud der kan søges (felt 2D3):</b> ${kr(v.projekt.tilskud_kr)} (50 % af et rådgiverforløb på ${kr(v.projekt.estimeret_pris_kr)})`)}
+      ${noteFelt("Økonomisk forankring: kapital til rådgivning og til implementering (understøtter felt 2E1)", v.projektgrundlag.p_oekonomisk_forankring)}
+      ${noteFelt("Organisatorisk forankring: ledelse og medarbejdere i projektet (understøtter felt 2F)", v.projektgrundlag.p_organisatorisk_forankring)}
+      ${v.projektgrundlag.p_effekter.length ? p(`<b style="color:${ink}">Forventede effekter med horisont (felt 2G):</b>`) + li(v.projektgrundlag.p_effekter.map((e) => `${e.effekt}: ${e.horisont}`)) : ""}
 
       ${h("Næste skridt")}
       <ol style="margin:0 0 14px;padding-left:18px;">${v.naeste_skridt
