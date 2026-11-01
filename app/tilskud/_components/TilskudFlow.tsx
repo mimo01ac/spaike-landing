@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { trackEvent } from "../../components/track";
+import VoiceControls from "./VoiceControls";
 import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
 const CALENDLY = "https://calendly.com/michael-spaike/new-meeting";
@@ -36,6 +37,7 @@ export default function TilskudFlow() {
   const [kvalificering, setKvalificering] = useState<Kvalificering | null>(null);
   const [stopEfterKval, setStopEfterKval] = useState(false);
   const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
+  const [voice, setVoice] = useState(false);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
   const kvalRef = useRef<HTMLDivElement>(null);
@@ -116,11 +118,32 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
+      <div className="flex flex-wrap items-center gap-2 font-sans text-[12.5px]">
+        <span className="text-muted">Sådan vil jeg tage samtalen:</span>
+        <button
+          type="button"
+          onClick={() => setVoice(false)}
+          className={`px-3 py-1.5 border rounded ${!voice ? "bg-ink text-cream border-ink" : "border-rule text-ink hover:border-ink"}`}
+        >
+          Skrive i chatten
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setVoice(true);
+            trackEvent("tilskud_voice_valgt");
+          }}
+          className={`px-3 py-1.5 border rounded ${voice ? "bg-ink text-cream border-ink" : "border-rule text-ink hover:border-ink"}`}
+        >
+          Tale med agenten
+        </button>
+      </div>
       <Chat
         token={start.token}
         cvr={cvrBrugt}
         virksomhed={start.virksomhed}
         inject={inject}
+        voice={voice}
         onKvalificering={(k, t) => {
           setKvalificering(k);
           setTranscript(t);
@@ -389,6 +412,7 @@ function Chat({
   cvr,
   virksomhed,
   inject,
+  voice,
   onKvalificering,
   onVurdering,
 }: {
@@ -397,6 +421,8 @@ function Chat({
   virksomhed: StartSvar["virksomhed"];
   /** Programmatisk besked (fx "fortsæt til forberedelsen" fra kvalificeringskortet). */
   inject: { id: number; text: string } | null;
+  /** Voice-tilstand: svar læses op, og brugeren kan tale i stedet for at skrive. */
+  voice: boolean;
   onKvalificering: (k: Kvalificering, transcript: ChatMsg[]) => void;
   onVurdering: (v: Vurdering, transcript: ChatMsg[]) => void;
 }) {
@@ -405,6 +431,7 @@ function Chat({
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sidsteSvar, setSidsteSvar] = useState<{ id: number; text: string } | null>(null);
   const started = useRef(false);
   const lastInject = useRef<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -507,6 +534,15 @@ function Chat({
     }
   }
 
+  // Når et assistent-svar er færdigstreamet, gives det videre til voice-laget (oplæsning).
+  useEffect(() => {
+    if (busy) return;
+    const sidste = messages[messages.length - 1];
+    if (sidste && sidste.role === "assistant" && sidste.content) {
+      setSidsteSvar({ id: messages.length, text: sidste.content });
+    }
+  }, [busy, messages]);
+
   return (
     <div className="border border-rule rounded bg-cream overflow-hidden">
       <div ref={scrollRef} className="h-[440px] overflow-y-auto px-5 py-6 space-y-5" aria-live="polite">
@@ -567,6 +603,15 @@ function Chat({
           Send
         </button>
       </form>
+      {voice && (
+        <VoiceControls
+          token={token}
+          onSend={(t) => void send(t)}
+          sidsteSvar={sidsteSvar}
+          busy={busy}
+          done={done}
+        />
+      )}
     </div>
   );
 }
