@@ -28,6 +28,7 @@ import {
   slaaCvrOp,
   virksomhedSomTekst,
 } from "@/lib/tilskud/cvr";
+import { esKonfigureret, soegVirksomheder } from "@/lib/tilskud/cvr-es";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat } from "@/lib/tilskud/chat";
@@ -48,10 +49,23 @@ export async function POST(req: Request) {
     return json({ error: "Ugyldig anmodning." }, 400);
   }
   const action = String(body.action ?? "");
+  if (action === "soeg") return soeg(req, body);
   if (action === "start") return start(req, body);
   if (action === "chat") return chat(req, body);
   if (action === "lead") return lead(req, body);
   return json({ error: "Ukendt handling." }, 400);
+}
+
+/** Navnesøgning i CVR -> liste at vælge fra (for dem der ikke husker CVR-nummeret). */
+async function soeg(req: Request, body: Record<string, unknown>) {
+  const ip = clientIp(req);
+  const rl = checkRateLimit(`tilskud-soeg:${ip}`, 40, 5 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange søgninger. Vent lidt." }, 429);
+  const term = String(body.term ?? "").trim().slice(0, 80);
+  if (term.length < 2) return json({ resultater: [] }, 200);
+  if (!esKonfigureret()) return json({ resultater: [], utilgaengelig: true }, 200);
+  const resultater = await soegVirksomheder(term, 8);
+  return json({ resultater }, 200);
 }
 
 async function start(req: Request, body: Record<string, unknown>) {

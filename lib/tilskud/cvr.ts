@@ -17,9 +17,15 @@ export interface Virksomhed {
   ophoert: boolean;
   ansatte?: number | null;
   ansatteInterval?: string | null;
+  /** Årsværk (kun fra CVR-ES); puljekravet er "mindst 2 årsværk". */
+  aarsvaerk?: number | null;
+  aarsvaerkInterval?: string | null;
   branchekode?: number;
   branche?: string;
   selskabsform?: string;
+  /** Reklamebeskyttet i CVR: data må kun bruges til brugerens egen afklaring, aldrig outreach. */
+  reklamebeskyttet?: boolean;
+  kilde?: "cvr-es" | "cvrapi" | "klient";
 }
 
 /** Deterministisk forhåndstjek af de krav CVR-data kan belyse. */
@@ -32,6 +38,8 @@ export interface Forhaandstjek {
   primaererhverv: boolean;
   bemaerkninger: string[];
 }
+
+import { hentVirksomhedFraEs } from "./cvr-es";
 
 const CVRAPI = "https://cvrapi.dk/api";
 const UA = "SpAIke - tilskudstjek (spaike.dk/tilskud) - michael@spaike.dk";
@@ -101,6 +109,7 @@ export function mapCvrApiSvar(data: unknown, forventetCvr: string): Virksomhed |
     branchekode: typeof d.industrycode === "number" ? d.industrycode : undefined,
     branche: d.industrydesc ? String(d.industrydesc).slice(0, 200) : undefined,
     selskabsform: d.companydesc ? String(d.companydesc).slice(0, 80) : undefined,
+    kilde: "cvrapi",
   };
 }
 
@@ -125,12 +134,15 @@ export function hentFraCvrCache(cvr: string): Virksomhed | null {
   return hit && hit.exp > Date.now() ? hit.v : null;
 }
 
+/**
+ * Opslag pr. CVR: cache -> CVR-ES (primær, ingen IP-kvote) -> cvrapi.dk (fallback).
+ */
 export async function slaaCvrOp(cvrInput: string): Promise<Virksomhed | null> {
   const cvr = normaliserCvr(cvrInput);
   if (!cvr) return null;
   const hit = cache.get(cvr);
   if (hit && hit.exp > Date.now()) return hit.v;
-  const v = await hentFraCvrApi(cvr);
+  const v = (await hentVirksomhedFraEs(cvr)) ?? (await hentFraCvrApi(cvr));
   if (v) cache.set(cvr, { v, exp: Date.now() + CACHE_TTL_MS });
   return v;
 }
@@ -186,14 +198,18 @@ export function forhaandstjek(v: Virksomhed, now: Date = new Date()): Forhaandst
   const aktiv = !v.ophoert;
   if (!aktiv) bem.push("CVR-nummeret står som ophørt.");
 
+  // EU-definitionen regner i årsværk; CVR-ES har ofte kun årsværk-intervallet for store selskaber.
+  const stoerrelse = typeof v.aarsvaerk === "number" ? v.aarsvaerk : typeof v.ansatte === "number" ? v.ansatte : null;
   let smv: Forhaandstjek["smv"] = "ukendt";
-  if (typeof v.ansatte === "number") smv = v.ansatte < 250 ? "ja" : "nej";
+  if (stoerrelse !== null) smv = stoerrelse < 250 ? "ja" : "nej";
   if (smv === "nej") bem.push("250 ansatte eller flere falder uden for EU's SMV-definition.");
 
+  // Puljekravet er årsværk; CVR-ES har et årsværk-interval, ellers bruges ansatte som proxy.
   let aarsvaerk: Forhaandstjek["aarsvaerk"] = "ukendt";
-  if (typeof v.ansatte === "number") aarsvaerk = v.ansatte >= 2 ? "ja" : "nej";
+  if (typeof v.aarsvaerk === "number") aarsvaerk = v.aarsvaerk >= 2 ? "ja" : "nej";
+  else if (typeof v.ansatte === "number") aarsvaerk = v.ansatte >= 2 ? "ja" : "nej";
   if (aarsvaerk === "nej") bem.push("Kravet er mindst to årsværk på ansøgningstidspunktet.");
-  if (aarsvaerk === "ukendt") bem.push("Antal ansatte er ikke oplyst i CVR; spørg om årsværk.");
+  if (aarsvaerk === "ukendt") bem.push("Antal ansatte/årsværk er ikke oplyst i CVR; spørg om årsværk.");
 
   let regnskab: Forhaandstjek["regnskab"] = "ukendt";
   if (alderAar !== null) regnskab = alderAar >= 2 ? "sandsynligt" : alderAar >= 1 ? "tvivlsomt" : "tvivlsomt";
@@ -214,7 +230,8 @@ export function virksomhedSomTekst(v: Virksomhed, t: Forhaandstjek): string {
     v.branche ? `Branche: ${v.branche}${v.branchekode ? ` (${v.branchekode})` : ""}` : null,
     v.by ? `By: ${v.postnr ?? ""} ${v.by}`.trim() : null,
     v.startdato ? `Startdato: ${v.startdato}${t.alderAar !== null ? ` (ca. ${t.alderAar} år)` : ""}` : null,
-    `Ansatte iflg. CVR: ${v.ansatteInterval ?? (typeof v.ansatte === "number" ? String(v.ansatte) : "ikke oplyst")}`,
+    `Ansatte iflg. CVR: ${v.ansatteInterval ?? (typeof v.ansatte === "number" ? String(v.ansatte) : "ikke oplyst")}` +
+      (v.aarsvaerkInterval ? ` (årsværk: ${v.aarsvaerkInterval})` : ""),
     `Forhåndstjek: aktiv=${t.aktiv ? "ja" : "nej"}, SMV=${t.smv}, min. 2 årsværk=${t.aarsvaerk}, årsregnskab=${t.regnskab}, primærerhverv=${t.primaererhverv ? "ja" : "nej"}`,
     t.bemaerkninger.length ? `Bemærkninger: ${t.bemaerkninger.join(" ")}` : null,
   ].filter(Boolean);

@@ -3,6 +3,7 @@
  * CLI-harness for /api/tilskud. Rammer HTTP-routen, så det der testes er det
  * der kører i produktion.
  *
+ *   node scripts/tilskud-cli.mjs soeg  --term "mimoco" [--json]
  *   node scripts/tilskud-cli.mjs start --cvr 39127709 [--base http://localhost:3000]
  *   node scripts/tilskud-cli.mjs chat  --cvr 39127709 [--auto] [--say "..."] [--json]
  *   node scripts/tilskud-cli.mjs lead  --cvr 39127709 --email test@example.com [--navn ..] [--alarm]
@@ -141,6 +142,15 @@ async function lead(token, cvr, virksomhed, vurdering, transcript) {
 
 async function main() {
   const cvr = String(flag("cvr", ""));
+  if (cmd === "soeg") {
+    const res = await post({ action: "soeg", term: flag("term", "") });
+    const data = await res.json();
+    if (!res.ok) throw new Error(`soeg ${res.status}: ${JSON.stringify(data)}`);
+    if (JSON_ONLY) console.log(JSON.stringify(data));
+    else for (const h of data.resultater ?? []) console.log(`${h.cvr}  ${h.navn}  |  ${[h.selskabsform, h.postnr, h.by, h.ansatteInterval].filter(Boolean).join(" ")}`);
+    if (!JSON_ONLY && !(data.resultater ?? []).length) console.log("(ingen resultater)", data.utilgaengelig ? "navnesøgning ikke konfigureret (CVR_USER/CVR_PASS)" : "");
+    return;
+  }
   if (cmd === "start") {
     const s = await start(cvr);
     console.log(JSON.stringify(s, null, 2));
@@ -170,7 +180,7 @@ async function main() {
     console.log(JSON.stringify(r));
     return;
   }
-  console.error("Brug: start|chat|lead|flow --cvr <8 cifre> [--email ..] [--auto] [--say ..] [--base ..] [--json]");
+  console.error("Brug: soeg --term <navn> | start|chat|lead|flow --cvr <8 cifre> [--email ..] [--auto] [--say ..] [--base ..] [--json]");
   process.exit(1);
 }
 

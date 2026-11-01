@@ -87,46 +87,15 @@ export default function TilskudFlow() {
 
   if (!start) {
     return (
-      <div className="max-w-2xl">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const digits = cvrInput.replace(/\D/g, "");
-            if (digits.length !== 8) {
-              setStartFejl("Et CVR-nummer har 8 cifre.");
-              return;
-            }
-            void startTjek(digits);
-          }}
-          className="flex flex-col sm:flex-row gap-2"
-        >
-          <input
-            type="text"
-            inputMode="numeric"
-            autoComplete="off"
-            value={cvrInput}
-            onChange={(e) => setCvrInput(e.target.value)}
-            placeholder="CVR-nummer, fx 39127709"
-            aria-label="CVR-nummer"
-            disabled={starter}
-            className={`${inputCls} flex-1 text-lg`}
-          />
-          <button type="submit" disabled={starter} className={btnPrimary}>
-            {starter ? "Slår op …" : "Start tjekket"}
-          </button>
-        </form>
-        <div className="flex items-center gap-4 mt-2.5">
-          {startFejl && <p className="text-[13px] text-red-700">{startFejl}</p>}
-          <button
-            type="button"
-            onClick={() => void startTjek("")}
-            disabled={starter}
-            className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
-          >
-            Spring CVR over og svar selv
-          </button>
-        </div>
-      </div>
+      <VirksomhedsSoegning
+        value={cvrInput}
+        onChange={setCvrInput}
+        busy={starter}
+        fejl={startFejl}
+        setFejl={setStartFejl}
+        onVaelg={(cvr) => void startTjek(cvr)}
+        onSpringOver={() => void startTjek("")}
+      />
     );
   }
 
@@ -157,6 +126,151 @@ export default function TilskudFlow() {
   );
 }
 
+type Soegehit = {
+  cvr: string;
+  navn: string;
+  postnr?: string;
+  by?: string;
+  selskabsform?: string;
+  branche?: string;
+  ansatteInterval?: string | null;
+};
+
+/**
+ * Ét felt til både CVR-nummer og virksomhedsnavn. Skriver man bogstaver,
+ * søges der i CVR efter 350 ms, og man vælger virksomheden på listen (for
+ * dem der ikke lige husker CVR-nummeret). 8 cifre starter direkte.
+ */
+function VirksomhedsSoegning({
+  value,
+  onChange,
+  busy,
+  fejl,
+  setFejl,
+  onVaelg,
+  onSpringOver,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  busy: boolean;
+  fejl: string | null;
+  setFejl: (f: string | null) => void;
+  onVaelg: (cvr: string) => void;
+  onSpringOver: () => void;
+}) {
+  const [hits, setHits] = useState<Soegehit[]>([]);
+  const [soeger, setSoeger] = useState(false);
+  const [soegt, setSoegt] = useState(false);
+  const [utilgaengelig, setUtilgaengelig] = useState(false);
+  const digits = value.replace(/\D/g, "");
+  const erCvr = /^\d{8}$/.test(digits) && !/[a-zA-ZæøåÆØÅ]/.test(value);
+  const erNavn = value.trim().length >= 3 && /[a-zA-ZæøåÆØÅ]/.test(value);
+
+  useEffect(() => {
+    if (!erNavn) {
+      setHits([]);
+      setSoegt(false);
+      return;
+    }
+    const term = value.trim();
+    const t = setTimeout(async () => {
+      setSoeger(true);
+      try {
+        const res = await fetch("/api/tilskud", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "soeg", term }),
+        });
+        const data = (await res.json()) as { resultater?: Soegehit[]; utilgaengelig?: boolean };
+        setHits(data.resultater ?? []);
+        setUtilgaengelig(!!data.utilgaengelig);
+        setSoegt(true);
+        trackEvent("tilskud_navnesoegning", { hits: String(data.resultater?.length ?? 0) });
+      } catch {
+        setHits([]);
+      } finally {
+        setSoeger(false);
+      }
+    }, 350);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  return (
+    <div className="max-w-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setFejl(null);
+          if (erCvr) return onVaelg(digits);
+          if (hits[0]) return onVaelg(hits[0].cvr);
+          setFejl(erNavn ? "Vælg virksomheden på listen, eller skriv CVR-nummeret (8 cifre)." : "Skriv et CVR-nummer (8 cifre) eller virksomhedens navn.");
+        }}
+        className="flex flex-col sm:flex-row gap-2"
+      >
+        <input
+          type="text"
+          autoComplete="off"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="CVR-nummer eller virksomhedsnavn"
+          aria-label="CVR-nummer eller virksomhedsnavn"
+          aria-autocomplete="list"
+          disabled={busy}
+          className={`${inputCls} flex-1 text-lg`}
+        />
+        <button type="submit" disabled={busy} className={btnPrimary}>
+          {busy ? "Slår op …" : "Start tjekket"}
+        </button>
+      </form>
+
+      {erNavn && (soeger || soegt) && (
+        <div className="mt-2 border border-rule rounded bg-cream-deep overflow-hidden" role="listbox" aria-label="Virksomheder">
+          {soeger && hits.length === 0 && <p className="px-4 py-3 font-sans text-[13px] text-muted">Søger i CVR …</p>}
+          {!soeger && soegt && hits.length === 0 && (
+            <p className="px-4 py-3 font-sans text-[13px] text-muted">
+              {utilgaengelig
+                ? "Navnesøgningen er ikke tilgængelig lige nu. Skriv CVR-nummeret i stedet."
+                : "Ingen aktive virksomheder matcher. Prøv en kortere del af navnet, eller skriv CVR-nummeret."}
+            </p>
+          )}
+          {hits.map((h) => (
+            <button
+              key={h.cvr}
+              type="button"
+              role="option"
+              aria-selected={false}
+              disabled={busy}
+              onClick={() => onVaelg(h.cvr)}
+              className="w-full text-left px-4 py-2.5 border-b border-rule last:border-b-0 hover:bg-cream transition-colors disabled:opacity-60"
+            >
+              <span className="font-serif text-[16px]">{h.navn}</span>
+              <span className="font-mono text-[10.5px] text-muted ml-2">CVR {h.cvr}</span>
+              <span className="block font-sans text-[12.5px] text-ink-soft">
+                {[h.selskabsform, [h.postnr, h.by].filter(Boolean).join(" "), h.ansatteInterval ? `${h.ansatteInterval} ansatte` : null, h.branche]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 mt-2.5">
+        {fejl && <p className="text-[13px] text-red-700">{fejl}</p>}
+        <button
+          type="button"
+          onClick={onSpringOver}
+          disabled={busy}
+          className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
+        >
+          Spring CVR over og svar selv
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Virksomhedskort({ start }: { start: StartSvar }) {
   const v = start.virksomhed;
   const t = start.forhaandstjek;
@@ -180,7 +294,13 @@ function Virksomhedskort({ start }: { start: StartSvar }) {
             <span className="font-mono text-[11px] text-muted">CVR {v.cvr}</span>
           </div>
           <p className="font-sans text-[13.5px] text-ink-soft mt-1">
-            {[v.branche, v.selskabsform, v.by, v.ansatteInterval ? `${v.ansatteInterval} ansatte` : null]
+            {[
+              v.branche,
+              v.selskabsform,
+              v.by,
+              v.ansatteInterval ? `${v.ansatteInterval} ansatte` : null,
+              v.aarsvaerkInterval ? `${v.aarsvaerkInterval} årsværk` : null,
+            ]
               .filter(Boolean)
               .join(" · ")}
           </p>

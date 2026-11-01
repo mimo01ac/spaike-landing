@@ -7,7 +7,7 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 - Vercel Hobby: **12 serverless functions**. Tæl `app/api/**/route.ts` før du tilføjer (7 efter /tilskud). Nye handlinger lægges som `action` i et eksisterende endpoint, ikke som ny route.
 
 ## Arkitektur-regler (gælder her)
-- Alt eksternt bag `lib/`: `lib/pocketbase.ts`, `lib/email.ts` (Brevo), `lib/tilskud/cvr.ts` (CVR), `lib/tilskud/chat.ts` (Anthropic). Komponenter og routes kalder aldrig en SDK/API direkte.
+- Alt eksternt bag `lib/`: `lib/pocketbase.ts`, `lib/email.ts` (Brevo), `lib/tilskud/cvr.ts` + `cvr-es.ts` (CVR: Erhvervsstyrelsens Elasticsearch primært med env `CVR_USER`/`CVR_PASS`, cvrapi.dk fallback), `lib/tilskud/chat.ts` (Anthropic). Komponenter og routes kalder aldrig en SDK/API direkte.
 - Hvert endpoint har en CLI-vej: `scripts/ai-tjek-cli.mjs`, `scripts/tilskud-cli.mjs`.
 - Umami på alt nyt: sider i `app/` arver scriptet; samme-fane-links `data-track-event`, `_blank`-links `data-umami-event`. Ny side → `tests/e2e/helpers.ts` PUBLIC_PAGES + `app/sitemap.ts`.
 - Fravalg logges i `DEFERRED.md`, eksterne adgange i `DEPENDENCIES.md`.
@@ -36,4 +36,4 @@ Sidst verificeret: 2026-11-01
 - Frisk Conductor-workspace mangler `.vercel/` og `.env.local` → API-routes giver 500 lokalt indtil env er hentet.
 - Rate-limit er in-memory pr. serverless-instans (best effort).
 - Turnstile er ikke konfigureret i prod (nøgler mangler); gaten springer bot-tjek over.
-- cvrapi.dk returnerer `employees: null` for mange små selskaber → forhåndstjek viser "?" og agenten spørger selv.
+- CVR-ES (`distribution.virk.dk`) svarer kun på http; status for aktive virksomheder er `NORMAL` (ikke "Aktiv"); små selskaber har ofte hverken ansatte- eller årsværk-interval → forhåndstjek viser "?" og agenten spørger selv. Uden `CVR_USER`/`CVR_PASS` falder opslag tilbage til cvrapi.dk, som er kvote-blokeret fra Vercels IP'er (så sker opslaget i browseren).
