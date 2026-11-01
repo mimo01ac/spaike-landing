@@ -3,6 +3,7 @@
  * til Michael). Selve afsendelsen sker via lib/email.ts (Brevo).
  */
 
+import type { Forhaandstjek, Virksomhed } from "./cvr";
 import type { Kvalificering, Vurdering } from "./types";
 
 const ink = "#0f1a2e";
@@ -157,6 +158,31 @@ export function renderKvalificeringMail(k: Kvalificering, virksomhed: string): {
     </td></tr>
   </table></td></tr></table></body></html>`;
   return { subject: `Tilskudstjek: ${STATUS_LABEL[k.status]?.split(":")[0] ?? "resultat"} for ${virksomhed || "jer"}`, html };
+}
+
+/** Besked til Michael i det øjeblik et tjek starter (før der er en samtale). */
+export function renderSessionStartNotifikation(opts: {
+  id: string;
+  cvr: string;
+  virksomhed: Virksomhed | null;
+  forhaandstjek: Forhaandstjek | null;
+}): { subject: string; html: string } {
+  const v = opts.virksomhed;
+  const t = opts.forhaandstjek;
+  const navn = v?.navn || (opts.cvr ? `CVR ${opts.cvr}` : "ukendt virksomhed (CVR sprunget over)");
+  const fakta = v
+    ? [v.branche, v.selskabsform, [v.postnr, v.by].filter(Boolean).join(" "), v.ansatteInterval ? `${v.ansatteInterval} ansatte` : null]
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+  const html = `<p>Et Tilskudstjek er lige gået i gang på <b>/tilskud</b>.</p>
+  <p><b>Virksomhed:</b> ${esc(navn)}${opts.cvr ? ` (CVR ${esc(opts.cvr)})` : ""}<br>
+  ${fakta ? `${esc(fakta)}<br>` : ""}
+  ${t ? `<b>Forhåndstjek:</b> SMV ${esc(t.smv)}, 2+ årsværk ${esc(t.aarsvaerk)}, regnskab ${esc(t.regnskab)}${t.alderAar !== null ? `, ${t.alderAar} år gammel` : ""}<br>` : ""}
+  ${opts.cvr ? `<b>CVR (telefon, ejere):</b> <a href="https://datacvr.virk.dk/enhed/virksomhed/${esc(opts.cvr)}">datacvr.virk.dk</a><br>` : ""}
+  <b>PocketBase:</b> tilskud_sessioner/${esc(opts.id)} (samtalen og resultatet skrives hertil undervejs)</p>
+  ${v?.reklamebeskyttet ? `<p style="color:#a23b2e;"><b>Reklamebeskyttet i CVR.</b> Kontakt kun om deres eget tjek, ikke med salg.</p>` : ""}`;
+  return { subject: `Tilskudstjek startet: ${navn}`, html };
 }
 
 export function renderLeadNotifikation(opts: {

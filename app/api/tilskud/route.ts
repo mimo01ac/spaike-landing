@@ -1,19 +1,24 @@
 /**
- * /api/tilskud: ét endpoint med tre handlinger (holder Vercel-function-tallet
- * nede; 7 af 12 efter denne). POST { action: "start" | "chat" | "lead", ... }.
+ * /api/tilskud: ét endpoint med flere handlinger (holder Vercel-function-tallet
+ * nede; 7 af 12). POST { action, ... }:
  *
- *  start: CVR-opslag + forhåndstjek + session-token. Fejler CVR-opslaget,
- *         udstedes tokenet alligevel (agenten spørger så selv).
- *  chat:  streamer Claude som NDJSON: {type:"text"} | {type:"vurdering"} |
- *         {type:"error"} | {type:"done"}. Kræver gyldigt token.
- *  lead:  gemmer lead i PocketBase (tilskud_leads) + Brevo til Michael og
- *         vurderings-mail til brugeren (fail-soft).
+ *  soeg:   navnesøgning i CVR.
+ *  start:  CVR-opslag + forhåndstjek + session-token. Opretter sessionen i
+ *          PocketBase (tilskud_sessioner) og mailer Michael med det samme.
+ *  chat:   streamer Claude som NDJSON: {type:"text"} | {type:"kvalificering"} |
+ *          {type:"vurdering"} | {type:"error"} | {type:"done"}. Skriver
+ *          samtalen til sessionen.
+ *  voice-start:    WebRTC-token til ElevenLabs-agenten + dynamiske variabler.
+ *  voice-resultat: udskrift fra ElevenLabs -> kvalificering/vurdering (Claude).
+ *  lead:   gemmer lead (tilskud_leads) + Brevo til Michael og brugeren.
+ *          Fail-soft: mails sendes også, når PocketBase er nede.
  *
- * CLI: node scripts/tilskud-cli.mjs <start|chat|lead|flow> ... (se filen).
+ * CLI: node scripts/tilskud-cli.mjs <soeg|start|chat|lead|flow|voice-start|voice-resultat>.
  */
 
 import { NextResponse } from "next/server";
-import { issueSessionToken, verifySessionToken } from "@/lib/sessionToken";
+import { issueSessionToken, sessionIdFraToken, verifySessionToken } from "@/lib/sessionToken";
+import { nytSessionId, opdaterSession, opretSession } from "@/lib/tilskud/session";
 import { checkRateLimit, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { createRecord } from "@/lib/pocketbase";
@@ -29,16 +34,20 @@ import {
   virksomhedSomTekst,
 } from "@/lib/tilskud/cvr";
 import { esKonfigureret, soegVirksomheder } from "@/lib/tilskud/cvr-es";
-import { syntetiser, tilTale, ttsKonfigureret } from "@/lib/tilskud/tts";
+import { agentId, hentSamtale, hentSamtaleToken, voiceKonfigureret } from "@/lib/tilskud/voice";
+import { dynamiskeVariabler } from "@/lib/tilskud/voice-agent";
+import { normaliserNote } from "@/lib/tilskud/afklaring";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
-import { startTilskudChat } from "@/lib/tilskud/chat";
+import { startTilskudChat, udledResultatAfSamtale } from "@/lib/tilskud/chat";
 import { renderKvalificeringMail, renderLeadNotifikation, renderVurderingMail } from "@/lib/tilskud/email";
 import { normaliserKvalificering, normaliserVurdering } from "@/lib/tilskud/vurdering";
+import type { Virksomhed } from "@/lib/tilskud/cvr";
 import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+// voice-resultat skriver hele vurderingen med Opus (~45 s målt 2026-11-01); 60 s var for tæt på.
+export const maxDuration = 120;
 
 const MAX_PAYLOAD_CHARS = 60_000;
 
@@ -51,29 +60,12 @@ export async function POST(req: Request) {
   }
   const action = String(body.action ?? "");
   if (action === "soeg") return soeg(req, body);
-  if (action === "tts") return tts(req, body);
+  if (action === "voice-start") return voiceStart(req, body);
+  if (action === "voice-resultat") return voiceResultat(req, body);
   if (action === "start") return start(req, body);
   if (action === "chat") return chat(req, body);
   if (action === "lead") return lead(req, body);
   return json({ error: "Ukendt handling." }, 400);
-}
-
-/** Voice-tilstand: læser et assistent-svar op (ElevenLabs, dansk stemme). Kræver session-token. */
-async function tts(req: Request, body: Record<string, unknown>) {
-  const ip = clientIp(req);
-  const rl = checkRateLimit(`tilskud-tts:${ip}`, 80, 5 * 60 * 1000);
-  if (!rl.allowed) return json({ error: "For mange anmodninger. Vent lidt." }, 429);
-  if (!verifySessionToken(body.token as string | undefined)) {
-    return json({ error: "Sessionen er udløbet. Genindlæs siden." }, 401);
-  }
-  if (!ttsKonfigureret()) return json({ error: "Tale er ikke sat op." }, 503);
-  const tekst = tilTale(String(body.text ?? ""));
-  if (tekst.length < 2) return json({ error: "Ingen tekst." }, 400);
-  const lyd = await syntetiser(tekst);
-  if (!lyd) return json({ error: "Kunne ikke lave tale lige nu." }, 502);
-  return new Response(lyd.body, {
-    headers: { "Content-Type": lyd.contentType, "Cache-Control": "no-store" },
-  });
 }
 
 /** Navnesøgning i CVR -> liste at vælge fra (for dem der ikke husker CVR-nummeret). */
@@ -108,9 +100,11 @@ async function start(req: Request, body: Record<string, unknown>) {
   }
   const tjek = virksomhed ? forhaandstjek(virksomhed) : null;
   const p = naesteRaadgivningspulje();
+  const sid = nytSessionId();
+  await opretSession({ id: sid, cvr: cvr ?? "", virksomhed, forhaandstjek: tjek, notificer: req.headers.get("x-tilskud-test") !== "1" });
 
   const svar: StartSvar & { cvrFejl?: string } = {
-    token: issueSessionToken(),
+    token: issueSessionToken(sid),
     virksomhed,
     forhaandstjek: tjek,
     pulje: p ? { id: p.id, navn: p.navn, aabner: p.aabner, lukker: p.lukker, maksTilskudKr: p.maksTilskudKr } : null,
@@ -139,33 +133,8 @@ async function chat(req: Request, body: Record<string, unknown>) {
 
   // Kontekst genopbygges server-side fra det CVR klienten sender, så prompten
   // ikke kan forfalskes med fri tekst.
-  let kontekst = "";
-  const cvr = normaliserCvr(String(body.cvr ?? ""));
-  if (cvr) {
-    // Cache først (sat af start-trinnet), så opslag, så klientens kopi af
-    // virksomheden fra start-svaret (ny serverless-instans uden cache).
-    let v = hentFraCvrCache(cvr) ?? (await slaaCvrOp(cvr));
-    if (!v && body.virksomhed && typeof body.virksomhed === "object") {
-      const k = body.virksomhed as Record<string, unknown>;
-      if (k.cvr === cvr && typeof k.navn === "string") {
-        v = {
-          cvr,
-          navn: k.navn.slice(0, 200),
-          by: typeof k.by === "string" ? k.by.slice(0, 80) : undefined,
-          postnr: typeof k.postnr === "string" ? k.postnr.slice(0, 10) : undefined,
-          startdato: typeof k.startdato === "string" ? k.startdato.slice(0, 10) : undefined,
-          ophoert: !!k.ophoert,
-          ansatte: typeof k.ansatte === "number" ? k.ansatte : null,
-          ansatteInterval: typeof k.ansatteInterval === "string" ? k.ansatteInterval.slice(0, 20) : null,
-          branchekode: typeof k.branchekode === "number" ? k.branchekode : undefined,
-          branche: typeof k.branche === "string" ? k.branche.slice(0, 200) : undefined,
-          selskabsform: typeof k.selskabsform === "string" ? k.selskabsform.slice(0, 80) : undefined,
-        };
-        saetCvrCache(v);
-      }
-    }
-    if (v) kontekst = virksomhedSomTekst(v, forhaandstjek(v));
-  }
+  const v = await virksomhedFraBody(body);
+  const kontekst = v ? virksomhedSomTekst(v, forhaandstjek(v)) : "";
 
   const encoder = new TextEncoder();
   let handle: ReturnType<typeof startTilskudChat> | null = null;
@@ -187,7 +156,13 @@ async function chat(req: Request, body: Record<string, unknown>) {
           kontekst,
           onText: (delta) => send({ type: "text", text: delta }),
         });
-        const { vurdering, kvalificering, afskaaret } = await handle.faerdig;
+        const { tekst, vurdering, kvalificering, afskaaret } = await handle.faerdig;
+        await opdaterSession(sessionIdFraToken(body.token as string | undefined), {
+          kanal: "chat",
+          transcript: [...messages, { role: "assistant", content: tekst }],
+          ...(kvalificering && !afskaaret ? { kvalificering, status: "kvalificeret", egnethed: kvalificering.status } : {}),
+          ...(vurdering && !afskaaret ? { vurdering, status: "vurderet", egnethed: vurdering.egnethed.status } : {}),
+        });
         if (kvalificering && !afskaaret) {
           send({ type: "kvalificering", kvalificering });
         } else if (vurdering && !afskaaret) {
@@ -220,6 +195,124 @@ async function chat(req: Request, body: Record<string, unknown>) {
   return new Response(stream, {
     headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store" },
   });
+}
+
+/**
+ * Virksomheden til agentens kontekst: cache (sat af start-trinnet), så opslag,
+ * så klientens kopi fra start-svaret (ny serverless-instans uden cache), men
+ * kun hvis den matcher det CVR der blev slået op.
+ */
+async function virksomhedFraBody(body: Record<string, unknown>): Promise<Virksomhed | null> {
+  const cvr = normaliserCvr(String(body.cvr ?? ""));
+  if (!cvr) return null;
+  let v = hentFraCvrCache(cvr) ?? (await slaaCvrOp(cvr));
+  if (!v && body.virksomhed && typeof body.virksomhed === "object") {
+    const k = body.virksomhed as Record<string, unknown>;
+    if (k.cvr === cvr && typeof k.navn === "string") {
+      v = {
+        cvr,
+        navn: k.navn.slice(0, 200),
+        by: typeof k.by === "string" ? k.by.slice(0, 80) : undefined,
+        postnr: typeof k.postnr === "string" ? k.postnr.slice(0, 10) : undefined,
+        startdato: typeof k.startdato === "string" ? k.startdato.slice(0, 10) : undefined,
+        ophoert: !!k.ophoert,
+        ansatte: typeof k.ansatte === "number" ? k.ansatte : null,
+        ansatteInterval: typeof k.ansatteInterval === "string" ? k.ansatteInterval.slice(0, 20) : null,
+        branchekode: typeof k.branchekode === "number" ? k.branchekode : undefined,
+        branche: typeof k.branche === "string" ? k.branche.slice(0, 200) : undefined,
+        selskabsform: typeof k.selskabsform === "string" ? k.selskabsform.slice(0, 80) : undefined,
+      };
+      saetCvrCache(v);
+    }
+  }
+  return v;
+}
+
+/**
+ * Stemme-tilstanden starter: WebRTC-token til ElevenLabs-agenten + de
+ * dynamiske variabler (CVR-kontekst) bygget her på serveren. Agenten er privat,
+ * så den kan kun bruges med et token fra denne handling.
+ */
+async function voiceStart(req: Request, body: Record<string, unknown>) {
+  const ip = clientIp(req);
+  const rl = checkRateLimit(`tilskud-voice:${ip}`, 5, 10 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange samtaler på kort tid. Prøv igen om lidt, eller skriv i chatten." }, 429);
+  const sid = sessionIdFraToken(body.token as string | undefined);
+  if (!sid) return json({ error: "Sessionen er udløbet. Genindlæs siden." }, 401);
+  if (!voiceKonfigureret()) return json({ error: "Stemmen er ikke sat op. Brug chatten." }, 503);
+
+  const v = await virksomhedFraBody(body);
+  let samtale: { token: string; conversationId: string | null };
+  try {
+    samtale = await hentSamtaleToken();
+  } catch (e) {
+    console.error("tilskud voice-start: token fejlede:", (e as Error).message);
+    return json({ error: "Stemmen kunne ikke starte lige nu. Prøv igen, eller skriv i chatten." }, 502);
+  }
+  await opdaterSession(sid, { kanal: "stemme", elevenlabs_samtale: samtale.conversationId ?? "" });
+  return json({ conversationToken: samtale.token, conversationId: samtale.conversationId, dynamicVariables: dynamiskeVariabler(v) }, 200);
+}
+
+/** Klientens egen kopi af udskriften (fallback, hvis ElevenLabs ikke har den klar endnu). */
+function renUdskrift(raw: unknown): ChatMsg[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .slice(0, 120)
+    .filter((m) => m && typeof m === "object" && typeof (m as ChatMsg).content === "string")
+    .map((m) => ({ role: (m as ChatMsg).role === "user" ? ("user" as const) : ("assistant" as const), content: (m as ChatMsg).content.slice(0, 3000) }));
+}
+
+/** Efter stemmesamtalen: udskrift fra ElevenLabs -> samme kvalificering/vurdering som chatten. */
+async function voiceResultat(req: Request, body: Record<string, unknown>) {
+  const ip = clientIp(req);
+  const rl = checkRateLimit(`tilskud-voice-resultat:${ip}`, 6, 10 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange forsøg. Vent lidt." }, 429);
+  const sid = sessionIdFraToken(body.token as string | undefined);
+  if (!sid) return json({ error: "Sessionen er udløbet. Genindlæs siden." }, 401);
+
+  const klientUdskrift = renUdskrift(body.udskrift);
+  let udskrift = klientUdskrift;
+  const conversationId = String(body.conversationId ?? "").trim();
+  if (conversationId && voiceKonfigureret()) {
+    try {
+      const s = await hentSamtale(conversationId);
+      // Kun vores egen agents samtaler. Brug ElevenLabs' udskrift, når den er mindst lige så lang.
+      if (s.agentId === agentId() && s.transcript.length >= klientUdskrift.length) {
+        udskrift = s.transcript.map((t) => ({ role: t.role === "user" ? "user" : "assistant", content: t.message }));
+      }
+    } catch (e) {
+      console.warn("tilskud voice-resultat: kunne ikke hente samtalen:", (e as Error).message);
+    }
+  }
+  if (udskrift.filter((m) => m.role === "user").length < 1) {
+    return json({ tom: true }, 200);
+  }
+
+  const afklaringer = (body.afklaringer && typeof body.afklaringer === "object" ? Object.entries(body.afklaringer as Record<string, unknown>) : [])
+    .map(([punkt, x]) => normaliserNote({ punkt, ...(x && typeof x === "object" ? x : {}) }))
+    .filter((x): x is NonNullable<typeof x> => !!x);
+  const afklaringerTekst = afklaringer.map((a) => `${a.id}: ${a.afklaring.status} (${a.afklaring.note})`).join("\n");
+
+  const v = await virksomhedFraBody(body);
+  const kontekst = v ? virksomhedSomTekst(v, forhaandstjek(v)) : "";
+  let resultat: { kvalificering: Kvalificering | null; vurdering: Vurdering | null };
+  try {
+    resultat = await udledResultatAfSamtale({ udskrift, kontekst, afklaringer: afklaringerTekst });
+  } catch (e) {
+    console.error("tilskud voice-resultat: Claude fejlede:", (e as Error).message);
+    return json({ error: "Vurderingen kunne ikke samles lige nu. Prøv igen." }, 502);
+  }
+  await opdaterSession(sid, {
+    kanal: "stemme",
+    transcript: udskrift,
+    afklaringer: Object.fromEntries(afklaringer.map((a) => [a.id, a.afklaring])),
+    ...(resultat.kvalificering ? { kvalificering: resultat.kvalificering, status: "kvalificeret", egnethed: resultat.kvalificering.status } : {}),
+    ...(resultat.vurdering ? { vurdering: resultat.vurdering, status: "vurderet", egnethed: resultat.vurdering.egnethed.status } : {}),
+  });
+  if (!resultat.kvalificering && !resultat.vurdering) {
+    return json({ error: "Vurderingen blev ikke komplet. Prøv igen." }, 502);
+  }
+  return json({ ...resultat, transcript: udskrift }, 200);
 }
 
 async function lead(req: Request, body: Record<string, unknown>) {
@@ -267,12 +360,18 @@ async function lead(req: Request, body: Record<string, unknown>) {
       status: "new",
     });
   } catch (e) {
+    // Fail-soft (lært 2026-11-01 under Fly-udfald i ARN): mails sendes alligevel,
+    // så leadet når Michael, selvom PocketBase er nede.
     console.error("tilskud lead: PB-gem fejlede:", (e as Error).message);
-    return json({ error: "Noget gik galt. Prøv igen." }, 500);
   }
+  await opdaterSession(sessionIdFraToken(body.token as string | undefined), {
+    status: "lead",
+    lead_id: pbId,
+    ...(vurdering ? { vurdering, egnethed: vurdering.egnethed.status } : {}),
+    ...(kvalificering ? { kvalificering } : {}),
+  });
 
-  // Fail-soft notifikationer: leadet er gemt uanset.
-  const notif = renderLeadNotifikation({ email, navn, telefon, virksomhed, cvr, puljeAlarm, vurdering, kvalificering, fase, pbId });
+  const notif = renderLeadNotifikation({ email, navn, telefon, virksomhed, cvr, puljeAlarm, vurdering, kvalificering, fase, pbId: pbId || "IKKE GEMT (PocketBase-fejl), data står kun i denne mail" });
   await sendEmail({
     to: process.env.EMAIL_FROM_ADDRESS || "michael@spaike.dk",
     subject: notif.subject,

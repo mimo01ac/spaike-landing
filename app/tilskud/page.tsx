@@ -55,7 +55,7 @@ const FAQ = [
   },
   {
     q: "Hvad gemmer I?",
-    a: "Samtalen og vurderingen gemmes kun, hvis I selv beder om at få resultatet på mail. CVR-opslaget bruger offentlige data. Se privatlivspolitikken for detaljer.",
+    a: "Jeg gemmer virksomhedens CVR-oplysninger, samtalen og vurderingen fra det øjeblik, tjekket starter, så jeg kan følge op og hjælpe jer videre. Navn, mail og telefon kun, hvis I selv skriver dem. Taler I med agenten, går stemmen gennem ElevenLabs; lyden optages ikke. Se privatlivspolitikken for detaljer.",
   },
 ];
 

@@ -31,3 +31,13 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Tur-latens = Claude-svar (3-8 s) + TTS af hele svaret før afspilning · fart · det rigtige: sætningsvis TTS-streaming mens teksten streamer · effort M
 - Stemme = "Michael Stemme" (professionel klon af Michaels stemme, da) sat i env `TILSKUD_TTS_VOICE`; ikke øre-testet af native lyttere endnu · beslutning: Michael vurderer i morgen; alternativ "Mads SpAIke" (BIWC0507fYMfhPcAEIRP) · effort XS (kun env)
 - TTS-kald er ikke cost-cappet ud over rate-limit pr. IP (80/5 min) · fart · det rigtige: dagligt tegn-loft pr. session + global breaker · effort S. **Tjek ElevenLabs-forbrug sammen med Anthropic-forbruget ugentligt til 2026-12-01.**
+
+## 2026-11-01 · Tilskudstjek stemme v2 (ElevenLabs Agents) + sessioner
+
+- v1 (Web Speech + oplæsning af chatten) er erstattet helt; punkterne i afsnittet ovenfor er dermed lukket undtagen stemmevalget.
+- Agentens LLM er Claude Sonnet 4.6 (A/B 2026-11-01 i simulation: 10/10 noteringer mod 9/10 for gpt-4o og ustabile Haiku 4.5/Gemini Flash), men svartiden er ikke målt i en rigtig samtale · fart · det rigtige: mål tid-til-første-lyd i ElevenLabs-dashboardet efter Michaels test, skift til gpt-4o via `TILSKUD_VOICE_LLM` + sync hvis den føles træg · effort XS
+- Stemmen er "Michael Stemme" (pro-klon) på eleven_flash_v2_5; "Spajk" er skrevet fonetisk i prompten i stedet for en udtale-ordbog · fart · det rigtige: øre-test, evt. alias-ordbog for "SpAIke" og "SMV Digital" · effort S
+- Omkostningsvagt: agentens `call_limits.daily_limit` = 50 samtaler/døgn og 5 samtidige (fail-closed hos ElevenLabs) + rate-limit 5 starter/10 min pr. IP. Ingen beløbsloft · det rigtige: månedligt forbrugsloft i ElevenLabs-kontoen · effort XS (Michael, dashboard)
+- Tjeklisten afhænger af, at agenten kalder `noter_afklaring`; der er ingen server-side kontrol undervejs · det rigtige: hvis rigtige samtaler viser huller, så en let Haiku-opsummering af udskriften efter hver brugertur som fallback · effort M
+- `voice-resultat` kører Claude Opus 5.5 synkront (ca. 20-45 s) inden for Vercels 60 s · fart · det rigtige: streame eller køre i baggrunden med polling, hvis vurderingen bliver langsommere · effort M
+- Sessioner gemmes for alle (Michael-beslutning); ingen automatisk sletning af gamle `tilskud_sessioner` · det rigtige: slet sessioner uden lead efter fx 12 måneder (cron eller PB-hook) · effort S

@@ -48,14 +48,19 @@ export default function Privatlivspolitik() {
         scan-resultatet (webadresse, score og fund), så rapport-linket virker.
         På <a href="/tilskud">spaike.dk/tilskud</a> slår vi offentlige
         CVR-data op ud fra det CVR-nummer eller virksomhedsnavn, du indtaster,
-        og du fører en samtale med en AI-assistent om jeres situation. Samtalen
-        og den vurdering, den ender i, gemmes <strong>kun</strong>, hvis du
-        selv beder om at få resultatet på mail. I så fald gemmer vi navn,
-        e-mail, eventuelt telefonnummer, CVR-nummer, samtalen og vurderingen
-        for at sende dig resultatet og følge op, og for at kunne give dig
-        besked om puljeåbning, hvis du har bedt om det. Svarene sendes til
-        vores AI-leverandør (Anthropic, behandlet i EU/USA efter deres
-        erhvervsvilkår uden træning på dine data) for at lave vurderingen.
+        og du fører en samtale med en AI-assistent om jeres situation, enten
+        skriftligt eller med stemmen. Fra det øjeblik tjekket starter, gemmer
+        vi virksomhedens CVR-oplysninger, samtalen og den vurdering, den ender
+        i, og vi får besked om, at et tjek er startet. Det gør vi for at kunne
+        følge op, svare på spørgsmål og hjælpe jer videre med tilskuddet
+        (legitim interesse). Beder du om resultatet på mail, gemmer vi også
+        navn, e-mail og eventuelt telefonnummer, og giver dig besked om
+        puljeåbning, hvis du har bedt om det. Svarene sendes til vores
+        AI-leverandør (Anthropic, behandlet i EU/USA efter deres erhvervsvilkår
+        uden træning på dine data) for at lave vurderingen. Vælger du at tale
+        med assistenten, går stemmen gennem ElevenLabs, som omsætter tale til
+        tekst og tekst til tale. Lyden optages ikke, og udskriften slettes hos
+        ElevenLabs efter 30 dage.
         Skriv ikke personfølsomme oplysninger i samtalen. Du kan altid få
         indsigt i eller slettet det, vi har gemt, ved at skrive til
         michael@spaike.dk.

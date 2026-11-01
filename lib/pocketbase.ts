@@ -9,6 +9,8 @@
 const URL = process.env.POCKETBASE_URL;
 const EMAIL = process.env.POCKETBASE_ADMIN_EMAIL;
 const PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD;
+/** Uden timeout hang kald i 35 s under Fly-udfaldet 2026-11-01. */
+const TIMEOUT_MS = 8000;
 
 let cachedToken: { token: string; exp: number } | null = null;
 
@@ -30,6 +32,7 @@ async function getToken(): Promise<string> {
     return cachedToken.token;
   }
   const res = await fetch(`${URL}/api/collections/_superusers/auth-with-password`, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ identity: EMAIL, password: PASSWORD }),
@@ -49,6 +52,7 @@ export async function createRecord(
 ): Promise<string> {
   const token = await getToken();
   const res = await fetch(`${URL}/api/collections/${collection}/records`, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: token },
     body: JSON.stringify(data),
@@ -68,6 +72,7 @@ export async function getRecord<T = Record<string, unknown>>(
 ): Promise<T | null> {
   const token = await getToken();
   const res = await fetch(`${URL}/api/collections/${collection}/records/${id}`, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
     headers: { Authorization: token },
     cache: "no-store",
   });
@@ -86,6 +91,7 @@ export async function updateRecord(
 ): Promise<void> {
   const token = await getToken();
   const res = await fetch(`${URL}/api/collections/${collection}/records/${id}`, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
     method: "PATCH",
     headers: { "Content-Type": "application/json", Authorization: token },
     body: JSON.stringify(data),

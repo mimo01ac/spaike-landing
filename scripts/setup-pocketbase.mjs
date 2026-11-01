@@ -91,6 +91,31 @@ const COLLECTIONS = [
     ],
   },
   {
+    // Alle Tilskudstjek fra start (Michael 2026-11-01), også uden mail. id = session-tokenets sid.
+    name: "tilskud_sessioner",
+    type: "base",
+    fields: [
+      { name: "cvr", type: "text" },
+      { name: "virksomhed", type: "text" },
+      { name: "branche", type: "text" },
+      { name: "by", type: "text" },
+      { name: "ansatte", type: "text" },
+      { name: "reklamebeskyttet", type: "bool" },
+      { name: "test", type: "bool" },
+      { name: "kanal", type: "select", maxSelect: 1, values: ["chat", "stemme"] },
+      { name: "status", type: "select", maxSelect: 1, values: ["startet", "kvalificeret", "vurderet", "lead"] },
+      { name: "egnethed", type: "select", maxSelect: 1, values: ["groen", "gul", "roed"] },
+      { name: "transcript", type: "json", maxSize: 2000000 },
+      { name: "afklaringer", type: "json", maxSize: 200000 },
+      { name: "kvalificering", type: "json", maxSize: 500000 },
+      { name: "vurdering", type: "json", maxSize: 2000000 },
+      { name: "elevenlabs_samtale", type: "text" },
+      { name: "lead_id", type: "text" },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+      { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
+    ],
+  },
+  {
     name: "tilskud_leads",
     type: "base",
     fields: [

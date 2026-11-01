@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { trackEvent } from "../../components/track";
-import VoiceControls from "./VoiceControls";
+import dynamic from "next/dynamic";
+
+// ElevenLabs-SDK'et (~120 kB) hentes først, når nogen vælger stemmen.
+const VoiceSamtale = dynamic(() => import("./VoiceSamtale"), {
+  ssr: false,
+  loading: () => <div className="border border-rule rounded bg-cream h-[320px] flex items-center justify-center text-muted text-sm">Gør stemmen klar …</div>,
+});
 import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
 const CALENDLY = "https://calendly.com/michael-spaike/new-meeting";
@@ -38,7 +44,7 @@ export default function TilskudFlow() {
   const [stopEfterKval, setStopEfterKval] = useState(false);
   const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
   const [voice, setVoice] = useState(false);
-  // Stemmen bygges om (2026-11-01); indtil da kun synlig med ?stemme=1.
+  // Stemmen er ny (2026-11-01): synlig på preview/lokalt, i produktion kun med ?stemme=1, indtil Michael har godkendt den.
   const [visStemme, setVisStemme] = useState(false);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -90,7 +96,9 @@ export default function TilskudFlow() {
   }
 
   useEffect(() => {
-    setVisStemme(new URLSearchParams(window.location.search).get("stemme") === "1");
+    setVisStemme(
+      new URLSearchParams(window.location.search).get("stemme") === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV !== "production",
+    );
   }, []);
 
   useEffect(() => {
@@ -124,7 +132,7 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
-      {visStemme && (
+      {visStemme && !kvalificering && !vurdering && (
       <div className="flex flex-wrap items-center gap-2 font-sans text-[12.5px]">
         <span className="text-muted">Sådan vil jeg tage samtalen:</span>
         <button
@@ -146,26 +154,45 @@ export default function TilskudFlow() {
         </button>
       </div>
       )}
-      <Chat
-        token={start.token}
-        cvr={cvrBrugt}
-        virksomhed={start.virksomhed}
-        inject={inject}
-        voice={voice}
-        onKvalificering={(k, t) => {
-          setKvalificering(k);
-          setTranscript(t);
-        }}
-        onVurdering={(v, t) => {
-          setVurdering(v);
-          setTranscript(t);
-        }}
-      />
+      {voice ? (
+        <VoiceSamtale
+          token={start.token}
+          cvr={cvrBrugt}
+          virksomhed={start.virksomhed}
+          forhaandstjek={start.forhaandstjek}
+          onKvalificering={(k, t) => {
+            // Samtalen er slut: ingen "fortsæt" her, kun resultatet og mailen.
+            setKvalificering(k);
+            setStopEfterKval(true);
+            setTranscript(t);
+          }}
+          onVurdering={(v, t) => {
+            setVurdering(v);
+            setTranscript(t);
+          }}
+        />
+      ) : (
+        <Chat
+          token={start.token}
+          cvr={cvrBrugt}
+          virksomhed={start.virksomhed}
+          inject={inject}
+          onKvalificering={(k, t) => {
+            setKvalificering(k);
+            setTranscript(t);
+          }}
+          onVurdering={(v, t) => {
+            setVurdering(v);
+            setTranscript(t);
+          }}
+        />
+      )}
       {kvalificering && !vurdering && (
         <div ref={kvalRef} className="scroll-mt-24">
           <KvalificeringKort
             k={kvalificering}
             stoppet={stopEfterKval}
+            kunMail={voice}
             onFortsaet={() => {
               setStopEfterKval(false);
               trackEvent("tilskud_fortsaet_forberedelse", { status: kvalificering.status });
@@ -346,6 +373,13 @@ function VirksomhedsSoegning({
           Spring CVR over og svar selv
         </button>
       </div>
+      <p className="font-sans text-[12px] text-muted mt-2.5 max-w-xl">
+        Jeg gemmer virksomhedens CVR-oplysninger og samtalen, så jeg kan følge op og hjælpe jer videre. Se{" "}
+        <a href="/privatlivspolitik" className="underline underline-offset-2" data-track-event="privatliv_click">
+          privatlivspolitikken
+        </a>
+        .
+      </p>
     </div>
   );
 }
@@ -420,7 +454,6 @@ function Chat({
   cvr,
   virksomhed,
   inject,
-  voice,
   onKvalificering,
   onVurdering,
 }: {
@@ -429,8 +462,6 @@ function Chat({
   virksomhed: StartSvar["virksomhed"];
   /** Programmatisk besked (fx "fortsæt til forberedelsen" fra kvalificeringskortet). */
   inject: { id: number; text: string } | null;
-  /** Voice-tilstand: svar læses op, og brugeren kan tale i stedet for at skrive. */
-  voice: boolean;
   onKvalificering: (k: Kvalificering, transcript: ChatMsg[]) => void;
   onVurdering: (v: Vurdering, transcript: ChatMsg[]) => void;
 }) {
@@ -439,7 +470,6 @@ function Chat({
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sidsteSvar, setSidsteSvar] = useState<{ id: number; text: string } | null>(null);
   const started = useRef(false);
   const lastInject = useRef<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -542,15 +572,6 @@ function Chat({
     }
   }
 
-  // Når et assistent-svar er færdigstreamet, gives det videre til voice-laget (oplæsning).
-  useEffect(() => {
-    if (busy) return;
-    const sidste = messages[messages.length - 1];
-    if (sidste && sidste.role === "assistant" && sidste.content) {
-      setSidsteSvar({ id: messages.length, text: sidste.content });
-    }
-  }, [busy, messages]);
-
   return (
     <div className="border border-rule rounded bg-cream overflow-hidden">
       <div ref={scrollRef} className="h-[440px] overflow-y-auto px-5 py-6 space-y-5" aria-live="polite">
@@ -611,15 +632,6 @@ function Chat({
           Send
         </button>
       </form>
-      {voice && (
-        <VoiceControls
-          token={token}
-          onSend={(t) => void send(t)}
-          sidsteSvar={sidsteSvar}
-          busy={busy}
-          done={done}
-        />
-      )}
     </div>
   );
 }
@@ -634,11 +646,14 @@ const STATUS: Record<string, { label: string; cls: string }> = {
 function KvalificeringKort({
   k,
   stoppet,
+  kunMail = false,
   onFortsaet,
   onStop,
 }: {
   k: Kvalificering;
   stoppet: boolean;
+  /** Stemme-tilstand: samtalen er slut, så ingen "fortsæt"-del. */
+  kunMail?: boolean;
   onFortsaet: () => void;
   onStop: () => void;
 }) {
@@ -676,6 +691,7 @@ function KvalificeringKort({
           )}
         </div>
       </div>
+      {!kunMail && (
       <div className="px-5 py-5 border-t border-rule bg-cream">
         <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">Trin 2 af 2: forberedelse</p>
         <p className="font-serif text-lg mt-1 leading-snug">
@@ -701,6 +717,7 @@ function KvalificeringKort({
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }
