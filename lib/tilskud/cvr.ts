@@ -78,10 +78,52 @@ function parseAnsatte(v: number | string | null | undefined): {
   return { ansatte: null, interval: null };
 }
 
+/**
+ * Mapper cvrapi.dk's rå svar til vores Virksomhed. Bruges både server-side og
+ * når klienten har slået op direkte (fallback, se nedenfor). Returnerer null
+ * hvis svaret ikke matcher det forventede CVR.
+ */
+export function mapCvrApiSvar(data: unknown, forventetCvr: string): Virksomhed | null {
+  const d = (data && typeof data === "object" ? data : {}) as CvrApiSvar;
+  if (!d.name || d.error) return null;
+  if (d.vat !== undefined && String(d.vat) !== forventetCvr) return null;
+  const { ansatte, interval } = parseAnsatte(d.employees);
+  return {
+    cvr: forventetCvr,
+    navn: String(d.name).slice(0, 200),
+    adresse: d.address ? String(d.address).slice(0, 200) : undefined,
+    postnr: d.zipcode ? String(d.zipcode).slice(0, 10) : undefined,
+    by: d.city ? String(d.city).slice(0, 80) : undefined,
+    startdato: parseDanskDato(d.startdate),
+    ophoert: !!d.enddate,
+    ansatte,
+    ansatteInterval: interval,
+    branchekode: typeof d.industrycode === "number" ? d.industrycode : undefined,
+    branche: d.industrydesc ? String(d.industrydesc).slice(0, 200) : undefined,
+    selskabsform: d.companydesc ? String(d.companydesc).slice(0, 80) : undefined,
+  };
+}
+
 // Kort in-memory cache pr. serverless-instans: chat-routen genopbygger
 // konteksten ved hver tur, og CVR-data ændrer sig ikke i løbet af en samtale.
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const cache = new Map<string, { v: Virksomhed; exp: number }>();
+
+/**
+ * Læg en virksomhed i cachen udefra. Baggrund (fundet i preview 2026-11-01):
+ * cvrapi.dk's gratis-kvote er pr. IP, og Vercels delte egress-IP'er svarer
+ * "403 QUOTA_EXCEEDED". Klienten slår derfor op direkte (CORS er åben, kvoten
+ * følger den besøgendes IP) og sender resultatet med; serveren mapper det
+ * gennem mapCvrApiSvar og cacher det her.
+ */
+export function saetCvrCache(v: Virksomhed): void {
+  cache.set(v.cvr, { v, exp: Date.now() + CACHE_TTL_MS });
+}
+
+export function hentFraCvrCache(cvr: string): Virksomhed | null {
+  const hit = cache.get(cvr);
+  return hit && hit.exp > Date.now() ? hit.v : null;
+}
 
 export async function slaaCvrOp(cvrInput: string): Promise<Virksomhed | null> {
   const cvr = normaliserCvr(cvrInput);
@@ -120,25 +162,12 @@ async function hentFraCvrApi(cvr: string): Promise<Virksomhed | null> {
       console.warn("CVR-opslag fejlede:", sidsteCvrFejl);
       return null;
     }
-    if (!data || data.error || !data.name) {
+    const v = mapCvrApiSvar(data, cvr);
+    if (!v) {
       sidsteCvrFejl = `Tomt/fejl-svar: ${JSON.stringify(data).slice(0, 120)}`;
       return null;
     }
-    const { ansatte, interval } = parseAnsatte(data.employees);
-    return {
-      cvr,
-      navn: data.name,
-      adresse: data.address,
-      postnr: data.zipcode,
-      by: data.city,
-      startdato: parseDanskDato(data.startdate),
-      ophoert: !!data.enddate,
-      ansatte,
-      ansatteInterval: interval,
-      branchekode: data.industrycode,
-      branche: data.industrydesc,
-      selskabsform: data.companydesc,
-    };
+    return v;
   } catch (e) {
     console.warn("CVR-opslag fejlede:", (e as Error).message);
     return null;

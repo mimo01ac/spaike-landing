@@ -33,16 +33,37 @@ export default function TilskudFlow() {
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
 
+  async function kaldStart(cvr: string, cvrFallback?: unknown) {
+    const res = await fetch("/api/tilskud", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start", cvr, cvrFallback }),
+    });
+    return { res, data: (await res.json()) as StartSvar & { error?: string } };
+  }
+
+  // Fallback når serverens CVR-opslag afvises (cvrapi.dk's gratis-kvote er pr.
+  // IP, og Vercels delte IP'er er opbrugt): browseren slår selv op; kvoten
+  // følger så den besøgendes egen IP. Serveren validerer svaret mod CVR'et.
+  async function slaaOpFraBrowser(cvr: string): Promise<unknown | null> {
+    try {
+      const r = await fetch(`https://cvrapi.dk/api?search=${cvr}&country=dk`, { headers: { Accept: "application/json" } });
+      if (!r.ok) return null;
+      return await r.json();
+    } catch {
+      return null;
+    }
+  }
+
   async function startTjek(cvr: string) {
     setStarter(true);
     setStartFejl(null);
     try {
-      const res = await fetch("/api/tilskud", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "start", cvr }),
-      });
-      const data = (await res.json()) as StartSvar & { error?: string };
+      let { res, data } = await kaldStart(cvr);
+      if (res.ok && data.token && cvr && !data.virksomhed && data.cvrFejl) {
+        const fallback = await slaaOpFraBrowser(cvr);
+        if (fallback) ({ res, data } = await kaldStart(cvr, fallback));
+      }
       if (!res.ok || !data.token) {
         setStartFejl(data.error ?? "Noget gik galt. Prøv igen.");
         return;
@@ -115,6 +136,7 @@ export default function TilskudFlow() {
       <Chat
         token={start.token}
         cvr={cvrBrugt}
+        virksomhed={start.virksomhed}
         onVurdering={(v, t) => {
           setVurdering(v);
           setTranscript(t);
@@ -197,10 +219,12 @@ function Virksomhedskort({ start }: { start: StartSvar }) {
 function Chat({
   token,
   cvr,
+  virksomhed,
   onVurdering,
 }: {
   token: string;
   cvr: string;
+  virksomhed: StartSvar["virksomhed"];
   onVurdering: (v: Vurdering, transcript: ChatMsg[]) => void;
 }) {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -240,7 +264,7 @@ function Chat({
       const res = await fetch("/api/tilskud", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "chat", token, cvr, messages: history }),
+        body: JSON.stringify({ action: "chat", token, cvr, virksomhed, messages: history }),
       });
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => ({}));

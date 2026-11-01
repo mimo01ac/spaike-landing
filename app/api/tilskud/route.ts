@@ -18,7 +18,16 @@ import { checkRateLimit, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { createRecord } from "@/lib/pocketbase";
 import { sendEmail } from "@/lib/email";
-import { forhaandstjek, normaliserCvr, sidsteCvrFejl, slaaCvrOp, virksomhedSomTekst } from "@/lib/tilskud/cvr";
+import {
+  forhaandstjek,
+  hentFraCvrCache,
+  mapCvrApiSvar,
+  normaliserCvr,
+  saetCvrCache,
+  sidsteCvrFejl,
+  slaaCvrOp,
+  virksomhedSomTekst,
+} from "@/lib/tilskud/cvr";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat } from "@/lib/tilskud/chat";
@@ -56,7 +65,13 @@ async function start(req: Request, body: Record<string, unknown>) {
   }
 
   const cvr = normaliserCvr(String(body.cvr ?? ""));
-  const virksomhed = cvr ? await slaaCvrOp(cvr) : null;
+  let virksomhed = cvr ? await slaaCvrOp(cvr) : null;
+  // Fallback: klienten har selv slået op hos cvrapi.dk (CORS) fordi serverens
+  // IP-kvote er opbrugt. Vi mapper og validerer svaret mod det indtastede CVR.
+  if (cvr && !virksomhed && body.cvrFallback && typeof body.cvrFallback === "object") {
+    virksomhed = mapCvrApiSvar(body.cvrFallback, cvr);
+    if (virksomhed) saetCvrCache(virksomhed);
+  }
   const tjek = virksomhed ? forhaandstjek(virksomhed) : null;
   const p = naesteRaadgivningspulje();
 
@@ -93,7 +108,28 @@ async function chat(req: Request, body: Record<string, unknown>) {
   let kontekst = "";
   const cvr = normaliserCvr(String(body.cvr ?? ""));
   if (cvr) {
-    const v = await slaaCvrOp(cvr);
+    // Cache først (sat af start-trinnet), så opslag, så klientens kopi af
+    // virksomheden fra start-svaret (ny serverless-instans uden cache).
+    let v = hentFraCvrCache(cvr) ?? (await slaaCvrOp(cvr));
+    if (!v && body.virksomhed && typeof body.virksomhed === "object") {
+      const k = body.virksomhed as Record<string, unknown>;
+      if (k.cvr === cvr && typeof k.navn === "string") {
+        v = {
+          cvr,
+          navn: k.navn.slice(0, 200),
+          by: typeof k.by === "string" ? k.by.slice(0, 80) : undefined,
+          postnr: typeof k.postnr === "string" ? k.postnr.slice(0, 10) : undefined,
+          startdato: typeof k.startdato === "string" ? k.startdato.slice(0, 10) : undefined,
+          ophoert: !!k.ophoert,
+          ansatte: typeof k.ansatte === "number" ? k.ansatte : null,
+          ansatteInterval: typeof k.ansatteInterval === "string" ? k.ansatteInterval.slice(0, 20) : null,
+          branchekode: typeof k.branchekode === "number" ? k.branchekode : undefined,
+          branche: typeof k.branche === "string" ? k.branche.slice(0, 200) : undefined,
+          selskabsform: typeof k.selskabsform === "string" ? k.selskabsform.slice(0, 80) : undefined,
+        };
+        saetCvrCache(v);
+      }
+    }
     if (v) kontekst = virksomhedSomTekst(v, forhaandstjek(v));
   }
 
