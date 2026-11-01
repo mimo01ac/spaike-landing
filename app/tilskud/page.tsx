@@ -20,7 +20,16 @@ export const metadata: Metadata = {
     url: "https://www.spaike.dk/tilskud",
     locale: "da_DK",
     type: "website",
+    images: [
+      {
+        url: "/og/tilskud.png",
+        width: 1200,
+        height: 630,
+        alt: "Tilskudstjek: kan staten betale halvdelen af jeres AI-automatisering?",
+      },
+    ],
   },
+  alternates: { canonical: "https://www.spaike.dk/tilskud" },
 };
 
 const FAQ = [
