@@ -34,8 +34,11 @@ export function normaliserVurdering(raw: unknown): Vurdering {
     projekt: {
       titel: str(pr.titel),
       formaal: str(pr.formaal),
+      udgangspunkt: str(pr.udgangspunkt),
       omfang: str(pr.omfang),
       analysespoergsmaal: strArr(pr.analysespoergsmaal),
+      forventet_effekt: strArr(pr.forventet_effekt),
+      forankring: str(pr.forankring),
       kandidater: (Array.isArray(pr.kandidater) ? pr.kandidater : []).map((k) => {
         const o = obj(k);
         return { titel: str(o.titel), problem: str(o.problem), gevinst: str(o.gevinst), teknologi: str(o.teknologi) };
