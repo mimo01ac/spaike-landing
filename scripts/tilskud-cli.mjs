@@ -27,15 +27,15 @@ const log = (...a) => {
   if (!JSON_ONLY) console.log(...a);
 };
 
+// Fixture = en typisk bruger der IKKE ved hvor han skal starte (Michaels pointe
+// 2026-11-01): agenten skal guide, ikke forhøre. Svarene er bevidst løse.
 const FIXTURE = [
-  "Vi er 12 ansatte og har aflagt regnskab hvert år siden 2019.",
-  "Ja, vi kan godt betale vores halvdel kontant og lægge beløbet ud.",
-  "Nej, vi har ikke fået offentlige tilskud de seneste tre år.",
-  "Nej, vi er ejet af de to stiftere, ingen store ejere.",
-  "Vi vil gerne have analyseret hele kundeflowet, fra et tilbud eller en ordre kommer ind, til den er leveret og faktureret. Om et år skal det meste køre uden manuel indtastning, og vi skal kunne se omsætning pr. kunde løbende.",
-  "Det gør mest ondt når tilbud og ordrer fra mails skal tastes ind i e-conomic, og når ugerapporter samles i Excel. Cirka 15 timer om ugen fordelt på to personer.",
-  "Flowet løber gennem Outlook, en webshop på Shopify, e-conomic og Excel.",
-  "Vi prøvede en Zapier-kobling for to år siden, men den holdt ikke, når formaterne ændrede sig.",
+  "Ærligt talt har vi bare hørt, at man kan få tilskud til digitalisering, og vi ved ikke rigtig hvor vi skal starte. Vi er 12 ansatte.",
+  "Ja, vi har aflagt regnskab hvert år siden 2019, og vi kan godt betale vores halvdel kontant og lægge beløbet ud.",
+  "Nej, ingen offentlige tilskud de seneste tre år, og vi er ejet af de to stiftere.",
+  "Det der fylder mest er, at Lene og Peter i administrationen drukner. Alt skal igennem dem, og når en af dem er syg, går det i stå. Og vi laver for mange fejl i fakturaerne. Det er nok faktureringsflowet, vi skal kigge på.",
+  "Hvis det blev løst, kunne vi tage flere kunder ind uden at ansætte en tredje i administrationen, og pengene ville komme hurtigere ind. Det er nok en halv stilling i dag, tror jeg.",
+  "Det ville være mig og Lene, der driver det. Vi skiftede til e-conomic for tre år siden og satte selv Shopify op.",
 ];
 const FALLBACK = "Det ved jeg ikke præcist, tag dit bedste skøn og gå videre.";
 

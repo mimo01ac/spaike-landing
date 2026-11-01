@@ -24,10 +24,16 @@ export interface Vurdering {
   projekt: {
     titel: string;
     formaal: string;
+    /** Den konkrete smerte brugeren selv nævnte; ankeret for hele projektet. */
+    udgangspunkt: string;
     /** Hvilket flow/område analysen dækker (fra hvor til hvor, systemer, afdelinger). */
     omfang: string;
     /** De spørgsmål analysen skal svare på. */
     analysespoergsmaal: string[];
+    /** Forventede effekter i ansøgningens sprog (business case). */
+    forventet_effekt: string[];
+    /** Hvem driver projektet internt + digital erfaring (kapacitets-kriteriet). */
+    forankring: string;
     /** Hypoteser analysen tester (ikke besluttede løsninger). */
     kandidater: {
       titel: string;

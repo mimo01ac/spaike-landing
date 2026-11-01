@@ -71,9 +71,12 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
 
       ${h("Projektoplæg")}
       <div style="font:600 17px/1.3 Georgia,serif;color:${ink};margin:0 0 6px;">${esc(v.projekt.titel)}</div>
+      ${v.projekt.udgangspunkt ? `<p style="font:italic 15px/1.6 Georgia,serif;color:${ink};border-left:3px solid ${amber};padding-left:12px;margin:0 0 10px;">${esc(v.projekt.udgangspunkt)}</p>` : ""}
       ${p(esc(v.projekt.formaal))}
       ${v.projekt.omfang ? p(`<b style="color:${ink}">Omfang:</b> ${esc(v.projekt.omfang)}`) : ""}
       ${v.projekt.analysespoergsmaal.length ? p(`<b style="color:${ink}">Det analysen skal svare på:</b>`) + li(v.projekt.analysespoergsmaal) : ""}
+      ${v.projekt.forventet_effekt.length ? p(`<b style="color:${ink}">Forventet effekt (til ansøgningen):</b>`) + li(v.projekt.forventet_effekt) : ""}
+      ${v.projekt.forankring ? p(`<b style="color:${ink}">Forankring:</b> ${esc(v.projekt.forankring)}`) : ""}
       ${p(`<b style="color:${ink}">Hypoteser analysen tester:</b>`)}
       ${kandidater}
       ${p(`<b style="color:${ink}">Rådgivningsforløb:</b>`)}

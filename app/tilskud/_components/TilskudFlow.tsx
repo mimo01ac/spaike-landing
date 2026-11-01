@@ -567,6 +567,11 @@ function Resultat({
       <div className="px-5 py-5 border-b border-rule">
         <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Projektoplæg</p>
         <h3 className="font-serif text-2xl mt-1 leading-tight">{v.projekt.titel}</h3>
+        {v.projekt.udgangspunkt && (
+          <p className="font-serif text-[16px] italic text-ink-soft mt-2 border-l-2 border-amber-dark pl-3">
+            {v.projekt.udgangspunkt}
+          </p>
+        )}
         <p className="font-sans text-[14px] text-ink-soft mt-2">{v.projekt.formaal}</p>
         {v.projekt.omfang && (
           <p className="font-sans text-[14px] text-ink-soft mt-2">
@@ -582,6 +587,21 @@ function Resultat({
               ))}
             </ul>
           </div>
+        )}
+        {v.projekt.forventet_effekt.length > 0 && (
+          <div className="mt-3">
+            <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Forventet effekt (til ansøgningen)</p>
+            <ul className="list-disc pl-5 mt-1 space-y-1 font-sans text-[13.5px] text-ink-soft">
+              {v.projekt.forventet_effekt.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {v.projekt.forankring && (
+          <p className="font-sans text-[13.5px] text-ink-soft mt-3">
+            <b className="text-ink font-medium">Forankring:</b> {v.projekt.forankring}
+          </p>
         )}
         <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted mt-4">Hypoteser analysen tester</p>
         <div className="grid sm:grid-cols-2 gap-3 mt-1.5">
