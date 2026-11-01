@@ -7,7 +7,7 @@
  * funktion, så manglende felter bliver tomme værdier i stedet for crashes.
  */
 
-import type { Vurdering } from "./types";
+import type { Kvalificering, Vurdering } from "./types";
 
 const str = (v: unknown, fallback = ""): string => (typeof v === "string" ? v : fallback);
 const num = (v: unknown, fallback = 0): number => (typeof v === "number" && Number.isFinite(v) ? v : fallback);
@@ -79,13 +79,63 @@ export function normaliserVurdering(raw: unknown): Vurdering {
   };
 }
 
-/** Sandt når de felter brugeren faktisk får værdi af, er til stede. */
+export function normaliserKvalificering(raw: unknown): Kvalificering {
+  const r = obj(raw);
+  const p = obj(r.pulje);
+  const status = r.status === "groen" || r.status === "gul" || r.status === "roed" ? r.status : "gul";
+  return {
+    status,
+    opsummering: str(r.opsummering),
+    begrundelse: strArr(r.begrundelse),
+    stoppere: strArr(r.stoppere),
+    pulje: { id: str(p.id), navn: str(p.navn), hvorfor: str(p.hvorfor) },
+    idee: str(r.idee),
+    naeste: str(r.naeste),
+  };
+}
+
+/**
+ * Felter der mangler i en vurdering (til logning). Fundet 2026-11-01: et enkelt
+ * tomt felt må ikke blokere hele resultatet, så kun de bærende felter er krav.
+ */
+export function manglendeFelter(v: Vurdering): string[] {
+  const m: string[] = [];
+  if (!v.egnethed.opsummering) m.push("egnethed.opsummering");
+  if (!v.projekt.titel) m.push("projekt.titel");
+  if (!v.projekt.kandidater.length) m.push("projekt.kandidater");
+  if (!v.projekt.forloeb.length) m.push("projekt.forloeb");
+  if (!v.projekt.omfang) m.push("projekt.omfang");
+  if (!v.projekt.forventet_effekt.length) m.push("projekt.forventet_effekt");
+  if (!v.projektgrundlag.p_beskrivelse) m.push("projektgrundlag.p_beskrivelse");
+  if (!v.projektgrundlag.g_digitale_barrierer) m.push("projektgrundlag.g_digitale_barrierer");
+  if (!v.naeste_skridt.length) m.push("naeste_skridt");
+  return m;
+}
+
+/**
+ * Standard-næste-skridt, hvis modellen udelader dem (set 2026-11-01). Holdes i
+ * kode, så brugeren aldrig står uden en vej videre.
+ */
+export function standardNaesteSkridt(v: Vurdering): string[] {
+  const roed = v.egnethed.status === "roed";
+  const vindue = v.pulje.id === "digitalisering-2026-11" ? "9. november 2026 kl. 09.00 til 16. november kl. 23.55" : "når puljen åbner";
+  if (roed) {
+    return [
+      "Som det ser ud nu, kan I ikke søge. Start med det, der står under 'det der skal afklares', og tjek igen før næste pulje.",
+      "Projektbeskrivelsen kan I stadig bruge som grundlag for et forløb uden tilskud, eller til næste pulje.",
+      "Husk, at intet arbejde må være påbegyndt før et eventuelt tilsagn, hvis I vil søge senere.",
+    ];
+  }
+  return [
+    "Opret kladden online på puljeaabning.vudk.dk nu, for systemet er åbent før vinduet. Skriv selv ansøgningen med egne ord og brug projektbeskrivelsen som grundlag; I bekræfter i ansøgningen, at den er udarbejdet af jer selv.",
+    "Udfyld [udfyld]-markørerne med jeres egne tal (omsætning, vækstmål, ansatte, kapital). Konkrete tal styrker business casen og pointene.",
+    "Indhent 2 til 3 tilbud fra rådgivere i SMV:Digitals rådgiverdatabase og dokumentér, hvordan I har sammenlignet dem på pris og kvalitet. SpAIke (Michael Mortensen) er godkendt rådgiver og kan være ét af tilbuddene; valget er jeres.",
+    `Vær klar, når vinduet åbner: ${vindue}. Det er pointene, der afgør, ikke hvem der kommer først.`,
+    "De tre forbehold: jeres halvdel betales kontant (1:1, egne timer tæller ikke), tilskuddet kommer bagud som refusion, og intet arbejde må gå i gang før tilsagn.",
+  ];
+}
+
+/** Sandt når de bærende felter er til stede (resten vises blot tomt). */
 export function erKomplet(v: Vurdering): boolean {
-  return !!(
-    v.egnethed.opsummering &&
-    v.projekt.titel &&
-    v.projekt.kandidater.length &&
-    v.projektgrundlag.p_beskrivelse &&
-    v.naeste_skridt.length
-  );
+  return !!(v.egnethed.opsummering && v.projekt.titel);
 }

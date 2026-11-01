@@ -9,6 +9,7 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 ## /tilskud: faglige regler (Michael, 2026-11-01)
 - Tilskuddet betaler analysen (potentialeafklaring): interview og oplæg ligger på analysens niveau, aldrig en byggeliste.
 - Blødt discovery-interview med smerten som anker; højst 4 spørgsmål efter de formelle krav (smerte/område, forventet effekt, forankring). Spørg ikke "hvor i flowet går tiden" (det er analysens leverance).
+- To faser: **1) kvalificering** (formelle krav + overordnet idé → tool `afgiv_kvalificering` → kort med stop/fortsæt; stop = let lead m. kvalificerings-mail) og **2) forberedelse** (kun efter brugerens ja; højst 4 spørgsmål → `afgiv_vurdering`). Markøren `[Kvalificering afgivet: <status>]` i historikken fortæller modellen, at fase 1 er afgivet.
 - Ansøgeren bekræfter selv at have udarbejdet ansøgningen → vi leverer en **projektbeskrivelse som grundlag** (neutral tredje person, strukturet efter skabelonens felter, `docs/smv-digital-ansoegningsskabelon-2026-11.md`), aldrig ansøgningstekst.
 
 ## Arkitektur-regler (gælder her)

@@ -66,6 +66,7 @@ async function chatTurn(token, cvr, messages) {
   let buf = "";
   let text = "";
   let vurdering = null;
+  let kvalificering = null;
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const { done, value } = await reader.read();
@@ -85,11 +86,12 @@ async function chatTurn(token, cvr, messages) {
         text += evt.text;
         if (!JSON_ONLY) process.stdout.write(evt.text);
       } else if (evt.type === "vurdering") vurdering = evt.vurdering;
+      else if (evt.type === "kvalificering") kvalificering = evt.kvalificering;
       else if (evt.type === "error") throw new Error(`chat-fejl: ${evt.error}`);
     }
   }
   if (!JSON_ONLY) process.stdout.write("\n");
-  return { text, vurdering };
+  return { text, vurdering, kvalificering };
 }
 
 async function runChat(token, cvr, { auto, say }) {
@@ -97,10 +99,22 @@ async function runChat(token, cvr, { auto, say }) {
     { role: "user", content: "Hej. Jeg vil gerne tjekke, om vi kan søge tilskud til et projekt om AI og automatisering." },
   ];
   let vurdering = null;
+  let kvalificering = null;
   let fixtureIdx = 0;
-  for (let turn = 0; turn < 14; turn++) {
+  for (let turn = 0; turn < 16; turn++) {
     log(`\n--- tur ${turn + 1} (assistent) ---`);
     const r = await chatTurn(token, cvr, messages);
+    if (r.kvalificering) {
+      // Fase 1 afgivet: markér det i historikken (som klienten gør) og sig ja til fase 2.
+      kvalificering = r.kvalificering;
+      messages.push({ role: "assistant", content: `${r.text}\n\n[Kvalificering afgivet: ${r.kvalificering.status}]` });
+      log(`\n=== KVALIFICERING === ${JSON.stringify(r.kvalificering)}`);
+      if (flag("stop-efter-kvalificering", false)) break;
+      const ja = "Ja, lad os fortsætte til forberedelsen.";
+      log(`\n> ${ja}`);
+      messages.push({ role: "user", content: ja });
+      continue;
+    }
     messages.push({ role: "assistant", content: r.text });
     if (r.vurdering) {
       vurdering = r.vurdering;
@@ -118,10 +132,10 @@ async function runChat(token, cvr, { auto, say }) {
     log(`\n> ${svar}`);
     messages.push({ role: "user", content: svar });
   }
-  return { messages, vurdering };
+  return { messages, vurdering, kvalificering };
 }
 
-async function lead(token, cvr, virksomhed, vurdering, transcript) {
+async function lead(token, cvr, virksomhed, vurdering, transcript, kvalificering = null) {
   const res = await post({
     action: "lead",
     token,
@@ -133,6 +147,7 @@ async function lead(token, cvr, virksomhed, vurdering, transcript) {
     puljeAlarm: !!flag("alarm", false),
     consent: true,
     vurdering,
+    kvalificering,
     transcript,
   });
   const data = await res.json();
@@ -159,17 +174,19 @@ async function main() {
   if (cmd === "chat" || cmd === "flow") {
     const s = await start(cvr);
     log("Virksomhed:", s.virksomhed?.navn ?? "(intet opslag)", "| forhåndstjek:", JSON.stringify(s.forhaandstjek));
-    const { messages, vurdering } = await runChat(s.token, cvr, {
+    const { messages, vurdering, kvalificering } = await runChat(s.token, cvr, {
       auto: cmd === "flow" || !!flag("auto", false),
       say: flag("say"),
     });
     if (vurdering) {
       console.log(JSON_ONLY ? JSON.stringify(vurdering) : "\n=== VURDERING ===\n" + JSON.stringify(vurdering, null, 2));
+    } else if (kvalificering && JSON_ONLY) {
+      console.log(JSON.stringify({ kvalificering }));
     } else {
       log("\n(ingen vurdering endnu)");
     }
     if (cmd === "flow" && flag("email")) {
-      const r = await lead(s.token, cvr, s.virksomhed?.navn ?? "", vurdering, messages);
+      const r = await lead(s.token, cvr, s.virksomhed?.navn ?? "", vurdering, messages, kvalificering);
       console.log("lead:", JSON.stringify(r));
     }
     return;

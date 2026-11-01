@@ -9,6 +9,19 @@ export type ChatMsg = { role: "user" | "assistant"; content: string };
 
 export type Egnethed = "groen" | "gul" | "roed";
 
+/** Fase 1: hurtig kvalificering. Brugeren vælger derefter om de vil videre til forberedelsen. */
+export interface Kvalificering {
+  status: Egnethed;
+  opsummering: string;
+  begrundelse: string[];
+  stoppere: string[];
+  pulje: { id: string; navn: string; hvorfor: string };
+  /** Den overordnede idé/smerte som brugeren selv formulerede den. */
+  idee: string;
+  /** Hvad fase 2 vil afklare, i én sætning (vises som "sådan fortsætter vi"). */
+  naeste: string;
+}
+
 export interface Vurdering {
   egnethed: {
     status: Egnethed;

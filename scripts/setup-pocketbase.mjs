@@ -105,6 +105,13 @@ const COLLECTIONS = [
         maxSelect: 1,
         values: ["groen", "gul", "roed"],
       },
+      {
+        name: "fase",
+        type: "select",
+        maxSelect: 1,
+        values: ["kvalificering", "forberedelse"],
+      },
+      { name: "kvalificering", type: "json", maxSize: 500000 },
       { name: "vurdering", type: "json", maxSize: 2000000 },
       { name: "transcript", type: "json", maxSize: 2000000 },
       { name: "consent", type: "bool" },
