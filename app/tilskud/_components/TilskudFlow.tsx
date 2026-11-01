@@ -4,10 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { trackEvent } from "../../components/track";
-import type { ChatMsg, StartSvar, Vurdering } from "@/lib/tilskud/types";
+import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
 const CALENDLY = "https://calendly.com/michael-spaike/new-meeting";
 const INTRO = "Hej. Jeg vil gerne tjekke, om vi kan søge tilskud til et projekt om AI og automatisering.";
+const FORTSAET = "Ja, lad os fortsætte til forberedelsen.";
+/** Lægges i historikken når fase 1 er afgivet, så modellen ved det (den ser ikke sine egne tool-kald igen). */
+const KVAL_MARKOER = (status: string) => `\n\n[Kvalificering afgivet: ${status}]`;
 
 const md: Components = {
   p: ({ node: _n, ...props }) => <p className="mb-2.5 last:mb-0" {...props} />,
@@ -30,8 +33,12 @@ export default function TilskudFlow() {
   const [starter, setStarter] = useState(false);
   const [startFejl, setStartFejl] = useState<string | null>(null);
   const [vurdering, setVurdering] = useState<Vurdering | null>(null);
+  const [kvalificering, setKvalificering] = useState<Kvalificering | null>(null);
+  const [stopEfterKval, setStopEfterKval] = useState(false);
+  const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
+  const kvalRef = useRef<HTMLDivElement>(null);
 
   async function kaldStart(cvr: string, cvrFallback?: unknown) {
     const res = await fetch("/api/tilskud", {
@@ -85,6 +92,13 @@ export default function TilskudFlow() {
     }
   }, [vurdering]);
 
+  useEffect(() => {
+    if (kvalificering) {
+      trackEvent("tilskud_kvalificering_klar", { status: kvalificering.status });
+      setTimeout(() => kvalRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    }
+  }, [kvalificering]);
+
   if (!start) {
     return (
       <VirksomhedsSoegning
@@ -106,11 +120,45 @@ export default function TilskudFlow() {
         token={start.token}
         cvr={cvrBrugt}
         virksomhed={start.virksomhed}
+        inject={inject}
+        onKvalificering={(k, t) => {
+          setKvalificering(k);
+          setTranscript(t);
+        }}
         onVurdering={(v, t) => {
           setVurdering(v);
           setTranscript(t);
         }}
       />
+      {kvalificering && !vurdering && (
+        <div ref={kvalRef} className="scroll-mt-24">
+          <KvalificeringKort
+            k={kvalificering}
+            stoppet={stopEfterKval}
+            onFortsaet={() => {
+              setStopEfterKval(false);
+              trackEvent("tilskud_fortsaet_forberedelse", { status: kvalificering.status });
+              setInject({ id: Date.now(), text: FORTSAET });
+            }}
+            onStop={() => {
+              setStopEfterKval(true);
+              trackEvent("tilskud_stop_efter_kvalificering", { status: kvalificering.status });
+            }}
+          />
+          {stopEfterKval && (
+            <div className="border border-rule border-t-0 rounded-b bg-cream-deep">
+              <LeadForm
+                token={start.token}
+                cvr={cvrBrugt}
+                virksomhed={start.virksomhed?.navn ?? ""}
+                vurdering={null}
+                kvalificering={kvalificering}
+                transcript={transcript}
+              />
+            </div>
+          )}
+        </div>
+      )}
       {vurdering && (
         <div ref={resultRef} className="scroll-mt-24">
           <Resultat
@@ -340,11 +388,16 @@ function Chat({
   token,
   cvr,
   virksomhed,
+  inject,
+  onKvalificering,
   onVurdering,
 }: {
   token: string;
   cvr: string;
   virksomhed: StartSvar["virksomhed"];
+  /** Programmatisk besked (fx "fortsæt til forberedelsen" fra kvalificeringskortet). */
+  inject: { id: number; text: string } | null;
+  onKvalificering: (k: Kvalificering, transcript: ChatMsg[]) => void;
   onVurdering: (v: Vurdering, transcript: ChatMsg[]) => void;
 }) {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -353,6 +406,7 @@ function Chat({
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const started = useRef(false);
+  const lastInject = useRef<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -362,6 +416,13 @@ function Chat({
     void send(INTRO, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!inject || inject.id === lastInject.current) return;
+    lastInject.current = inject.id;
+    void send(inject.text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inject]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -405,7 +466,7 @@ function Chat({
         buffer = lines.pop() ?? "";
         for (const line of lines) {
           if (!line.trim()) continue;
-          let evt: { type: string; text?: string; vurdering?: Vurdering; error?: string };
+          let evt: { type: string; text?: string; vurdering?: Vurdering; kvalificering?: Kvalificering; error?: string };
           try {
             evt = JSON.parse(line);
           } catch {
@@ -418,6 +479,16 @@ function Chat({
               copy[copy.length - 1] = { role: "assistant", content: assistantText };
               return copy;
             });
+          } else if (evt.type === "kvalificering" && evt.kvalificering) {
+            // Fase 1 afgivet: markér i historikken (vises ikke, men sendes til modellen).
+            const k = evt.kvalificering;
+            const medMarkoer = (assistantText || "Kvalificeringen er klar nedenfor.") + KVAL_MARKOER(k.status);
+            setMessages((m) => {
+              const copy = [...m];
+              copy[copy.length - 1] = { role: "assistant", content: medMarkoer };
+              return copy;
+            });
+            onKvalificering(k, [...history, { role: "assistant", content: medMarkoer }]);
           } else if (evt.type === "vurdering" && evt.vurdering) {
             setDone(true);
             onVurdering(evt.vurdering, [
@@ -452,7 +523,7 @@ function Chat({
               {m.role === "assistant" ? (
                 m.content ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>
-                    {m.content}
+                    {m.content.replace(/\n\n\[Kvalificering afgivet: [a-z]+\]$/, "")}
                   </ReactMarkdown>
                 ) : busy ? (
                   "…"
@@ -505,6 +576,77 @@ const STATUS: Record<string, { label: string; cls: string }> = {
   gul: { label: "Gul: muligvis, med forbehold", cls: "border-amber-dark text-amber-dark" },
   roed: { label: "Rød: ikke som det ser ud nu", cls: "border-red-700 text-red-700" },
 };
+
+/** Fase 1-kortet: resultatet af kvalificeringen og valget om at fortsætte til forberedelsen. */
+function KvalificeringKort({
+  k,
+  stoppet,
+  onFortsaet,
+  onStop,
+}: {
+  k: Kvalificering;
+  stoppet: boolean;
+  onFortsaet: () => void;
+  onStop: () => void;
+}) {
+  const s = STATUS[k.status] ?? STATUS.gul;
+  const roed = k.status === "roed";
+  return (
+    <div className={`border border-rule bg-cream-deep ${stoppet ? "rounded-t" : "rounded"}`}>
+      <div className="px-5 py-5">
+        <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Trin 1 af 2: kvalificering</p>
+        <span className={`inline-block mt-2 font-mono text-[10.5px] tracking-wider uppercase px-2 py-0.5 border ${s.cls}`}>{s.label}</span>
+        <p className="font-serif text-xl mt-3 leading-snug">{k.opsummering}</p>
+        <ul className="list-disc pl-5 mt-3 space-y-1 font-sans text-[14px] text-ink-soft">
+          {k.begrundelse.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+        {k.stoppere.length > 0 && (
+          <div className="mt-3">
+            <p className="font-mono text-[10.5px] tracking-wider uppercase text-red-700">Det der skal afklares</p>
+            <ul className="list-disc pl-5 mt-1 space-y-1 font-sans text-[14px] text-ink-soft">
+              {k.stoppere.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div className="grid sm:grid-cols-2 gap-4 mt-4 font-sans text-[13.5px] text-ink-soft">
+          <p>
+            <b className="text-ink font-medium">Pulje:</b> {k.pulje.navn}. {k.pulje.hvorfor}
+          </p>
+          {k.idee && (
+            <p>
+              <b className="text-ink font-medium">Jeres idé:</b> {k.idee}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="px-5 py-5 border-t border-rule bg-cream">
+        <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">Trin 2 af 2: forberedelse</p>
+        <p className="font-serif text-lg mt-1 leading-snug">
+          {roed
+            ? "Som det ser ud nu, kan I ikke søge. I kan stadig få forberedelsen, hvis I vil have projektet tænkt igennem alligevel."
+            : "Nu handler det om at forberede jer, så ansøgningen står så stærkt som muligt."}
+        </p>
+        <p className="font-sans text-[14px] text-ink-soft mt-2">
+          {k.naeste ||
+            "Jeg sørger for, at I får tænkt alle de ting igennem, som ansøgningen spørger om, og samler dem i en projektbeskrivelse, I kan bygge jeres egen ansøgning på."}{" "}
+          Tre til fire spørgsmål mere.
+        </p>
+        <div className="flex flex-wrap gap-2.5 mt-4">
+          <button type="button" onClick={onFortsaet} className={roed ? btnAmber : btnPrimary}>
+            {roed ? "Fortsæt alligevel" : "Ja, fortsæt til forberedelsen"}
+          </button>
+          <button type="button" onClick={onStop} className={roed ? btnPrimary : btnAmber} disabled={stoppet}>
+            {roed ? "Send mig opsummeringen på mail" : "Nej tak, send mig resultatet på mail"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function kr(n: number) {
   return `${Math.round(n).toLocaleString("da-DK")} kr.`;
@@ -652,7 +794,7 @@ function Resultat({
         </ol>
       </div>
 
-      <LeadForm token={token} cvr={cvr} virksomhed={virksomhed} vurdering={v} transcript={transcript} />
+      <LeadForm token={token} cvr={cvr} virksomhed={virksomhed} vurdering={v} kvalificering={null} transcript={transcript} />
 
       <p className="px-5 py-4 font-sans text-[12px] text-muted border-t border-rule">
         Indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Åbenhed: SpAIke er
@@ -668,14 +810,18 @@ function LeadForm({
   cvr,
   virksomhed,
   vurdering,
+  kvalificering,
   transcript,
 }: {
   token: string;
   cvr: string;
   virksomhed: string;
-  vurdering: Vurdering;
+  vurdering: Vurdering | null;
+  kvalificering: Kvalificering | null;
   transcript: ChatMsg[];
 }) {
+  const fuld = !!vurdering;
+  const status = vurdering?.egnethed.status ?? kvalificering?.status ?? "ukendt";
   const [navn, setNavn] = useState("");
   const [email, setEmail] = useState("");
   const [telefon, setTelefon] = useState("");
@@ -706,6 +852,7 @@ function LeadForm({
           consent,
           website,
           vurdering,
+          kvalificering,
           transcript,
         }),
       });
@@ -715,7 +862,7 @@ function LeadForm({
         return;
       }
       setOk(true);
-      trackEvent("tilskud_lead_sendt", { status: vurdering.egnethed.status, alarm: puljeAlarm ? "ja" : "nej" });
+      trackEvent("tilskud_lead_sendt", { status, fase: fuld ? "forberedelse" : "kvalificering", alarm: puljeAlarm ? "ja" : "nej" });
     } catch {
       setError("Forbindelsen fejlede. Prøv igen.");
     } finally {
@@ -728,8 +875,9 @@ function LeadForm({
       <div className="px-5 py-6 bg-cream">
         <p className="font-serif text-xl">Sendt. Tjek din indbakke om et øjeblik.</p>
         <p className="font-sans text-[14px] text-ink-soft mt-2">
-          Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den
-          gennemgået, inden vinduet åbner, så book 20 minutter.
+          {fuld
+            ? "Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den gennemgået, inden vinduet åbner, så book 20 minutter."
+            : "Mailen indeholder kvalificeringen og næste skridt. Vil I videre, kan I køre forberedelsen her på siden når som helst, eller tage 20 minutter med Michael."}
         </p>
         <a
           href={CALENDLY}
@@ -747,16 +895,26 @@ function LeadForm({
 
   return (
     <form onSubmit={submit} className="px-5 py-6 bg-cream">
-      <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">Få hele vurderingen på mail</p>
-      <p className="font-serif text-lg mt-1 leading-snug">
-        Inklusive en projektbeskrivelse, der kan danne grundlag for jeres ansøgning: struktureret efter
-        ansøgningens felter (udfordringer, projekt, nyhedsværdi, rådgivers opgaver, forankring, effekter) og bygget
-        på jeres egne svar.
+      <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">
+        {fuld ? "Få hele vurderingen på mail" : "Få kvalificeringen på mail"}
       </p>
-      <p className="font-sans text-[12.5px] text-muted mt-1.5">
-        Ansøgningen skriver I selv (det bekræfter I i den). Projektbeskrivelsen giver jer alt det, felterne spørger
-        om.
-      </p>
+      {fuld ? (
+        <>
+          <p className="font-serif text-lg mt-1 leading-snug">
+            Inklusive en projektbeskrivelse, der kan danne grundlag for jeres ansøgning: struktureret efter
+            ansøgningens felter (udfordringer, projekt, nyhedsværdi, rådgivers opgaver, forankring, effekter) og
+            bygget på jeres egne svar.
+          </p>
+          <p className="font-sans text-[12.5px] text-muted mt-1.5">
+            Ansøgningen skriver I selv (det bekræfter I i den). Projektbeskrivelsen giver jer alt det, felterne
+            spørger om.
+          </p>
+        </>
+      ) : (
+        <p className="font-serif text-lg mt-1 leading-snug">
+          Resultatet, puljen og næste skridt, så I har det ved hånden, når I vil videre.
+        </p>
+      )}
       <div className="grid sm:grid-cols-2 gap-2.5 mt-4">
         <input className={inputCls} placeholder="Navn" value={navn} onChange={(e) => setNavn(e.target.value)} aria-label="Navn" />
         <input

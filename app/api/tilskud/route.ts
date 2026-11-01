@@ -32,9 +32,9 @@ import { esKonfigureret, soegVirksomheder } from "@/lib/tilskud/cvr-es";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat } from "@/lib/tilskud/chat";
-import { renderLeadNotifikation, renderVurderingMail } from "@/lib/tilskud/email";
-import { normaliserVurdering } from "@/lib/tilskud/vurdering";
-import type { ChatMsg, StartSvar, Vurdering } from "@/lib/tilskud/types";
+import { renderKvalificeringMail, renderLeadNotifikation, renderVurderingMail } from "@/lib/tilskud/email";
+import { normaliserKvalificering, normaliserVurdering } from "@/lib/tilskud/vurdering";
+import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -167,10 +167,12 @@ async function chat(req: Request, body: Record<string, unknown>) {
           kontekst,
           onText: (delta) => send({ type: "text", text: delta }),
         });
-        const { vurdering, afskaaret } = await handle.faerdig;
-        if (vurdering && !afskaaret) {
+        const { vurdering, kvalificering, afskaaret } = await handle.faerdig;
+        if (kvalificering && !afskaaret) {
+          send({ type: "kvalificering", kvalificering });
+        } else if (vurdering && !afskaaret) {
           send({ type: "vurdering", vurdering });
-        } else if (vurdering && afskaaret) {
+        } else if ((vurdering || kvalificering) && afskaaret) {
           // Ufuldstændig vurdering: bed brugeren trigge et nyt forsøg frem for
           // at vise et halvt resultat.
           send({ type: "error", error: "Vurderingen blev afbrudt undervejs. Skriv 'prøv igen', så samler jeg den en gang til." });
@@ -222,6 +224,9 @@ async function lead(req: Request, body: Record<string, unknown>) {
   const puljeAlarm = !!body.puljeAlarm;
   const vurdering: Vurdering | null =
     body.vurdering && typeof body.vurdering === "object" ? normaliserVurdering(body.vurdering) : null;
+  const kvalificering: Kvalificering | null =
+    body.kvalificering && typeof body.kvalificering === "object" ? normaliserKvalificering(body.kvalificering) : null;
+  const fase: "kvalificering" | "forberedelse" = vurdering ? "forberedelse" : "kvalificering";
   const transcript = (Array.isArray(body.transcript) ? body.transcript : []).slice(0, 80) as ChatMsg[];
 
   let pbId = "";
@@ -232,7 +237,9 @@ async function lead(req: Request, body: Record<string, unknown>) {
       telefon,
       cvr,
       virksomhed,
-      egnethed: vurdering?.egnethed?.status ?? "",
+      egnethed: vurdering?.egnethed?.status ?? kvalificering?.status ?? "",
+      fase,
+      kvalificering: kvalificering ?? null,
       vurdering: vurdering ?? null,
       transcript,
       consent: true,
@@ -245,7 +252,7 @@ async function lead(req: Request, body: Record<string, unknown>) {
   }
 
   // Fail-soft notifikationer: leadet er gemt uanset.
-  const notif = renderLeadNotifikation({ email, navn, telefon, virksomhed, cvr, puljeAlarm, vurdering, pbId });
+  const notif = renderLeadNotifikation({ email, navn, telefon, virksomhed, cvr, puljeAlarm, vurdering, kvalificering, fase, pbId });
   await sendEmail({
     to: process.env.EMAIL_FROM_ADDRESS || "michael@spaike.dk",
     subject: notif.subject,
@@ -255,6 +262,10 @@ async function lead(req: Request, body: Record<string, unknown>) {
   let mailSendt = false;
   if (vurdering) {
     const m = renderVurderingMail(vurdering, virksomhed);
+    const r = await sendEmail({ to: email, toName: navn || undefined, subject: m.subject, html: m.html });
+    mailSendt = r.ok;
+  } else if (kvalificering) {
+    const m = renderKvalificeringMail(kvalificering, virksomhed);
     const r = await sendEmail({ to: email, toName: navn || undefined, subject: m.subject, html: m.html });
     mailSendt = r.ok;
   }

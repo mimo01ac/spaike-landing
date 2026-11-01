@@ -3,7 +3,7 @@
  * til Michael). Selve afsendelsen sker via lib/email.ts (Brevo).
  */
 
-import type { Vurdering } from "./types";
+import type { Kvalificering, Vurdering } from "./types";
 
 const ink = "#0f1a2e";
 const soft = "#3a3f4e";
@@ -127,6 +127,38 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
   return { subject: `Tilskudstjek: ${STATUS_LABEL[v.egnethed.status]?.split(":")[0] ?? "resultat"} for ${virksomhed || "jer"}`, html };
 }
 
+/** Fase 1-mail: kvalificeringen alene (brugeren stoppede før forberedelsen). */
+export function renderKvalificeringMail(k: Kvalificering, virksomhed: string): { subject: string; html: string } {
+  const farve = STATUS_FARVE[k.status] ?? ink;
+  const html = `<!doctype html><html><body style="margin:0;padding:0;background:${cream};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${cream};padding:28px 0;"><tr><td align="center">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;padding:0 20px;">
+    <tr><td style="padding:0 0 18px;"><div style="font:700 22px/1 Arial,sans-serif;color:${ink};">Sp<span style="color:${amber};">AI</span>ke</div></td></tr>
+    <tr><td><div style="font:600 11px/1.4 Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:${amber};">Dit tilskudstjek: kvalificering</div></td></tr>
+    <tr><td style="padding:4px 0 14px;"><div style="font:600 24px/1.2 Georgia,serif;color:${ink};">${esc(virksomhed || "Jeres virksomhed")}</div></td></tr>
+    <tr><td>
+      <div style="border-left:4px solid ${farve};padding:8px 0 8px 14px;margin:0 0 14px;">
+        <div style="font:600 14px/1.4 Arial,sans-serif;color:${farve};">${esc(STATUS_LABEL[k.status] ?? k.status)}</div>
+        ${p(esc(k.opsummering))}
+      </div>
+      ${li(k.begrundelse)}
+      ${k.stoppere.length ? h("Det der skal afklares") + li(k.stoppere) : ""}
+      ${h("Pulje")}
+      ${p(`<b style="color:${ink}">${esc(k.pulje.navn)}</b>. ${esc(k.pulje.hvorfor)}`)}
+      ${k.idee ? h("Jeres idé, som I beskrev den") + p(esc(k.idee)) : ""}
+      ${h("Næste skridt")}
+      ${p(`Vil I videre, så kør forberedelsen på spaike.dk/tilskud: ${esc(k.naeste || "den sikrer, at I har tænkt alle de ting igennem, som ansøgningen spørger om, og samler dem i en projektbeskrivelse, I kan bygge jeres egen ansøgning på.")}`)}
+      ${p("Husk de tre forbehold: jeres halvdel betales kontant (1:1), tilskuddet refunderes bagud, og intet arbejde må starte før tilsagn.")}
+      <a href="${CALENDLY}" style="display:inline-block;background:${ink};color:${cream};text-decoration:none;font:600 13px/1 Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:14px 22px;border-radius:2px;margin:6px 0 20px;">Book 20 minutter med Michael &rarr;</a>
+      <div style="border-top:1px solid ${rule};padding:14px 0 0;">
+        ${p("Kvalificeringen er en indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Åbenhed: SpAIke er godkendt rådgiver i SMV:Digital og kan være én af de rådgivere, I indhenter tilbud fra; puljen kræver, at I sammenligner flere.")}
+        <p style="font:400 12px/1.5 Arial,sans-serif;color:#6b6650;margin:0;">SpAIke ApS · michael@spaike.dk · spaike.dk/tilskud</p>
+      </div>
+    </td></tr>
+  </table></td></tr></table></body></html>`;
+  return { subject: `Tilskudstjek: ${STATUS_LABEL[k.status]?.split(":")[0] ?? "resultat"} for ${virksomhed || "jer"}`, html };
+}
+
 export function renderLeadNotifikation(opts: {
   email: string;
   navn?: string;
@@ -135,16 +167,19 @@ export function renderLeadNotifikation(opts: {
   cvr?: string;
   puljeAlarm: boolean;
   vurdering: Vurdering | null;
+  kvalificering?: Kvalificering | null;
+  fase?: "kvalificering" | "forberedelse";
   pbId: string;
 }): { subject: string; html: string } {
   const v = opts.vurdering;
-  const status = v?.egnethed.status ?? "ukendt";
-  const html = `<p>Nyt lead fra <b>/tilskud</b>.</p>
+  const k = opts.kvalificering ?? null;
+  const status = v?.egnethed.status ?? k?.status ?? "ukendt";
+  const html = `<p>Nyt lead fra <b>/tilskud</b> (${esc(opts.fase ?? (v ? "forberedelse" : "kvalificering"))}).</p>
   <p><b>Virksomhed:</b> ${esc(opts.virksomhed)}${opts.cvr ? ` (CVR ${esc(opts.cvr)})` : ""}<br>
   <b>Kontakt:</b> ${esc(opts.navn ?? "")} &lt;${esc(opts.email)}&gt; ${opts.telefon ? esc(opts.telefon) : ""}<br>
   <b>Egnethed:</b> ${esc(status)}${v ? ` · point ${v.point.potentiale}+${v.point.kapacitet}` : ""}<br>
   <b>Puljealarm:</b> ${opts.puljeAlarm ? "ja" : "nej"}<br>
   <b>PocketBase:</b> tilskud_leads/${esc(opts.pbId)}</p>
-  ${v ? `<p><b>Projekt:</b> ${esc(v.projekt.titel)}<br>${esc(v.projekt.formaal)}</p><p><b>Økonomi:</b> ${kr(v.projekt.estimeret_pris_kr)} i alt, tilskud ${kr(v.projekt.tilskud_kr)}.</p><p><b>Stoppere:</b> ${v.egnethed.stoppere.length ? esc(v.egnethed.stoppere.join("; ")) : "ingen"}</p>` : "<p>Ingen vurdering (leadet kom før chatten var færdig).</p>"}`;
-  return { subject: `Tilskud-lead (${status}): ${opts.virksomhed || opts.email}`, html };
+  ${v ? `<p><b>Projekt:</b> ${esc(v.projekt.titel)}<br>${esc(v.projekt.formaal)}</p><p><b>Økonomi:</b> ${kr(v.projekt.estimeret_pris_kr)} i alt, tilskud ${kr(v.projekt.tilskud_kr)}.</p><p><b>Stoppere:</b> ${v.egnethed.stoppere.length ? esc(v.egnethed.stoppere.join("; ")) : "ingen"}</p>` : k ? `<p><b>Idé:</b> ${esc(k.idee)}</p><p><b>Stoppere:</b> ${k.stoppere.length ? esc(k.stoppere.join("; ")) : "ingen"}</p><p>Stoppede efter kvalificeringen (ingen forberedelse). Oplagt at følge op med et kort kald.</p>` : "<p>Ingen vurdering (leadet kom før chatten var færdig).</p>"}`;
+  return { subject: `Tilskud-lead (${status}, ${opts.fase ?? (v ? "forberedelse" : "kvalificering")}): ${opts.virksomhed || opts.email}`, html };
 }

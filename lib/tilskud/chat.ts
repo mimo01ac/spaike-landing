@@ -9,6 +9,8 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import {
+  KVALIFICERING_TOOL,
+  KVALIFICERING_TOOL_NAME,
   MAX_TOKENS,
   MODEL,
   SYSTEM_PROMPT,
@@ -16,12 +18,17 @@ import {
   VURDERING_TOOL_NAME,
   understoetterEffort,
 } from "./agent";
-import type { ChatMsg, Vurdering } from "./types";
-import { erKomplet, normaliserVurdering } from "./vurdering";
+import type { ChatMsg, Kvalificering, Vurdering } from "./types";
+import { erKomplet, manglendeFelter, normaliserKvalificering, normaliserVurdering, standardNaesteSkridt } from "./vurdering";
 
 export interface TilskudChatHandle {
-  /** Løses når Claude er færdig. `afskaaret` = max_tokens ramt midt i vurderingen. */
-  faerdig: Promise<{ tekst: string; vurdering: Vurdering | null; afskaaret: boolean }>;
+  /** Løses når Claude er færdig. `afskaaret` = max_tokens ramt midt i et tool-kald. */
+  faerdig: Promise<{
+    tekst: string;
+    kvalificering: Kvalificering | null;
+    vurdering: Vurdering | null;
+    afskaaret: boolean;
+  }>;
   /** Stop streamen (klienten forsvandt). */
   afbryd: () => void;
 }
@@ -60,7 +67,7 @@ export function startTilskudChat(opts: {
     model: MODEL,
     max_tokens: MAX_TOKENS,
     system,
-    tools: [VURDERING_TOOL],
+    tools: [KVALIFICERING_TOOL, VURDERING_TOOL],
     messages: anthropicMessages,
     ...(understoetterEffort(MODEL) ? { output_config: { effort: "low" } } : {}),
   };
@@ -73,16 +80,30 @@ export function startTilskudChat(opts: {
       .filter((b): b is Anthropic.TextBlock => b.type === "text")
       .map((b) => b.text)
       .join("");
+    const kval = final.content.find(
+      (b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === KVALIFICERING_TOOL_NAME,
+    );
+    if (kval) {
+      const kvalificering = normaliserKvalificering(kval.input);
+      const afskaaret = final.stop_reason === "max_tokens" || !kvalificering.opsummering;
+      return { tekst, kvalificering, vurdering: null, afskaaret };
+    }
     const tool = final.content.find(
       (b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === VURDERING_TOOL_NAME,
     );
-    if (!tool) return { tekst, vurdering: null, afskaaret: false };
+    if (!tool) return { tekst, kvalificering: null, vurdering: null, afskaaret: false };
     const vurdering = normaliserVurdering(tool.input);
+    const mangler = manglendeFelter(vurdering);
+    if (!vurdering.naeste_skridt.length) vurdering.naeste_skridt = standardNaesteSkridt(vurdering);
     const afskaaret = final.stop_reason === "max_tokens" || !erKomplet(vurdering);
-    if (afskaaret) {
-      console.warn("tilskud: vurdering afskåret", { stop_reason: final.stop_reason, output_tokens: final.usage.output_tokens });
+    if (afskaaret || mangler.length) {
+      console.warn("tilskud: vurdering", afskaaret ? "afskåret" : "med tomme felter", {
+        stop_reason: final.stop_reason,
+        output_tokens: final.usage.output_tokens,
+        mangler,
+      });
     }
-    return { tekst, vurdering, afskaaret };
+    return { tekst, kvalificering: null, vurdering, afskaaret };
   });
 
   return {
