@@ -91,6 +91,35 @@ const COLLECTIONS = [
     ],
   },
   {
+    name: "tilskud_leads",
+    type: "base",
+    fields: [
+      { name: "email", type: "email", required: true },
+      { name: "navn", type: "text" },
+      { name: "telefon", type: "text" },
+      { name: "cvr", type: "text" },
+      { name: "virksomhed", type: "text" },
+      {
+        name: "egnethed",
+        type: "select",
+        maxSelect: 1,
+        values: ["groen", "gul", "roed"],
+      },
+      { name: "vurdering", type: "json", maxSize: 2000000 },
+      { name: "transcript", type: "json", maxSize: 2000000 },
+      { name: "consent", type: "bool" },
+      { name: "pulje_alarm", type: "bool" },
+      {
+        name: "status",
+        type: "select",
+        maxSelect: 1,
+        values: ["new", "contacted", "booked", "done"],
+      },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+      { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
+    ],
+  },
+  {
     name: "ai_tjek_leads",
     type: "base",
     fields: [
