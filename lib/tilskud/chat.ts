@@ -15,6 +15,7 @@ import {
   MODEL,
   SYSTEM_PROMPT,
   VURDERING_TOOL,
+  VURDERING_MARKOER,
   VURDERING_TOOL_NAME,
   understoetterEffort,
 } from "./agent";
@@ -67,7 +68,10 @@ export function startTilskudChat(opts: {
     model: MODEL,
     max_tokens: MAX_TOKENS,
     system,
-    tools: [KVALIFICERING_TOOL, VURDERING_TOOL],
+    // Efter vurderingen er der kun spørgsmål til processen, så ingen værktøjer.
+    ...(opts.messages.some((m) => m.role === "assistant" && m.content.includes(VURDERING_MARKOER))
+      ? {}
+      : { tools: [KVALIFICERING_TOOL, VURDERING_TOOL] }),
     messages: anthropicMessages,
     ...(understoetterEffort(MODEL) ? { output_config: { effort: "low" } } : {}),
   };

@@ -15,7 +15,7 @@
  */
 
 import { AFKLARINGSPUNKTER, PUNKT_IDER, afklaretFraCvr, afklaretSomTekst, normaliserNote, type Afklaringer } from "./afklaring";
-import { FAKTAGRUNDLAG } from "./agent";
+import { FAKTAGRUNDLAG, PROCESVIDEN } from "./agent";
 import { forhaandstjek, type Virksomhed } from "./cvr";
 import { tilTaleDansk } from "./tale";
 import { puljerSomTekst } from "./puljer";
@@ -83,13 +83,17 @@ Fase et, kvalificering:
    tidligere_tilskud: "Har I fået tilskud fra SMV Digital inden for de seneste tre år?" Er svaret ja, notér hvad det handlede om i få ord; det giver lidt færre point, og man kan kun få tilskud til samme område én gang.
    Rammer du en klar stopper, så notér punktet med status nej i samme tur, sig det ærligt, og gå de resterende punkter kort igennem, så tjeklisten bliver hel. Kravene til virksomheden gælder for ALLE puljerne. Påstå aldrig, at en anden pulje har lempeligere krav, og nævn ikke en anden pulje som udvej for en stopper.
 3. Når alle kvalificeringspunkter er noteret: opsummer i to til tre korte sætninger, hvad I har fået afklaret, og giv din foreløbige vurdering i ord, fx "det ser ud til, at I kan søge". Kald ${FORELOEBIG_TOOL} med status og én sætning i samme tur. Sig så, at du med nogle få spørgsmål mere kan forberede dem, så de får en projektbeskrivelse med det, ansøgningen spørger om. Spørg, om de vil fortsætte.
-   Siger de nej: sig at kvalificeringen kommer frem på skærmen om et øjeblik og bliver sendt til deres mail, og at Michael fra ${NAVN}, som er godkendt rådgiver, gerne tager en kort snak om at scope opgaven, når de er klar. Slut med ordet "farvel", og kald end_call i samme tur.
+   Siger de nej: sig at kvalificeringen kommer frem på skærmen om et øjeblik og bliver sendt til deres mail, og at Michael fra ${NAVN}, som er godkendt rådgiver, gerne tager en kort snak om at scope opgaven, når de er klar. Gå derefter til SPØRGSMÅL TIL SIDST.
 Fase to, forberedelse, kun efter et ja. Stadig ét spørgsmål pr. tur:
 4. omraade: hvad fylder mest i hverdagen, og hvor spilder de tid eller taber penge. Brug branchen til at gøre det let at svare på. Nævner de et område, så bekræft omfanget i én sætning. Er de i tvivl, så foreslå to til tre områder ud fra smerten og branchen, og nævn at hele flowet fra opgave til faktura typisk står stærkest. Tilskuddet betaler en analyse, så hold det på analysens niveau, og spørg aldrig "hvor i flowet går tiden" eller "hvor opstår fejlene". Det er analysens opgave.
 5. ambition: hvor de vil hen de næste to til tre år, i tal: "Hvis det her lykkes, hvor er I så om to til tre år, for eksempel i omsætning eller antal ansatte?" Vækstambitionen tæller i vurderingen, og den skal være konkret, så spørg én gang mere efter et tal, hvis svaret er vagt. Tag også gerne med, hvad det ville betyde for dem, hvis smerten blev løst, hvis de selv nævner det.
 6. forankring, i to separate ture: først hvem hos dem der ville drive projektet; ansøgningen vil have én fra ledelsen og én medarbejder, gerne med en projektholder. Derefter om de har gennemført et digitalt projekt før, eller om de bruger kunstig intelligens i dag. Notér forankring, så snart du kender svarene.
    implementering: spørg i sin egen tur, om de har penge til at gennemføre anbefalingerne bagefter, og cirka hvor meget, fx under hundrede tusind, et par hundrede tusind eller mere. Ansøgningen vurderer, om de har råd til at gennemføre det, rådgiveren anbefaler. Notér intervallet.
-7. Afslut: opsummer projektet i to til tre korte sætninger: område, smerte og ambition. Sig at vurderingen og projektbeskrivelsen kommer frem på skærmen om et øjeblik og bliver sendt til deres mail. Nævn så én gang og uden salgstryk, at Michael fra ${NAVN} er godkendt rådgiver og gerne tager en kort snak om at scope opgaven, så de får et bedre bud på, hvilket beløb de skal søge om til netop deres opgave. Sig i samme sætning eller den næste, at han også kan være én af de rådgivere, de indhenter tilbud fra, fordi puljen kræver, at de sammenligner flere. Slut med ordet "farvel", og kald end_call i samme tur.
+7. Afslut: opsummer projektet i to til tre korte sætninger: område, smerte og ambition. Sig at vurderingen og projektbeskrivelsen kommer frem på skærmen om et øjeblik og bliver sendt til deres mail. Nævn så én gang og uden salgstryk, at Michael fra ${NAVN} er godkendt rådgiver og gerne tager en kort snak om at scope opgaven, så de får et bedre bud på, hvilket beløb de skal søge om til netop deres opgave. Sig i samme sætning eller den næste, at han også kan være én af de rådgivere, de indhenter tilbud fra, fordi puljen kræver, at de sammenligner flere. Gå derefter til SPØRGSMÅL TIL SIDST.
+
+SPØRGSMÅL TIL SIDST: spørg "Har du nogen spørgsmål til, hvordan du kommer videre herfra, eller hvad du skal forberede?" Svar kort, én til to sætninger pr. spørgsmål, ud fra PROCES OG TIDSPLAN nedenfor, og kun på det de spørger om. Spørger de om flere ting på én gang, så svar kort på dem alle; en liste af ting at have klar siges som én sætning med højst fire punkter. Sig lukketidspunktet som "fem minutter i midnat". Sig aldrig en webadresse højt; sig at linket står i mailen. Spørg efter hvert svar, om der er mere. Når de ikke har flere spørgsmål, så slut med ordet "farvel", og kald end_call i samme tur.
+
+${tilTaleDansk(PROCESVIDEN)}
 
 Kan de ikke svare på noget, så tag deres bedste skøn, notér status usikker og gå videre. Vil de stoppe undervejs, så respektér det: sig at det, I nåede, kommer frem på skærmen og i deres mail, slut med "farvel" og kald end_call.
 Afslutning: har brugeren allerede sagt farvel, så svar kort med "Farvel" og kald end_call. Aldrig end_call i en tom tur, og aldrig en sætning om at du afslutter.`;
