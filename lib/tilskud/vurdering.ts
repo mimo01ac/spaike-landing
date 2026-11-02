@@ -14,6 +14,26 @@ const num = (v: unknown, fallback = 0): number => (typeof v === "number" && Numb
 const strArr = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []);
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === "object" ? (v as Record<string, unknown>) : {});
 
+/** Michaels prissætning (2026-11-02): 1.200 kr. i timen. Tilskuddet er mindst 50.000 kr. = mindst 100.000 kr. i alt. */
+export const TIMEPRIS_KR = 1200;
+const MIN_TOTAL_KR = 100_000;
+const MAX_TOTAL_KR = 300_000;
+
+/**
+ * Økonomien regnes her, ikke af modellen (den regnede inkonsistent: 120.000 kr.
+ * og "ca. 55 timer"). Modellens pris bruges kun som skøn for omfanget; timer,
+ * tilskud og egenbetaling følger deterministisk af timeprisen og puljens regler.
+ */
+export function beregnOekonomi(modelPris: number, modelTilskud: number, puljeId: string) {
+  if (!modelPris) return { estimeret_timer: 0, estimeret_pris_kr: 0, tilskud_kr: 0, egenbetaling_kr: 0 };
+  const pris = Math.min(MAX_TOTAL_KR, Math.max(MIN_TOTAL_KR, Math.round(modelPris / 5000) * 5000));
+  const timer = Math.round(pris / TIMEPRIS_KR);
+  // Loft på 50.000 kr.: cyber-puljen, eller når modellen har sat loftet (digital markedsføring, enkle ERP).
+  const loft = puljeId.startsWith("cyber") || (modelTilskud === 50_000 && modelPris > MIN_TOTAL_KR);
+  const tilskud = Math.min(Math.round(pris / 2), loft ? 50_000 : 150_000);
+  return { estimeret_timer: timer, estimeret_pris_kr: pris, tilskud_kr: tilskud, egenbetaling_kr: pris - tilskud };
+}
+
 export function normaliserVurdering(raw: unknown): Vurdering {
   const r = obj(raw);
   const e = obj(r.egnethed);
@@ -47,10 +67,7 @@ export function normaliserVurdering(raw: unknown): Vurdering {
         const o = obj(f);
         return { leverance: str(o.leverance), beskrivelse: str(o.beskrivelse) };
       }),
-      estimeret_timer: num(pr.estimeret_timer),
-      estimeret_pris_kr: num(pr.estimeret_pris_kr),
-      tilskud_kr: num(pr.tilskud_kr),
-      egenbetaling_kr: num(pr.egenbetaling_kr),
+      ...beregnOekonomi(num(pr.estimeret_pris_kr), num(pr.tilskud_kr), str(p.id)),
     },
     point: {
       potentiale: Math.max(0, Math.min(5, num(pt.potentiale))),
