@@ -12,7 +12,7 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 - Før start (Michael 2026-11-02): virksomhed + navn + e-mail + samtykke (valgfri puljepåmindelse). Resultatet mailes automatisk (`lead`-handlingen kaldes af klienten), ingen mail-formular til sidst.
 - To faser: **1) kvalificering** (formelle krav + overordnet idé → tool `afgiv_kvalificering` → kort med stop/fortsæt; stop = kvalificeringen mailes) og **2) forberedelse** (kun efter brugerens ja; højst 5 spørgsmål → `afgiv_vurdering`). Markøren `[Kvalificering afgivet: <status>]` i historikken fortæller modellen, at fase 1 er afgivet.
 - Pris (Michael 2026-11-02): timepris 1.200 kr.; forløb mindst 100.000 kr. i alt (tilskuddet er mindst 50.000 kr.), højst 300.000. Økonomien regnes deterministisk i `beregnOekonomi` (`lib/tilskud/vurdering.ts`), ikke af modellen.
-- Omsætning spørges som interval (under 10 mio., 10 til 50, over 50); kun over ca. 370 mio. kr. afklares balancen. Det præcise tal skriver de selv i ansøgningen.
+- Omsætning spørges som ét ja/nej (under ca. 375 mio. kr.), aldrig det præcise tal; ejerskab over 25 % af en stor virksomhed er et eget spørgsmål. Det præcise tal skriver de selv i ansøgningen.
 - Ansøgeren bekræfter selv at have udarbejdet ansøgningen → vi leverer en **projektbeskrivelse som grundlag** (neutral tredje person, strukturet efter skabelonens felter, `docs/smv-digital-ansoegningsskabelon-2026-11.md`), aldrig ansøgningstekst.
 
 ## Arkitektur-regler (gælder her)

@@ -12,11 +12,11 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Tilskudstjek · Kan staten betale halvdelen af jeres AI-automatisering?",
   description:
-    "Indtast jeres CVR-nummer og få på fem minutter en ærlig indikation af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, hjælp til at scope det rigtige område og et struktureret grundlag med de informationer, I skal bruge til selv at skrive ansøgningen. Gratis, dansk, ingen konto.",
+    "Tal med en AI-agent eller svar i en chat, og få på fem til ti minutter en ærlig vurdering af, om I kan søge SMV:Digitals rådgivertilskud (50 %, op til 150.000 kr.) til AI og automatisering, hjælp til at vælge det rigtige område og en projektbeskrivelse, I kan skrive jeres egen ansøgning ud fra. Gratis, dansk, ingen konto.",
   openGraph: {
     title: "Tilskudstjek · AI-automatisering med 50 % tilskud",
     description:
-      "Egnethed, pulje, projektoplæg og udkast til ansøgning på fem minutter. Bygget på SMV:Digitals egne regler.",
+      "Kan I søge, hvilket område skal analysen dække, og en projektbeskrivelse som grundlag for jeres egen ansøgning. Fem til ti minutter, tale eller chat. Bygget på SMV:Digitals egne regler.",
     url: "https://www.spaike.dk/tilskud",
     locale: "da_DK",
     type: "website",
@@ -96,9 +96,8 @@ export default function TilskudPage() {
           </h1>
           <p className="font-serif text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
             SMV:Digital dækker 50 % af rådgivning om automatisering og AI, op til 150.000 kr.
-            Indtast jeres CVR-nummer, svar på et par spørgsmål, og få en ærlig indikation af om I
-            kan søge, et konkret projektoplæg og en projektbeskrivelse som grundlag for jeres ansøgning. Fem minutter,
-            ingen konto.
+            Tal med en AI-agent eller svar i en chat, og få en ærlig vurdering af, om I kan søge, et konkret
+            projektoplæg og en projektbeskrivelse som grundlag for jeres ansøgning. Fem til ti minutter, ingen konto.
           </p>
           <div className="mt-8">
             <TilskudFlow />
@@ -135,7 +134,7 @@ export default function TilskudPage() {
           <div className="grid md:grid-cols-3 gap-x-10 gap-y-8 mt-6">
             {[
               ["1. CVR-opslag", "Jeg henter det, CVR allerede ved: størrelse, alder, branche. Så spørger jeg kun om det, data ikke kan svare på."],
-              ["2. Otte spørgsmål", "De hårde krav først (årsværk, regnskab, kontant medfinansiering, tidligere tilskud), så hvilket flow eller område analysen skal dække, og hvor det gør ondt i dag."],
+              ["2. Tal eller skriv", "Vælg om du vil tale med en AI-agent eller svare i en chat. Først et par hurtige ja/nej-spørgsmål om kravene, så hvor det gør ondt i dag, hvilket område analysen skal dække, og hvor I vil hen."],
               ["3. Vurdering og oplæg", "Grøn, gul eller rød med begrundelse, den rigtige pulje og dato, et oplæg til selve analysen (omfang, spørgsmål, hypoteser, økonomi), pointindikation og en projektbeskrivelse som grundlag for jeres egen ansøgning."],
             ].map(([t, b]) => (
               <div key={t} className="flex flex-col gap-2">
