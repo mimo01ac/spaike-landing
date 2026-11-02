@@ -34,6 +34,30 @@ const btnPrimary =
 const btnAmber =
   "bg-amber text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-amber-dark hover:text-cream transition-colors disabled:opacity-50";
 
+type Gendannet = { transcript: ChatMsg[]; afklaringer: Record<string, unknown> };
+type GenoptagSvar = {
+  genoptagToken?: string;
+  kanGenoptages?: string;
+  kontakt?: { navn: string; email: string; puljeAlarm: boolean };
+  genoptag?: { kanal: string; transcript: ChatMsg[]; afklaringer: Record<string, unknown>; kvalificering: Kvalificering | null; opdateret: string };
+};
+
+const GENOPTAG_KEY = "tilskud-genoptag";
+function hentGenoptagToken(): string | undefined {
+  try {
+    return localStorage.getItem(GENOPTAG_KEY) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+function gemGenoptagToken(t: string) {
+  try {
+    localStorage.setItem(GENOPTAG_KEY, t);
+  } catch {
+    /* privat tilstand e.l. */
+  }
+}
+
 /** Hvem der tager tjekket (Michael 2026-11-02: navn og e-mail FØR start; resultatet mailes automatisk). */
 type Kontakt = { navn: string; email: string; puljeAlarm: boolean; consent: boolean };
 
@@ -51,6 +75,9 @@ export default function TilskudFlow() {
   // Kanal vælges FØR noget starter (Michael 2026-11-02): ingen chat vises, før brugeren har valgt.
   const [kanal, setKanal] = useState<"chat" | "stemme" | null>(null);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
+  // Fortsæt hvor du slap (Michael 2026-11-02): gemte svar fra en påbegyndt session.
+  const [gendannet, setGendannet] = useState<Gendannet | null>(null);
+  const [kanGenoptages, setKanGenoptages] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const kvalRef = useRef<HTMLDivElement>(null);
 
@@ -58,9 +85,9 @@ export default function TilskudFlow() {
     const res = await fetch("/api/tilskud", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "start", cvr, cvrFallback, ...kontakt }),
+      body: JSON.stringify({ action: "start", cvr, cvrFallback, ...kontakt, genoptagToken: hentGenoptagToken() }),
     });
-    return { res, data: (await res.json()) as StartSvar & { error?: string } };
+    return { res, data: (await res.json()) as StartSvar & GenoptagSvar & { error?: string } };
   }
 
   // Fallback når serverens CVR-opslag afvises (cvrapi.dk's gratis-kvote er pr.
@@ -76,6 +103,46 @@ export default function TilskudFlow() {
     }
   }
 
+  /** Gendan en påbegyndt session: kanal, samtale, tjekliste og evt. kvalificeringskort. */
+  function anvendGenoptag(data: GenoptagSvar) {
+    const g = data.genoptag!;
+    setGendannet({ transcript: g.transcript, afklaringer: g.afklaringer });
+    setKanal(g.kanal === "stemme" ? "stemme" : "chat");
+    if (g.kvalificering) setKvalificering(g.kvalificering);
+    if (data.kontakt) setKontakt({ ...data.kontakt, consent: true });
+  }
+
+  // Link fra mailen: /tilskud?fortsaet=<token>
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("fortsaet");
+    if (!t) return;
+    void (async () => {
+      setStarter(true);
+      try {
+        const res = await fetch("/api/tilskud", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "genoptag", genoptagToken: t }),
+        });
+        const data = (await res.json()) as StartSvar & GenoptagSvar & { cvr?: string; error?: string };
+        if (!res.ok || !data.token) {
+          setStartFejl(data.error ?? "Samtalen kunne ikke genoptages. Start et nyt tjek.");
+          return;
+        }
+        gemGenoptagToken(data.genoptagToken ?? t);
+        setCvrBrugt(data.cvr ?? "");
+        anvendGenoptag(data);
+        setStart(data);
+        trackEvent("tilskud_genoptaget", { vej: "link" });
+      } catch {
+        setStartFejl("Forbindelsen fejlede. Prøv igen.");
+      } finally {
+        setStarter(false);
+        window.history.replaceState(null, "", "/tilskud");
+      }
+    })();
+  }, []);
+
   async function startTjek(cvr: string) {
     setStarter(true);
     setStartFejl(null);
@@ -90,6 +157,13 @@ export default function TilskudFlow() {
         return;
       }
       setCvrBrugt(cvr);
+      if (data.genoptagToken) gemGenoptagToken(data.genoptagToken);
+      if (data.genoptag) {
+        anvendGenoptag(data);
+        trackEvent("tilskud_genoptaget", { vej: "samme_browser" });
+      } else {
+        setKanGenoptages(data.kanGenoptages ?? null);
+      }
       setStart(data);
       trackEvent("tilskud_start", { cvr_fundet: data.virksomhed ? "ja" : "nej" });
     } catch {
@@ -131,6 +205,10 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
+      {kanGenoptages && !gendannet && kanal === null && <GenoptagBanner token={start.token} email={kontakt.email} opdateret={kanGenoptages} />}
+      {gendannet && (
+        <p className="font-sans text-[13px] text-ink-soft">Velkommen tilbage. Dine svar fra sidst er gemt, og du fortsætter, hvor du slap.</p>
+      )}
       {kanal === null ? (
         <KanalValg
           onVaelg={(k) => {
@@ -142,6 +220,7 @@ export default function TilskudFlow() {
         <VoiceSamtale
           token={start.token}
           navn={kontakt.navn}
+          tidligere={gendannet ?? undefined}
           cvr={cvrBrugt}
           virksomhed={start.virksomhed}
           forhaandstjek={start.forhaandstjek}
@@ -159,6 +238,7 @@ export default function TilskudFlow() {
       ) : (
         <Chat
           token={start.token}
+          tidligere={gendannet?.transcript}
           cvr={cvrBrugt}
           virksomhed={start.virksomhed}
           inject={inject}
@@ -243,6 +323,46 @@ type Soegehit = {
  * søges der i CVR efter 350 ms, og man vælger virksomheden på listen (for
  * dem der ikke lige husker CVR-nummeret). 8 cifre starter direkte.
  */
+/** Påbegyndt samtale fundet for samme e-mail og CVR, men fra en anden browser: send et link til mailen. */
+function GenoptagBanner({ token, email, opdateret }: { token: string; email: string; opdateret: string }) {
+  const [tilstand, setTilstand] = useState<"klar" | "sender" | "sendt" | "fejl">("klar");
+  const dato = new Date(opdateret.replace(" ", "T")).toLocaleDateString("da-DK", { day: "numeric", month: "long" });
+  async function send() {
+    setTilstand("sender");
+    try {
+      const res = await fetch("/api/tilskud", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "genoptag-link", token }),
+      });
+      setTilstand(res.ok ? "sendt" : "fejl");
+      if (res.ok) trackEvent("tilskud_genoptag_link");
+    } catch {
+      setTilstand("fejl");
+    }
+  }
+  return (
+    <div className="border border-amber-dark rounded bg-cream px-4 py-3 font-sans text-[13.5px] text-ink-soft">
+      {tilstand === "sendt" ? (
+        <p>Linket er sendt til {email}. Åbn det for at fortsætte, eller start forfra herunder.</p>
+      ) : (
+        <>
+          <p>Du har en påbegyndt samtale fra {dato}. Vil du fortsætte, hvor du slap?</p>
+          <button
+            type="button"
+            onClick={() => void send()}
+            disabled={tilstand === "sender"}
+            className="mt-2 font-sans text-[12.5px] text-ink underline underline-offset-2 disabled:opacity-50"
+          >
+            {tilstand === "sender" ? "Sender …" : "Send mig et link til at fortsætte"}
+          </button>
+          {tilstand === "fejl" && <p className="text-red-700 mt-1">Linket kunne ikke sendes lige nu. Prøv igen.</p>}
+        </>
+      )}
+    </div>
+  );
+}
+
 /** Første skridt efter CVR: hvordan vil brugeren gå tjekket igennem? Intet starter før valget. */
 function KanalValg({ onVaelg }: { onVaelg: (k: "chat" | "stemme") => void }) {
   const kort =
@@ -554,6 +674,7 @@ function Virksomhedskort({ start }: { start: StartSvar }) {
 
 function Chat({
   token,
+  tidligere,
   cvr,
   virksomhed,
   inject,
@@ -561,6 +682,8 @@ function Chat({
   onVurdering,
 }: {
   token: string;
+  /** Gemte beskeder fra en påbegyndt session (fortsæt hvor du slap). */
+  tidligere?: ChatMsg[];
   cvr: string;
   virksomhed: StartSvar["virksomhed"];
   /** Programmatisk besked (fx "fortsæt til forberedelsen" fra kvalificeringskortet). */
@@ -568,7 +691,10 @@ function Chat({
   onKvalificering: (k: Kvalificering, transcript: ChatMsg[]) => void;
   onVurdering: (v: Vurdering, transcript: ChatMsg[]) => void;
 }) {
-  const [messages, setMessages] = useState<ChatMsg[]>([]);
+  // En stemmesamtale starter med agentens replik; Claude kræver, at historikken starter med brugeren.
+  const [messages, setMessages] = useState<ChatMsg[]>(() =>
+    tidligere?.length ? (tidligere[0].role === "assistant" ? [{ role: "user", content: INTRO }, ...tidligere] : tidligere) : [],
+  );
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -581,6 +707,7 @@ function Chat({
   useEffect(() => {
     if (started.current) return;
     started.current = true;
+    if (messages.length) return; // fortsætter en gemt samtale
     void send(INTRO, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -679,7 +806,7 @@ function Chat({
     <div className="border border-rule rounded bg-cream overflow-hidden">
       <div ref={scrollRef} className="h-[440px] overflow-y-auto px-5 py-6 space-y-5" aria-live="polite">
         {messages.length === 0 && busy && <p className="text-muted text-sm italic">Tilskudstjekket læser CVR-data …</p>}
-        {messages.map((m, i) => (
+        {messages.map((m, i) => m.content === INTRO ? null : (
           <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
             <div
               className={

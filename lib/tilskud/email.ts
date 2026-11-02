@@ -214,3 +214,16 @@ export function renderLeadNotifikation(opts: {
   ${v ? `<p><b>Projekt:</b> ${esc(v.projekt.titel)}<br>${esc(v.projekt.formaal)}</p><p><b>Økonomi:</b> ${kr(v.projekt.estimeret_pris_kr)} i alt, tilskud ${kr(v.projekt.tilskud_kr)}.</p><p><b>Stoppere:</b> ${v.egnethed.stoppere.length ? esc(v.egnethed.stoppere.join("; ")) : "ingen"}</p>` : k ? `<p><b>Idé:</b> ${esc(k.idee)}</p><p><b>Stoppere:</b> ${k.stoppere.length ? esc(k.stoppere.join("; ")) : "ingen"}</p><p>Stoppede efter kvalificeringen (ingen forberedelse). Oplagt at følge op med et kort kald.</p>` : "<p>Ingen vurdering (leadet kom før chatten var færdig).</p>"}`;
   return { subject: `Tilskud-lead (${status}, ${opts.fase ?? (v ? "forberedelse" : "kvalificering")}): ${opts.virksomhed || opts.email}`, html };
 }
+
+/** Link til at fortsætte en påbegyndt samtale fra en anden enhed (gælder 7 dage). */
+export function renderGenoptagMail(link: string, navn: string): { subject: string; html: string } {
+  const fornavn = (navn || "").trim().split(/\s+/)[0];
+  const html = `<!doctype html><html><body style="margin:0;background:${cream};"><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:28px 14px;"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fffdf7;border:1px solid ${rule};"><tr><td style="padding:28px 30px;">
+      ${p(`Hej${fornavn ? ` ${esc(fornavn)}` : ""}`)}
+      ${p("Her er linket til at fortsætte dit Tilskudstjek, hvor du slap. Dine svar er gemt, så du ikke skal starte forfra.")}
+      <a href="${esc(link)}" style="display:inline-block;background:${ink};color:${cream};text-decoration:none;font:600 13px/1 Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:14px 22px;border-radius:2px;margin:6px 0 20px;">Fortsæt Tilskudstjekket &rarr;</a>
+      ${p("Linket virker i 7 dage. Har du ikke bedt om det, kan du se bort fra mailen.")}
+      <p style="font:400 12px/1.5 Arial,sans-serif;color:#6b6650;margin:14px 0 0;">Michael Mortensen · SpAIke · michael@spaike.dk</p>
+    </td></tr></table></td></tr></table></body></html>`;
+  return { subject: "Fortsæt dit Tilskudstjek", html };
+}
