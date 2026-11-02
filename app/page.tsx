@@ -6,10 +6,15 @@ import BuildItYourself from "./components/BuildItYourself";
 import Manifest from "./components/Manifest";
 import Kontakt from "./components/Kontakt";
 import Footer from "./components/Footer";
+import TilskudBjaelke from "./components/TilskudBjaelke";
+
+// Tilskudsbjælken afhænger af dato; revalidér hver time.
+export const revalidate = 3600;
 
 export default function Home() {
   return (
     <>
+      <TilskudBjaelke />
       <Header />
       <main>
         <Hero />

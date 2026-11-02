@@ -4,6 +4,7 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 
 ## Properties
 - `/` landing · `/ai-tjek` (lead-magnet, deterministisk scan) · `/ai-innovationsdag` (Claude discovery-agent) · `/tilskud` (Tilskudstjek: CVR + Claude-interview + lead, v1 2026-11-01) · juridiske sider.
+- Vej ind til /tilskud: menupunkt "Tilskud" i `Header`, link i `Footer` og `TilskudBjaelke` øverst på forsiden. Bjælken vises kun, mens næste rådgivningspulje i `lib/tilskud/puljer.ts` har en lukkedato og ikke er lukket (forsiden revalideres hver time). Umami: `tilskud_menu_click`, `tilskud_footer_click`, `tilskud_bjaelke_click`.
 - Vercel Hobby: **12 serverless functions**. Tæl `app/api/**/route.ts` før du tilføjer (7 efter /tilskud). Nye handlinger lægges som `action` i et eksisterende endpoint, ikke som ny route.
 
 ## /tilskud: faglige regler (Michael, 2026-11-01)
