@@ -22,6 +22,9 @@ export default function Header() {
           <a href="/#byg-selv" className="hover:text-amber-dark transition-colors">
             Byg selv
           </a>
+          <a href="/tilskud" data-track-event="tilskud_menu_click" className="hover:text-amber-dark transition-colors">
+            Tilskud
+          </a>
           <a href="/#manifest" className="hover:text-amber-dark transition-colors">
             Manifest
           </a>

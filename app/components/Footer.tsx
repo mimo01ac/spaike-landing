@@ -24,6 +24,7 @@ export default function Footer() {
               {/* Rod-relative: Footer genbruges på field note-sider. */}
               <li><a href="/#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">Hvad vi bygger</a></li>
               <li><a href="/#discovery" className="hover:text-amber-dark transition-colors">Discovery</a></li>
+              <li><a href="/tilskud" data-track-event="tilskud_footer_click" className="hover:text-amber-dark transition-colors">Tilskudstjek</a></li>
               <li><a href="/#manifest" className="hover:text-amber-dark transition-colors">Manifest</a></li>
               <li><a href="/#kontakt" className="hover:text-amber-dark transition-colors">Kontakt</a></li>
             </ul>
