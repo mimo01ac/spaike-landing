@@ -53,4 +53,4 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 ## 2026-11-02 · Efter infowebinaret: kort kvalificering, ambition, fri formulering
 
 - Formulerings-tjek trin 2 (Michaels idé): før resultatet vises, sammenlign 2B, 2C og 2D2 med tidligere genererede tekster (6-ords-sekvenser) og skriv om over en grænse · udskudt: kræver at teksterne er gemt i PB `tilskud_sessioner`, og spaike-crm er nede · trin 1 (fri formulering i prompten) er bygget og målt: 0-2 % overlap på 2D2, 7 % på 2B mellem to virksomheder · effort S
-- Kvalificeringen spørger ikke længere om de minimis, tilskudsindtægter, ejerskab over 25 % eller dobbeltfinansiering; de tager det i ansøgningen · bevidst valg (Michael 2026-11-02)
+- Kvalificeringen spørger ikke længere om de minimis, tilskudsindtægter eller dobbeltfinansiering (ejerskab over 25 % blev tilføjet igen samme dag, fordi danske datterselskaber af store koncerner ellers slipper igennem); de tager det i ansøgningen · bevidst valg (Michael 2026-11-02)

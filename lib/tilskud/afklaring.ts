@@ -23,7 +23,8 @@ export const AFKLARINGSPUNKTER: Afklaringspunkt[] = [
   // Kvalificering: kun det der kan stoppe dem; resten afklares i selve ansøgningen (webinar 2026-11-02).
   { id: "idee", fase: "kvalificering", label: "Hvad det skal hjælpe med" },
   { id: "aarsvaerk", fase: "kvalificering", label: "Mindst to årsværk" },
-  { id: "smv", fase: "kvalificering", label: "SMV: selvstændig, under ca. 375 mio. kr." },
+  { id: "smv", fase: "kvalificering", label: "SMV: omsætning under ca. 375 mio. kr." },
+  { id: "ejerskab", fase: "kvalificering", label: "Ikke ejet 25 % eller mere af en stor virksomhed" },
   { id: "regnskab", fase: "kvalificering", label: "Mindst ét aflagt årsregnskab" },
   { id: "medfinansiering", fase: "kvalificering", label: "Egen halvdel kontant, lagt ud" },
   { id: "tidligere_tilskud", fase: "kvalificering", label: "SMV:Digital-tilskud de seneste tre år" },
