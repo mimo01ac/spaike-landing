@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMV:Digital ansøgning: hvad de spørger om og vurderer</title>
+<style>
+  :root { --ink:#0f1a2e; --soft:#3a3f4e; --muted:#6b6650; --amber:#b88f3f; --rule:#d8d3c7; --cream:#f3eee2; --deep:#ebe4d4; --green:#1f7a4d; --red:#a23b2e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--cream); color:var(--ink); font:15px/1.6 -apple-system, "Segoe UI", Arial, sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 48px 28px 80px; }
+  .eyebrow { font: 600 11px/1.4 ui-monospace, Menlo, monospace; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); }
+  h1 { font: 500 38px/1.15 Georgia, "Times New Roman", serif; margin: 8px 0 12px; }
+  h2 { font: 500 26px/1.2 Georgia, serif; margin: 52px 0 6px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  h3 { font: 600 15px/1.4 Arial, sans-serif; margin: 26px 0 8px; }
+  p.lead { font: 17px/1.6 Georgia, serif; color: var(--soft); max-width: 760px; }
+  .note { color: var(--muted); font-size: 13px; }
+  .kort { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .kort > div { background:#fff8; border:1px solid var(--rule); border-radius:4px; padding:16px 18px; }
+  .kort .tal { font: 500 30px/1 Georgia, serif; color: var(--amber); }
+  .kort .navn { font-weight: 600; margin: 8px 0 4px; }
+  .kort ul { margin: 6px 0 0; padding-left: 18px; color: var(--soft); font-size: 13.5px; }
+  table { width:100%; border-collapse: collapse; margin-top: 10px; font-size: 13.5px; background:#fff6; }
+  th { text-align:left; font: 600 10.5px/1.4 ui-monospace, Menlo, monospace; letter-spacing:1px; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--ink); padding:8px 10px; vertical-align: bottom; }
+  td { border-bottom:1px solid var(--rule); padding:9px 10px; vertical-align: top; color: var(--soft); }
+  td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .chip { display:inline-block; font: 600 10.5px/1.5 ui-monospace, Menlo, monospace; letter-spacing:.6px; text-transform: uppercase; padding:1px 7px; border:1px solid; border-radius:2px; white-space: nowrap; }
+  .ja { color: var(--green); border-color: var(--green); }
+  .delvist { color: var(--amber); border-color: var(--amber); }
+  .nej { color: var(--red); border-color: var(--red); }
+  .point { color: var(--ink); border-color: var(--ink); }
+  .ingen { color: var(--muted); border-color: var(--rule); }
+  ol.huller { padding-left: 22px; }
+  ol.huller li { margin: 0 0 14px; color: var(--soft); }
+  ol.huller b { color: var(--ink); }
+  .spm { display:block; font-family: Georgia, serif; font-style: italic; color: var(--ink); margin-top: 3px; }
+  a { color: var(--ink); }
+  @media (max-width: 760px) { .kort { grid-template-columns: 1fr; } td:first-child { white-space: normal; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">SpAIke · Tilskudstjekket · grundlag for interviewet · 2. november 2026</div>
+  <h1>SMV:Digital "Digitalisering": hvad ansøgningen spørger om, og hvad der giver point</h1>
+  <p class="lead">Overblik over hele den officielle ansøgning, felt for felt, og hvad der skal udinterviewes for at kunne skrive en stærk projektbeskrivelse. Sidste kolonne viser, om Tilskudstjekket (chat og stemme) får det med i dag.</p>
+  <p class="note">Kilder: den officielle skabelon "Digitalisering" fra <a href="https://virksomhedsguiden.dk/api/media/userfiles/447ecce5-449d-42c7-ba16-fb4b893949ba">Virksomhedsguiden</a> (hentet 1/11-2026, ordret kopi i repoet <code>docs/smv-digital-ansoegningsskabelon-2026-11.md</code>), pointmodellen fra Virksomhedsguiden og BEK 556/2024 (verificeret 1/11-2026). Online ansøgning: <a href="https://puljeaabning.vudk.dk/">puljeaabning.vudk.dk</a>. Hvilke felter der fodrer hvilket kriterium, er min læsning; skabelonen siger kun, at del 2 bruges til vurderingen, del 1 er baggrund, og del 3 ikke tæller.</p>
+
+  <h2>1. Sådan vurderes ansøgningen</h2>
+  <div class="kort">
+    <div>
+      <div class="tal">0 til 5</div>
+      <div class="navn">Digitaliseringspotentiale og business case</div>
+      <ul>
+        <li>Klar, målbar gevinst knyttet til en konkret udfordring</li>
+        <li>Flere processer eller data på tværs af systemer</li>
+        <li>Ny teknologi for virksomheden (nyhedsværdi)</li>
+        <li>Fodres især af 1F, 1G, 2B, 2C, 2D2 og 2G</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tal">0 til 5</div>
+      <div class="navn">Organisatorisk og økonomisk kapacitet, herunder jobskabelse</div>
+      <ul>
+        <li>Økonomi til at betale sin halvdel og implementere bagefter</li>
+        <li>Ledelse og medarbejdere sat på projektet i 8 måneder</li>
+        <li>Erfaring med digitale projekter</li>
+        <li>Fodres især af 1B.1, 2E1, 2F og effekten "Flere ansatte"</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tal">0 til minus 3</div>
+      <div class="navn">Tidligere tilskud</div>
+      <ul>
+        <li>Førstegangsansøgere får 0 i fradrag</li>
+        <li>Tidligere digitaliseringstilskud trækker ned</li>
+        <li>Betydeligt overlap med et tidligere projekt kan koste hele ansøgningen (1D)</li>
+      </ul>
+    </div>
+  </div>
+  <p><b>Tilsagn fra 7 point</b>, højeste score først. Det er ikke først-til-mølle. Ved pointlighed vinder færrest tidligere tilskud, derefter indsendelsestidspunkt. Ansøgningen skal være <b>skrevet af virksomheden selv</b> (de bekræfter, at den ikke er udarbejdet eller kopieret fra en rådgiver). Derfor leverer tjekket en projektbeskrivelse som grundlag, ikke ansøgningstekst.</p>
+
+  <h2>2. Formelle krav (bekræftelser før ansøgningen)</h2>
+  <p class="note">Alle skal kunne bekræftes med ja. Ét nej stopper ansøgningen.</p>
+  <table>
+    <tr><th>Krav</th><th>Hvad det betyder</th><th>Skal afklares</th><th>Dækket i dag</th></tr>
+    <tr><td>Dansk CVR</td><td>Ansøger har dansk CVR-nummer</td><td>Kommer fra CVR</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>SMV-status</td><td>Højst 249 ansatte og omsætning højst 50 mio. euro eller balance højst 43 mio. euro, inkl. koncern</td><td>Ansatte og omsætning, og om de er del af en koncern</td><td><span class="chip delvist">Delvist</span> koncern spørges ikke</td></tr>
+    <tr><td>Ikke primærerhverv</td><td>Ikke landbrug, fiskeri o.l. (hovedbranchekode)</td><td>Kommer fra CVR</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>Erhvervsvirksomhed</td><td>ApS, A/S, personligt ejet osv. Ikke skoler, foreninger, museer, varmeværker</td><td>Selskabsform fra CVR</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>Under 50 % tilskudsindtægter</td><td>Offentlige tilskud, donationer, kontingenter under halvdelen af indtægterne</td><td>Kun relevant i fx uddannelse, kultur, sundhed</td><td><span class="chip delvist">Delvist</span> kun hvis branchen peger på det</td></tr>
+    <tr><td>De minimis</td><td>Højst 300.000 euro i offentlig støtte over tre år, på koncernniveau</td><td>Tidligere støtte og cirka beløb</td><td><span class="chip delvist">Delvist</span> beløb spørges ikke altid</td></tr>
+    <tr><td>Mindst ét årsregnskab</td><td>Første regnskab skal være afsluttet og aflagt</td><td>Alder fra CVR, ellers spørg</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>2 til 249 årsværk</td><td>På ansøgningstidspunktet, efter seneste årsværk i CVR (E-indkomst). Freelancere tæller ikke</td><td>Fuldtidsstillinger</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>Ét forløb pr. CVR pr. spor</td><td>Ingen igangværende SMV:Digital-forløb (andre spor som Grøn eller Eksport er ok)</td><td>Er I i gang med et SMV:-forløb nu?</td><td><span class="chip nej">Nej</span></td></tr>
+    <tr><td>Ingen anden støtte til projektet</td><td>Hverken erhvervsfremme- eller EU-midler til samme projekt, før eller efter</td><td>Søger I andre midler til det samme?</td><td><span class="chip nej">Nej</span></td></tr>
+    <tr><td>Én ansøgning pr. ejerkreds</td><td>Virksomheder med 25 % eller mere fælles ejerskab kan kun have ét forløb ad gangen</td><td>Søger søsterselskaber også?</td><td><span class="chip delvist">Delvist</span> kun ejerskab over 25 % af stor virksomhed</td></tr>
+    <tr><td>Selv udarbejdet</td><td>Ansøgningen må ikke være skrevet eller kopieret fra en rådgiver</td><td>Information, ikke spørgsmål</td><td><span class="chip ja">Ja</span> siges i tjekket</td></tr>
+    <tr><td>Start efter tilsagn, kontant</td><td>Intet arbejde før tilsagn; medfinansiering kun kontant, ingen timer</td><td>Kan I betale jeres halvdel kontant og lægge ud?</td><td><span class="chip ja">Ja</span></td></tr>
+  </table>
+
+  <h2>3. Ansøgningens felter, og hvad der skal udinterviewes</h2>
+
+  <h3>Del 1: Virksomhedsoplysninger (baggrund, pointgives ikke direkte, men læses med)</h3>
+  <table>
+    <tr><th>Felt</th><th>Hvad de spørger om</th><th>Grænse</th><th>Skal udinterviewes</th><th>Dækket i dag</th></tr>
+    <tr><td>1A Stamdata</td><td>Hentes fra CVR. Tegningsberettiget/direktør, kontaktperson, mail, mobil, hjemmeside</td><td></td><td>Kontaktperson og direktør</td><td><span class="chip delvist">Delvist</span> navn og mail nu, direktør nej</td></tr>
+    <tr><td>1B.1 Nøgletal</td><td>Omsætning, eksport %, resultat før skat, balance, egenkapital (tkr., seneste regnskabsår)</td><td></td><td>Omsætning, eksport %, om resultat eller egenkapital er negativ</td><td><span class="chip delvist">Delvist</span> kun omsætning</td></tr>
+    <tr><td>1C De minimis</td><td>Tidligere de minimis-støtte: ordninger og samlet beløb de seneste 3 år</td><td></td><td>Hvilke ordninger og cirka beløb</td><td><span class="chip delvist">Delvist</span></td></tr>
+    <tr><td>1D Tidligere digitaliseringstilskud</td><td>Ja/nej. Hvis ja: opnåede resultater (især forretningsmæssigt), og hvordan det nye projekt er nyt eller supplerer</td><td>300 til 2.000 tegn</td><td>Hvad fik I, hvad kom der ud af det, hvad er nyt nu</td><td><span class="chip nej">Nej</span> kun om de har fået tilskud</td></tr>
+    <tr><td>1E Om virksomheden</td><td>Vision og formål, hvem I er, ejere, koncern</td><td>200 til 1.500</td><td>Hvad er drømmen for virksomheden?</td><td><span class="chip nej">Nej</span></td></tr>
+    <tr><td>1E Produkter og ydelser</td><td>Hvad sælger I, forståeligt for en udefra</td><td>100 til 1.000</td><td>Hvad sælger I?</td><td><span class="chip delvist">Delvist</span> branche fra CVR</td></tr>
+    <tr><td>1E Kunder og markeder</td><td>Kundetyper, brancher, markeder, salgskanaler</td><td>100 til 1.000</td><td>Hvem er jeres kunder, og hvordan sælger I?</td><td><span class="chip nej">Nej</span></td></tr>
+    <tr><td>1E Styrker og svagheder</td><td>Styrker, svagheder, konkurrence, særlig position, relevant for projektet</td><td>100 til 1.000</td><td>Hvad gør jer stærke, hvad holder jer tilbage?</td><td><span class="chip nej">Nej</span></td></tr>
+    <tr><td>1F Vækstambition, 2 år</td><td>Konkret med tal og procenter: omsætning, resultat, produktivitet, ansatte, produkter, markeder</td><td>200 til 1.300</td><td>Hvor vil I hen om to år, i tal?</td><td><span class="chip delvist">Delvist</span> retning, sjældent tal</td></tr>
+    <tr><td>1F Vækstambition, 3 til 5 år</td><td>Samme, længere sigt, og hvordan udviklingen realiseres</td><td>200 til 1.300</td><td>Og om tre til fem år?</td><td><span class="chip delvist">Delvist</span></td></tr>
+    <tr><td>1G Digitale barrierer</td><td>Hvilke digitale udfordringer forhindrer jer i at nå ambitionerne</td><td>300 til 1.300</td><td>Smerten: hvad fylder, hvor taber I tid og penge</td><td><span class="chip ja">Ja</span> ankeret i interviewet</td></tr>
+  </table>
+
+  <h3>Del 2: Projekt (det der vurderes)</h3>
+  <table>
+    <tr><th>Felt</th><th>Hvad de spørger om</th><th>Grænse</th><th>Skal udinterviewes</th><th>Dækket i dag</th></tr>
+    <tr><td>2A Projekttitel</td><td>Kort, præcis titel</td><td></td><td>Afledes</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>2B Projektbeskrivelse <span class="chip point">Point</span></td><td>Det konkrete projekt og hvordan det løser udfordringerne, hvorfor vigtigt, forretningsmæssigt potentiale, aktiviteter, forventede resultater, hvilke medarbejdere og hvordan</td><td>500 til 1.500 ekskl. blanktegn</td><td>Område/flow, forventet effekt, hvem der deltager</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>2C Digital nyhedsværdi <span class="chip point">Point</span></td><td>Ny digital teknologi for virksomheden eller væsentlig opgradering. Kendt teknologi på et nyt område tæller ikke</td><td>300 til 1.500</td><td>Hvilke systemer bruger I i dag, og bruger I kunstig intelligens eller automatisering allerede?</td><td><span class="chip delvist">Delvist</span> systemer spørges ikke altid</td></tr>
+    <tr><td>2D1 Rådgivers område</td><td>Afkrydsning, fx "Analyse vedr anvendelse af AI til produktivitetsforbedringer", "systemintegration", "RPA"</td><td></td><td>Afledes</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>2D2 Rådgivers opgaver <span class="chip point">Point</span></td><td>Opgaver og aktiviteter, krævede kompetencer. Kun undersøgende, analyserende, forberedende, klargørende og opfølgende. Ikke installation, kodning, test, markedsføring</td><td>300 til 1.500</td><td>Afledes af projektet</td><td><span class="chip ja">Ja</span></td></tr>
+    <tr><td>2D3 Ansøgt tilskud</td><td>50 % af rådgiverydelsen, 50.000 til 150.000 kr. (cyber, digital markedsføring og enkle ERP højst 50.000). Skal matche projektet og virksomhedens økonomi og organisation</td><td></td><td>Størrelse og økonomi</td><td><span class="chip delvist">Delvist</span> skønnes ud fra størrelse</td></tr>
+    <tr><td>2E1 Økonomisk forankring <span class="chip point">Point</span></td><td>a) kapital til rådgivningen (tkr.), b) kapital til at implementere anbefalingerne (tkr.), hvordan midlerne er til rådighed. Negativt resultat eller egenkapital SKAL forklares, fx ekstern finansiering</td><td>Højst 500</td><td>Beløb til implementering, og hvor pengene kommer fra; negativ egenkapital?</td><td><span class="chip delvist">Delvist</span> beløb nævnes, spørges ikke aktivt</td></tr>
+    <tr><td>2F Organisatorisk forankring <span class="chip point">Point</span></td><td>Mindst én fra ledelsen og mindst én medarbejder, med niveau, titel, navn og rolle (projektholder, specialist, bruger). Rådgiver skal ikke stå her</td><td>Højst 500</td><td>Navne, titler og roller</td><td><span class="chip delvist">Delvist</span> hvem, ikke titler og roller</td></tr>
+    <tr><td>2G Effekter <span class="chip point">Point</span></td><td>For hver: flere ansatte, større omsætning, styrket produktivitet, lavere omkostninger, øget eksport, nye kundegrupper, nye produkter, højere kvalitet, lavere klimaaftryk: nej / inden for et år / inden for tre år</td><td>Afkrydsning</td><td>Hvad forventer I konkret, og hvornår?</td><td><span class="chip delvist">Delvist</span> udledes af effekt-svaret</td></tr>
+  </table>
+
+  <h3>Del 3: Baggrund (tæller ikke)</h3>
+  <table>
+    <tr><th>Felt</th><th>Hvad de spørger om</th><th>Dækket i dag</th></tr>
+    <tr><td>3A.1 Kendskab og rådgiver</td><td>Hvordan I hørte om tilskuddet; om I har valgt rådgiver, og om den er i rådgiverdatabasen</td><td><span class="chip ingen">Ikke nødvendigt</span></td></tr>
+    <tr><td>3A.2 Kontakt</td><td>Må erhvervshusene kontakte jer; nyhedsbrev</td><td><span class="chip ingen">Ikke nødvendigt</span></td></tr>
+    <tr><td>3A.3 Erhvervsfremme før</td><td>Tidligere vejledning eller støtte (SMV:-spor, erhvervshuse, GTS, klynger) og antal gange</td><td><span class="chip delvist">Delvist</span> via tidligere tilskud</td></tr>
+  </table>
+
+  <h2>4. Det tjekket ikke får spurgt om i dag, i prioriteret rækkefølge</h2>
+  <p class="note">Prioriteret efter hvor meget det flytter point eller risikerer afslag. Hvert punkt er ét kort spørgsmål.</p>
+  <ol class="huller">
+    <li><b>Vækstambition i tal</b> (1F, 2G, jobskabelse i kapacitet). Det svageste punkt i dag: interviewet får retning, men sjældent tal.
+      <span class="spm">"Hvis det her lykkes, hvor er I så om to år, fx i omsætning eller antal ansatte?"</span></li>
+    <li><b>Økonomisk råderum</b> (1B.1, 2E1, kapacitet). Negativt resultat eller egenkapital skal forklares, ellers taber de point eller får afslag. Resultat og egenkapital kan hentes fra seneste årsregnskab i CVR i stedet for at spørge.
+      <span class="spm">"Hvor meget kan I sætte af til at gennemføre anbefalingerne bagefter?"</span></li>
+    <li><b>Organisatorisk forankring med navne, titler og roller</b> (2F, kapacitet).
+      <span class="spm">"Hvem fra ledelsen står for projektet, og hvem fra medarbejderne er med?"</span></li>
+    <li><b>Tidligere digitaliseringstilskud: hvad, resultater, hvorfor nyt</b> (1D, minus 0 til 3 point og risiko for afslag ved overlap).
+      <span class="spm">"Hvad handlede det tidligere projekt om, og hvad kom der ud af det?"</span></li>
+    <li><b>Nuværende systemer og teknologi</b> (2C nyhedsværdi).
+      <span class="spm">"Hvilke systemer kører I på i dag, fx økonomi, CRM eller planlægning?"</span></li>
+    <li><b>Formelle stoppere, der ikke tjekkes</b>: igangværende SMV:Digital-forløb, anden støtte til samme projekt, søsterselskaber i samme ejerkreds, koncern ved SMV-status.
+      <span class="spm">"Er I eller et søsterselskab i gang med et andet SMV-forløb eller en ansøgning lige nu?"</span></li>
+    <li><b>Kunder, markeder og eksport</b> (1E, effekterne "øget eksport" og "nye kundegrupper").
+      <span class="spm">"Hvem er jeres typiske kunder, og sælger I noget uden for Danmark?"</span></li>
+    <li><b>Vision, styrker og svagheder</b> (1E). Pointgives ikke direkte, og virksomheden kan skrive det selv. Kan dækkes af ét åbent spørgsmål eller udelades.</li>
+  </ol>
+  <p class="note">Punkt 1 til 4 påvirker pointscoren mest. De passer ind i forberedelsesfasen uden at bryde reglen om analysens niveau: det er spørgsmål om virksomheden, ikke om hvor i flowet tiden går.</p>
+</main>
+</body>
+</html>

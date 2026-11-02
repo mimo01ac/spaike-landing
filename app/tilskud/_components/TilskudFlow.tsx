@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Mic, MessageSquare } from "lucide-react";
 import { trackEvent } from "../../components/track";
 import dynamic from "next/dynamic";
 
@@ -47,7 +48,8 @@ export default function TilskudFlow() {
   const [kvalificering, setKvalificering] = useState<Kvalificering | null>(null);
   const [stopEfterKval, setStopEfterKval] = useState(false);
   const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
-  const [voice, setVoice] = useState(false);
+  // Kanal vælges FØR noget starter (Michael 2026-11-02): ingen chat vises, før brugeren har valgt.
+  const [kanal, setKanal] = useState<"chat" | "stemme" | null>(null);
   // Stemmen er ny (2026-11-01): synlig på preview/lokalt, i produktion kun med ?stemme=1, indtil Michael har godkendt den.
   const [visStemme, setVisStemme] = useState(false);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
@@ -137,29 +139,14 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
-      {visStemme && !kvalificering && !vurdering && (
-      <div className="flex flex-wrap items-center gap-2 font-sans text-[12.5px]">
-        <span className="text-muted">Sådan vil jeg tage samtalen:</span>
-        <button
-          type="button"
-          onClick={() => setVoice(false)}
-          className={`px-3 py-1.5 border rounded ${!voice ? "bg-ink text-cream border-ink" : "border-rule text-ink hover:border-ink"}`}
-        >
-          Skrive i chatten
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setVoice(true);
-            trackEvent("tilskud_voice_valgt");
+      {visStemme && kanal === null ? (
+        <KanalValg
+          onVaelg={(k) => {
+            setKanal(k);
+            trackEvent("tilskud_kanal_valgt", { kanal: k });
           }}
-          className={`px-3 py-1.5 border rounded ${voice ? "bg-ink text-cream border-ink" : "border-rule text-ink hover:border-ink"}`}
-        >
-          Tale med agenten
-        </button>
-      </div>
-      )}
-      {voice ? (
+        />
+      ) : kanal === "stemme" ? (
         <VoiceSamtale
           token={start.token}
           navn={kontakt.navn}
@@ -193,12 +180,21 @@ export default function TilskudFlow() {
           }}
         />
       )}
+      {visStemme && kanal !== null && !kvalificering && !vurdering && (
+        <button
+          type="button"
+          onClick={() => setKanal(kanal === "stemme" ? "chat" : "stemme")}
+          className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
+        >
+          {kanal === "stemme" ? "Skift til at skrive i chatten i stedet" : "Skift til at tale med AI-agenten i stedet"}
+        </button>
+      )}
       {kvalificering && !vurdering && (
         <div ref={kvalRef} className="scroll-mt-24">
           <KvalificeringKort
             k={kvalificering}
             stoppet={stopEfterKval}
-            kunMail={voice}
+            kunMail={kanal === "stemme"}
             onFortsaet={() => {
               setStopEfterKval(false);
               trackEvent("tilskud_fortsaet_forberedelse", { status: kvalificering.status });
@@ -255,6 +251,34 @@ type Soegehit = {
  * søges der i CVR efter 350 ms, og man vælger virksomheden på listen (for
  * dem der ikke lige husker CVR-nummeret). 8 cifre starter direkte.
  */
+/** Første skridt efter CVR: hvordan vil brugeren gå tjekket igennem? Intet starter før valget. */
+function KanalValg({ onVaelg }: { onVaelg: (k: "chat" | "stemme") => void }) {
+  const kort =
+    "group flex flex-col items-start justify-start text-left border border-rule rounded bg-cream px-5 py-5 hover:border-ink hover:bg-cream-deep transition-colors";
+  return (
+    <div>
+      <p className="font-serif text-2xl leading-snug">Hvordan vil du gå det igennem?</p>
+      <p className="font-sans text-[14px] text-ink-soft mt-1">Begge veje giver det samme resultat, og det sendes til din mail.</p>
+      <div className="grid sm:grid-cols-2 gap-3 mt-4">
+        <button type="button" onClick={() => onVaelg("stemme")} className={kort}>
+          <Mic className="h-6 w-6 text-amber-dark" aria-hidden="true" />
+          <span className="block font-serif text-xl mt-3">Tal med en AI-agent</span>
+          <span className="block font-sans text-[13.5px] text-ink-soft mt-1">
+            En samtale på fem til ti minutter. Du taler, agenten guider dig igennem. Brug gerne headset.
+          </span>
+        </button>
+        <button type="button" onClick={() => onVaelg("chat")} className={kort}>
+          <MessageSquare className="h-6 w-6 text-amber-dark" aria-hidden="true" />
+          <span className="block font-serif text-xl mt-3">Skriv i en chat</span>
+          <span className="block font-sans text-[13.5px] text-ink-soft mt-1">
+            Svar på spørgsmålene skriftligt i dit eget tempo.
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function VirksomhedsSoegning({
   value,
   onChange,
