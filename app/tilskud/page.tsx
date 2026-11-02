@@ -55,7 +55,7 @@ const FAQ = [
   },
   {
     q: "Hvad gemmer I?",
-    a: "Jeg gemmer virksomhedens CVR-oplysninger, samtalen og vurderingen fra det øjeblik, tjekket starter, så jeg kan følge op og hjælpe jer videre. Navn, mail og telefon kun, hvis I selv skriver dem. Taler I med agenten, går stemmen gennem ElevenLabs; lyden optages ikke. Se privatlivspolitikken for detaljer.",
+    a: "Jeg gemmer virksomhedens CVR-oplysninger, dit navn, din e-mail, samtalen og vurderingen fra det øjeblik, tjekket starter, så jeg kan sende dig resultatet, følge op og hjælpe jer videre. Taler I med agenten, går stemmen gennem ElevenLabs; lyden optages ikke. Se privatlivspolitikken for detaljer.",
   },
 ];
 

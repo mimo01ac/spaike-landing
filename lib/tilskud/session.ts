@@ -39,6 +39,7 @@ export async function opretSession(opts: {
   cvr: string;
   virksomhed: Virksomhed | null;
   forhaandstjek: Forhaandstjek | null;
+  kontakt: { navn: string; email: string; puljeAlarm: boolean };
   /** false for CLI-/testkørsler (header x-tilskud-test: 1). */
   notificer?: boolean;
 }): Promise<void> {
@@ -46,6 +47,9 @@ export async function opretSession(opts: {
   const gem = createRecord(SESSION_COLLECTION, {
     id: opts.id,
     cvr: opts.cvr,
+    navn: opts.kontakt.navn,
+    email: opts.kontakt.email,
+    pulje_alarm: opts.kontakt.puljeAlarm,
     virksomhed: v?.navn ?? "",
     branche: v?.branche ?? "",
     by: v?.by ?? "",
@@ -61,8 +65,8 @@ export async function opretSession(opts: {
   let mail: Promise<unknown> = Promise.resolve();
   if (opts.notificer !== false && Date.now() - sidst > DEDUP_MS) {
     senestNotificeret.set(noegle, Date.now());
-    const n = renderSessionStartNotifikation({ id: opts.id, cvr: opts.cvr, virksomhed: v, forhaandstjek: opts.forhaandstjek });
-    mail = sendEmail({ to: process.env.EMAIL_FROM_ADDRESS || "michael@spaike.dk", subject: n.subject, html: n.html });
+    const n = renderSessionStartNotifikation({ id: opts.id, cvr: opts.cvr, virksomhed: v, forhaandstjek: opts.forhaandstjek, kontakt: opts.kontakt });
+    mail = sendEmail({ to: process.env.EMAIL_FROM_ADDRESS || "michael@spaike.dk", subject: n.subject, html: n.html, replyTo: { email: opts.kontakt.email, name: opts.kontakt.navn } });
   }
   await hoejst(Promise.allSettled([gem, mail]));
 }

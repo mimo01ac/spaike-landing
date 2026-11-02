@@ -54,7 +54,7 @@ async function post(body) {
 }
 
 async function start(cvr) {
-  const res = await post({ action: "start", cvr });
+  const res = await post({ action: "start", cvr, navn: flag("navn", "CLI Test"), email: flag("email", "cli-test@spaike.dk"), consent: true });
   const data = await res.json();
   if (!res.ok) throw new Error(`start ${res.status}: ${JSON.stringify(data)}`);
   return data;
@@ -166,7 +166,7 @@ async function main() {
     // Udsteder et WebRTC-token til stemme-agenten (selve samtalen kræver en browser/mikrofon;
     // samtale-logikken testes med `npm run tilskud:voice -- simuler`).
     const s = await start(cvr || "");
-    const res = await post({ action: "voice-start", token: s.token, cvr, virksomhed: s.virksomhed });
+    const res = await post({ action: "voice-start", token: s.token, cvr, virksomhed: s.virksomhed, navn: flag("navn", "CLI Test") });
     const data = await res.json();
     if (!res.ok) throw new Error(`voice-start ${res.status}: ${JSON.stringify(data)}`);
     const ud = { conversationId: data.conversationId, token_laengde: data.conversationToken?.length ?? 0, dynamicVariables: data.dynamicVariables };

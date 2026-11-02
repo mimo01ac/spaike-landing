@@ -175,3 +175,24 @@ export async function simulerSamtale(opts: {
     await el("DELETE", `/v1/convai/agent-testing/${encodeURIComponent(test.id)}`).catch(() => undefined);
   }
 }
+
+// --- Udtale-ordbog -----------------------------------------------------------
+
+/**
+ * Opret eller opdatér en udtale-ordbog (alias-regler) og returnér locatoren til
+ * agentens tts.pronunciation_dictionary_locators. Findes ordbogen (samme navn),
+ * erstattes reglerne, så sync er idempotent.
+ */
+export async function sikrUdtaleOrdbog(
+  navn: string,
+  regler: { type: string; string_to_replace: string; alias: string }[],
+): Promise<{ pronunciation_dictionary_id: string; version_id: string }> {
+  const liste = await el<{ pronunciation_dictionaries?: { id: string; name: string }[] }>("GET", "/v1/pronunciation-dictionaries?page_size=100");
+  const fundet = liste.pronunciation_dictionaries?.find((d) => d.name === navn);
+  if (!fundet) {
+    const r = await el<{ id: string; version_id: string }>("POST", "/v1/pronunciation-dictionaries/add-from-rules", { name: navn, rules: regler });
+    return { pronunciation_dictionary_id: r.id, version_id: r.version_id };
+  }
+  const r = await el<{ id?: string; version_id: string }>("POST", `/v1/pronunciation-dictionaries/${encodeURIComponent(fundet.id)}/set-rules`, { rules: regler });
+  return { pronunciation_dictionary_id: fundet.id, version_id: r.version_id };
+}

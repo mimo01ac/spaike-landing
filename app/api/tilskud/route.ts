@@ -90,6 +90,17 @@ async function start(req: Request, body: Record<string, unknown>) {
     if (!ts.ok) return json({ error: "Bot-tjek fejlede. Genindlæs siden og prøv igen." }, 403);
   }
 
+  // Navn og e-mail før start (Michael 2026-11-02): så ved han hvem der tester, og resultatet mailes automatisk.
+  const kontakt = {
+    navn: String(body.navn ?? "").trim().slice(0, 120),
+    email: String(body.email ?? "").trim().slice(0, 200),
+    puljeAlarm: !!body.puljeAlarm,
+  };
+  if (!kontakt.navn || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(kontakt.email)) {
+    return json({ error: "Skriv dit navn og en gyldig e-mail, så jeg kan sende resultatet." }, 400);
+  }
+  if (!body.consent) return json({ error: "Du skal acceptere behandlingen af dine oplysninger." }, 400);
+
   const cvr = normaliserCvr(String(body.cvr ?? ""));
   let virksomhed = cvr ? await slaaCvrOp(cvr) : null;
   // Fallback: klienten har selv slået op hos cvrapi.dk (CORS) fordi serverens
@@ -101,7 +112,7 @@ async function start(req: Request, body: Record<string, unknown>) {
   const tjek = virksomhed ? forhaandstjek(virksomhed) : null;
   const p = naesteRaadgivningspulje();
   const sid = nytSessionId();
-  await opretSession({ id: sid, cvr: cvr ?? "", virksomhed, forhaandstjek: tjek, notificer: req.headers.get("x-tilskud-test") !== "1" });
+  await opretSession({ id: sid, cvr: cvr ?? "", virksomhed, forhaandstjek: tjek, kontakt, notificer: req.headers.get("x-tilskud-test") !== "1" });
 
   const svar: StartSvar & { cvrFejl?: string } = {
     token: issueSessionToken(sid),
@@ -250,7 +261,7 @@ async function voiceStart(req: Request, body: Record<string, unknown>) {
     return json({ error: "Stemmen kunne ikke starte lige nu. Prøv igen, eller skriv i chatten." }, 502);
   }
   await opdaterSession(sid, { kanal: "stemme", elevenlabs_samtale: samtale.conversationId ?? "" });
-  return json({ conversationToken: samtale.token, conversationId: samtale.conversationId, dynamicVariables: dynamiskeVariabler(v) }, 200);
+  return json({ conversationToken: samtale.token, conversationId: samtale.conversationId, dynamicVariables: dynamiskeVariabler(v, String(body.navn ?? "")) }, 200);
 }
 
 /** Klientens egen kopi af udskriften (fallback, hvis ElevenLabs ikke har den klar endnu). */

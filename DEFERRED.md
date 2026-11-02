@@ -41,3 +41,11 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Tjeklisten afhænger af, at agenten kalder `noter_afklaring`; der er ingen server-side kontrol undervejs · det rigtige: hvis rigtige samtaler viser huller, så en let Haiku-opsummering af udskriften efter hver brugertur som fallback · effort M
 - `voice-resultat` kører Claude Opus 5.5 synkront (ca. 20-45 s) inden for Vercels 60 s · fart · det rigtige: streame eller køre i baggrunden med polling, hvis vurderingen bliver langsommere · effort M
 - Sessioner gemmes for alle (Michael-beslutning); ingen automatisk sletning af gamle `tilskud_sessioner` · det rigtige: slet sessioner uden lead efter fx 12 måneder (cron eller PB-hook) · effort S
+
+## 2026-11-02 · Stemme v2.1 (SpAIke-voice-standard) + navn/e-mail før start
+
+- Rettet efter Michaels test: stemmen er nu SpAIkes standard (Mathias, eleven_v3_conversational, 0.5/0.85/0.95) i stedet for "Michael Stemme" på flash_v2_5. Punktet om stemmevalg ovenfor er lukket.
+- Udtale-ordbog ("AI" → "kunstig intelligens", "SpAIke" → "Spajk") er bygget i sync, men springes over: ElevenLabs-nøglen mangler rettigheden `pronunciation_dictionaries_read/write` · det rigtige: giv nøglen rettigheden, kør `npm run tilskud:voice -- sync` · effort XS (Michael, ElevenLabs-dashboard). Prompt + `tilTaleDansk` dækker indtil da (0 "AI" i simulationer).
+- Mikrofon-gaten kræver lyd over 12 % før "Start samtalen" · ingen "start alligevel"-vej, hvis en mikrofon er meget svag · det rigtige: vis knappen efter fx 10 s uden lyd · effort XS
+- Resultatet mailes automatisk ved slut; forlader brugeren siden efter kvalificeringen i chatten uden at vælge, sendes intet (sessionen er gemt og Michael har start-mailen) · effort S hvis det skal ændres
+- Forberedelsen i stemmen bruger op til seks korte spørgsmål (ét pr. tur) i stedet for chatten fire, fordi forankring er delt i tre ture · bevidst valg for talt dansk
