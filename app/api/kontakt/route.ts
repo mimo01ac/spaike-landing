@@ -58,11 +58,8 @@ export async function POST(req: Request) {
   try {
     await createRecord("kontakt_beskeder", { navn, email, besked, consent: true });
   } catch (e) {
+    // Fail-soft (2026-11-02, PocketBase nede): mailen til Michael bærer beskeden alene.
     console.error("kontakt: PB-gem fejlede:", (e as Error).message);
-    return NextResponse.json(
-      { error: "Noget gik galt. Skriv i stedet direkte til michael@spaike.dk." },
-      { status: 500 },
-    );
   }
 
   await sendEmail({

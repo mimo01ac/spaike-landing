@@ -67,6 +67,7 @@ export async function POST(req: Request) {
     );
   }
 
+  let gemt = true;
   try {
     await createRecord("discovery_sessions", {
       name,
@@ -92,17 +93,29 @@ export async function POST(req: Request) {
       });
     }
 
-    // Send briefen + guide-link på mail (best-effort: leadet er gemt uanset).
-    const brief = body.case_brief as CaseBriefData | undefined;
-    if (brief && Array.isArray(brief.cases) && brief.cases.length > 0) {
-      const { subject, html } = renderBriefEmail(brief);
-      const sent = await sendEmail({ to: email, toName: name, subject, html });
-      if (!sent.ok) console.warn("Brief-mail ikke sendt:", sent.reason);
-    }
-
-    return NextResponse.json({ ok: true });
   } catch (e) {
+    // Fail-soft (2026-11-02, PocketBase nede): briefen sendes stadig, og Michael får leadet på mail.
+    gemt = false;
     console.error("lead create fejlede:", (e as Error).message);
-    return NextResponse.json({ error: "Kunne ikke gemme. Prøv igen." }, { status: 500 });
+    await sendEmail({
+      to: process.env.EMAIL_FROM_ADDRESS || "michael@spaike.dk",
+      subject: `Innovationsdag-lead (IKKE gemt i PocketBase): ${company || name}`,
+      html: `<p>PocketBase fejlede, så leadet står kun her.</p><p><b>Navn:</b> ${esc(name)}<br><b>E-mail:</b> ${esc(email)}<br><b>Virksomhed:</b> ${esc(company)}<br><b>Website:</b> ${esc(website)}<br><b>Vil have hjælp:</b> ${wantHelp ? "ja" : "nej"}</p>`,
+      replyTo: { email, name },
+    });
   }
+
+  // Send briefen + guide-link på mail (best-effort).
+  const brief = body.case_brief as CaseBriefData | undefined;
+  if (brief && Array.isArray(brief.cases) && brief.cases.length > 0) {
+    const { subject, html } = renderBriefEmail(brief);
+    const sent = await sendEmail({ to: email, toName: name, subject, html });
+    if (!sent.ok) console.warn("Brief-mail ikke sendt:", sent.reason);
+  }
+
+  return NextResponse.json({ ok: true, gemt });
+}
+
+function esc(v: unknown): string {
+  return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
