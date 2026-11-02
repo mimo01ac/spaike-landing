@@ -972,6 +972,26 @@ function Resultat({
         </ol>
       </div>
 
+      {(v.projektgrundlag.p_raadgiveropgaver || v.projektgrundlag.p_afkrydsning.length > 0) && (
+        <div className="px-5 py-5 border-b border-rule">
+          <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Rådgivers område og opgaver (felt 2D1 og 2D2)</p>
+          {v.projektgrundlag.p_afkrydsning.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {v.projektgrundlag.p_afkrydsning.map((a, i) => (
+                <span key={i} className="font-sans text-[12.5px] border border-rule rounded px-2 py-0.5 bg-cream">
+                  {a}
+                </span>
+              ))}
+            </div>
+          )}
+          {v.projektgrundlag.p_raadgiveropgaver && (
+            <p className="font-sans text-[14px] text-ink-soft mt-3 whitespace-pre-line">{v.projektgrundlag.p_raadgiveropgaver}</p>
+          )}
+          <p className="font-sans text-[12px] text-muted mt-2">
+            Grundlag for feltet om rådgivers opgaver. Skriv det selv med jeres egne ord i ansøgningen.
+          </p>
+        </div>
+      )}
       <div className="px-5 py-5 border-b border-rule">
         <p className="font-mono text-[10.5px] tracking-wider uppercase text-muted">Næste skridt</p>
         <ol className="list-decimal pl-5 mt-2 space-y-1.5 font-sans text-[14px] text-ink-soft">
