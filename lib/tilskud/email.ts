@@ -116,6 +116,7 @@ export function renderVurderingMail(v: Vurdering, virksomhed: string): { subject
         .map((s) => `<li style="font:400 14px/1.6 Arial,sans-serif;color:${soft};margin:0 0 4px;">${esc(s)}</li>`)
         .join("")}</ol>
 
+      ${p("Jeg er godkendt rådgiver i SMV:Digital og sparrer gerne om at scope opgaven, så I får et bedre bud på, hvilket beløb I skal søge om til netop jeres opgave. Book 20 minutter med mig, inden vinduet åbner.")}
       <a href="${CALENDLY}" style="display:inline-block;background:${ink};color:${cream};text-decoration:none;font:600 13px/1 Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:14px 22px;border-radius:2px;margin:6px 0 20px;">Book 20 minutter med Michael &rarr;</a>
 
       <div style="border-top:1px solid ${rule};padding:14px 0 0;">
@@ -150,6 +151,7 @@ export function renderKvalificeringMail(k: Kvalificering, virksomhed: string): {
       ${h("Næste skridt")}
       ${p(`Vil I videre, så kør forberedelsen på spaike.dk/tilskud: ${esc(k.naeste || "den sikrer, at I har tænkt alle de ting igennem, som ansøgningen spørger om, og samler dem i en projektbeskrivelse, I kan bygge jeres egen ansøgning på.")}`)}
       ${p("Husk de tre forbehold: jeres halvdel betales kontant (1:1), tilskuddet refunderes bagud, og intet arbejde må starte før tilsagn.")}
+      ${p("Jeg er godkendt rådgiver i SMV:Digital og sparrer gerne om at scope opgaven, så I får et bedre bud på, hvilket beløb I skal søge om til netop jeres opgave. Book 20 minutter med mig, inden vinduet åbner.")}
       <a href="${CALENDLY}" style="display:inline-block;background:${ink};color:${cream};text-decoration:none;font:600 13px/1 Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:14px 22px;border-radius:2px;margin:6px 0 20px;">Book 20 minutter med Michael &rarr;</a>
       <div style="border-top:1px solid ${rule};padding:14px 0 0;">
         ${p("Kvalificeringen er en indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Åbenhed: SpAIke er godkendt rådgiver i SMV:Digital og kan være én af de rådgivere, I indhenter tilbud fra; puljen kræver, at I sammenligner flere.")}

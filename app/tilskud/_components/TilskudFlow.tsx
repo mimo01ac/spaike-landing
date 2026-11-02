@@ -986,7 +986,7 @@ function Resultat({
       <p className="px-5 py-4 font-sans text-[12px] text-muted border-t border-rule">
         Indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Tjekket er en hjælp til
         at afklare, scope og samle informationer; det er ikke en ansøgningsservice, og ansøgningen skriver I selv.
-        Åbenhed: SpAIke er godkendt rådgiver i SMV:Digital og kan være én af de rådgivere, I indhenter tilbud fra;
+        Åbenhed: SpAIke er godkendt rådgiver i SMV:Digital, sparrer gerne om at scope opgaven og kan være én af de rådgivere, I indhenter tilbud fra;
         puljen kræver, at I sammenligner flere.
       </p>
     </div>
@@ -1078,8 +1078,8 @@ function ResultatMail({
           </p>
           <p className="font-sans text-[14px] text-ink-soft mt-2">
             {fuld
-              ? "Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den gennemgået, inden vinduet åbner, så book 20 minutter."
-              : "Mailen indeholder kvalificeringen og næste skridt. Vil I videre, kan I køre forberedelsen her på siden når som helst, eller tage 20 minutter med Michael."}
+              ? "Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Jeg er godkendt rådgiver i SMV:Digital og sparrer gerne om at scope opgaven, så I får et bedre bud på, hvilket beløb I skal søge om til netop jeres opgave. Book 20 minutter, inden vinduet åbner."
+              : "Mailen indeholder kvalificeringen og næste skridt. Jeg er godkendt rådgiver i SMV:Digital og sparrer gerne om at scope opgaven, så I får et bedre bud på, hvilket beløb I skal søge om til netop jeres opgave. Book 20 minutter, eller kør forberedelsen her på siden, når I er klar."}
           </p>
           <a
             href={CALENDLY}

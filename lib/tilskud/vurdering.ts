@@ -146,7 +146,7 @@ export function standardNaesteSkridt(v: Vurdering): string[] {
   return [
     "Opret kladden online på puljeaabning.vudk.dk nu, for systemet er åbent før vinduet. Projektbeskrivelsen er ikke tekst til ansøgningen, men grundlaget med de informationer, I skal bruge: skriv selv ansøgningen med egne ord ud fra den. I bekræfter i ansøgningen, at den er udarbejdet af jer.",
     "Udfyld [udfyld]-markørerne med jeres egne tal (omsætning, vækstmål, ansatte, kapital). Konkrete tal styrker business casen og pointene.",
-    "Indhent 2 til 3 tilbud fra rådgivere i SMV:Digitals rådgiverdatabase og dokumentér, hvordan I har sammenlignet dem på pris og kvalitet. SpAIke (Michael Mortensen) er godkendt rådgiver og kan være ét af tilbuddene; valget er jeres.",
+    "Indhent 2 til 3 tilbud fra rådgivere i SMV:Digitals rådgiverdatabase og dokumentér, hvordan I har sammenlignet dem på pris og kvalitet. SpAIke (Michael Mortensen) er godkendt rådgiver, sparrer gerne om at scope opgaven, så I får et bedre bud på, hvilket beløb I skal søge om, og kan være ét af tilbuddene; valget er jeres.",
     `Vær klar, når vinduet åbner: ${vindue}. Det er pointene, der afgør, ikke hvem der kommer først.`,
     "De tre forbehold: jeres halvdel betales kontant (1:1, egne timer tæller ikke), tilskuddet kommer bagud som refusion, og intet arbejde må gå i gang før tilsagn.",
   ];
