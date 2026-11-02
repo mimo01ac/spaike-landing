@@ -29,7 +29,7 @@ const flag = (navn: string, def?: string) => {
 };
 
 const PERSONAER: Record<string, string> = {
-  typisk: `Du er Henrik, ejer af en tømrervirksomhed med tolv ansatte (cirka elleve fuldtidsstillinger) og cirka fjorten millioner kroner i omsætning. I har aflagt regnskab hvert år siden 2015. I kan godt betale jeres halvdel kontant og lægge beløbet ud. Ingen offentlige tilskud de seneste tre år. I er ejet af dig og din bror. Du har bare hørt, at man kan få tilskud til digitalisering, og ved ikke helt hvor du skal starte. Det der fylder: tilbud og fakturering tager alt for lang tid, Lene på kontoret drukner, og der sker fejl i fakturaerne. Du siger ja til at fortsætte med forberedelsen. Hvis det blev løst, kunne I tage flere opgaver uden at ansætte på kontoret, det er nok en halv stilling i dag. Dig og Lene ville drive projektet. I skiftede til e-conomic for tre år siden, ingen AI endnu. Til implementering bagefter kan I nok finde hundrede og halvtreds tusind. Svar kort og naturligt som i en telefonsamtale, én til to sætninger. Sig farvel når assistenten siger farvel.`,
+  typisk: `Du er Henrik, ejer af en tømrervirksomhed med tolv ansatte (cirka elleve fuldtidsstillinger) og cirka fjorten millioner kroner i omsætning. I har aflagt regnskab hvert år siden 2015. I kan godt betale jeres halvdel kontant og lægge beløbet ud. Ingen offentlige tilskud de seneste tre år. I er ejet af dig og din bror. Du har bare hørt, at man kan få tilskud til digitalisering, og ved ikke helt hvor du skal starte. Det der fylder: tilbud og fakturering tager alt for lang tid, Lene på kontoret drukner, og der sker fejl i fakturaerne. Du siger ja til at fortsætte med forberedelsen. Hvis det blev løst, kunne I tage flere opgaver uden at ansætte på kontoret, det er nok en halv stilling i dag. Dig og Lene ville drive projektet. I skiftede til e-conomic for tre år siden, ingen AI endnu. Til implementering bagefter kan I nok finde hundrede og halvtreds tusind. I er ikke en del af en koncern. I har aldrig fået tilskud fra SMV Digital. Bliver I spurgt om ambitioner: om tre år vil I gerne omsætte for tyve millioner og være femten ansatte, men det siger du kun, hvis du bliver spurgt. Svar kort og naturligt som i en telefonsamtale, én til to sætninger. Sig farvel når assistenten siger farvel.`,
   stop: `Du er Mette, direktør i et lille revisionsfirma med seks fuldtidsansatte og fem millioner i omsætning, regnskab hvert år siden 2012, kan betale kontant, ingen tilskud, ejet af dig selv. Du vil gerne have styr på kundeonboarding, som er meget manuel. Når assistenten spørger om du vil fortsætte med forberedelsen, siger du nej tak, ikke lige nu. Svar kort og naturligt, én til to sætninger. Sig farvel når assistenten siger farvel.`,
   roed: `Du er Jonas, der driver en enkeltmandsvirksomhed som webdesigner. Det er kun dig, ingen ansatte, omsætning cirka otte hundrede tusind. Du har aflagt to regnskaber. Du kan ikke lægge halvtreds tusind kroner ud kontant. Du vil gerne bruge AI til at skrive tilbud hurtigere. Svar kort og naturligt, én til to sætninger. Sig farvel når assistenten siger farvel.`,
 };
@@ -92,8 +92,8 @@ async function main() {
       override: flag("llm") ? medLlm(cfg, flag("llm")!) : undefined,
       succeskriterier: [
         "Sagde agenten i sin første replik, at den er en AI-assistent?",
-        "Fik agenten afklaret både antal ansatte eller årsværk og omsætning?",
-        "Talte agenten i korte sætninger uden lister og uden ros som perfekt eller glimrende? (Ét samlet spørgsmål om ansatte og omsætning er tilladt.)",
+        "Fik agenten afklaret årsværk og SMV-status (selvstændig virksomhed, ikke del af en koncern) med korte spørgsmål?",
+        "Talte agenten i korte sætninger uden lister og uden ros som perfekt eller glimrende?",
         "Sagde agenten farvel, og sagde den intet på engelsk eller om værktøjer?",
       ],
     });

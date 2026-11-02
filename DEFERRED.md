@@ -49,3 +49,8 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Mikrofon-gaten kræver lyd over 12 % før "Start samtalen" · ingen "start alligevel"-vej, hvis en mikrofon er meget svag · det rigtige: vis knappen efter fx 10 s uden lyd · effort XS
 - Resultatet mailes automatisk ved slut; forlader brugeren siden efter kvalificeringen i chatten uden at vælge, sendes intet (sessionen er gemt og Michael har start-mailen) · effort S hvis det skal ændres
 - Forberedelsen i stemmen bruger op til seks korte spørgsmål (ét pr. tur) i stedet for chatten fire, fordi forankring er delt i tre ture · bevidst valg for talt dansk
+
+## 2026-11-02 · Efter infowebinaret: kort kvalificering, ambition, fri formulering
+
+- Formulerings-tjek trin 2 (Michaels idé): før resultatet vises, sammenlign 2B, 2C og 2D2 med tidligere genererede tekster (6-ords-sekvenser) og skriv om over en grænse · udskudt: kræver at teksterne er gemt i PB `tilskud_sessioner`, og spaike-crm er nede · trin 1 (fri formulering i prompten) er bygget og målt: 0-2 % overlap på 2D2, 7 % på 2B mellem to virksomheder · effort S
+- Kvalificeringen spørger ikke længere om de minimis, tilskudsindtægter, ejerskab over 25 % eller dobbeltfinansiering; de tager det i ansøgningen · bevidst valg (Michael 2026-11-02)
