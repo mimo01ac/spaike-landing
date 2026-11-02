@@ -16,8 +16,8 @@
 import { AFKLARINGSPUNKTER } from "../lib/tilskud/afklaring";
 import { udledResultatAfSamtale } from "../lib/tilskud/chat";
 import { forhaandstjek, slaaCvrOp, virksomhedSomTekst } from "../lib/tilskud/cvr";
-import { diffKonfig, hentAgent, opdaterAgent, opretAgent, simulerSamtale } from "../lib/tilskud/voice";
-import { NOTER_TOOL, dynamiskeVariabler, voiceAgentKonfig } from "../lib/tilskud/voice-agent";
+import { diffKonfig, hentAgent, opdaterAgent, opretAgent, sikrUdtaleOrdbog, simulerSamtale } from "../lib/tilskud/voice";
+import { NOTER_TOOL, UDTALE_REGLER, dynamiskeVariabler, voiceAgentKonfig } from "../lib/tilskud/voice-agent";
 
 const args = process.argv.slice(2);
 const cmd = args[0];
@@ -50,6 +50,15 @@ async function main() {
   }
 
   if (cmd === "sync") {
+    // Backstop for "AI"/"SpAIke"; kræver nøgle-rettigheden pronunciation_dictionaries_write.
+    // Uden den kører agenten som StockRate m.fl.: prompt + tilTaleDansk bærer udtalen.
+    try {
+      const udtale = await sikrUdtaleOrdbog("tilskud-udtale", UDTALE_REGLER);
+      console.log(`udtale-ordbog: ${udtale.pronunciation_dictionary_id} v${udtale.version_id}`);
+      Object.assign(cfg, voiceAgentKonfig(udtale));
+    } catch (e) {
+      console.log(`udtale-ordbog sprunget over: ${(e as Error).message.slice(0, 140)}`);
+    }
     let id = process.env.TILSKUD_VOICE_AGENT_ID;
     if (id) {
       await opdaterAgent(id, cfg);
@@ -73,7 +82,7 @@ async function main() {
     if (!prompt) throw new Error(`ukendt persona: ${persona} (${Object.keys(PERSONAER).join(", ")})`);
     const cvr = flag("cvr");
     const v = cvr ? await slaaCvrOp(cvr) : null;
-    const dyn = dynamiskeVariabler(v);
+    const dyn = dynamiskeVariabler(v, { typisk: "Henrik Holm", stop: "Mette Lund", roed: "Jonas Berg" }[persona]);
     const t0 = Date.now();
     const sim = await simulerSamtale({
       navn: `tilskud-voice ${persona} ${new Date().toISOString()}`,
@@ -109,6 +118,9 @@ async function main() {
     const opsummering = {
       persona,
       llm: flag("llm") ?? "(agentens)",
+      flere_spoergsmaal: sim.transcript.filter((t) => t.role === "agent" && (t.message.match(/\?/g) ?? []).length > 1).map((t) => t.message.slice(0, 160)),
+      cifre: sim.transcript.filter((t) => t.role === "agent" && /\d/.test(t.message)).map((t) => t.message.slice(0, 160)),
+      siger_AI: sim.transcript.filter((t) => t.role === "agent" && /\bAI\b/.test(t.message)).length,
       ros: sim.transcript.filter((t) => t.role === "agent" && /perfekt|glimrende|fantastisk|super\b|held og lykke/i.test(t.message)).length,
       sekunder: sek,
       test_status: sim.status,

@@ -19,6 +19,8 @@ type Fase = "klar" | "forbinder" | "aktiv" | "samler" | "faerdig";
 
 interface Props {
   token: string;
+  /** Brugerens navn fra startformularen (agenten hilser med fornavnet). */
+  navn: string;
   cvr: string;
   virksomhed: StartSvar["virksomhed"];
   forhaandstjek: StartSvar["forhaandstjek"];
@@ -40,12 +42,15 @@ const FORELOEBIG: Record<string, { label: string; cls: string }> = {
   roed: { label: "Foreløbigt: ikke som det ser ud nu", cls: "border-red-700 text-red-700" },
 };
 
-function Samtale({ token, cvr, virksomhed, forhaandstjek, onKvalificering, onVurdering }: Props) {
+function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering, onVurdering }: Props) {
   const [fase, setFase] = useState<Fase>("klar");
   const [fejl, setFejl] = useState<string | null>(null);
   const [afklaringer, setAfklaringer] = useState<Afklaringer>(() => afklaretFraCvr(virksomhed, forhaandstjek));
   const [foreloebig, setForeloebig] = useState<{ status: string; tekst: string } | null>(null);
   const [sekunder, setSekunder] = useState(0);
+  // Mikrofon-tjek før start (vault: "Voice-app mikrofon-tjek + dansk stemme"): valgt enhed + om den har hørt lyd.
+  const [enhed, setEnhed] = useState<string | null>(null);
+  const [mikOk, setMikOk] = useState(false);
   const udskrift = useRef<ChatMsg[]>([]);
   const conversationId = useRef<string | null>(null);
   const afklaringerRef = useRef(afklaringer);
@@ -123,18 +128,10 @@ function Samtale({ token, cvr, virksomhed, forhaandstjek, onKvalificering, onVur
     setFase("forbinder");
     trackEvent("tilskud_voice_start");
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((t) => t.stop());
-    } catch {
-      setFejl("Browseren fik ikke adgang til mikrofonen. Tillad mikrofonen i adresselinjen, og prøv igen, eller skriv i chatten.");
-      setFase("klar");
-      return;
-    }
-    try {
       const res = await fetch("/api/tilskud", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "voice-start", token, cvr, virksomhed }),
+        body: JSON.stringify({ action: "voice-start", token, cvr, virksomhed, navn }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         conversationToken?: string;
@@ -154,6 +151,7 @@ function Samtale({ token, cvr, virksomhed, forhaandstjek, onKvalificering, onVur
         conversationToken: data.conversationToken,
         connectionType: "webrtc",
         dynamicVariables: data.dynamicVariables,
+        ...(enhed ? { inputDeviceId: enhed } : {}),
       });
     } catch {
       setFejl("Forbindelsen fejlede. Prøv igen, eller skriv i chatten.");
@@ -256,16 +254,22 @@ function Samtale({ token, cvr, virksomhed, forhaandstjek, onKvalificering, onVur
 
           {fase === "klar" && (
             <>
+              <MikrofonTjek
+                onEnhed={setEnhed}
+                onOk={() => setMikOk(true)}
+                onFejl={(f) => setFejl(f)}
+              />
               <button
                 type="button"
                 onClick={() => void start()}
-                className="mt-5 bg-ink text-cream px-6 py-3 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-amber hover:text-ink transition-colors"
+                disabled={!mikOk}
+                className="mt-4 bg-ink text-cream px-6 py-3 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-amber hover:text-ink transition-colors disabled:opacity-40 disabled:hover:bg-ink disabled:hover:text-cream"
               >
                 Start samtalen
               </button>
               <p className="font-sans text-[12.5px] text-muted mt-3 max-w-xs">
-                Tillad mikrofonen, når browseren spørger. Brug gerne headset. Samtalen tager fem til ti minutter, og du kan
-                afbryde agenten, når som helst.
+                Brug gerne headset eller AirPods, så agenten ikke hører sig selv. Samtalen tager fem til ti minutter, og du
+                kan afbryde agenten, når som helst.
               </p>
             </>
           )}
@@ -324,6 +328,107 @@ function Punkter({ titel, fase, afklaringer }: { titel: string; fase: "kvalifice
           );
         })}
       </ul>
+    </div>
+  );
+}
+
+/**
+ * Mikrofon-tjek før samtalen: enhedsvælger + levende niveau-måler, og
+ * "Start samtalen" låses op først, når mikrofonen har hørt rigtig lyd.
+ * Mønster fra vault-noten "Voice-app mikrofon-tjek + dansk stemme (best practice)".
+ */
+function MikrofonTjek({ onEnhed, onOk, onFejl }: { onEnhed: (id: string | null) => void; onOk: () => void; onFejl: (f: string | null) => void }) {
+  const [aktiv, setAktiv] = useState(false);
+  const [enheder, setEnheder] = useState<MediaDeviceInfo[]>([]);
+  const [valgt, setValgt] = useState<string>("");
+  const [niveau, setNiveau] = useState(0);
+  const [hoert, setHoert] = useState(false);
+  const stop = useRef<() => void>(() => undefined);
+
+  useEffect(() => () => stop.current(), []);
+
+  async function maal(deviceId?: string) {
+    stop.current();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { ...(deviceId ? { deviceId: { exact: deviceId } } : {}), echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+      });
+      const alle = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audioinput");
+      setEnheder(alle);
+      const brugt = stream.getAudioTracks()[0]?.getSettings().deviceId ?? deviceId ?? "";
+      setValgt(brugt);
+      onEnhed(brugt || null);
+      const ctx = new AudioContext();
+      const kilde = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      kilde.connect(analyser);
+      const data = new Uint8Array(analyser.fftSize);
+      let raf = 0;
+      const tik = () => {
+        analyser.getByteTimeDomainData(data);
+        let sum = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = (data[i] - 128) / 128;
+          sum += v * v;
+        }
+        const pct = Math.min(100, Math.round(Math.sqrt(sum / data.length) * 320));
+        setNiveau(pct);
+        if (pct > 12) {
+          setHoert(true);
+          onOk();
+        }
+        raf = requestAnimationFrame(tik);
+      };
+      raf = requestAnimationFrame(tik);
+      stop.current = () => {
+        cancelAnimationFrame(raf);
+        stream.getTracks().forEach((t) => t.stop());
+        void ctx.close();
+      };
+      setAktiv(true);
+      onFejl(null);
+    } catch {
+      onFejl("Browseren fik ikke adgang til mikrofonen. Tillad mikrofonen i adresselinjen, og prøv igen, eller skriv i chatten.");
+    }
+  }
+
+  if (!aktiv) {
+    return (
+      <button
+        type="button"
+        onClick={() => void maal()}
+        className="mt-5 border border-ink text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-ink hover:text-cream transition-colors"
+      >
+        Tjek mikrofonen
+      </button>
+    );
+  }
+  return (
+    <div className="mt-5 w-full max-w-xs text-left">
+      {enheder.length > 1 && (
+        <select
+          value={valgt}
+          onChange={(e) => {
+            setHoert(false);
+            void maal(e.target.value);
+          }}
+          aria-label="Mikrofon"
+          className="w-full bg-cream border border-rule rounded px-2.5 py-1.5 font-sans text-[12.5px] text-ink"
+        >
+          {enheder.map((d, i) => (
+            <option key={d.deviceId || i} value={d.deviceId}>
+              {d.label || `Mikrofon ${i + 1}`}
+            </option>
+          ))}
+        </select>
+      )}
+      <div className="mt-2 h-2 rounded bg-cream-deep border border-rule overflow-hidden" aria-hidden="true">
+        <div className={`h-full transition-[width] duration-75 ${hoert ? "bg-green-700" : "bg-amber"}`} style={{ width: `${niveau}%` }} />
+      </div>
+      <p className={`font-sans text-[12.5px] mt-1.5 ${hoert ? "text-green-800" : "text-red-700"}`} aria-live="polite">
+        {hoert ? "Mikrofonen virker." : "Sig noget, så bjælken bevæger sig."}
+      </p>
     </div>
   );
 }

@@ -33,8 +33,12 @@ const btnPrimary =
 const btnAmber =
   "bg-amber text-ink px-5 py-2.5 font-sans text-[12px] font-medium tracking-wider uppercase hover:bg-amber-dark hover:text-cream transition-colors disabled:opacity-50";
 
+/** Hvem der tager tjekket (Michael 2026-11-02: navn og e-mail FØR start; resultatet mailes automatisk). */
+type Kontakt = { navn: string; email: string; puljeAlarm: boolean; consent: boolean };
+
 export default function TilskudFlow() {
   const [start, setStart] = useState<StartSvar | null>(null);
+  const [kontakt, setKontakt] = useState<Kontakt>({ navn: "", email: "", puljeAlarm: false, consent: false });
   const [cvrInput, setCvrInput] = useState("");
   const [cvrBrugt, setCvrBrugt] = useState("");
   const [starter, setStarter] = useState(false);
@@ -54,7 +58,7 @@ export default function TilskudFlow() {
     const res = await fetch("/api/tilskud", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "start", cvr, cvrFallback }),
+      body: JSON.stringify({ action: "start", cvr, cvrFallback, ...kontakt }),
     });
     return { res, data: (await res.json()) as StartSvar & { error?: string } };
   }
@@ -123,8 +127,9 @@ export default function TilskudFlow() {
         busy={starter}
         fejl={startFejl}
         setFejl={setStartFejl}
-        onVaelg={(cvr) => void startTjek(cvr)}
-        onSpringOver={() => void startTjek("")}
+        kontakt={kontakt}
+        setKontakt={setKontakt}
+        onStart={(cvr) => void startTjek(cvr)}
       />
     );
   }
@@ -157,6 +162,7 @@ export default function TilskudFlow() {
       {voice ? (
         <VoiceSamtale
           token={start.token}
+          navn={kontakt.navn}
           cvr={cvrBrugt}
           virksomhed={start.virksomhed}
           forhaandstjek={start.forhaandstjek}
@@ -205,10 +211,11 @@ export default function TilskudFlow() {
           />
           {stopEfterKval && (
             <div className="border border-rule border-t-0 rounded-b bg-cream-deep">
-              <LeadForm
+              <ResultatMail
                 token={start.token}
                 cvr={cvrBrugt}
                 virksomhed={start.virksomhed?.navn ?? ""}
+                kontakt={kontakt}
                 vurdering={null}
                 kvalificering={kvalificering}
                 transcript={transcript}
@@ -224,6 +231,7 @@ export default function TilskudFlow() {
             token={start.token}
             cvr={cvrBrugt}
             virksomhed={start.virksomhed?.navn ?? ""}
+            kontakt={kontakt}
             transcript={transcript}
           />
         </div>
@@ -250,30 +258,35 @@ type Soegehit = {
 function VirksomhedsSoegning({
   value,
   onChange,
+  kontakt,
+  setKontakt,
   busy,
   fejl,
   setFejl,
-  onVaelg,
-  onSpringOver,
+  onStart,
 }: {
   value: string;
   onChange: (v: string) => void;
+  kontakt: Kontakt;
+  setKontakt: (k: Kontakt) => void;
   busy: boolean;
   fejl: string | null;
   setFejl: (f: string | null) => void;
-  onVaelg: (cvr: string) => void;
-  onSpringOver: () => void;
+  onStart: (cvr: string) => void;
 }) {
   const [hits, setHits] = useState<Soegehit[]>([]);
   const [soeger, setSoeger] = useState(false);
   const [soegt, setSoegt] = useState(false);
   const [utilgaengelig, setUtilgaengelig] = useState(false);
+  const [valgt, setValgt] = useState<{ cvr: string; navn: string } | null>(null);
+  const [udenCvr, setUdenCvr] = useState(false);
   const digits = value.replace(/\D/g, "");
   const erCvr = /^\d{8}$/.test(digits) && !/[a-zA-ZæøåÆØÅ]/.test(value);
   const erNavn = value.trim().length >= 3 && /[a-zA-ZæøåÆØÅ]/.test(value);
+  const soegAktiv = !valgt && !udenCvr && erNavn;
 
   useEffect(() => {
-    if (!erNavn) {
+    if (!soegAktiv) {
       setHits([]);
       setSoegt(false);
       return;
@@ -300,7 +313,10 @@ function VirksomhedsSoegning({
     }, 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, soegAktiv]);
+
+  const k = kontakt;
+  const opdater = (delta: Partial<Kontakt>) => setKontakt({ ...k, ...delta });
 
   return (
     <div className="max-w-2xl">
@@ -308,78 +324,149 @@ function VirksomhedsSoegning({
         onSubmit={(e) => {
           e.preventDefault();
           setFejl(null);
-          if (erCvr) return onVaelg(digits);
-          if (hits[0]) return onVaelg(hits[0].cvr);
-          setFejl(erNavn ? "Vælg virksomheden på listen, eller skriv CVR-nummeret (8 cifre)." : "Skriv et CVR-nummer (8 cifre) eller virksomhedens navn.");
+          let cvr = valgt?.cvr ?? (erCvr ? digits : "");
+          if (!cvr && !udenCvr) {
+            if (erNavn && hits[0]) cvr = hits[0].cvr;
+            else return setFejl("Vælg virksomheden på listen, eller skriv CVR-nummeret (8 cifre).");
+          }
+          if (!k.navn.trim()) return setFejl("Skriv dit navn.");
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(k.email.trim())) return setFejl("Skriv en gyldig e-mail, så jeg kan sende resultatet.");
+          if (!k.consent) return setFejl("Sæt flueben ved samtykket for at starte.");
+          onStart(cvr);
         }}
-        className="flex flex-col sm:flex-row gap-2"
+        className="space-y-2.5"
       >
-        <input
-          type="text"
-          autoComplete="off"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="CVR-nummer eller virksomhedsnavn"
-          aria-label="CVR-nummer eller virksomhedsnavn"
-          aria-autocomplete="list"
-          disabled={busy}
-          className={`${inputCls} flex-1 text-lg`}
-        />
-        <button type="submit" disabled={busy} className={btnPrimary}>
-          {busy ? "Slår op …" : "Start tjekket"}
-        </button>
-      </form>
-
-      {erNavn && (soeger || soegt) && (
-        <div className="mt-2 border border-rule rounded bg-cream-deep overflow-hidden" role="listbox" aria-label="Virksomheder">
-          {soeger && hits.length === 0 && <p className="px-4 py-3 font-sans text-[13px] text-muted">Søger i CVR …</p>}
-          {!soeger && soegt && hits.length === 0 && (
-            <p className="px-4 py-3 font-sans text-[13px] text-muted">
-              {utilgaengelig
-                ? "Navnesøgningen er ikke tilgængelig lige nu. Skriv CVR-nummeret i stedet."
-                : "Ingen aktive virksomheder matcher. Prøv en kortere del af navnet, eller skriv CVR-nummeret."}
-            </p>
-          )}
-          {hits.map((h) => (
+        {valgt || udenCvr ? (
+          <div className="flex items-center justify-between gap-3 border border-rule rounded bg-cream-deep px-3.5 py-2.5">
+            <span className="font-sans text-[14px]">
+              {valgt ? (
+                <>
+                  <span className="font-serif text-[16px]">{valgt.navn}</span>
+                  <span className="font-mono text-[10.5px] text-muted ml-2">CVR {valgt.cvr}</span>
+                </>
+              ) : (
+                <span className="text-ink-soft">Uden CVR-nummer. Jeg spørger i stedet.</span>
+              )}
+            </span>
             <button
-              key={h.cvr}
               type="button"
-              role="option"
-              aria-selected={false}
               disabled={busy}
-              onClick={() => onVaelg(h.cvr)}
-              className="w-full text-left px-4 py-2.5 border-b border-rule last:border-b-0 hover:bg-cream transition-colors disabled:opacity-60"
+              onClick={() => {
+                setValgt(null);
+                setUdenCvr(false);
+              }}
+              className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
             >
-              <span className="font-serif text-[16px]">{h.navn}</span>
-              <span className="font-mono text-[10.5px] text-muted ml-2">CVR {h.cvr}</span>
-              <span className="block font-sans text-[12.5px] text-ink-soft">
-                {[h.selskabsform, [h.postnr, h.by].filter(Boolean).join(" "), h.ansatteInterval ? `${h.ansatteInterval} ansatte` : null, h.branche]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </span>
+              Skift
             </button>
-          ))}
-        </div>
-      )}
+          </div>
+        ) : (
+          <div>
+            <input
+              type="text"
+              autoComplete="off"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Virksomhed: CVR-nummer eller navn"
+              aria-label="CVR-nummer eller virksomhedsnavn"
+              aria-autocomplete="list"
+              disabled={busy}
+              className={`${inputCls} w-full text-lg`}
+            />
+            {soegAktiv && (soeger || soegt) && (
+              <div className="mt-2 border border-rule rounded bg-cream-deep overflow-hidden" role="listbox" aria-label="Virksomheder">
+                {soeger && hits.length === 0 && <p className="px-4 py-3 font-sans text-[13px] text-muted">Søger i CVR …</p>}
+                {!soeger && soegt && hits.length === 0 && (
+                  <p className="px-4 py-3 font-sans text-[13px] text-muted">
+                    {utilgaengelig
+                      ? "Navnesøgningen er ikke tilgængelig lige nu. Skriv CVR-nummeret i stedet."
+                      : "Ingen aktive virksomheder matcher. Prøv en kortere del af navnet, eller skriv CVR-nummeret."}
+                  </p>
+                )}
+                {hits.map((h) => (
+                  <button
+                    key={h.cvr}
+                    type="button"
+                    role="option"
+                    aria-selected={false}
+                    disabled={busy}
+                    onClick={() => {
+                      setValgt({ cvr: h.cvr, navn: h.navn });
+                      onChange(h.navn);
+                      setFejl(null);
+                    }}
+                    className="w-full text-left px-4 py-2.5 border-b border-rule last:border-b-0 hover:bg-cream transition-colors disabled:opacity-60"
+                  >
+                    <span className="font-serif text-[16px]">{h.navn}</span>
+                    <span className="font-mono text-[10.5px] text-muted ml-2">CVR {h.cvr}</span>
+                    <span className="block font-sans text-[12.5px] text-ink-soft">
+                      {[h.selskabsform, [h.postnr, h.by].filter(Boolean).join(" "), h.ansatteInterval ? `${h.ansatteInterval} ansatte` : null, h.branche]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
-      <div className="flex items-center gap-4 mt-2.5">
+        <div className="grid sm:grid-cols-2 gap-2.5">
+          <input
+            className={inputCls}
+            placeholder="Dit navn"
+            autoComplete="name"
+            value={k.navn}
+            onChange={(e) => opdater({ navn: e.target.value })}
+            aria-label="Dit navn"
+            disabled={busy}
+          />
+          <input
+            className={inputCls}
+            type="email"
+            placeholder="Arbejds-e-mail (resultatet sendes hertil)"
+            autoComplete="email"
+            value={k.email}
+            onChange={(e) => opdater({ email: e.target.value })}
+            aria-label="E-mail"
+            disabled={busy}
+          />
+        </div>
+        <label className="flex items-start gap-2.5 font-sans text-[13px] text-ink-soft">
+          <input type="checkbox" checked={k.puljeAlarm} onChange={(e) => opdater({ puljeAlarm: e.target.checked })} className="mt-1" />
+          <span>Send mig også en påmindelse, når ansøgningsvinduet åbner.</span>
+        </label>
+        <label className="flex items-start gap-2.5 font-sans text-[13px] text-ink-soft">
+          <input type="checkbox" checked={k.consent} onChange={(e) => opdater({ consent: e.target.checked })} className="mt-1" />
+          <span>
+            Jeg accepterer, at SpAIke gemmer virksomhedens oplysninger, mit navn, min e-mail og samtalen for at sende mig
+            resultatet og følge op. Se{" "}
+            <a href="/privatlivspolitik" className="underline underline-offset-2" data-track-event="privatliv_click">
+              privatlivspolitikken
+            </a>
+            .
+          </span>
+        </label>
+        <div className="flex flex-wrap items-center gap-4 pt-1">
+          <button type="submit" disabled={busy} className={btnPrimary}>
+            {busy ? "Slår op …" : "Start tjekket"}
+          </button>
+          {!valgt && !udenCvr && (
+            <button
+              type="button"
+              onClick={() => {
+                setUdenCvr(true);
+                setFejl(null);
+              }}
+              disabled={busy}
+              className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
+            >
+              Spring CVR over og svar selv
+            </button>
+          )}
+        </div>
         {fejl && <p className="text-[13px] text-red-700">{fejl}</p>}
-        <button
-          type="button"
-          onClick={onSpringOver}
-          disabled={busy}
-          className="font-sans text-[12.5px] text-muted underline underline-offset-2 hover:text-ink"
-        >
-          Spring CVR over og svar selv
-        </button>
-      </div>
-      <p className="font-sans text-[12px] text-muted mt-2.5 max-w-xl">
-        Jeg gemmer virksomhedens CVR-oplysninger og samtalen, så jeg kan følge op og hjælpe jer videre. Se{" "}
-        <a href="/privatlivspolitik" className="underline underline-offset-2" data-track-event="privatliv_click">
-          privatlivspolitikken
-        </a>
-        .
-      </p>
+      </form>
     </div>
   );
 }
@@ -731,12 +818,14 @@ function Resultat({
   token,
   cvr,
   virksomhed,
+  kontakt,
   transcript,
 }: {
   vurdering: Vurdering;
   token: string;
   cvr: string;
   virksomhed: string;
+  kontakt: Kontakt;
   transcript: ChatMsg[];
 }) {
   const s = STATUS[v.egnethed.status] ?? STATUS.gul;
@@ -868,7 +957,7 @@ function Resultat({
         </ol>
       </div>
 
-      <LeadForm token={token} cvr={cvr} virksomhed={virksomhed} vurdering={v} kvalificering={null} transcript={transcript} />
+      <ResultatMail token={token} cvr={cvr} virksomhed={virksomhed} kontakt={kontakt} vurdering={v} kvalificering={null} transcript={transcript} />
 
       <p className="px-5 py-4 font-sans text-[12px] text-muted border-t border-rule">
         Indikation lavet med AI ud fra dine svar og offentlige CVR-data, ikke en afgørelse. Tjekket er en hjælp til
@@ -880,10 +969,15 @@ function Resultat({
   );
 }
 
-function LeadForm({
+/**
+ * Resultatet mailes automatisk til den e-mail, brugeren skrev før start
+ * (Michael 2026-11-02). Ingen formular; samtykket blev givet i startformularen.
+ */
+function ResultatMail({
   token,
   cvr,
   virksomhed,
+  kontakt,
   vurdering,
   kvalificering,
   transcript,
@@ -891,26 +985,19 @@ function LeadForm({
   token: string;
   cvr: string;
   virksomhed: string;
+  kontakt: Kontakt;
   vurdering: Vurdering | null;
   kvalificering: Kvalificering | null;
   transcript: ChatMsg[];
 }) {
   const fuld = !!vurdering;
   const status = vurdering?.egnethed.status ?? kvalificering?.status ?? "ukendt";
-  const [navn, setNavn] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefon, setTelefon] = useState("");
-  const [puljeAlarm, setPuljeAlarm] = useState(false);
-  const [consent, setConsent] = useState(false);
-  const [website, setWebsite] = useState(""); // honeypot
-  const [busy, setBusy] = useState(false);
-  const [ok, setOk] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [tilstand, setTilstand] = useState<"sender" | "sendt" | "fejl">("sender");
+  const [mailSendt, setMailSendt] = useState(true);
+  const sendt = useRef(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setBusy(true);
+  async function send() {
+    setTilstand("sender");
     try {
       const res = await fetch("/api/tilskud", {
         method: "POST",
@@ -920,124 +1007,68 @@ function LeadForm({
           token,
           cvr,
           virksomhed,
-          navn,
-          email,
-          telefon,
-          puljeAlarm,
-          consent,
-          website,
+          navn: kontakt.navn,
+          email: kontakt.email,
+          puljeAlarm: kontakt.puljeAlarm,
+          consent: kontakt.consent,
           vurdering,
           kvalificering,
           transcript,
         }),
       });
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as { mailSendt?: boolean };
       if (!res.ok) {
-        setError(data.error ?? "Noget gik galt. Prøv igen.");
+        setTilstand("fejl");
         return;
       }
-      setOk(true);
-      trackEvent("tilskud_lead_sendt", { status, fase: fuld ? "forberedelse" : "kvalificering", alarm: puljeAlarm ? "ja" : "nej" });
+      setMailSendt(data.mailSendt !== false);
+      setTilstand("sendt");
+      trackEvent("tilskud_lead_sendt", { status, fase: fuld ? "forberedelse" : "kvalificering", alarm: kontakt.puljeAlarm ? "ja" : "nej" });
     } catch {
-      setError("Forbindelsen fejlede. Prøv igen.");
-    } finally {
-      setBusy(false);
+      setTilstand("fejl");
     }
   }
 
-  if (ok) {
-    return (
-      <div className="px-5 py-6 bg-cream">
-        <p className="font-serif text-xl">Sendt. Tjek din indbakke om et øjeblik.</p>
-        <p className="font-sans text-[14px] text-ink-soft mt-2">
-          {fuld
-            ? "Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den gennemgået, inden vinduet åbner, så book 20 minutter."
-            : "Mailen indeholder kvalificeringen og næste skridt. Vil I videre, kan I køre forberedelsen her på siden når som helst, eller tage 20 minutter med Michael."}
-        </p>
-        <a
-          href={CALENDLY}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-umami-event="book_moede_click"
-          data-umami-event-location="tilskud_resultat"
-          className={`${btnPrimary} inline-block mt-4`}
-        >
-          Book 20 minutter med Michael &rarr;
-        </a>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (sendt.current) return;
+    sendt.current = true;
+    void send();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <form onSubmit={submit} className="px-5 py-6 bg-cream">
-      <p className="font-mono text-[10.5px] tracking-wider uppercase text-amber-dark">
-        {fuld ? "Få hele vurderingen på mail" : "Få kvalificeringen på mail"}
-      </p>
-      {fuld ? (
+    <div className="px-5 py-6 bg-cream">
+      {tilstand === "sender" && <p className="font-serif text-lg">Sender resultatet til {kontakt.email} …</p>}
+      {tilstand === "fejl" && (
         <>
-          <p className="font-serif text-lg mt-1 leading-snug">
-            Inklusive projektbeskrivelsen: de informationer, ansøgningen spørger om (udfordring, ambition, projekt,
-            nyhedsværdi, rådgivers opgaver, forankring, effekter), samlet og struktureret ud fra jeres egne svar.
-          </p>
-          <p className="font-sans text-[12.5px] text-muted mt-1.5">
-            Det er ikke tekst til ansøgningen, men grundlaget I skriver den ud fra. Ansøgningen skriver I selv, og
-            det bekræfter I i den.
-          </p>
+          <p className="font-serif text-lg">Resultatet kunne ikke sendes lige nu.</p>
+          <button type="button" onClick={() => void send()} className={`${btnPrimary} mt-3`}>
+            Prøv igen
+          </button>
         </>
-      ) : (
-        <p className="font-serif text-lg mt-1 leading-snug">
-          Resultatet, puljen og næste skridt, så I har det ved hånden, når I vil videre.
-        </p>
       )}
-      <div className="grid sm:grid-cols-2 gap-2.5 mt-4">
-        <input className={inputCls} placeholder="Navn" value={navn} onChange={(e) => setNavn(e.target.value)} aria-label="Navn" />
-        <input
-          className={inputCls}
-          type="email"
-          required
-          placeholder="Arbejds-e-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          aria-label="E-mail"
-        />
-        <input
-          className={`${inputCls} sm:col-span-2`}
-          type="tel"
-          placeholder="Telefon (valgfrit)"
-          value={telefon}
-          onChange={(e) => setTelefon(e.target.value)}
-          aria-label="Telefon"
-        />
-        <input
-          type="text"
-          value={website}
-          onChange={(e) => setWebsite(e.target.value)}
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-          className="hidden"
-          name="website"
-        />
-      </div>
-      <label className="flex items-start gap-2.5 mt-3 font-sans text-[13px] text-ink-soft">
-        <input type="checkbox" checked={puljeAlarm} onChange={(e) => setPuljeAlarm(e.target.checked)} className="mt-1" />
-        <span>Send mig en påmindelse, når ansøgningssystemet og vinduet åbner.</span>
-      </label>
-      <label className="flex items-start gap-2.5 mt-2 font-sans text-[13px] text-ink-soft">
-        <input type="checkbox" required checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1" />
-        <span>
-          Jeg accepterer, at SpAIke gemmer samtalen og mine kontaktoplysninger for at sende vurderingen og følge
-          op. Se{" "}
-          <a href="/privatlivspolitik" className="underline underline-offset-2" data-track-event="privatliv_click">
-            privatlivspolitikken
+      {tilstand === "sendt" && (
+        <>
+          <p className="font-serif text-xl">
+            {mailSendt ? `Sendt til ${kontakt.email}. Tjek din indbakke om et øjeblik.` : "Jeg har modtaget resultatet, men mailen kunne ikke sendes lige nu. Jeg vender tilbage."}
+          </p>
+          <p className="font-sans text-[14px] text-ink-soft mt-2">
+            {fuld
+              ? "Mailen indeholder hele vurderingen og projektbeskrivelsen, I kan bygge ansøgningen på. Vil du have den gennemgået, inden vinduet åbner, så book 20 minutter."
+              : "Mailen indeholder kvalificeringen og næste skridt. Vil I videre, kan I køre forberedelsen her på siden når som helst, eller tage 20 minutter med Michael."}
+          </p>
+          <a
+            href={CALENDLY}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-umami-event="book_moede_click"
+            data-umami-event-location="tilskud_resultat"
+            className={`${btnPrimary} inline-block mt-4`}
+          >
+            Book 20 minutter med Michael &rarr;
           </a>
-          .
-        </span>
-      </label>
-      {error && <p className="text-[13px] text-red-700 mt-2">{error}</p>}
-      <button type="submit" disabled={busy || !consent || !email} className={`${btnPrimary} mt-4`}>
-        {busy ? "Sender …" : "Send mig vurderingen"}
-      </button>
-    </form>
+        </>
+      )}
+    </div>
   );
 }

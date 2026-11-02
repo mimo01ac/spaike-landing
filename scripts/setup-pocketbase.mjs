@@ -96,6 +96,9 @@ const COLLECTIONS = [
     type: "base",
     fields: [
       { name: "cvr", type: "text" },
+      { name: "navn", type: "text" },
+      { name: "email", type: "email" },
+      { name: "pulje_alarm", type: "bool" },
       { name: "virksomhed", type: "text" },
       { name: "branche", type: "text" },
       { name: "by", type: "text" },

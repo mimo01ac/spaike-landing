@@ -166,8 +166,10 @@ export function renderSessionStartNotifikation(opts: {
   cvr: string;
   virksomhed: Virksomhed | null;
   forhaandstjek: Forhaandstjek | null;
+  kontakt: { navn: string; email: string; puljeAlarm: boolean };
 }): { subject: string; html: string } {
   const v = opts.virksomhed;
+  const k = opts.kontakt;
   const t = opts.forhaandstjek;
   const navn = v?.navn || (opts.cvr ? `CVR ${opts.cvr}` : "ukendt virksomhed (CVR sprunget over)");
   const fakta = v
@@ -176,13 +178,14 @@ export function renderSessionStartNotifikation(opts: {
         .join(" · ")
     : "";
   const html = `<p>Et Tilskudstjek er lige gået i gang på <b>/tilskud</b>.</p>
-  <p><b>Virksomhed:</b> ${esc(navn)}${opts.cvr ? ` (CVR ${esc(opts.cvr)})` : ""}<br>
+  <p><b>Person:</b> ${esc(k.navn)} &lt;<a href="mailto:${esc(k.email)}">${esc(k.email)}</a>&gt;${k.puljeAlarm ? " · vil have påmindelse om puljeåbning" : ""}<br>
+  <b>Virksomhed:</b> ${esc(navn)}${opts.cvr ? ` (CVR ${esc(opts.cvr)})` : ""}<br>
   ${fakta ? `${esc(fakta)}<br>` : ""}
   ${t ? `<b>Forhåndstjek:</b> SMV ${esc(t.smv)}, 2+ årsværk ${esc(t.aarsvaerk)}, regnskab ${esc(t.regnskab)}${t.alderAar !== null ? `, ${t.alderAar} år gammel` : ""}<br>` : ""}
   ${opts.cvr ? `<b>CVR (telefon, ejere):</b> <a href="https://datacvr.virk.dk/enhed/virksomhed/${esc(opts.cvr)}">datacvr.virk.dk</a><br>` : ""}
   <b>PocketBase:</b> tilskud_sessioner/${esc(opts.id)} (samtalen og resultatet skrives hertil undervejs)</p>
   ${v?.reklamebeskyttet ? `<p style="color:#a23b2e;"><b>Reklamebeskyttet i CVR.</b> Kontakt kun om deres eget tjek, ikke med salg.</p>` : ""}`;
-  return { subject: `Tilskudstjek startet: ${navn}`, html };
+  return { subject: `Tilskudstjek startet: ${navn} (${k.navn})`, html };
 }
 
 export function renderLeadNotifikation(opts: {

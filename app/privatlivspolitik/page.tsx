@@ -51,11 +51,12 @@ export default function Privatlivspolitik() {
         og du fører en samtale med en AI-assistent om jeres situation, enten
         skriftligt eller med stemmen. Fra det øjeblik tjekket starter, gemmer
         vi virksomhedens CVR-oplysninger, samtalen og den vurdering, den ender
-        i, og vi får besked om, at et tjek er startet. Det gør vi for at kunne
-        følge op, svare på spørgsmål og hjælpe jer videre med tilskuddet
-        (legitim interesse). Beder du om resultatet på mail, gemmer vi også
-        navn, e-mail og eventuelt telefonnummer, og giver dig besked om
-        puljeåbning, hvis du har bedt om det. Svarene sendes til vores
+        i, sammen med det navn og den e-mail, du skriver, før tjekket starter.
+        Vi får besked om, at et tjek er startet, og resultatet sendes til din
+        e-mail. Det gør vi for at sende dig resultatet, følge op, svare på
+        spørgsmål og hjælpe jer videre med tilskuddet. Du giver samtykke, før
+        du starter, og vi giver dig besked om puljeåbning, hvis du har bedt
+        om det. Svarene sendes til vores
         AI-leverandør (Anthropic, behandlet i EU/USA efter deres erhvervsvilkår
         uden træning på dine data) for at lave vurderingen. Vælger du at tale
         med assistenten, går stemmen gennem ElevenLabs, som omsætter tale til
