@@ -805,7 +805,7 @@ function KvalificeringKort({
         <p className="font-sans text-[14px] text-ink-soft mt-2">
           {k.naeste ||
             "Jeg sørger for, at I får tænkt alle de ting igennem, som ansøgningen spørger om, og samler dem i en projektbeskrivelse, I kan bygge jeres egen ansøgning på."}{" "}
-          Tre til fire spørgsmål mere.
+          Fire til fem korte spørgsmål mere.
         </p>
         <p className="font-sans text-[12.5px] text-muted mt-2">
           Forberedelsen er ikke tekst til ansøgningen. Den hjælper jer med at få tankerne igennem og samler de

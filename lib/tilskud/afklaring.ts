@@ -20,16 +20,18 @@ export interface Afklaringspunkt {
 }
 
 export const AFKLARINGSPUNKTER: Afklaringspunkt[] = [
+  // Kvalificering: kun det der kan stoppe dem; resten afklares i selve ansøgningen (webinar 2026-11-02).
   { id: "idee", fase: "kvalificering", label: "Hvad det skal hjælpe med" },
-  { id: "smv", fase: "kvalificering", label: "SMV: ansatte og omsætning" },
   { id: "aarsvaerk", fase: "kvalificering", label: "Mindst to årsværk" },
+  { id: "smv", fase: "kvalificering", label: "SMV: selvstændig, under ca. 375 mio. kr." },
   { id: "regnskab", fase: "kvalificering", label: "Mindst ét aflagt årsregnskab" },
   { id: "medfinansiering", fase: "kvalificering", label: "Egen halvdel kontant, lagt ud" },
-  { id: "tidligere_tilskud", fase: "kvalificering", label: "Offentlige tilskud de seneste tre år" },
-  { id: "ejerskab", fase: "kvalificering", label: "Ikke ejet 25 % af en stor virksomhed" },
+  { id: "tidligere_tilskud", fase: "kvalificering", label: "SMV:Digital-tilskud de seneste tre år" },
+  // Forberedelse: det der vurderes (projekt, vækstambition, organisatorisk og økonomisk forankring).
   { id: "omraade", fase: "forberedelse", label: "Område analysen skal dække" },
-  { id: "effekt", fase: "forberedelse", label: "Forventet effekt og ambition" },
-  { id: "forankring", fase: "forberedelse", label: "Hvem driver projektet" },
+  { id: "ambition", fase: "forberedelse", label: "Vækstambition i tal" },
+  { id: "forankring", fase: "forberedelse", label: "Ledelse og medarbejdere i projektet" },
+  { id: "implementering", fase: "forberedelse", label: "Penge til at gennemføre anbefalingerne" },
 ];
 
 export const PUNKT_IDER = AFKLARINGSPUNKTER.map((p) => p.id);

@@ -143,7 +143,7 @@ export async function udledResultatAfSamtale(opts: {
     },
     {
       type: "text",
-      text: `STEMMESAMTALE. Samtalen herunder er ført som en stemmesamtale med en anden assistent (talegenkendelse, så enkelte ord kan være hørt forkert). Din opgave nu er udelukkende at afgive resultatet ved at kalde ét af værktøjerne; skriv ingen tekst til brugeren, og svar aldrig uden et værktøjskald. Er forberedelsen gennemført (område, forventet effekt og forankring er drøftet efter at brugeren sagde ja til at fortsætte), så kald ${VURDERING_TOOL_NAME}. Ellers kald ${KVALIFICERING_TOOL_NAME} ud fra det, I nåede. Byg kun på det brugeren faktisk sagde; mangler noget, så skriv at det skal afklares.`,
+      text: `STEMMESAMTALE. Samtalen herunder er ført som en stemmesamtale med en anden assistent (talegenkendelse, så enkelte ord kan være hørt forkert). Din opgave nu er udelukkende at afgive resultatet ved at kalde ét af værktøjerne; skriv ingen tekst til brugeren, og svar aldrig uden et værktøjskald. Er forberedelsen gennemført (område, vækstambition, forankring og penge til implementering er drøftet efter at brugeren sagde ja til at fortsætte), så kald ${VURDERING_TOOL_NAME}. Ellers kald ${KVALIFICERING_TOOL_NAME} ud fra det, I nåede. Byg kun på det brugeren faktisk sagde; mangler noget, så skriv at det skal afklares.`,
     },
   ];
   const final = await client.messages.create({
