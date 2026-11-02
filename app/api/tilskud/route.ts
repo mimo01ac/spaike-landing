@@ -17,8 +17,8 @@
  */
 
 import { NextResponse } from "next/server";
-import { issueSessionToken, sessionIdFraToken, verifySessionToken } from "@/lib/sessionToken";
-import { nytSessionId, opdaterSession, opretSession } from "@/lib/tilskud/session";
+import { issueGenoptagToken, issueSessionToken, sessionIdFraToken, verifyGenoptagToken, verifySessionToken } from "@/lib/sessionToken";
+import { findGenoptageligSession, hentSession, kanGenoptages, nytSessionId, opdaterSession, opretSession, type SessionRecord } from "@/lib/tilskud/session";
 import { checkRateLimit, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { createRecord } from "@/lib/pocketbase";
@@ -40,7 +40,7 @@ import { normaliserNote } from "@/lib/tilskud/afklaring";
 import { naesteRaadgivningspulje } from "@/lib/tilskud/puljer";
 import { MAX_TURNS } from "@/lib/tilskud/agent";
 import { startTilskudChat, udledResultatAfSamtale } from "@/lib/tilskud/chat";
-import { renderKvalificeringMail, renderLeadNotifikation, renderVurderingMail } from "@/lib/tilskud/email";
+import { renderGenoptagMail, renderKvalificeringMail, renderLeadNotifikation, renderVurderingMail } from "@/lib/tilskud/email";
 import { normaliserKvalificering, normaliserVurdering } from "@/lib/tilskud/vurdering";
 import type { Virksomhed } from "@/lib/tilskud/cvr";
 import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
@@ -65,6 +65,9 @@ export async function POST(req: Request) {
   if (action === "start") return start(req, body);
   if (action === "chat") return chat(req, body);
   if (action === "lead") return lead(req, body);
+  if (action === "gem") return gem(req, body);
+  if (action === "genoptag") return genoptag(req, body);
+  if (action === "genoptag-link") return genoptagLink(req, body);
   return json({ error: "Ukendt handling." }, 400);
 }
 
@@ -111,18 +114,98 @@ async function start(req: Request, body: Record<string, unknown>) {
   }
   const tjek = virksomhed ? forhaandstjek(virksomhed) : null;
   const p = naesteRaadgivningspulje();
+  const pulje = p ? { id: p.id, navn: p.navn, aabner: p.aabner, lukker: p.lukker, maksTilskudKr: p.maksTilskudKr } : null;
+
+  // Fortsæt hvor du slap: samme e-mail + CVR med en påbegyndt session. Indholdet
+  // udleveres kun, hvis browseren har sessionens fortsæt-token (samme enhed);
+  // ellers får klienten blot at vide, at der er en, og kan bede om et link på mail.
+  const tidligere = cvr ? await findGenoptageligSession(kontakt.email, cvr, "", req.headers.get("x-tilskud-test") === "1") : null;
+  if (tidligere && verifyGenoptagToken(body.genoptagToken as string | undefined) === tidligere.id) {
+    return json(genoptagSvar(tidligere, virksomhed, tjek, pulje), 200);
+  }
+
   const sid = nytSessionId();
   await opretSession({ id: sid, cvr: cvr ?? "", virksomhed, forhaandstjek: tjek, kontakt, notificer: req.headers.get("x-tilskud-test") !== "1" });
 
-  const svar: StartSvar & { cvrFejl?: string } = {
+  const svar: StartSvar & { cvrFejl?: string; genoptagToken: string; kanGenoptages?: string } = {
     token: issueSessionToken(sid),
     virksomhed,
     forhaandstjek: tjek,
-    pulje: p ? { id: p.id, navn: p.navn, aabner: p.aabner, lukker: p.lukker, maksTilskudKr: p.maksTilskudKr } : null,
+    pulje,
+    genoptagToken: issueGenoptagToken(sid),
+    ...(tidligere ? { kanGenoptages: tidligere.updated } : {}),
   };
   // Diagnose (ingen persondata) så et fejlet opslag kan fejlsøges fra klienten/CLI.
   if (cvr && !virksomhed && sidsteCvrFejl) svar.cvrFejl = sidsteCvrFejl;
   return json(svar, 200);
+}
+
+/** Svar der genopretter en påbegyndt session i klienten (samme sid, så den fortsætter i samme record). */
+function genoptagSvar(
+  r: SessionRecord,
+  virksomhed: Virksomhed | null,
+  tjek: ReturnType<typeof forhaandstjek> | null,
+  pulje: StartSvar["pulje"],
+) {
+  return {
+    token: issueSessionToken(r.id),
+    genoptagToken: issueGenoptagToken(r.id),
+    virksomhed,
+    forhaandstjek: tjek,
+    pulje,
+    kontakt: { navn: r.navn, email: r.email, puljeAlarm: !!r.pulje_alarm },
+    genoptag: {
+      kanal: r.kanal || "chat",
+      transcript: renUdskrift(r.transcript),
+      afklaringer: r.afklaringer ?? {},
+      kvalificering: r.status === "kvalificeret" && r.kvalificering ? normaliserKvalificering(r.kvalificering) : null,
+      opdateret: r.updated,
+    },
+  };
+}
+
+/** Åbner en påbegyndt session fra linket i mailen (?fortsaet=<token>). */
+async function genoptag(req: Request, body: Record<string, unknown>) {
+  const rl = checkRateLimit(`tilskud-genoptag:${clientIp(req)}`, 20, 10 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange forsøg. Vent lidt." }, 429);
+  const sid = verifyGenoptagToken(body.genoptagToken as string | undefined);
+  const r = await hentSession(sid);
+  if (!kanGenoptages(r)) return json({ error: "Samtalen kan ikke genoptages. Den er afsluttet eller over 7 dage gammel. Start et nyt tjek." }, 404);
+  const virksomhed = r.cvr ? hentFraCvrCache(r.cvr) ?? (await slaaCvrOp(r.cvr)) : null;
+  const p = naesteRaadgivningspulje();
+  const pulje = p ? { id: p.id, navn: p.navn, aabner: p.aabner, lukker: p.lukker, maksTilskudKr: p.maksTilskudKr } : null;
+  return json({ ...genoptagSvar(r, virksomhed, virksomhed ? forhaandstjek(virksomhed) : null, pulje), cvr: r.cvr }, 200);
+}
+
+/** Sender et fortsæt-link til e-mailen på den påbegyndte session (anden enhed). */
+async function genoptagLink(req: Request, body: Record<string, unknown>) {
+  const rl = checkRateLimit(`tilskud-genoptag-link:${clientIp(req)}`, 3, 10 * 60 * 1000);
+  if (!rl.allowed) return json({ error: "For mange forsøg. Vent lidt." }, 429);
+  const nu = await hentSession(sessionIdFraToken(body.token as string | undefined));
+  if (!nu || !nu.email || !nu.cvr) return json({ error: "Sessionen er udløbet. Genindlæs siden." }, 401);
+  const tidligere = await findGenoptageligSession(nu.email, nu.cvr, nu.id, !!nu.test);
+  if (!tidligere) return json({ error: "Der er ingen påbegyndt samtale at fortsætte." }, 404);
+  const link = `${new URL(req.url).origin}/tilskud?fortsaet=${encodeURIComponent(issueGenoptagToken(tidligere.id))}`;
+  const m = renderGenoptagMail(link, tidligere.navn);
+  const r = await sendEmail({ to: tidligere.email, toName: tidligere.navn || undefined, subject: m.subject, html: m.html });
+  return r.ok ? json({ ok: true }, 200) : json({ error: "Mailen kunne ikke sendes lige nu. Prøv igen." }, 502);
+}
+
+/** Løbende gemning undervejs (stemmen gemmer ellers først til sidst). */
+async function gem(req: Request, body: Record<string, unknown>) {
+  const rl = checkRateLimit(`tilskud-gem:${clientIp(req)}`, 120, 10 * 60 * 1000);
+  if (!rl.allowed) return json({ ok: false }, 429);
+  const sid = sessionIdFraToken(body.token as string | undefined);
+  if (!sid) return json({ error: "Sessionen er udløbet." }, 401);
+  const afklaringer = (body.afklaringer && typeof body.afklaringer === "object" ? Object.entries(body.afklaringer as Record<string, unknown>) : [])
+    .map(([punkt, x]) => normaliserNote({ punkt, ...(x && typeof x === "object" ? x : {}) }))
+    .filter((x): x is NonNullable<typeof x> => !!x);
+  await opdaterSession(sid, {
+    kanal: body.kanal === "stemme" ? "stemme" : "chat",
+    transcript: renUdskrift(body.udskrift),
+    afklaringer: Object.fromEntries(afklaringer.map((a) => [a.id, a.afklaring])),
+  });
+  return json({ ok: true }, 200);
 }
 
 async function chat(req: Request, body: Record<string, unknown>) {
@@ -261,7 +344,10 @@ async function voiceStart(req: Request, body: Record<string, unknown>) {
     return json({ error: "Stemmen kunne ikke starte lige nu. Prøv igen, eller skriv i chatten." }, 502);
   }
   await opdaterSession(sid, { kanal: "stemme", elevenlabs_samtale: samtale.conversationId ?? "" });
-  return json({ conversationToken: samtale.token, conversationId: samtale.conversationId, dynamicVariables: dynamiskeVariabler(v, String(body.navn ?? "")) }, 200);
+  // Fortsætter brugeren en påbegyndt session (eller skifter fra chat), får agenten det, der allerede er sagt.
+  const r = await hentSession(sid);
+  const tidligere = r && (r.transcript ?? []).some((m) => m.role === "user") ? { transcript: r.transcript ?? [], afklaringer: r.afklaringer ?? {} } : undefined;
+  return json({ conversationToken: samtale.token, conversationId: samtale.conversationId, dynamicVariables: dynamiskeVariabler(v, String(body.navn ?? ""), tidligere) }, 200);
 }
 
 /** Klientens egen kopi af udskriften (fallback, hvis ElevenLabs ikke har den klar endnu). */

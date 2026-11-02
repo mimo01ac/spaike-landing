@@ -101,3 +101,22 @@ export async function updateRecord(
     throw new Error(`PocketBase update (${collection}/${id}) fejlede: ${res.status} ${body}`);
   }
 }
+
+/** Records der matcher et PocketBase-filter (tom liste hvis ingen). */
+export async function findRecords<T = Record<string, unknown>>(
+  collection: string,
+  filter: string,
+  sort = "-updated",
+  perPage = 5,
+): Promise<T[]> {
+  const token = await getToken();
+  const qs = new URLSearchParams({ filter, sort, perPage: String(perPage), skipTotal: "1" });
+  const res = await fetch(`${URL}/api/collections/${collection}/records?${qs}`, {
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+    headers: { Authorization: token },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`PocketBase find (${collection}) fejlede: ${res.status}`);
+  const data = (await res.json()) as { items?: T[] };
+  return data.items ?? [];
+}

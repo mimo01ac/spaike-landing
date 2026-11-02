@@ -14,7 +14,7 @@
  * stemme (best practice)", "Spotless dansk voice-agent", "Dansk voice-agent (ElevenLabs)").
  */
 
-import { AFKLARINGSPUNKTER, PUNKT_IDER, afklaretFraCvr, afklaretSomTekst } from "./afklaring";
+import { AFKLARINGSPUNKTER, PUNKT_IDER, afklaretFraCvr, afklaretSomTekst, normaliserNote, type Afklaringer } from "./afklaring";
 import { FAKTAGRUNDLAG } from "./agent";
 import { forhaandstjek, type Virksomhed } from "./cvr";
 import { tilTaleDansk } from "./tale";
@@ -51,6 +51,10 @@ Jordnært dansk uden buzzwords. Anerkend kort og neutralt, fx "okay", "tak for d
 Lad dem altid tale færdig, også når de tøver eller tænker.
 Du er ikke selv rådgiver. Den godkendte rådgiver er Michael Mortensen fra ${NAVN}; omtal ham som "Michael fra ${NAVN}". Sig aldrig "vi" om ${NAVN}.
 Du skriver ikke ansøgningen for dem og lover ikke tilsagn. Spørger de om noget uden for emnet, svarer du kort og fører samtalen tilbage. Du er ikke en generel assistent.
+
+TIDLIGERE SAMTALE (hvis brugeren fortsætter, hvor de slap):
+{{tidligere_samtale}}
+Står der en tidligere samtale, så fortsæt derfra. Du har allerede hilst og spurgt, om de er klar. Gentag ikke din præsentation, spørg ikke igen om det, der er besvaret eller står som afklaret, og gå videre med det næste punkt, der mangler. Var kvalificeringen allerede givet, og havde de sagt ja til forberedelsen, så fortsæt med forberedelsen.
 
 DET DU VED OM VIRKSOMHEDEN (fra CVR, kan være ufuldstændigt):
 {{cvr_kontekst}}
@@ -90,7 +94,15 @@ Fase to, forberedelse, kun efter et ja. Stadig ét spørgsmål pr. tur:
 Kan de ikke svare på noget, så tag deres bedste skøn, notér status usikker og gå videre. Vil de stoppe undervejs, så respektér det: sig at det, I nåede, kommer frem på skærmen og i deres mail, slut med "farvel" og kald end_call.
 Afslutning: har brugeren allerede sagt farvel, så svar kort med "Farvel" og kald end_call. Aldrig end_call i en tom tur, og aldrig en sætning om at du afslutter.`;
 
-export const FIRST_MESSAGE = `{{hilsen}}, og tak fordi du tager dig tid. Jeg er ${NAVN}s digitale assistent, og jeg er en kunstig intelligens. Jeg guider dig gennem en kort afklaring af, om SMV Digitals tilskud er en mulighed for {{virksomhed_navn}}. Det tager fem til ti minutter, og på skærmen kan du følge med i, hvad vi har afklaret. Hvad fik jer til at kigge på det her lige nu?`;
+/** Åbningen bygges pr. samtale (ny eller "velkommen tilbage"); se aabning() nedenfor. */
+export const FIRST_MESSAGE = `{{aabning}}`;
+
+function aabning(hilsen: string, virksomhed: string, fortsaetter: boolean): string {
+  if (fortsaetter) {
+    return `${hilsen}, velkommen tilbage. Jeg er ${NAVN}s digitale assistent, og jeg er en kunstig intelligens. Dine svar fra sidst er gemt, så vi fortsætter, hvor du slap, og på skærmen kan du se, hvad vi allerede har afklaret. Er du klar til at fortsætte?`;
+  }
+  return `${hilsen}, og tak fordi du tager dig tid. Jeg er ${NAVN}s digitale assistent, og jeg er en kunstig intelligens. Jeg guider dig gennem en kort afklaring af, om SMV Digitals tilskud er en mulighed for ${virksomhed}. Det tager fem til ti minutter, og på skærmen kan du følge med i, hvad vi har afklaret. Hvad fik jer til at kigge på det her lige nu?`;
+}
 
 /** Udtale-ordbog (backstop hvis modellen alligevel skriver "AI" eller "SpAIke"); sættes af sync. */
 export const UDTALE_REGLER = [
@@ -111,6 +123,8 @@ export function voiceAgentKonfig(udtale?: { pronunciation_dictionary_id: string;
             virksomhed_navn: "jer",
             navn: "brugeren",
             hilsen: "Hej",
+            aabning: aabning("Hej", "jer", false),
+            tidligere_samtale: "ingen",
             cvr_kontekst: "Intet CVR-opslag. Spørg selv, hvad virksomheden laver.",
             allerede_afklaret: "intet endnu",
             i_dag: "den første november totusind og seksogtyve",
@@ -212,15 +226,31 @@ function cvrSomTale(v: Virksomhed): string {
 }
 
 /** Dynamiske variabler pr. samtale, bygget server-side fra CVR-opslaget og startformularen. */
-export function dynamiskeVariabler(v: Virksomhed | null, navn?: string): Record<string, string> {
+export function dynamiskeVariabler(
+  v: Virksomhed | null,
+  navn?: string,
+  tidligere?: { transcript: { role: string; content: string }[]; afklaringer: Record<string, unknown> },
+): Record<string, string> {
   const t = v ? forhaandstjek(v) : null;
+  const gemte: Afklaringer = Object.fromEntries(
+    Object.entries(tidligere?.afklaringer ?? {})
+      .map(([punkt, x]) => normaliserNote({ punkt, ...(x && typeof x === "object" ? x : {}) }))
+      .filter((x): x is NonNullable<typeof x> => !!x)
+      .map((x) => [x.id, x.afklaring]),
+  );
+  const udskrift = (tidligere?.transcript ?? [])
+    .filter((m) => m.content?.trim() && !m.content.startsWith("Hej. Jeg vil gerne tjekke"))
+    .map((m) => `${m.role === "user" ? "Bruger" : "Assistent"}: ${m.content.replace(/\n\n\[Kvalificering afgivet: [a-z]+\]$/, "")}`)
+    .join("\n");
   const fornavn = (navn ?? "").trim().split(/\s+/)[0]?.slice(0, 40) ?? "";
   return {
     virksomhed_navn: v?.navn || "jer",
     navn: fornavn || "brugeren",
     hilsen: fornavn ? `Hej ${fornavn}` : "Hej",
     cvr_kontekst: v ? cvrSomTale(v).slice(0, 2000) : "Intet CVR-opslag. Spørg selv, hvad virksomheden laver.",
-    allerede_afklaret: tilTaleDansk(afklaretSomTekst(afklaretFraCvr(v, t))),
+    allerede_afklaret: tilTaleDansk(afklaretSomTekst({ ...afklaretFraCvr(v, t), ...gemte })),
+    tidligere_samtale: udskrift ? tilTaleDansk(udskrift.slice(-6000)) : "ingen",
+    aabning: aabning(fornavn ? `Hej ${fornavn}` : "Hej", v?.navn || "jer", !!udskrift),
     i_dag: tilTaleDansk(datoSomOrd(new Date())),
     puljer: tilTaleDansk(puljerSomTekst()),
   };

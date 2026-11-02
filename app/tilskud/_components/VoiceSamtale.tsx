@@ -21,6 +21,8 @@ interface Props {
   token: string;
   /** Brugerens navn fra startformularen (agenten hilser med fornavnet). */
   navn: string;
+  /** Gemte svar fra en påbegyndt session (fortsæt hvor du slap). */
+  tidligere?: { transcript: ChatMsg[]; afklaringer: Record<string, unknown> };
   cvr: string;
   virksomhed: StartSvar["virksomhed"];
   forhaandstjek: StartSvar["forhaandstjek"];
@@ -42,16 +44,22 @@ const FORELOEBIG: Record<string, { label: string; cls: string }> = {
   roed: { label: "Foreløbigt: ikke som det ser ud nu", cls: "border-red-700 text-red-700" },
 };
 
-function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering, onVurdering }: Props) {
+function Samtale({ token, navn, tidligere, cvr, virksomhed, forhaandstjek, onKvalificering, onVurdering }: Props) {
   const [fase, setFase] = useState<Fase>("klar");
   const [fejl, setFejl] = useState<string | null>(null);
-  const [afklaringer, setAfklaringer] = useState<Afklaringer>(() => afklaretFraCvr(virksomhed, forhaandstjek));
+  const [afklaringer, setAfklaringer] = useState<Afklaringer>(() => {
+    const gemte = Object.entries(tidligere?.afklaringer ?? {})
+      .map(([punkt, x]) => normaliserNote({ punkt, ...(x && typeof x === "object" ? x : {}) }))
+      .filter((x): x is NonNullable<typeof x> => !!x);
+    return { ...afklaretFraCvr(virksomhed, forhaandstjek), ...Object.fromEntries(gemte.map((x) => [x.id, x.afklaring])) };
+  });
   const [foreloebig, setForeloebig] = useState<{ status: string; tekst: string } | null>(null);
   const [sekunder, setSekunder] = useState(0);
   // Mikrofon-tjek før start (vault: "Voice-app mikrofon-tjek + dansk stemme"): valgt enhed + om den har hørt lyd.
   const [enhed, setEnhed] = useState<string | null>(null);
   const [mikOk, setMikOk] = useState(false);
-  const udskrift = useRef<ChatMsg[]>([]);
+  const udskrift = useRef<ChatMsg[]>(tidligere?.transcript ?? []);
+  const gemTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const conversationId = useRef<string | null>(null);
   const afklaringerRef = useRef(afklaringer);
   const samlet = useRef(false);
@@ -62,7 +70,14 @@ function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering,
     clientTools: {
       noter_afklaring: (p: Record<string, unknown>) => {
         const n = normaliserNote(p);
-        if (n) setAfklaringer((a) => ({ ...a, [n.id]: n.afklaring }));
+        if (n) {
+          setAfklaringer((a) => {
+            const ny = { ...a, [n.id]: n.afklaring };
+            afklaringerRef.current = ny;
+            return ny;
+          });
+          gemSnart();
+        }
         return "ok";
       },
       vis_foreloebig_vurdering: (p: Record<string, unknown>) => {
@@ -76,7 +91,10 @@ function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering,
       trackEvent("tilskud_voice_forbundet");
     },
     onMessage: (m) => {
-      if (m.message?.trim()) udskrift.current.push({ role: m.role === "user" ? "user" : "assistant", content: m.message });
+      if (m.message?.trim()) {
+        udskrift.current.push({ role: m.role === "user" ? "user" : "assistant", content: m.message });
+        gemSnart();
+      }
     },
     onDisconnect: () => {
       void samlResultat();
@@ -85,6 +103,19 @@ function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering,
       console.warn("tilskud voice:", msg);
     },
   });
+  /** Gem løbende (samme sid), så samtalen kan genoptages, hvis noget går ned. */
+  function gemSnart() {
+    if (gemTimer.current) clearTimeout(gemTimer.current);
+    gemTimer.current = setTimeout(() => {
+      void fetch("/api/tilskud", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "gem", token, kanal: "stemme", udskrift: udskrift.current, afklaringer: afklaringerRef.current }),
+        keepalive: true,
+      }).catch(() => undefined);
+    }, 3000);
+  }
+
   const convRef = useRef(conversation);
   convRef.current = conversation;
 
@@ -145,7 +176,7 @@ function Samtale({ token, navn, cvr, virksomhed, forhaandstjek, onKvalificering,
         return;
       }
       conversationId.current = data.conversationId ?? null;
-      udskrift.current = [];
+      udskrift.current = [...(tidligere?.transcript ?? [])];
       samlet.current = false;
       conversation.startSession({
         conversationToken: data.conversationToken,

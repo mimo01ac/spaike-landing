@@ -10,6 +10,7 @@
  *   node scripts/tilskud-cli.mjs flow  --cvr 39127709 [--email test@example.com] [--json]
  *   node scripts/tilskud-cli.mjs voice-start    --cvr 39127709 [--json]
  *   node scripts/tilskud-cli.mjs voice-resultat --cvr 39127709 [--conversation conv_...] [--json]
+ *   node scripts/tilskud-cli.mjs genoptag --cvr 39127709   (fortsæt hvor du slap: start, svar, genoptag, link-sti, gem)
  *
  * Stemme-agentens samtale-logik (uden mikrofon): npm run tilskud:voice -- simuler.
  *
@@ -162,6 +163,27 @@ async function lead(token, cvr, virksomhed, vurdering, transcript, kvalificering
 
 async function main() {
   const cvr = String(flag("cvr", ""));
+  if (cmd === "genoptag") {
+    // Fortsæt hvor du slap, ende-til-ende (testsessioner, ingen start-mail). Link-mailen sendes ikke her.
+    const email = `genoptag-cli-${Date.now()}@spaike.dk`;
+    const k = { navn: "CLI Test", email, consent: true };
+    const sid = (t) => JSON.parse(Buffer.from(t.split(".")[0], "base64").toString()).sid;
+    const A = await (await post({ action: "start", cvr, ...k })).json();
+    await (await post({ action: "gem", token: A.token, kanal: "chat", udskrift: [{ role: "assistant", content: "Hvad fik jer til at kigge på det?" }, { role: "user", content: "Faktureringen tager for lang tid." }], afklaringer: { idee: { status: "ok", note: "fakturering" } } })).json();
+    const same = await (await post({ action: "start", cvr, ...k, genoptagToken: A.genoptagToken })).json();
+    const anden = await (await post({ action: "start", cvr, ...k })).json();
+    const link = await (await post({ action: "genoptag", genoptagToken: A.genoptagToken })).json();
+    const falsk = await post({ action: "genoptag", genoptagToken: A.token });
+    const ud = {
+      samme_browser_genoptaget: !!same.genoptag && sid(same.token) === sid(A.token),
+      anden_enhed_kun_besked: !!anden.kanGenoptages && !anden.genoptag,
+      link_genoptager: (link.genoptag?.transcript?.length ?? 0) === 2,
+      session_token_afvist: falsk.status === 404,
+    };
+    console.log(JSON.stringify(ud, null, JSON_ONLY ? 0 : 2));
+    if (Object.values(ud).some((x) => !x)) process.exit(1);
+    return;
+  }
   if (cmd === "voice-start") {
     // Udsteder et WebRTC-token til stemme-agenten (selve samtalen kræver en browser/mikrofon;
     // samtale-logikken testes med `npm run tilskud:voice -- simuler`).

@@ -54,3 +54,9 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 
 - Formulerings-tjek trin 2 (Michaels idé): før resultatet vises, sammenlign 2B, 2C og 2D2 med tidligere genererede tekster (6-ords-sekvenser) og skriv om over en grænse · udskudt: kræver at teksterne er gemt i PB `tilskud_sessioner`, og spaike-crm er nede · trin 1 (fri formulering i prompten) er bygget og målt: 0-2 % overlap på 2D2, 7 % på 2B mellem to virksomheder · effort S
 - Kvalificeringen spørger ikke længere om de minimis, tilskudsindtægter eller dobbeltfinansiering (ejerskab over 25 % blev tilføjet igen samme dag, fordi danske datterselskaber af store koncerner ellers slipper igennem); de tager det i ansøgningen · bevidst valg (Michael 2026-11-02)
+
+## 2026-11-02 · Fortsæt hvor du slap
+
+- Skifter brugeren fra chat til stemme midt i en session, får stemmeagenten chat-svarene som kontekst, men den endelige vurdering bygger kun på stemme-udskriften (klientens kopi starter tom ved skift) · det rigtige: send chat-historikken med til VoiceSamtale ved skift · effort S
+- Genoptagelse kun inden for 7 dage og ikke efter lead/vurdering · bevidst valg
+- Fortsæt-linket sendes også til adresser, der ikke findes (bounce hos Brevo) · lav risiko, kræver at man kender e-mail og CVR · effort XS hvis det skal begrænses

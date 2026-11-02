@@ -77,3 +77,30 @@ export function sessionIdFraToken(token: string | undefined): string | null {
     return null;
   }
 }
+
+/**
+ * Fortsæt-token (Michael 2026-11-02): lader brugeren genoptage en påbegyndt
+ * session, enten fra samme browser (localStorage) eller via et link sendt til
+ * deres e-mail. Signeret med samme hemmelighed, men med eget formål ("g"), så
+ * et almindeligt session-token ikke kan bruges som fortsæt-token og omvendt.
+ */
+const GENOPTAG_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+export function issueGenoptagToken(sid: string): string {
+  const body = b64url(Buffer.from(JSON.stringify({ sid, exp: Date.now() + GENOPTAG_TTL_MS, k: "g" })));
+  return `${body}.${sign(`g.${body}`, secret())}`;
+}
+
+/** sid fra et gyldigt fortsæt-token, ellers null. */
+export function verifyGenoptagToken(token: string | undefined): string | null {
+  if (!token || !token.includes(".")) return null;
+  const [body, sig] = token.split(".");
+  const expected = sign(`g.${body}`, secret());
+  if (!sig || sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  try {
+    const p = JSON.parse(Buffer.from(body, "base64").toString()) as { sid?: string; exp?: number; k?: string };
+    return p.k === "g" && typeof p.sid === "string" && typeof p.exp === "number" && p.exp > Date.now() ? p.sid : null;
+  } catch {
+    return null;
+  }
+}

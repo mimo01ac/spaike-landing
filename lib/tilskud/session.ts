@@ -10,7 +10,7 @@
  */
 
 import crypto from "crypto";
-import { createRecord, updateRecord } from "@/lib/pocketbase";
+import { createRecord, findRecords, getRecord, updateRecord } from "@/lib/pocketbase";
 import { sendEmail } from "@/lib/email";
 import type { Forhaandstjek, Virksomhed } from "./cvr";
 import { renderSessionStartNotifikation } from "./email";
@@ -81,4 +81,52 @@ export async function opdaterSession(id: string | null, data: Record<string, unk
       console.error("tilskud session: PB-opdatering fejlede:", (e as Error).message),
     ),
   );
+}
+
+// --- Fortsæt hvor du slap (Michael 2026-11-02) --------------------------------
+
+export interface SessionRecord {
+  id: string;
+  cvr: string;
+  navn: string;
+  email: string;
+  pulje_alarm: boolean;
+  test?: boolean;
+  kanal: "chat" | "stemme" | "";
+  status: SessionStatus | "";
+  transcript: { role: "user" | "assistant"; content: string }[] | null;
+  afklaringer: Record<string, unknown> | null;
+  kvalificering: unknown;
+  updated: string;
+}
+
+const GENOPTAG_DAGE = 7;
+
+/** Har sessionen noget at fortsætte fra (mindst ét svar fra brugeren)? */
+export function kanGenoptages(r: SessionRecord | null): r is SessionRecord {
+  if (!r || r.status === "lead" || r.status === "vurderet") return false;
+  return (r.transcript ?? []).some((m) => m.role === "user" && m.content?.trim());
+}
+
+/** Seneste påbegyndte session for samme e-mail og CVR inden for 7 dage. Fail-soft: null ved fejl. */
+export async function findGenoptageligSession(email: string, cvr: string, undtagId = "", test = false): Promise<SessionRecord | null> {
+  const q = (v: string) => v.replace(/["\\]/g, "");
+  const siden = new Date(Date.now() - GENOPTAG_DAGE * 86400000).toISOString().replace("T", " ").slice(0, 19);
+  const filter = `email = "${q(email)}" && cvr = "${q(cvr)}" && status != "lead" && status != "vurderet" && test = ${test} && updated >= "${siden}"`;
+  try {
+    const liste = (await hoejst(findRecords<SessionRecord>(SESSION_COLLECTION, filter))) || [];
+    return liste.find((r) => r.id !== undtagId && kanGenoptages(r)) ?? null;
+  } catch (e) {
+    console.error("tilskud session: opslag fejlede:", (e as Error).message);
+    return null;
+  }
+}
+
+export async function hentSession(id: string | null): Promise<SessionRecord | null> {
+  if (!id) return null;
+  try {
+    return ((await hoejst(getRecord<SessionRecord>(SESSION_COLLECTION, id))) as SessionRecord | null) ?? null;
+  } catch {
+    return null;
+  }
 }
