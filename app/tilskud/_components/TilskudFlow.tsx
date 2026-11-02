@@ -50,8 +50,6 @@ export default function TilskudFlow() {
   const [inject, setInject] = useState<{ id: number; text: string } | null>(null);
   // Kanal vælges FØR noget starter (Michael 2026-11-02): ingen chat vises, før brugeren har valgt.
   const [kanal, setKanal] = useState<"chat" | "stemme" | null>(null);
-  // Stemmen er ny (2026-11-01): synlig på preview/lokalt, i produktion kun med ?stemme=1, indtil Michael har godkendt den.
-  const [visStemme, setVisStemme] = useState(false);
   const [transcript, setTranscript] = useState<ChatMsg[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
   const kvalRef = useRef<HTMLDivElement>(null);
@@ -102,12 +100,6 @@ export default function TilskudFlow() {
   }
 
   useEffect(() => {
-    setVisStemme(
-      new URLSearchParams(window.location.search).get("stemme") === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV !== "production",
-    );
-  }, []);
-
-  useEffect(() => {
     if (vurdering) {
       trackEvent("tilskud_vurdering_klar", { status: vurdering.egnethed.status });
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
@@ -139,7 +131,7 @@ export default function TilskudFlow() {
   return (
     <div className="max-w-2xl space-y-5">
       <Virksomhedskort start={start} />
-      {visStemme && kanal === null ? (
+      {kanal === null ? (
         <KanalValg
           onVaelg={(k) => {
             setKanal(k);
@@ -180,7 +172,7 @@ export default function TilskudFlow() {
           }}
         />
       )}
-      {visStemme && kanal !== null && !kvalificering && !vurdering && (
+      {kanal !== null && !kvalificering && !vurdering && (
         <button
           type="button"
           onClick={() => setKanal(kanal === "stemme" ? "chat" : "stemme")}
