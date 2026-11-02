@@ -19,6 +19,9 @@ const INTRO = "Hej. Jeg vil gerne tjekke, om vi kan søge tilskud til et projekt
 const FORTSAET = "Ja, lad os fortsætte til forberedelsen.";
 /** Lægges i historikken når fase 1 er afgivet, så modellen ved det (den ser ikke sine egne tool-kald igen). */
 const KVAL_MARKOER = (status: string) => `\n\n[Kvalificering afgivet: ${status}]`;
+const VURD_MARKOER = "\n\n[Vurdering afgivet]";
+const EFTER_VURDERING =
+  "Vurderingen og projektbeskrivelsen står nedenfor og er sendt til din mail. Har du spørgsmål til, hvordan du kommer videre, eller hvad du skal forberede, så skriv dem her.";
 
 const md: Components = {
   p: ({ node: _n, ...props }) => <p className="mb-2.5 last:mb-0" {...props} />,
@@ -698,6 +701,7 @@ function Chat({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [vurderet, setVurderet] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const started = useRef(false);
   const lastInject = useRef<number>(0);
@@ -785,11 +789,15 @@ function Chat({
             });
             onKvalificering(k, [...history, { role: "assistant", content: medMarkoer }]);
           } else if (evt.type === "vurdering" && evt.vurdering) {
-            setDone(true);
-            onVurdering(evt.vurdering, [
-              ...history,
-              { role: "assistant", content: assistantText || "Jeg har samlet vurderingen." },
-            ]);
+            // Fase 2 afgivet: markér i historikken, og hold chatten åben til spørgsmål om processen.
+            const medMarkoer = `${assistantText || "Jeg har samlet vurderingen."}\n\n${EFTER_VURDERING}${VURD_MARKOER}`;
+            setMessages((m) => {
+              const copy = [...m];
+              copy[copy.length - 1] = { role: "assistant", content: medMarkoer };
+              return copy;
+            });
+            setVurderet(true);
+            onVurdering(evt.vurdering, [...history, { role: "assistant", content: medMarkoer }]);
           } else if (evt.type === "error") {
             setError(evt.error ?? "Der opstod en fejl.");
           }
@@ -818,7 +826,7 @@ function Chat({
               {m.role === "assistant" ? (
                 m.content ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>
-                    {m.content.replace(/\n\n\[Kvalificering afgivet: [a-z]+\]$/, "")}
+                    {m.content.replace(/\n\n\[(Kvalificering afgivet: [a-z]+|Vurdering afgivet)\]$/, "")}
                   </ReactMarkdown>
                 ) : busy ? (
                   "…"
@@ -854,7 +862,7 @@ function Chat({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={busy || done}
-          placeholder={done ? "Tjekket er færdigt" : "Skriv dit svar …"}
+          placeholder={done ? "Tjekket er færdigt" : vurderet ? "Spørgsmål til, hvordan du kommer videre …" : "Skriv dit svar …"}
           aria-label="Dit svar"
           className={`${inputCls} flex-1`}
         />

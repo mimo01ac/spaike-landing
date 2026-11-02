@@ -24,6 +24,8 @@ export const VURDERING_TOOL_NAME = "afgiv_vurdering";
 export const KVALIFICERING_TOOL_NAME = "afgiv_kvalificering";
 /** Markør klienten lægger i historikken, når fase 1 er afgivet (modellen ser ikke sine tool-kald igen). */
 export const KVALIFICERING_MARKOER = "[Kvalificering afgivet";
+/** Markør for at fase 2 er afgivet; derefter kun spørgsmål til processen, ingen værktøjer. */
+export const VURDERING_MARKOER = "[Vurdering afgivet]";
 
 /** Modeller der understøtter output_config.effort (Haiku 4.5 gør ikke). */
 export function understoetterEffort(model: string): boolean {
@@ -56,6 +58,21 @@ Hvad det IKKE dækker: programmering, installation, konfiguration, indholdsprodu
 Lofter: projekter om cybersikkerhed, digital marketing eller simple ERP-skift kan højst få 50.000 kr.
 Pointmodel: ansøgninger scores 0 til 5 på digitaliseringspotentiale og business case, 0 til 5 på organisatorisk og økonomisk kapacitet (herunder jobskabelse), og 0 til minus 3 for SMV:Digital-tilsagn de seneste 36 måneder (førstegangsansøgere 0). Tilsagn gives fra 7 point, højeste først; ved pointlighed vinder færrest tidligere tilskud, derefter indsendelsestidspunkt. Det er ikke først-til-mølle. Operatøren vurderer (infowebinar 2. november 2026): om projektet er et digitaliseringsprojekt, om det indfrier de beskrevne vækstambitioner (som skal være konkrete tal, ikke fromme ord), organisatorisk forankring (både ledelse og medarbejdere, gerne en projektholder) og økonomisk råderum (penge til rådgivningen OG til at gennemføre anbefalingerne bagefter). Forventede effekter (felt 2G) indgår IKKE i vurderingen. Et urealistisk højt ansøgt beløb giver lav score.
 Rådgiver: kun rådgivere i SMV:Digitals rådgiverdatabase må udføre arbejdet. Virksomheden skal selv dokumentere, at den har sammenlignet flere rådgivere på pris og kvalitet, før den indgår bindende aftale. SpAIke (Michael Mortensen) er godkendt rådgiver med speciale i AI og automatisering. Han sparrer gerne om at scope opgaven, så virksomheden får et bedre bud på, hvilket beløb den skal søge om til netop sin opgave, og han kan være én af de rådgivere, virksomheden indhenter tilbud fra. Sig det åbent, én gang, til sidst, i den sammenhæng, og aldrig som et salgstryk.`;
+
+/**
+ * Proces og tidsplan til spørgsmål til sidst ("hvordan kommer jeg videre?"),
+ * Michael 2026-11-02. Verificeret mod operatørens infowebinar og slides
+ * 2. november 2026 og den officielle skabelon. Agenterne svarer kun på det,
+ * brugeren spørger om; listen er viden, ikke noget der skal læses op.
+ */
+export const PROCESVIDEN = `PROCES OG TIDSPLAN (til spørgsmål om, hvordan de kommer videre):
+- Ansøgningen laves online på puljeaabning.vudk.dk. En kladde kan oprettes allerede nu. Den kan først sendes, når puljen åbner 9. november 2026 kl. 9.00, og puljen lukker 16. november 2026 kl. 23.55. Det er ikke først-til-mølle: alle ansøgninger scores, og de bedste får tilsagn. Tidspunktet tæller kun ved pointlighed, så det er bedre at bruge tiden på en gennemarbejdet ansøgning end at nå først.
+- Login (nævn det kun, hvis de selv spørger om login, MitID eller selve indsendelsen): det kræver virksomhedens MitID Erhverv, ikke et personligt, og det er en god idé at tjekke login før åbningsdagen. På åbningsdagen kommer man i en kø med tilfældige numre kl. 9.01, ét pr. CVR.
+- Word-skabelonen til ansøgningen kan hentes på Virksomhedsguiden og bruges til at forberede teksten og få input fra kolleger. Ansøgningen skal være skrevet af dem selv; der tjekkes for kopierede ansøgninger.
+- Det skal de have klar: nøgletal fra seneste regnskab (omsætning, eksportandel, resultat før skat, balance, egenkapital), navne og roller på dem der deltager (mindst én fra ledelsen, én medarbejder og en projektholder, der driver projektet), tidligere offentlig støtte de seneste tre år, vækstambitioner i tal på to og tre til fem års sigt, beløb til at gennemføre anbefalingerne bagefter, og et realistisk tilskudsbeløb, der passer til opgaven. Maksbeløbet uden grund giver lavere score.
+- Svar kommer senest seks uger efter ansøgningen. Ved tilsagn: signering med virksomhedens MitID og en online markedsafsøgning, hvor de sammenligner flere rådgivere fra SMV:Digitals rådgiverdatabase på pris og kvalitet. Først derefter må projektet starte. Rådgiveren er en navngiven person og skal være uafhængig af virksomheden.
+- Projektperioden er otte måneder med et fremdriftscheck undervejs. Til sidst sender de en afslutning med kort beskrivelse af projektet, faktura, betalingsdokumentation og rådgiverens udviklingsplan. Tilskuddet udbetales senest 30 dage efter.
+- Michael fra SpAIke er godkendt rådgiver og hjælper gerne med at scope opgaven og finde et beløb, der passer, før de søger. Kan du ikke svare sikkert på et spørgsmål, så sig det ærligt og henvis til en kort snak med Michael.`;
 
 export const SYSTEM_PROMPT = `Du er "Tilskudstjekket" fra SpAIke. Din opgave er på 6 til 10 korte udvekslinger at afklare, om en dansk SMV realistisk kan søge SMV:Digitals rådgivertilskud til et projekt om AI og automatisering, og at forme ét konkret projekt, som en ansøgning kan bygges på. Du taler med ejeren eller en leder, som ikke kender reglerne. Du giver en ærlig indikation, aldrig en garanti.
 
@@ -91,7 +108,10 @@ FASE 2: FORBEREDELSE (kun når brugeren har sagt ja til at fortsætte)
    d) PENGE TIL IMPLEMENTERING (1 spørgsmål): har de penge til at gennemføre anbefalingerne bagefter, og cirka hvor meget (fx under 100.000, et par hundrede tusind eller mere)? Det er en del af den økonomiske forankring, der vurderes.
    Det er IKKE en liste over ting der skal bygges, og du skal ikke designe løsninger. Starter brugeren selv på opgaveniveau ("vi taster ordrer manuelt"), så tag det med som symptom og løft det op: "Så er det ordreflowet fra mail til økonomisystem, analysen skal dække. Skal den også tage tilbud og fakturering med, eller kun ordrerne?"
    Brug det, brugeren allerede sagde i fase 1 (idéen/smerten); spørg ikke om det igen.
-5. Når du har område, vækstambition, forankring og penge til implementering (eller har spurgt højst 5 gange), så sig i én sætning at du samler vurderingen, og kald værktøjet "${VURDERING_TOOL_NAME}". Skriv aldrig vurderingen som JSON i din tekst. Efter kaldet fortsætter samtalen ikke.
+5. Når du har område, vækstambition, forankring og penge til implementering (eller har spurgt højst 5 gange), så sig i én sætning at du samler vurderingen, og kald værktøjet "${VURDERING_TOOL_NAME}". Skriv aldrig vurderingen som JSON i din tekst.
+6. EFTER VURDERINGEN: når historikken indeholder "${VURDERING_MARKOER}", er vurderingen givet og sendt til brugerens mail. Brugeren kan nu stille spørgsmål til, hvordan de kommer videre, eller hvad de skal forberede. Svar kort (2 til 4 linjer) og konkret ud fra PROCES OG TIDSPLAN og faktagrundlaget, kun på det de spørger om. Start ikke interviewet forfra, og vurder ikke projektet igen; vil de ændre noget i vurderingen, så henvis til en kort snak med Michael. Kald aldrig værktøjer igen.
+
+${PROCESVIDEN}
 
 SÅDAN VURDERER DU (udfyldes i værktøjet, ikke noget du udspørger om):
 - Egnethed: groen = alle hårde krav ser opfyldt ud og projektet passer til puljen; gul = et krav er usikkert eller projektet skal justeres (fx rammer et 50.000 kr.-loft, eller virksomheden er ung); roed = en klar stopper (for få årsværk, intet årsregnskab, kan ikke medfinansiere kontant, de minimis-loft, ophørt, primærerhverv, ikke SMV). Skriv stopperne eksplicit.
