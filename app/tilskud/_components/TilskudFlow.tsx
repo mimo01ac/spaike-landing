@@ -5,6 +5,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Mic, MessageSquare } from "lucide-react";
 import { trackEvent } from "../../components/track";
+import { formularBegyndt, naaetTrin, sekunder } from "./tragt";
 import dynamic from "next/dynamic";
 
 // ElevenLabs-SDK'et (~120 kB) hentes først, når nogen vælger stemmen.
@@ -168,7 +169,8 @@ export default function TilskudFlow() {
         setKanGenoptages(data.kanGenoptages ?? null);
       }
       setStart(data);
-      trackEvent("tilskud_start", { cvr_fundet: data.virksomhed ? "ja" : "nej" });
+      naaetTrin("start");
+      trackEvent("tilskud_start", { cvr_fundet: data.virksomhed ? "ja" : "nej", sekunder: sekunder() });
     } catch {
       setStartFejl("Forbindelsen fejlede. Prøv igen.");
     } finally {
@@ -178,20 +180,23 @@ export default function TilskudFlow() {
 
   useEffect(() => {
     if (vurdering) {
-      trackEvent("tilskud_vurdering_klar", { status: vurdering.egnethed.status });
+      naaetTrin("vurdering");
+      trackEvent("tilskud_vurdering_klar", { status: vurdering.egnethed.status, sekunder: sekunder() });
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
     }
   }, [vurdering]);
 
   useEffect(() => {
     if (kvalificering) {
-      trackEvent("tilskud_kvalificering_klar", { status: kvalificering.status });
+      naaetTrin("kvalificering");
+      trackEvent("tilskud_kvalificering_klar", { status: kvalificering.status, sekunder: sekunder() });
       setTimeout(() => kvalRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
     }
   }, [kvalificering]);
 
   if (!start) {
     return (
+      <div onFocusCapture={formularBegyndt}>
       <VirksomhedsSoegning
         value={cvrInput}
         onChange={setCvrInput}
@@ -202,6 +207,7 @@ export default function TilskudFlow() {
         setKontakt={setKontakt}
         onStart={(cvr) => void startTjek(cvr)}
       />
+      </div>
     );
   }
 
@@ -216,7 +222,8 @@ export default function TilskudFlow() {
         <KanalValg
           onVaelg={(k) => {
             setKanal(k);
-            trackEvent("tilskud_kanal_valgt", { kanal: k });
+            naaetTrin("kanal");
+            trackEvent("tilskud_kanal_valgt", { kanal: k, sekunder: sekunder() });
           }}
         />
       ) : kanal === "stemme" ? (
@@ -272,12 +279,13 @@ export default function TilskudFlow() {
             kunMail={kanal === "stemme"}
             onFortsaet={() => {
               setStopEfterKval(false);
-              trackEvent("tilskud_fortsaet_forberedelse", { status: kvalificering.status });
+              naaetTrin("forberedelse");
+              trackEvent("tilskud_fortsaet_forberedelse", { status: kvalificering.status, sekunder: sekunder() });
               setInject({ id: Date.now(), text: FORTSAET });
             }}
             onStop={() => {
               setStopEfterKval(true);
-              trackEvent("tilskud_stop_efter_kvalificering", { status: kvalificering.status });
+              trackEvent("tilskud_stop_efter_kvalificering", { status: kvalificering.status, sekunder: sekunder() });
             }}
           />
           {stopEfterKval && (
@@ -735,7 +743,10 @@ function Chat({
     if (busy || done) return;
     setError(null);
     setBusy(true);
-    if (!hideUser && !messages.some((m) => m.role === "user")) trackEvent("tilskud_chat_foerste_svar");
+    if (!hideUser && !messages.some((m) => m.role === "user")) {
+      naaetTrin("samtale");
+      trackEvent("tilskud_chat_foerste_svar", { sekunder: sekunder() });
+    }
 
     const history: ChatMsg[] = [...messages, { role: "user", content: text }];
     setMessages(hideUser ? messages : history);
@@ -1194,7 +1205,8 @@ function ResultatMail({
       }
       setMailSendt(data.mailSendt !== false);
       setTilstand("sendt");
-      trackEvent("tilskud_lead_sendt", { status, fase: fuld ? "forberedelse" : "kvalificering", alarm: kontakt.puljeAlarm ? "ja" : "nej" });
+      naaetTrin("faerdig");
+      trackEvent("tilskud_lead_sendt", { status, fase: fuld ? "forberedelse" : "kvalificering", alarm: kontakt.puljeAlarm ? "ja" : "nej", sekunder: sekunder() });
     } catch {
       setTilstand("fejl");
     }
