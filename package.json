@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "tilskud:voice": "tsx --env-file=.env.local scripts/tilskud-voice.ts"
+    "tilskud:voice": "tsx --env-file=.env.local scripts/tilskud-voice.ts",
+    "tilskud:tragt": "tsx --env-file=.env.local scripts/tilskud-tragt.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { Check, CircleDashed, HelpCircle, Loader2, Mic, X } from "lucide-react";
 import { trackEvent } from "../../components/track";
+import { naaetTrin, sekunder as tragtSekunder } from "./tragt";
 import { AFKLARINGSPUNKTER, afklaretFraCvr, normaliserNote, type Afklaringer } from "@/lib/tilskud/afklaring";
 import type { ChatMsg, Kvalificering, StartSvar, Vurdering } from "@/lib/tilskud/types";
 
@@ -61,6 +62,7 @@ function Samtale({ token, navn, tidligere, cvr, virksomhed, forhaandstjek, onKva
   const udskrift = useRef<ChatMsg[]>(tidligere?.transcript ?? []);
   const gemTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const conversationId = useRef<string | null>(null);
+  const opkaldStart = useRef<number | null>(null);
   const afklaringerRef = useRef(afklaringer);
   const samlet = useRef(false);
   const orb = useRef<HTMLDivElement>(null);
@@ -88,7 +90,9 @@ function Samtale({ token, navn, tidligere, cvr, virksomhed, forhaandstjek, onKva
     },
     onConnect: () => {
       setFase("aktiv");
-      trackEvent("tilskud_voice_forbundet");
+      opkaldStart.current = Date.now();
+      naaetTrin("samtale");
+      trackEvent("tilskud_voice_forbundet", { sekunder: tragtSekunder() });
     },
     onMessage: (m) => {
       if (m.message?.trim()) {
@@ -97,6 +101,10 @@ function Samtale({ token, navn, tidligere, cvr, virksomhed, forhaandstjek, onKva
       }
     },
     onDisconnect: () => {
+      if (opkaldStart.current) {
+        trackEvent("tilskud_voice_slut", { opkald_sekunder: Math.round((Date.now() - opkaldStart.current) / 1000) });
+        opkaldStart.current = null;
+      }
       void samlResultat();
     },
     onError: (msg) => {
