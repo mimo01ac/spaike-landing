@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <title>AI-analyse · 21-5.dk · SpAIke</title>
 <meta property="og:title" content="AI-analyse for 21-5.dk · SpAIke">
-<meta property="og:description" content="To analyser i én: teknisk AI-parathed (85/100) og AI-panel, hvad ChatGPT, Perplexity, Gemini og Claude faktisk svarer om 21-5.">
+<meta property="og:description" content="To analyser: teknisk AI-parathed (85/100) og AI-synlighed, hvad ChatGPT, Perplexity og Claude svarer, når folk søger det, de faktisk søger.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f1a2e'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23d4a857' stroke-width='3'/%3E%3C/svg%3E">
 <style>
@@ -20,54 +20,45 @@
   body{margin:0;background:var(--cream);color:var(--ink);line-height:1.55;
     font-family:"Source Serif Pro",Georgia,"Times New Roman",serif;font-size:17px}
   .sans{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-  .mono{font-family:ui-monospace,Menlo,monospace}
   .wrap{max-width:880px;margin:0 auto;padding:0 24px 90px}
-  header{background:var(--ink);color:var(--cream);margin:0 -24px 0;padding:44px 24px 34px;
-    border-bottom:3px solid var(--amber)}
-  .kick{font-family:ui-monospace,Menlo,monospace;color:var(--amber);font-size:12px;
-    letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
+  header{background:var(--ink);color:var(--cream);margin:0 -24px 0;padding:44px 24px 34px;border-bottom:3px solid var(--amber)}
+  .kick{font-family:ui-monospace,Menlo,monospace;color:var(--amber);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
   h1{margin:0;font-size:34px;font-weight:600;line-height:1.1}
   h1 em{font-style:italic;color:var(--amber-soft)}
   .meta{font-family:Inter,sans-serif;color:#b9c0cf;font-size:14px;margin:14px 0 0}
-
-  .tabs{position:sticky;top:0;z-index:5;background:var(--cream);margin:0 -24px;padding:0 24px;
-    border-bottom:1px solid var(--rule);display:flex;gap:0}
-  .tab{appearance:none;background:none;border:none;cursor:pointer;font-family:Inter,sans-serif;
-    padding:18px 4px;margin-right:34px;font-size:15px;color:var(--muted);font-weight:600;
-    border-bottom:3px solid transparent;margin-bottom:-1px;text-align:left}
+  .tabs{position:sticky;top:0;z-index:5;background:var(--cream);margin:0 -24px;padding:0 24px;border-bottom:1px solid var(--rule);display:flex}
+  .tab{appearance:none;background:none;border:none;cursor:pointer;font-family:Inter,sans-serif;padding:18px 4px;margin-right:34px;font-size:15px;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;margin-bottom:-1px;text-align:left}
   .tab small{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:3px}
   .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--amber)}
   .tab[aria-selected="true"] small{color:var(--ink-soft)}
   .panel[hidden]{display:none}
-
   h2{font-size:22px;font-weight:600;margin:38px 0 6px;border-bottom:1px solid var(--rule);padding-bottom:8px}
   h3{font-size:18px;font-weight:600;margin:0 0 2px}
   p{margin:10px 0}
   .lead{font-size:18px;color:var(--ink-soft)}
-
   .scorewrap{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 40px;margin:28px 0 6px}
   .score{font-size:96px;line-height:.9;letter-spacing:-.02em}
   .score span{font-size:30px;color:var(--muted)}
   .scoredom{font-style:italic;font-size:22px;color:var(--green)}
   .scorenote{font-family:Inter,sans-serif;font-size:14px;color:var(--ink-soft);max-width:26em}
-
   .check{display:grid;grid-template-columns:30px 1fr auto;gap:4px 14px;padding:20px 0;border-bottom:1px solid var(--rule)}
   .check .tegn{font-family:ui-monospace,Menlo,monospace;font-size:20px;line-height:1.3}
-  .tegn.ok{color:var(--green)} .tegn.delvist{color:var(--amber-dark)}
-  .tegn.problem{color:var(--red)} .tegn.info{color:var(--muted)}
+  .tegn.ok{color:var(--green)} .tegn.delvist{color:var(--amber-dark)} .tegn.problem{color:var(--red)} .tegn.info{color:var(--muted)}
   .check .pts{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);white-space:nowrap;text-align:right}
   .check .hvad{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin:5px 0 0;max-width:48em}
   .check .hvad b{color:var(--ink-soft);font-weight:600}
   .check .fund{font-family:Inter,sans-serif;font-size:14px;color:var(--ink);margin:9px 0 0}
   .check .betyd{font-family:Inter,sans-serif;font-size:13px;color:var(--ink-soft);margin:4px 0 0;max-width:48em}
   .check .betyd b{font-weight:600}
-
-  .verdict{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--amber);
-    border-radius:10px;padding:20px 22px;margin:22px 0}
+  .verdict{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--amber);border-radius:10px;padding:20px 22px;margin:22px 0}
+  .insight{background:var(--ink);color:var(--cream);border-radius:12px;padding:22px 24px;margin:20px 0}
+  .insight h3{color:#fff;font-size:19px}
+  .insight p{color:#cdd3de;font-family:Inter,sans-serif;font-size:14.5px}
+  .insight b{color:#fff}
+  .insight .kw{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--amber-soft);background:rgba(255,255,255,.06);border-radius:6px;padding:2px 8px;display:inline-block;margin:3px 4px 3px 0}
   table{width:100%;border-collapse:collapse;margin:14px 0;font-family:Inter,sans-serif;font-size:14px}
   th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--rule);vertical-align:middle}
-  th{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
-    color:var(--muted);font-weight:700;background:var(--cream-deep)}
+  th{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--cream-deep)}
   .matrix td,.matrix th{text-align:center}
   .matrix td:first-child,.matrix th:first-child{text-align:left}
   .matrix td:first-child{font-weight:600;color:var(--ink);font-size:13.5px}
@@ -77,21 +68,16 @@
   .c-na{color:#b3ad9c}
   .card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:12px 0}
   .sans-list{font-family:Inter,sans-serif;font-size:15px}
-  .rec{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--rule);
-    border-radius:10px;padding:16px 18px;margin:12px 0}
+  .rec{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:16px 18px;margin:12px 0}
   .rec .n{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--amber-dark);font-size:20px;line-height:1.2}
   .rec .b{flex:1}
   .rec p{margin:4px 0 0;font-family:Inter,sans-serif;font-size:14.5px;color:var(--ink-soft)}
-  a{color:var(--amber-dark);text-decoration:underline;text-underline-offset:2px}
-  a:hover{color:var(--ink)}
+  a{color:var(--amber-dark);text-decoration:underline;text-underline-offset:2px} a:hover{color:var(--ink)}
   ul{padding-left:20px} li{margin:5px 0}
-  .note{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);background:var(--cream-deep);
-    border-radius:8px;padding:14px 16px;margin:26px 0 0}
-  .foot{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);
-    text-align:center;margin:44px 0 0;letter-spacing:.04em}
-
-  .qblock{margin:26px 0 0;padding:0 0 4px}
-  .qh{font-family:"Source Serif Pro",Georgia,serif;font-size:18px;font-weight:600;margin:0 0 2px}
+  .note{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);background:var(--cream-deep);border-radius:8px;padding:14px 16px;margin:26px 0 0}
+  .foot{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);text-align:center;margin:44px 0 0;letter-spacing:.04em}
+  .qblock{margin:24px 0 0}
+  .qh{font-family:"Source Serif Pro",Georgia,serif;font-size:17px;font-weight:600;margin:0 0 2px}
   .qfind{font-family:Inter,sans-serif;font-size:13.5px;color:var(--ink-soft);margin:2px 0 8px}
   details{background:#fff;border:1px solid var(--rule);border-radius:9px;margin:7px 0}
   summary{cursor:pointer;padding:10px 14px;font-family:Inter,sans-serif;font-size:13.5px;font-weight:600;color:var(--ink);list-style:none}
@@ -109,7 +95,7 @@
 <header>
   <p class="kick">SpAIke · AI-analyse</p>
   <h1>AI-analyse for <em>21-5.dk</em></h1>
-  <p class="meta">deleejerskab af ferieboliger · 1. oktober 2026 · to analyser: teknisk AI-parathed og hvad AI-modellerne faktisk svarer</p>
+  <p class="meta">deleejerskab af ferieboliger · opdateret 5. november 2026 · teknisk AI-parathed + AI-synlighed på de søgninger folk faktisk laver</p>
 </header>
 
 <div class="tabs" role="tablist">
@@ -117,7 +103,7 @@
     Teknisk AI-tjek<small>Kan AI læse jeres side? · 85/100</small>
   </button>
   <button class="tab" id="t-panel" role="tab" aria-selected="false" aria-controls="p-panel" onclick="visFane('panel')">
-    AI-panel<small>Hvad svarer modellerne om jer?</small>
+    AI-panel<small>Bliver I fundet, når folk søger?</small>
   </button>
 </div>
 
@@ -125,7 +111,7 @@
 <section class="panel" id="p-teknisk" role="tabpanel" aria-labelledby="t-teknisk">
   <div class="scorewrap">
     <div>
-      <div class="mono" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">21-5.dk</div>
+      <div class="sans" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">21-5.dk</div>
       <div class="score">85<span>/100</span></div>
       <div class="scoredom">Godt AI-fundament</div>
     </div>
@@ -134,203 +120,163 @@
 
   <h2>De 9 tjek</h2>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>Kan AI-crawlere læse jeres indhold uden JavaScript?</h3>
-      <p class="hvad"><b>Hvad det er: </b>AI-robotterne henter jeres side som ren tekst og kører sjældent den kode, der først bygger siden færdig inde i en browser. Vi tjekker, om jeres tekst allerede står der, før koden kører.</p>
-      <p class="fund">5.771 tegn synlig tekst i den rå HTML.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>De fleste AI-crawlere kører IKKE JavaScript. Er teksten kun synlig efter JS, findes jeres indhold reelt ikke for ChatGPT, Perplexity og AI Overviews.</p>
-    </div>
-    <div class="pts">25/25 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>Kan AI-crawlere læse jeres indhold uden JavaScript?</h3>
+    <p class="hvad"><b>Hvad det er: </b>AI-robotterne henter jeres side som ren tekst og kører sjældent den kode, der først bygger siden færdig inde i en browser. Vi tjekker, om jeres tekst allerede står der, før koden kører.</p>
+    <p class="fund">5.771 tegn synlig tekst i den rå HTML.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>De fleste AI-crawlere kører IKKE JavaScript. Er teksten kun synlig efter JS, findes jeres indhold reelt ikke for ChatGPT, Perplexity og AI Overviews.</p>
+  </div><div class="pts">25/25 p</div></div>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>Er AI-crawlerne lukket inde eller ude i robots.txt?</h3>
-      <p class="hvad"><b>Hvad det er: </b>robots.txt er en lille fil på jeres website, der fortæller robotterne fra fx ChatGPT, Claude og Google, hvilke sider de må besøge. Her tjekker vi, om I ved et uheld har spærret dem ude.</p>
-      <p class="fund">Ingen AI-crawlere er blokeret.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>GPTBot, ClaudeBot, PerplexityBot m.fl. skal kunne hente jeres sider, ellers kan AI-motorerne hverken citere eller anbefale jer.</p>
-    </div>
-    <div class="pts">20/20 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>Er AI-crawlerne lukket inde eller ude i robots.txt?</h3>
+    <p class="hvad"><b>Hvad det er: </b>robots.txt er en lille fil på jeres website, der fortæller robotterne fra fx ChatGPT, Claude og Google, hvilke sider de må besøge. Her tjekker vi, om I ved et uheld har spærret dem ude.</p>
+    <p class="fund">Ingen AI-crawlere er blokeret.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>GPTBot, ClaudeBot, PerplexityBot m.fl. skal kunne hente jeres sider, ellers kan AI-motorerne hverken citere eller anbefale jer.</p>
+  </div><div class="pts">20/20 p</div></div>
 
-  <div class="check">
-    <div class="tegn problem">✕</div>
-    <div>
-      <h3>Struktureret data (schema.org)</h3>
-      <p class="hvad"><b>Hvad det er: </b>Struktureret data er skjulte mærker i koden, der fortæller maskiner præcis hvad der er hvad (jeres navn, ydelser, adresse), i et format de kan stole på i stedet for at gætte ud fra teksten.</p>
-      <p class="fund">Ingen JSON-LD fundet.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Struktureret data gør jeres fakta (navn, ydelser, priser) maskinlæsbare og fodrer brand-entiteten, som AI-svar læner sig op ad.</p>
-    </div>
-    <div class="pts">0/12 p</div>
-  </div>
+  <div class="check"><div class="tegn problem">✕</div><div>
+    <h3>Struktureret data (schema.org)</h3>
+    <p class="hvad"><b>Hvad det er: </b>Struktureret data er skjulte mærker i koden, der fortæller maskiner præcis hvad der er hvad (jeres navn, ydelser, adresse), i et format de kan stole på i stedet for at gætte ud fra teksten.</p>
+    <p class="fund">Ingen JSON-LD fundet.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Struktureret data gør jeres fakta maskinlæsbare og fodrer brand-entiteten, som AI-svar læner sig op ad.</p>
+  </div><div class="pts">0/12 p</div></div>
 
-  <div class="check">
-    <div class="tegn delvist">!</div>
-    <div>
-      <h3>Titel, beskrivelse og canonical</h3>
-      <p class="hvad"><b>Hvad det er: </b>Titel og beskrivelse er den overskrift og tekst, der vises i Google og når siden deles. Canonical er et skjult mærke, der udpeger den rigtige adresse for en side, så den samme side ikke tæller som flere forskellige.</p>
-      <p class="fund">Titel: ja (4/4) · Meta description: ja (5/5) · Canonical: nej (0/3).</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Basal metadata er stadig det, både Google og AI-motorer bruger til at forstå og præsentere siden.</p>
-    </div>
-    <div class="pts">9/12 p</div>
-  </div>
+  <div class="check"><div class="tegn delvist">!</div><div>
+    <h3>Titel, beskrivelse og canonical</h3>
+    <p class="hvad"><b>Hvad det er: </b>Titel og beskrivelse er den overskrift og tekst, der vises i Google og når siden deles. Canonical er et skjult mærke, der udpeger den rigtige adresse for en side, så den samme side ikke tæller som flere forskellige.</p>
+    <p class="fund">Titel: ja (4/4) · Meta description: ja (5/5) · Canonical: nej (0/3).</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Basal metadata er stadig det, både Google og AI-motorer bruger til at forstå og præsentere siden.</p>
+  </div><div class="pts">9/12 p</div></div>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>sitemap.xml</h3>
-      <p class="hvad"><b>Hvad det er: </b>Et sitemap er en indholdsfortegnelse over alle jeres sider, som robotterne kan læse, så de hurtigt finder det hele, også nye sider.</p>
-      <p class="fund">Sitemap fundet og gyldigt.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Sitemappet er crawlernes indholdsfortegnelse; uden det opdages nye sider langsomt.</p>
-    </div>
-    <div class="pts">8/8 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>sitemap.xml</h3>
+    <p class="hvad"><b>Hvad det er: </b>Et sitemap er en indholdsfortegnelse over alle jeres sider, som robotterne kan læse, så de hurtigt finder det hele, også nye sider.</p>
+    <p class="fund">Sitemap fundet og gyldigt.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Sitemappet er crawlernes indholdsfortegnelse; uden det opdages nye sider langsomt.</p>
+  </div><div class="pts">8/8 p</div></div>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>robots.txt</h3>
-      <p class="hvad"><b>Hvad det er: </b>robots.txt er den fil, robotterne læser allerførst. Her tjekker vi helt enkelt, om den overhovedet findes på jeres website.</p>
-      <p class="fund">robots.txt findes.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Filen er jeres kontrakt med crawlerne, også de nye AI-crawlere.</p>
-    </div>
-    <div class="pts">5/5 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>robots.txt</h3>
+    <p class="hvad"><b>Hvad det er: </b>robots.txt er den fil, robotterne læser allerførst. Her tjekker vi helt enkelt, om den overhovedet findes på jeres website.</p>
+    <p class="fund">robots.txt findes.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Filen er jeres kontrakt med crawlerne, også de nye AI-crawlere.</p>
+  </div><div class="pts">5/5 p</div></div>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>H1-overskrift og sprogangivelse</h3>
-      <p class="hvad"><b>Hvad det er: </b>H1 er sidens vigtigste overskrift, den der med det samme siger, hvad siden handler om. Sprogangivelse er et skjult mærke, der fortæller, at siden er på dansk, så maskiner ikke er i tvivl.</p>
-      <p class="fund">H1: ja (5/5) · lang-attribut: ja (5/5).</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Tydelig struktur og sprogmarkering hjælper maskiner med at forstå, hvad og for hvem siden er.</p>
-    </div>
-    <div class="pts">10/10 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>H1-overskrift og sprogangivelse</h3>
+    <p class="hvad"><b>Hvad det er: </b>H1 er sidens vigtigste overskrift, den der med det samme siger, hvad siden handler om. Sprogangivelse er et skjult mærke, der fortæller, at siden er på dansk, så maskiner ikke er i tvivl.</p>
+    <p class="fund">H1: ja (5/5) · lang-attribut: ja (5/5).</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Tydelig struktur og sprogmarkering hjælper maskiner med at forstå, hvad og for hvem siden er.</p>
+  </div><div class="pts">10/10 p</div></div>
 
-  <div class="check">
-    <div class="tegn ok">✓</div>
-    <div>
-      <h3>Delingskort (OpenGraph)</h3>
-      <p class="hvad"><b>Hvad det er: </b>Et delingskort er det lille billede med titel og tekst, der dukker op, når nogen deler jeres side på fx LinkedIn eller Facebook, i stedet for bare et nøgent link.</p>
-      <p class="fund">og:title: ja (3/3) · og:description: ja (2/2) · og:image: ja (3/3).</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Deles jeres sider på LinkedIn eller citeres med preview, afgør OG-tags om I ligner en professionel afsender.</p>
-    </div>
-    <div class="pts">8/8 p</div>
-  </div>
+  <div class="check"><div class="tegn ok">✓</div><div>
+    <h3>Delingskort (OpenGraph)</h3>
+    <p class="hvad"><b>Hvad det er: </b>Et delingskort er det lille billede med titel og tekst, der dukker op, når nogen deler jeres side på fx LinkedIn eller Facebook, i stedet for bare et nøgent link.</p>
+    <p class="fund">og:title: ja (3/3) · og:description: ja (2/2) · og:image: ja (3/3).</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Deles jeres sider på LinkedIn eller citeres med preview, afgør OG-tags om I ligner en professionel afsender.</p>
+  </div><div class="pts">8/8 p</div></div>
 
-  <div class="check">
-    <div class="tegn info">i</div>
-    <div>
-      <h3>llms.txt</h3>
-      <p class="hvad"><b>Hvad det er: </b>llms.txt er en ny, endnu uofficiel fil, som nogle foreslår for at guide AI-modeller. Vi viser den til orientering; den tæller ikke med i scoren.</p>
-      <p class="fund">llms.txt findes.</p>
-      <p class="betyd"><b>Derfor betyder det noget: </b>Omdiskuteret standard uden målt effekt hos de store AI-motorer endnu; medtaget til orientering, tæller ikke i scoren.</p>
-    </div>
-    <div class="pts">info</div>
-  </div>
+  <div class="check"><div class="tegn info">i</div><div>
+    <h3>llms.txt</h3>
+    <p class="hvad"><b>Hvad det er: </b>llms.txt er en ny, endnu uofficiel fil, som nogle foreslår for at guide AI-modeller. Vi viser den til orientering; den tæller ikke med i scoren.</p>
+    <p class="fund">llms.txt findes.</p>
+    <p class="betyd"><b>Derfor betyder det noget: </b>Omdiskuteret standard uden målt effekt hos de store AI-motorer endnu; medtaget til orientering.</p>
+  </div><div class="pts">info</div></div>
 
-  <p class="note"><b>Kort sagt:</b> 21-5 har et solidt teknisk fundament (85/100). Det tydeligste hul er struktureret data (0/12) plus et manglende canonical-tag. Det er netop det maskinlæsbare fakta-lag, AI-motorerne læner sig på, så det er det billigste løft med størst effekt. Hvad det betyder i praksis, ses under fanen AI-panel.</p>
+  <p class="note"><b>Kort sagt:</b> 21-5 har et solidt teknisk fundament (85/100). Det tydeligste hul er struktureret data (0/12) plus et manglende canonical-tag, netop det maskinlæsbare fakta-lag AI-motorerne læner sig på. Hvad det betyder i praksis, ses under fanen AI-panel.</p>
 </section>
 
-<!-- ============ FANE 2: AI-PANEL (multi-model) ============ -->
+<!-- ============ FANE 2: AI-PANEL (rigtige søgninger) ============ -->
 <section class="panel" id="p-panel" role="tabpanel" aria-labelledby="t-panel" hidden>
-  <h2>Hvad svarer AI-modellerne, når kunderne spørger?</h2>
-  <p class="sans-list">Jeg stillede de samme købsspørgsmål til de fire modeller en dansk familie reelt bruger, og gemte deres <b>ordrette svar</b>. Du kan folde hvert svar ud nederst. Det er ikke et skøn, det er, hvad modellerne faktisk sagde 1. oktober 2026.</p>
+  <h2>Bliver 21-5 fundet, når folk søger det, de faktisk søger?</h2>
+  <p class="sans-list">Første version brugte brancheord, jeg selv fandt på. Den er skrottet. Denne analyse bygger på <b>hvad folk reelt søger</b> (Google autocomplete + 21-5's egne søgeord fra SimilarWeb), og de spørgsmål er stillet til de faktiske AI-modeller. Svarene kan foldes ud ordret nederst.</p>
+
+  <div class="insight">
+    <h3>Det vigtigste fund: 21-5 bliver kun fundet på deres eget navn</h3>
+    <p>Folk søger ikke "deleejerskab" eller "medejerskab", de ord giver nul forslag i Google. De søger konkret:</p>
+    <p>
+      <span class="kw">andel i feriebolig frankrig</span><span class="kw">andel feriebolig spanien</span><span class="kw">dele feriebolig i udlandet</span><span class="kw">feriebolig i udlandet skat</span><span class="kw">feriebolig mallorca køb</span><span class="kw">køb feriebolig i udlandet</span>
+    </p>
+    <p>Men 21-5's egen hjemmeside rangerer ifølge SimilarWeb næsten <b>kun på brand-søgninger</b>: <span class="kw">21-5</span><span class="kw">21 5</span><span class="kw">beyond</span><span class="kw">ordning hvor du deler 5 huse med 21 familier</span>. De henter altså stort set ingen af de reelle kategori-søgninger selv (~9.500 besøg/md, 100% Danmark, mest direkte + brand-trafik; nærmeste konkurrent iflg. SimilarWeb er myne-homes.com).</p>
+    <p><b>Derfor:</b> i AI-svar er 21-5 stærke, når man kender navnet, men svage, når en ny kunde søger kategorien. De er helt afhængige af, at tredjepart (Nykredit, Jyske Bank, presse) nævner dem.</p>
+  </div>
 
   <div class="verdict">
-    <p class="lead" style="margin-top:0"><b>21-5 er stærkt synlig, men ikke i alle modeller, og taber de brede spørgsmål.</b></p>
-    <p>På det afgørende spørgsmål, <i>"hvilke danske virksomheder tilbyder deleejerskab af ferieboliger i udlandet?"</i>, sætter <b>ChatGPT, Perplexity og Google Gemini alle 21-5 som nr. 1</b> ("den ældste og mest kendte / mest etablerede danske spiller"). <b>Claude udelod derimod 21-5 helt</b> og nævnte MyHomes, Five2one og Domos Plus i stedet. Det er en konkret blind vinkel, der kan lukkes.</p>
-    <p>På troværdighed er modellerne enige: etableret, EY-revideret, 1.500+ familier, ikke et suspekt timeshare-setup, men alle rejser den <b>samme indvending, at gensalg/likviditet kan tage tid</b>. Og på de brede og sammenlignende spørgsmål ("en feriebolig uden selv at eje hele huset", "timeshare vs deleejerskab") er 21-5 svagere, dér fylder Simply Sun, Villa No. 8 og MyHomes mere.</p>
+    <p class="lead" style="margin-top:0"><b>Et brand-fænomen, ikke en kategori-position.</b></p>
+    <p>Spørger man modellerne det, folk faktisk søger, er billedet nøgternt: <b>Claude</b> (kørt neutralt, uden personalisering) nævner <b>slet ikke 21-5 på nogen af kategori-søgningerne</b>, kun når man direkte spørger "hvad er 21-5". <b>Perplexity</b> svinger efter land: <b>nr. 1 på "andel i feriebolig i Frankrig"</b>, men <b>helt væk på Spanien</b> (der fylder Simply Sun, Villa No. 8, Five2one, Mojo). <b>ChatGPT</b> er mest gavmild og tager 21-5 med (Frankrig nr. 2, Spanien nr. 3), men huskede fra sessionen, at vi havde kigget på 21-5, så den er delvist personaliseret.</p>
   </div>
 
   <h2>Model-matrix: er 21-5 med i svaret?</h2>
-  <p class="sans-list">Hver celle viser 21-5's placering i den pågældende models svar.</p>
+  <p class="sans-list">Rigtige søgninger. Hver celle viser 21-5's placering i den pågældende models svar.</p>
   <table class="matrix">
-    <thead><tr><th>Kundens spørgsmål</th><th>ChatGPT</th><th>Perplexity</th><th>Gemini</th><th>Claude</th></tr></thead>
+    <thead><tr><th>Det folk søger på</th><th>ChatGPT</th><th>Perplexity</th><th>Claude</th></tr></thead>
     <tbody>
-      <tr><td>Hvilke danske virksomheder tilbyder deleejerskab?</td><td class="c-top">Nr. 1</td><td class="c-top">Nr. 1</td><td class="c-top">Nr. 1</td><td class="c-no">Ikke nævnt</td></tr>
-      <tr><td>Bedste koncept til Italien/Spanien?</td><td class="c-mid">Nr. 2</td><td class="c-mid">Top-gruppe</td><td class="c-na">ikke kørt</td><td class="c-no">Ikke nævnt</td></tr>
-      <tr><td>Luksus i Toscana/Provence/Mallorca?</td><td class="c-na">ikke kørt</td><td class="c-top">Nr. 1</td><td class="c-na">ikke kørt</td><td class="c-mid">Nr. 3</td></tr>
-      <tr><td>Feriebolig uden selv at eje hele huset?</td><td class="c-na">ikke kørt</td><td class="c-mid">Nr. 4</td><td class="c-na">ikke kørt</td><td class="c-no">Ikke nævnt</td></tr>
-      <tr><td>Er 21-5 troværdig?</td><td class="c-top">Positiv</td><td class="c-top">Positiv</td><td class="c-na">ikke kørt</td><td class="c-mid">Nuanceret</td></tr>
+      <tr><td>Andel i feriebolig i <b>Frankrig</b></td><td class="c-mid">Nr. 2</td><td class="c-top">Nr. 1</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Andel i feriebolig i <b>Spanien</b></td><td class="c-mid">Nr. 3</td><td class="c-no">Ikke nævnt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Dele feriebolig i udlandet</td><td class="c-na">ikke kørt</td><td class="c-mid">Nævnt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Eje uden at købe hele huset</td><td class="c-mid">Nævnt*</td><td class="c-no">Ikke nævnt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Muligheder for køb i udlandet</td><td class="c-na">ikke kørt</td><td class="c-mid">Nævnt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>Køb feriebolig på Mallorca</td><td class="c-na">ikke kørt</td><td class="c-no">Ikke nævnt</td><td class="c-no">Ikke nævnt</td></tr>
+      <tr><td>"Hvad er 21-5?" (brand)</td><td class="c-na">ikke kørt</td><td class="c-na">ikke kørt</td><td class="c-top">Ja</td></tr>
+      <tr><td>"Er 21-5 troværdig?" (brand)</td><td class="c-top">Positiv</td><td class="c-top">Positiv</td><td class="c-mid">Nuanceret</td></tr>
     </tbody>
   </table>
-  <p class="sans-list" style="font-size:13px;color:var(--muted)">"ikke kørt" = spørgsmålet er endnu ikke stillet til netop den model. Jeg kan udvide til fuld dækning (alle spørgsmål på alle fire modeller).</p>
+  <p class="sans-list" style="font-size:12.5px;color:var(--muted)">* ChatGPT-svaret var delvist personaliseret af sessionen. "ikke kørt" = ikke stillet til netop den model. Skat- og lån-søgninger er udeladt: de returnerer rådgivning (revisorer, banker), ingen delekoncepter overhovedet. Google Gemini kunne ikke automatiseres pålideligt og mangler, se metode-noten.</p>
 
   <h2>Svarene, ordret</h2>
 
   <div class="qblock">
-    <div class="qh">"Hvilke danske virksomheder tilbyder deleejerskab af ferieboliger i udlandet?"</div>
-    <div class="qfind">Det vigtigste synligheds-spørgsmål. Tre af fire modeller sætter 21-5 først; Claude mangler jer.</div>
-    <details><summary>ChatGPT <span class="tag top">Nr. 1</span></summary><div class="body">"Hvis vi afgrænser til danske virksomheder, hvor du faktisk køber en ejerandel … især disse aktive aktører: <b>1. 21-5</b> … Det er nok den mest etablerede danske spiller … over 1.500 ejerfamilier og mere end 300 købte boliger … 2. MyHomes … 3. Villa No. 8 … 4. CASAL Co-Living … 5. Domos Plus+." <i>Kilder: 21-5.dk, 21-5.com, MyHomes, Villa No. 8, CASAL.</i></div></details>
-    <details><summary>Perplexity <span class="tag top">Nr. 1</span></summary><div class="body">"Flere danske virksomheder tilbyder i dag deleejerskab … Her er de mest kendte aktører: <b>21-5</b> (21 familier deler 5 boliger), MyHomes (samarbejdspartner med Jyske Bank), Simply Sun …" <i>Kilder: nykredit, jyskebank, simplysun.</i></div></details>
-    <details><summary>Google Gemini <span class="tag top">Nr. 1</span></summary><div class="body">"Porteføljemodellen … <b>21-5</b> — Den ældste og mest kendte aktør på det danske marked. Grundidéen er, at 21 familier ejer 5 ferieboliger sammen … MyHomes … Five2one Estate … Domos Plus … CASAL."</div></details>
-    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… <b>MyHomes</b> … <b>Five2one</b> … <b>Domos Plus</b> … <b>Investering &amp; Feriebolig A/S</b> …" <i>21-5 optræder slet ikke i Claudes svar. Claude trak på andre kilder end de tre øvrige modeller.</i></div></details>
+    <div class="qh">"Hvor kan jeg købe en andel i en feriebolig i Spanien?"</div>
+    <div class="qfind">Den reelle test. Perplexity og Claude nævner slet ikke 21-5; ChatGPT har dem med som nr. 3.</div>
+    <details><summary>ChatGPT <span class="tag mid">Nr. 3</span></summary><div class="body">"… tre relevante muligheder: <b>VIVLA</b> (1/8 af konkret bolig, fra ca. €135.000), <b>MYNE</b> (1/8, ca. €199.000-729.000), <b>21-5</b> (1/21 af fem boliger, Sydspanien indgår i flere foreninger, fra ca. €350k). Vil du have ét fast sted i Spanien: kig først på VIVLA og MYNE. Vil du hellere eje flere ferieboliger: så er 21-5 relevant."</div></details>
+    <details><summary>Perplexity <span class="tag no">Ikke nævnt</span></summary><div class="body">"Danske udbydere med andelsboliger i Spanien: <b>Simply Sun</b>, <b>Villa No. 8</b>, <b>Five2one Estate</b>, <b>Domos Plus+</b>, <b>Mojo Sharing</b>." <i>21-5 optræder ikke.</i></div></details>
+    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… flere muligheder for, hvor du kan købe en andel i en feriebolig i Spanien … danske udbydere …" <i>21-5 optræder ikke i svaret.</i></div></details>
   </div>
 
   <div class="qblock">
-    <div class="qh">"Hvilket delekoncept er bedst til at eje en feriebolig i Italien eller Spanien?"</div>
-    <div class="qfind">21-5 anbefales positivt, men deler toppen med nyere/internationale spillere (MYNE, August).</div>
-    <details><summary>ChatGPT <span class="tag mid">Nr. 2 (anbefalet)</span></summary><div class="body">"… tre modeller: <b>MYNE</b> (hvis I vil have ét fast sted, 1/8, fra ca. €119k), <b>21-5</b> ('den mest interessante alternative model for en dansk familie', fremhæver dansk skatte-/ejerstruktur og dansk ejerbase), <b>August</b>. 'For en dansker ville jeg have 21-5 foran August.'"</div></details>
-    <details><summary>Perplexity <span class="tag mid">Top-gruppe</span></summary><div class="body">"De mest udbredte modeller i Danmark: <b>MyHomes / 21-5</b> – medejer af 5 luksusboliger på 5 destinationer sammen med 21 familier … Bolig-Udland … Simply Sun … Five2one."</div></details>
-    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… MyHomes … Simplysun … Five2one Estate … Amoitalia … Hus i Italien … August …" <i>21-5 optræder ikke i Claudes svar på dette spørgsmål.</i></div></details>
+    <div class="qh">"Hvor kan jeg købe en andel i en feriebolig i Frankrig?"</div>
+    <div class="qfind">21-5's stærkeste kategori-søgning. Perplexity sætter dem nr. 1, ChatGPT nr. 2, Claude mangler dem stadig.</div>
+    <details><summary>Perplexity <span class="tag top">Nr. 1</span></summary><div class="body">"De mest oplagte steder at starte er <b>21-5</b>, MyHomes, Villa No. 8 og Del en Bolig. 21-5: medejerskab af flere ferieboliger i en samlet pakke, blandt andet i Frankrig."</div></details>
+    <details><summary>ChatGPT <span class="tag mid">Nr. 2</span></summary><div class="body">"… tre modeller: <b>Lazazu</b> (1/8 af én bolig, Côte d'Azur/Paris), <b>21-5</b> (1/21 af 5 boliger, Sydfrankrig/Chamonix/Paris fylder meget i porteføljen), <b>August</b> (high-end collection)."</div></details>
+    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… flere muligheder for at købe en andel i en feriebolig i Frankrig …" <i>21-5 optræder ikke.</i></div></details>
   </div>
 
   <div class="qblock">
-    <div class="qh">"Hvem tilbyder luksus-ferieboliger i deleejerskab i Toscana, Provence eller på Mallorca?"</div>
-    <div class="qfind">Perplexity sætter 21-5 først med konkrete porteføljeeksempler; Claude nævner jer som tredje.</div>
-    <details><summary>Perplexity <span class="tag top">Nr. 1</span></summary><div class="body">"<b>21-5</b> … medejerskab i ferielejligheder og villaer på Mallorca, i Toscana og i Sydfrankrig/Provence … Eksempler: lejlighed på La Mola (Port d'Andratx), landvilla ved Montepulciano (Toscana), villa i Montauroux (Provence) … <b>Villa No. 8</b> …"</div></details>
-    <details><summary>Claude <span class="tag mid">Nr. 3</span></summary><div class="body">"<b>Villa No. 8</b> ejer luksusboliger i Toscana, Provence, Mallorca … <b>MyHomes</b> … <b>21-5</b> er en anden udbyder, hvor du kan blive en af de 21 familier, der sammen ejer 5 luksus ferieboliger i Europa … investere i en feriebolig i Toscana."</div></details>
+    <div class="qh">"Er 21-5 en god og troværdig ordning?" (brand)</div>
+    <div class="qfind">Når man kender navnet, er alle modeller enige: etableret og reel, men alle rejser gensalg/likviditet som den ene bekymring.</div>
+    <details><summary>Perplexity <span class="tag top">Positiv</span></summary><div class="body">"21-5 fremstår som en etableret og reel dansk virksomhed, ikke som et klassisk 'suspekt timeshare'-setup … stiftet 2010 … årsrapport revideret af EY uden forbehold … men bør vurderes som fælles ejerskab med begrænset likviditet."</div></details>
+    <details><summary>Claude <span class="tag mid">Nuanceret</span></summary><div class="body">"21-5 etableret 2010, 1.500+ familier, HBH-prisen 2019, 117 ansatte. Erfaringerne er <b>blandede</b>: positive (gensalg med ~50% gevinst i gennemsnit) og negative (udgifter stiger, kan tage flere år at sælge). Trustpilot 3,5-4,5."</div></details>
+    <details><summary>ChatGPT <span class="tag top">Positiv, med forbehold</span></summary><div class="body">"Reel og etableret virksomhed med et gennemprøvet koncept, ikke sketchy … siden 2010, ca. 117 medarbejdere, EY som revisor … Men skel mellem 'er virksomheden troværdig?' og 'er en andel en likvid investering?'."</div></details>
   </div>
 
-  <div class="qblock">
-    <div class="qh">"Hvordan kan min familie få en feriebolig i Sydeuropa uden selv at eje hele huset?"</div>
-    <div class="qfind">Bredt indgangsspørgsmål. Her er 21-5 svagere: nævnt sent hos Perplexity, slet ikke hos Claude. Simply Sun fylder mest.</div>
-    <details><summary>Perplexity <span class="tag mid">Nr. 4</span></summary><div class="body">"… <b>Simply Sun</b> (gennemgående eksempel) … <b>MyHomes</b> … <b>21-5</b>: Tilbyder medejerskab af ferieboliger i Frankrig, Spanien og Italien med forskellige pakker …" <i>Simply Sun bruges som det bærende eksempel gennem hele svaret.</i></div></details>
-    <details><summary>Claude <span class="tag no">Ikke nævnt</span></summary><div class="body">"… fractional ownership … timeshare … populære destinationer som Marbella, Malaga, Costa del Sol …" <i>Rent begrebssvar uden at nævne konkrete danske udbydere.</i></div></details>
-  </div>
-
-  <div class="qblock">
-    <div class="qh">"Er 21-5 en troværdig virksomhed, og hvad siger erfaringerne?"</div>
-    <div class="qfind">Modellerne er enige: etableret og reel, men alle nævner gensalg/likviditet som den ene bekymring.</div>
-    <details><summary>ChatGPT <span class="tag top">Positiv, med forbehold</span></summary><div class="body">"21-5 fremstår som en reel og etableret virksomhed med et gennemprøvet koncept, ikke som noget sketchy setup … siden 2010, ca. 117 medarbejdere, EY som revisor … Men jeg ville skelne mellem 'er virksomheden troværdig?' og 'er en 21-5-andel en ukompliceret og likvid investering?'." <i>Kilder: Proff, 21-5.</i></div></details>
-    <details><summary>Perplexity <span class="tag top">Positiv</span></summary><div class="body">"21-5 fremstår som en etableret og reel dansk virksomhed, ikke som et klassisk 'suspekt timeshare'-setup … stiftet i 2010 … seneste årsrapport revideret af EY uden forbehold … men bør vurderes som fælles ejerskab med begrænset likviditet, ikke en sikker investering." <i>24 kilder.</i></div></details>
-    <details><summary>Claude <span class="tag mid">Nuanceret</span></summary><div class="body">"21-5 A/S etableret i 2010, over 1.500 familier, vandt HBH-prisen 2019, 117 ansatte. Erfaringerne er <b>blandede</b>: positive (omsorg for ejerne, gensalg med ~50% gevinst i gennemsnit over 200 familier) og negative (udgifter stiger, kan tage flere år at sælge). Trustpilot 3,5-4,5."</div></details>
-  </div>
-
-  <h2>Konkurrenter AI anbefaler i jeres kategori</h2>
+  <h2>Konkurrenter AI anbefaler i stedet</h2>
   <div class="card sans-list">
     <ul>
-      <li><b>Simply Sun</b> og <b>MyHomes</b> — går igen i næsten alle modeller; MyHomes nævnes som den nærmeste parallel til jer.</li>
-      <li><b>MYNE</b> og <b>August Collection</b> — fremhæves især af ChatGPT som stærke alternativer (MYNE til "ét fast sted", August som "international 21-5").</li>
-      <li><b>Villa No. 8</b> — stærk på luksus- og enkeltbolig-spørgsmål.</li>
-      <li><b>CASAL Co-Living</b>, <b>Five2one</b>, <b>Domos Plus</b> — nyere danske spillere, der nu dukker op i modellernes svar.</li>
+      <li><b>Simply Sun</b> og <b>MyHomes</b> — går igen i næsten alle svar; MyHomes er iflg. SimilarWeb 21-5's nærmeste parallel.</li>
+      <li><b>VIVLA</b>, <b>MYNE</b>, <b>Lazazu</b> — nye, større spillere som ChatGPT fremhæver først på Spanien/Frankrig (1/8-model, "ét fast sted").</li>
+      <li><b>Villa No. 8</b>, <b>Five2one</b>, <b>Mojo</b>, <b>Domos Plus</b>, <b>CASAL</b>, <b>Del en Bolig</b> — danske spillere, der dukker op, hvor 21-5 ikke gør.</li>
     </ul>
   </div>
 
-  <h2>Anbefalinger: fra synlig til foretrukken</h2>
+  <h2>Anbefalinger</h2>
   <div class="rec"><div class="n">1</div><div class="b">
-    <h3>Luk Claude-blindpletten</h3>
-    <p>Claude udelod 21-5 på det direkte udbyder-spørgsmål og nævnte konkurrenterne i stedet. Claude trækker på andre kilder end ChatGPT/Perplexity/Gemini. Sørg for at 21-5 er stærkt og entydigt beskrevet dér, Claude typisk henter fra (Wikipedia-niveau fakta, uafhængig omtale, struktureret data), så I også kommer med, når en kunde spørger Claude.</p>
+    <h3>Byg indhold på det, folk faktisk søger</h3>
+    <p>21-5 rangerer kun på deres eget navn. De reelle søgninger ("andel i feriebolig i Spanien", "dele feriebolig i udlandet", "feriebolig i udlandet skat") fanger de ikke. Lav lande- og emne-sider målrettet netop de søgninger, så AI har 21-5-indhold at trække på, ikke kun konkurrenternes.</p>
   </div></div>
   <div class="rec"><div class="n">2</div><div class="b">
-    <h3>Afvæbn gensalgs-indvendingen, modellerne rejser den hver gang</h3>
-    <p>Alle modeller nævner likviditet/gensalg som den ene bekymring. I har reelt gode tal (over 200 familier har gensolgt med knap 50% gevinst i gennemsnit). Lav tydeligt, citervenligt indhold om netop gensalg, så modellerne gengiver DET i stedet for at gætte på "det kan tage flere år".</p>
+    <h3>Luk Spanien-hullet, det er størst</h3>
+    <p>På "andel i feriebolig i Spanien" er 21-5 væk hos både Perplexity og Claude, mens Simply Sun, Villa No. 8 og VIVLA ejer svaret. 21-5 HAR Sydspanien i porteføljen, men fortæller det ikke tydeligt nok til, at AI fanger det. En stærk Spanien-side er det hurtigste løft.</p>
   </div></div>
   <div class="rec"><div class="n">3</div><div class="b">
-    <h3>Vind de brede og sammenlignende spørgsmål</h3>
-    <p>På "feriebolig uden selv at eje hele huset" og "timeshare vs deleejerskab" er I svagere, dér fylder Simply Sun og Villa No. 8. Skriv jeres egne guide-/sammenligningssider, så I også fanges tidligt i købsrejsen, ikke kun når nogen allerede søger "danske delekoncepter".</p>
+    <h3>Luk schema-hullet (0/12 i den tekniske analyse)</h3>
+    <p>Struktureret data (JSON-LD) mangler helt. Det er det maskinlæsbare fakta-lag, der hjælper især Claude, som i dag udelader 21-5 på hele kategorien, med at forstå og citere jer. Tilføj Organization + FAQ + canonical.</p>
   </div></div>
   <div class="rec"><div class="n">4</div><div class="b">
-    <h3>Luk schema-hullet (0/12 i den tekniske analyse)</h3>
-    <p>21-5.dk har ingen struktureret data (JSON-LD). Det er det maskinlæsbare fakta-lag, modellerne bruger til at forstå og citere en virksomhed, og en direkte hjælp til at komme med i fx Claudes svar. Tilføj Organization + FAQ + canonical. Billigt løft, bred effekt.</p>
+    <h3>Forankr analysen i deres egne tal</h3>
+    <p>Den definitive liste over, hvad folk reelt søger for at finde 21-5, ligger i deres Google Search Console. Henter vi den, kan spørgsmålene gøres 100% præcise frem for bygget på eksterne estimater.</p>
   </div></div>
 
-  <p class="note"><b>Metode:</b> Spørgsmålene er stillet til de faktiske modeller 1. oktober 2026. ChatGPT, Perplexity og Google Gemini i browseren på en almindelig brugerkonto; Claude via Anthropics API med websøgning. Hver celle er modellens eget, ordrette svar (foldet ud ovenfor, forkortet for læsbarhed). Forbehold: ChatGPT og Gemini svarede på en indlogget konto, hvilket kan personalisere svaret let; modellerne opdaterer løbende, så det er et øjebliksbillede; og ikke alle spørgsmål er kørt på alle fire modeller endnu (markeret "ikke kørt" i matricen).</p>
+  <p class="note"><b>Metode:</b> Spørgsmålene er bygget på Google autocomplete + 21-5's estimerede søgeord (SimilarWeb) og stillet til modellerne 1.-5. november 2026. ChatGPT og Perplexity i browseren på en almindelig brugerkonto; Claude via Anthropics API med websøgning (den mest neutrale måling, uden personalisering eller session-hukommelse). Forbehold: ChatGPT/Perplexity på indlogget konto kan personalisere let (ChatGPT huskede fx vores session); modellerne opdaterer løbende, så det er et øjebliksbillede; Google Gemini kunne ikke automatiseres pålideligt og mangler i denne version; skat-/lån-søgninger er udeladt, da de ikke returnerer delekoncepter. Den definitive søgeords-liste kræver adgang til 21-5's Search Console.</p>
 </section>
 
 <p class="foot">spaike.dk · Commercial impact, powered by AI</p>
