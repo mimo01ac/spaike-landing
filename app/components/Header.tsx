@@ -13,14 +13,11 @@ export default function Header() {
           </span>
         </a>
         <nav className="hidden lg:flex items-center gap-8 font-sans text-[13px] text-ink">
-          <a href="/#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">
-            Hvad vi bygger
+          <a href="/ydelser" data-track-event="ydelser_menu_click" className="hover:text-amber-dark transition-colors">
+            Ydelser
           </a>
           <a href="/#discovery" className="hover:text-amber-dark transition-colors">
             Discovery
-          </a>
-          <a href="/#byg-selv" className="hover:text-amber-dark transition-colors">
-            Byg selv
           </a>
           <a href="/tilskud" data-track-event="tilskud_menu_click" className="hover:text-amber-dark transition-colors">
             Tilskud

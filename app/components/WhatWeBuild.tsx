@@ -60,6 +60,16 @@ export default function WhatWeBuild() {
           </div>
         ))}
       </div>
+
+      <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-7">
+        <a
+          href="/ydelser"
+          data-track-event="ydelser_forside_click"
+          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-wider uppercase text-ink hover:text-amber-dark transition-colors"
+        >
+          Se alle ydelser →
+        </a>
+      </div>
     </section>
   );
 }

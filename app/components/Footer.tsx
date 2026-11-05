@@ -22,7 +22,7 @@ export default function Footer() {
             </p>
             <ul className="font-serif text-base space-y-2">
               {/* Rod-relative: Footer genbruges på field note-sider. */}
-              <li><a href="/#hvad-vi-bygger" className="hover:text-amber-dark transition-colors">Hvad vi bygger</a></li>
+              <li><a href="/ydelser" data-track-event="ydelser_footer_click" className="hover:text-amber-dark transition-colors">Ydelser</a></li>
               <li><a href="/#discovery" className="hover:text-amber-dark transition-colors">Discovery</a></li>
               <li><a href="/tilskud" data-track-event="tilskud_footer_click" className="hover:text-amber-dark transition-colors">Tilskudstjek</a></li>
               <li><a href="/#manifest" className="hover:text-amber-dark transition-colors">Manifest</a></li>
