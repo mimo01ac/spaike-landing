@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tilskud`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/ai-innovationsdag/ideer`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/ai-innovationsdag/guide`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/field-notes/hands-on-copilot-training`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/field-notes/vibe-coding-guide`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/field-notes/anthropic-sales-playbook`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/privatlivspolitik`, changeFrequency: "yearly", priority: 0.3 },
