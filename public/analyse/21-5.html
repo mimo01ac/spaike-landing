@@ -105,6 +105,9 @@
   <button class="tab" id="t-panel" role="tab" aria-selected="false" aria-controls="p-panel" onclick="visFane('panel')">
     AI-panel<small>Bliver I fundet, når folk søger?</small>
   </button>
+  <button class="tab" id="t-intl" role="tab" aria-selected="false" aria-controls="p-intl" onclick="visFane('intl')">
+    Internationale markeder<small>Hvad sker der på DE/UK/FR/NL?</small>
+  </button>
 </div>
 
 <!-- ============ FANE 1: TEKNISK ============ -->
@@ -279,12 +282,78 @@
   <p class="note"><b>Metode:</b> Spørgsmålene er bygget på Google autocomplete + 21-5's estimerede søgeord (SimilarWeb) og stillet til modellerne 1.-5. november 2026. ChatGPT og Perplexity i browseren på en almindelig brugerkonto; Claude via Anthropics API med websøgning (den mest neutrale måling, uden personalisering eller session-hukommelse). Forbehold: ChatGPT/Perplexity på indlogget konto kan personalisere let (ChatGPT huskede fx vores session); modellerne opdaterer løbende, så det er et øjebliksbillede; Google Gemini kunne ikke automatiseres pålideligt og mangler i denne version; skat-/lån-søgninger er udeladt, da de ikke returnerer delekoncepter. Den definitive søgeords-liste kræver adgang til 21-5's Search Console.</p>
 </section>
 
+<!-- ============ FANE 3: INTERNATIONALE MARKEDER ============ -->
+<section class="panel" id="p-intl" role="tabpanel" aria-labelledby="t-intl" hidden>
+  <h2>Hvad sker der, når 21-5 går international?</h2>
+  <p class="sans-list">21-5 vil ind på Tyskland, UK, Frankrig og Holland. Men AI svarer på <b>søgesproget</b> og læner sig på <b>lokale</b> kilder, så den danske styrke (Nykredit, Jyske Bank, dansk presse) følger ikke med. Jeg stillede derfor de samme kategori-søgninger på tysk, engelsk, fransk og hollandsk til Claude (neutral).</p>
+
+  <div class="insight">
+    <h3>Internationalt er 21-5 stort set usynlig i AI</h3>
+    <p>På de nye markeder forsvinder både 21-5 og de danske konkurrenter. I stedet dominerer en <b>større, international liga</b>, anført af <b>MYNE</b> (Berlin-startup, går igen i hvert eneste marked), efterfulgt af <b>Pacaso</b>, <b>August</b>, <b>VIVLA</b> og <b>Lazazu</b>, plus lokale som Immo-Axess (FR) og Kocomo (NL).</p>
+    <p><b>Konsekvens:</b> 21-5 kan ikke genbruge deres danske AI-synlighed i udlandet. Hvert marked er en separat AEO-kamp, der kræver indhold og autoritet på det lokale sprog.</p>
+  </div>
+
+  <h2>Er 21-5 med i svaret, pr. marked?</h2>
+  <table class="matrix">
+    <thead><tr><th>Marked</th><th>21-5 nævnt?</th><th>Hvem dominerer i AI-svaret</th></tr></thead>
+    <tbody>
+      <tr><td>🇩🇪 Tyskland</td><td class="c-mid">Delvist (1 af 2)</td><td style="text-align:left">MYNE (førende), MyHomes, Lazazu, Pacaso</td></tr>
+      <tr><td>🇬🇧 UK / engelsk</td><td class="c-no">Nej (0 af 2)</td><td style="text-align:left">MYNE, VIVLA, Pacaso, August</td></tr>
+      <tr><td>🇫🇷 Frankrig</td><td class="c-no">Nej (0 af 2)</td><td style="text-align:left">Immo-Axess, VIVLA, Pacaso, MYNE, August</td></tr>
+      <tr><td>🇳🇱 Holland</td><td class="c-no">Næsten ikke (1 af 2, sent)</td><td style="text-align:left">Fractional Group, Kocomo, Pacaso, August, MYNE</td></tr>
+    </tbody>
+  </table>
+  <p class="sans-list" style="font-size:12.5px;color:var(--muted)">To søgninger pr. marked, stillet på det lokale sprog. Til sammenligning: på dansk er 21-5 nr. 1 på brand-søgninger og nr. 1-2 på "andel i feriebolig i Frankrig".</p>
+
+  <h2>Svarene, ordret (uddrag)</h2>
+
+  <div class="qblock">
+    <div class="qh">🇩🇪 "Wo kann ich einen Anteil an einer Ferienimmobilie in Spanien kaufen?"</div>
+    <div class="qfind">MYNE (Berlin) er det første svar. 21-5 er med på den bredere "Miteigentum Ferienhaus"-søgning, men ikke her.</div>
+    <details><summary>Claude (tysk) <span class="tag mid">21-5 delvist</span></summary><div class="body">"… <b>1. MYNE Homes</b> (Berliner Start-up DFW Verwaltungs GmbH) … Miteigentumsanteile ab 109.000 Euro … <b>MyHomes</b>, <b>Lazazu</b>, <b>Pacaso</b>." <i>På "Miteigentum Ferienhaus" nævnes 21-5 ("2008 in Dänemark gegründet") sammen med MYNE og MyHomes.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">🇬🇧 "Where can I buy a share in a holiday home in Spain?"</div>
+    <div class="qfind">21-5 optræder ikke. Internationale spillere ejer svaret.</div>
+    <details><summary>Claude (engelsk) <span class="tag no">Ikke nævnt</span></summary><div class="body">"… <b>1. MYNE</b> A Berlin-based company offering managed co-ownership of holiday homes across Europe, including Spain (Mallorca, Costa Blanca, Ibiza, Tenerife) … <b>VIVLA</b>, <b>Pacaso</b>, <b>August</b>." <i>21-5 optræder ikke i nogen af de to engelske svar.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">🇫🇷 "Où acheter une part dans une résidence secondaire en Espagne?"</div>
+    <div class="qfind">21-5 optræder ikke. Lokale og internationale spillere fylder.</div>
+    <details><summary>Claude (fransk) <span class="tag no">Ikke nævnt</span></summary><div class="body">"… <b>Immo-Axess</b> … <b>VIVLA</b>, <b>Pacaso</b>, <b>MYNE</b>, <b>August</b>, <b>Lazazu</b>." <i>21-5 optræder ikke; den anden franske søgning endte endda på klassisk boligbytte, ikke deleejerskab.</i></div></details>
+  </div>
+
+  <div class="qblock">
+    <div class="qh">🇳🇱 "Waar kan ik een aandeel in een vakantiewoning kopen?"</div>
+    <div class="qfind">21-5 nævnes kun én gang, sent. Kocomo, Pacaso, August og MYNE fylder.</div>
+    <details><summary>Claude (hollandsk) <span class="tag no">Næsten ikke</span></summary><div class="body">"… <b>1. Fractional Group</b> … <b>2. Kocomo</b> … <b>Pacaso</b>, <b>August</b>, <b>MYNE</b>." <i>21-5 optræder kun i det ene af to svar.</i></div></details>
+  </div>
+
+  <h2>Anbefaling: AEO pr. marked, ikke ét sprog</h2>
+  <div class="rec"><div class="n">1</div><div class="b">
+    <h3>Unik optimering til hvert målmarked</h3>
+    <p>Din intuition er rigtig: der skal unik optimering til hvert marked. 21-5 skal have indhold på det lokale sprog (DE/EN/FR/NL), lokal struktureret data (entitet pr. land) og lokal tredjeparts-autoritet (lokal presse, lokale banker, lokale "bedste delekoncept"-lister). Ellers er de usynlige i AI netop der, hvor de vil vokse.</p>
+  </div></div>
+  <div class="rec"><div class="n">2</div><div class="b">
+    <h3>MYNE er den internationale konkurrent at måle sig mod</h3>
+    <p>På dansk er konkurrenterne Simply Sun og MyHomes. Internationalt er det MYNE (Berlin), Pacaso og August, større, velfinansierede spillere, der allerede ejer AI-svaret på tværs af sprog. Benchmarket skifter, når markedet skifter.</p>
+  </div></div>
+  <div class="rec"><div class="n">3</div><div class="b">
+    <h3>Mål synligheden pr. marked løbende</h3>
+    <p>Denne måling bør køres pr. målmarked (de rigtige lokale søgninger + lokale konkurrent-kort) og gentages, så I kan se effekten af den lokale optimering over tid. Det er en større analyse end den danske alene, og den rigtige, når ekspansionen er i gang.</p>
+  </div></div>
+
+  <p class="note"><b>Metode:</b> Kategori-søgningerne er stillet på tysk, engelsk, fransk og hollandsk (to pr. marked) til Claude via Anthropics API med websøgning, 5. november 2026, neutralt og uden personalisering. Et øjebliksbillede; modellerne opdaterer løbende. En fuld markeds-analyse ville også køre ChatGPT, Perplexity og Gemini pr. sprog og bruge lokale autocomplete-søgninger frem for oversatte.</p>
+</section>
+
 <p class="foot">spaike.dk · Commercial impact, powered by AI</p>
 </div>
 
 <script>
   function visFane(navn){
-    var faner = {teknisk:"p-teknisk", panel:"p-panel"};
+    var faner = {teknisk:"p-teknisk", panel:"p-panel", intl:"p-intl"};
     for (var key in faner){
       var valgt = key === navn;
       document.getElementById(faner[key]).hidden = !valgt;
@@ -294,6 +363,7 @@
     window.scrollTo({top:0, behavior:"instant"});
   }
   if (location.hash === "#panel") visFane("panel");
+  if (location.hash === "#intl") visFane("intl");
 </script>
 </body>
 </html>
