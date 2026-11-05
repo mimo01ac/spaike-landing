@@ -5,95 +5,94 @@ import AgentFlow from "../../components/field-notes/illustrations/AgentFlow";
 
 /*
  * ────────────────────────────────────────────────────────────────────────
- * DECISIONS WAITING ON MICHAEL (spec §9). Built with clear placeholders.
- * Do not guess these; confirm before go-live.
- *   1. PRICE: default below is "Pricing on request" (no invented number).
- *      Swap for "From DKK X" if you want a public anchor. See PRICE_TODO.
- *   2. LANGUAGE: English by default (matches LinkedIn + other field notes).
- *      A Danish variant can live at /field-notes/hands-on-copilot-training-da.
- *   3. SLUG: /field-notes/hands-on-copilot-training. Change the file + index
- *      + sitemap + OG url if you want something else.
- *   4. PRE-INTERVIEW: described as a light preparation step in §"How it works".
- *      Promote it to a headline feature if you want it to carry more weight.
- *   5. LEAD MAGNET: the compendium is described, not gated. If you want it as
- *      an email-gated download, wire a form where the COMPENDIUM_TODO note is.
+ * BESLUTNINGER (spec §9). Bygget med tydelige placeholders hvor de mangler.
+ *   1. PRIS: default nedenfor er "Efter aftale" (intet opfundet tal).
+ *      Skift til "Fra DKK X" hvis du vil have et offentligt anker. Se PRICE_TODO.
+ *   2. SPROG: dansk (afklaret 2026-11-05, matcher resten af spaike.dk og den
+ *      danske målgruppe). En engelsk variant kan ligge paa et -en-slug.
+ *   3. SLUG: /field-notes/hands-on-copilot-training. Aendr fil + index
+ *      + sitemap + OG-url hvis du vil have noget andet.
+ *   4. FORINTERVIEW: beskrevet som et let forberedelsestrin i §"Saadan foregaar det".
+ *      Loeft det til en fremhaevet feature hvis det skal baere mere vaegt.
+ *   5. LEAD MAGNET: kompendiet er beskrevet, ikke gated. Vil du have det som
+ *      en email-gated download, saa laeg en formular hvor COMPENDIUM_TODO staar.
  * ────────────────────────────────────────────────────────────────────────
  */
 
 export const metadata: Metadata = {
-  title: "Hands-on Copilot training | SpAIke",
+  title: "Hands-on Copilot-træning | SpAIke",
   description:
-    "A three-hour, hands-on Copilot session for teams that have the license but not the habit. Built on your own tasks, so people leave with agents that draft real work, and the judgement to check it.",
+    "Et praktisk Copilot-forløb på tre timer for teams der har licensen, men ikke vanen. Bygget på jeres egne opgaver, så folk går hjem med agenter der laver udkast til rigtigt arbejde, og dømmekraften til at tjekke det.",
   alternates: {
     canonical: "/field-notes/hands-on-copilot-training",
   },
   openGraph: {
-    title: "From chat to your own agents, built on your team's real work",
+    title: "Fra chat til jeres egne agenter, bygget på teamets eget arbejde",
     description:
-      "A three-hour, hands-on Copilot session for teams that have the license but not the habit. Agents that draft meeting briefs, minutes and presentations from your own material. AI drafts, you review, decide and hit send.",
+      "Et praktisk Copilot-forløb på tre timer for teams der har Copilot, men ikke har fundet hvor det passer ind. Agenter der laver udkast til mødebriefs, referater og præsentationer fra jeres eget materiale. AI laver udkastet, I retter, beslutter og sender.",
     type: "article",
-    locale: "en_US",
+    locale: "da_DK",
     url: "https://www.spaike.dk/field-notes/hands-on-copilot-training",
     images: [
       {
         url: "/og/hands-on-copilot-training.png",
         width: 1200,
         height: 630,
-        alt: "Hands-on Copilot training: from chat to your own agents",
+        alt: "Hands-on Copilot-træning: fra chat til jeres egne agenter",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "From chat to your own agents, built on your team's real work",
+    title: "Fra chat til jeres egne agenter, bygget på teamets eget arbejde",
     description:
-      "A three-hour, hands-on Copilot session for teams that have Copilot but have not found where it fits the working day.",
+      "Et praktisk Copilot-forløb på tre timer for teams der har Copilot, men ikke har fundet hvor det passer ind i hverdagen.",
     images: ["/og/hands-on-copilot-training.png"],
   },
 };
 
-const MEETING_BRIEF = `You prepare me for a client meeting. You produce one short, internal, one-page brief so I walk in prepared. The brief is a draft for my eyes only, not something to send out.
+const MEETING_BRIEF = `Du forbereder mig til et kundemøde. Du laver ét kort, internt mødebrief på én side, så jeg møder velforberedt op. Briefet er et udkast, kun til mine øjne, ikke noget der skal sendes ud.
 
-Work in this order:
-1. Find the meeting in my calendar (time, place, attendees). If several could match, ask me which one.
-2. Find the most recent mail with this client, and what they asked for or raised.
-3. Find what I promised them ("I will send", "we will come back to you").
-4. Find internal notes relevant to this client.
-5. Use web search only for general market context, and always name the source.
+Sådan finder du stoffet:
+1. Find mødet i min kalender (tid, sted, deltagere). Er der flere mulige, så spørg kort hvilket.
+2. Find de seneste mails med kunden, og hvad kunden har bedt om eller spurgt om.
+3. Find det, jeg selv har lovet ("jeg sender", "vi vender tilbage").
+4. Find interne noter, der er relevante for kunden.
+5. Brug kun websøgning til generelle markedsforhold, og angiv altid kilden.
 
-Write the brief in this fixed order, kept short:
-- Meeting: date, time, place, attendees
-- Status: 2 to 3 lines on the client and the occasion
-- What they asked for: bullets, each with its source (mail + date)
-- What we promised: bullets with a deadline where one is stated
-- Suggested agenda: 3 to 5 points in a natural order
-- Questions to ask: 3 to 5 open questions
-- Needed before the meeting: figures or documents, with [MISSING: ...] if not found in the sources
+Skriv briefet i denne faste rækkefølge, kort:
+- Møde: dato, tid, sted, deltagere
+- Status: 2 til 3 linjer om kunden og anledningen
+- Det kunden har bedt om: punkter, hvert med kilde (mail + dato)
+- Det vi har lovet: punkter med frist, hvis den fremgår
+- Forslag til dagsorden: 3 til 5 punkter i en naturlig rækkefølge
+- Spørgsmål at stille: 3 til 5 åbne spørgsmål
+- Klar før mødet: tal eller oversigter, med [MANGLER: ...] hvis de ikke findes i kilderne
 
-Rules:
-- Never invent figures, amounts, dates or agreements. If it is not in the sources, write [MISSING: ...].
-- The brief gathers facts and prepares the conversation. It does not give advice.
-- Keep it internal. No client details go into anything that leaves the building.
-- End with "Sources:" and a list of the mails and notes you used.`;
+Regler:
+- Opfind aldrig tal, beløb, datoer eller aftaler. Står det ikke i kilderne, så skriv [MANGLER: ...].
+- Briefet samler fakta og forbereder dialogen. Det giver ikke rådgivning.
+- Hold det internt. Ingen kundeoplysninger i noget, der skal ud af huset.
+- Afslut med "Kilder:" og en liste over de mails og noter, du har brugt.`;
 
-const MINUTES = `You turn rough meeting notes, a Teams transcript, or pasted text into clean minutes plus a follow-up. Everything you produce is a draft that a person reads before anything is shared. If it is unclear which meeting it is, ask me briefly.
+const MINUTES = `Du gør rå mødenoter, et Teams-transskript eller indsat tekst til et rent referat plus opfølgning. Alt du laver er et udkast, som et menneske læser igennem, før det deles. Er det uklart hvilket møde, så spørg kort.
 
-Deliver in this fixed order:
-1. Minutes
-   - Meeting: name, date, time
-   - Attendees, and apologies
-   - Decisions: numbered, one line each, phrased as a decision ("Decided: ...")
-   - Discussed: short points with no decision
-   - Tasks: a table with the columns What, Who, Deadline
-   - Next meeting: date and time if it is stated
-2. A draft follow-up mail to the attendees: short, with the decisions and tasks. To be approved and sent by a person.
-3. Suggested calendar entries: the next meeting and key deadlines, as text. Do not create them yourself.
-4. Open points: anything in the notes that is ambiguous or missing an owner or deadline.
+Leverance i denne faste rækkefølge:
+1. Referat
+   - Møde: navn, dato, tid
+   - Deltagere, og afbud
+   - Beslutninger: nummereret, én linje hver, formuleret som en beslutning ("Besluttet: ...")
+   - Drøftet: korte punkter uden beslutning
+   - Opgaver: en tabel med kolonnerne Hvad, Hvem, Frist
+   - Næste møde: dato og tid, hvis det fremgår
+2. Et udkast til opfølgningsmail til deltagerne: kort, med beslutninger og opgaver. Skal godkendes og sendes af et menneske.
+3. Forslag til kalenderaftaler: næste møde og vigtige frister, som tekst. Opret dem ikke selv.
+4. Uklarheder: ting i noterne der er tvetydige eller mangler en ejer eller frist.
 
-Rules:
-- Write only what is in the source. Never guess names, figures, deadlines or decisions. If something is missing, write [MISSING: ...] and list it under Open points.
-- Keep decisions and discussion separate. An opinion is not a decision.
-- Never send anything yourself, and never create calendar entries yourself.`;
+Regler:
+- Skriv kun det, der står i kilden. Gæt aldrig navne, tal, frister eller beslutninger. Mangler noget, så skriv [MANGLER: ...] og nævn det under Uklarheder.
+- Hold beslutninger og drøftelser adskilt. En mening er ikke en beslutning.
+- Send aldrig noget selv, og opret aldrig kalenderaftaler selv.`;
 
 export default function HandsOnCopilotTraining() {
   return (
@@ -101,26 +100,26 @@ export default function HandsOnCopilotTraining() {
       {/* DATELINE */}
       <div className="flex justify-between items-center pb-3.5 mb-8 border-b border-rule font-mono text-[11px] font-medium tracking-wider uppercase text-muted">
         <span className="text-ink">SpAIke / Field Notes / №&nbsp;02</span>
-        <span className="text-amber-dark">7&nbsp;min read</span>
+        <span className="text-amber-dark">7&nbsp;min læsning</span>
       </div>
 
       {/* HERO */}
       <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-4">
-        Hands-on Copilot training
+        Hands-on Copilot-træning
       </div>
       <h1 className="font-serif font-semibold text-[36px] md:text-[54px] leading-[1.08] tracking-tight text-ink mb-6">
-        From chat to your own agents,{" "}
+        Fra chat til jeres egne agenter,{" "}
         <em className="italic font-medium text-amber-dark">
-          built on your team&apos;s real work
+          bygget på teamets eget arbejde
         </em>
       </h1>
 
       {/* DECK */}
       <p className="font-serif text-[22px] italic leading-[1.45] text-ink-soft mb-8 max-w-[640px]">
-        A three-hour, hands-on session for teams that have Copilot but have not
-        found where it fits the working day. Three hours, on your own tasks, not
-        a demo. People leave with agents that draft real work, and the judgement
-        to check it.
+        Et praktisk forløb på tre timer for teams der har Copilot, men ikke har
+        fundet hvor det passer ind i hverdagen. Tre timer, på jeres egne opgaver,
+        ikke en demo. Folk går hjem med agenter der laver udkast til rigtigt
+        arbejde, og dømmekraften til at tjekke dem.
       </p>
 
       {/* PRIMARY CTA */}
@@ -130,19 +129,19 @@ export default function HandsOnCopilotTraining() {
           data-track-event="copilot_training_hero_cta"
           className="inline-flex items-center gap-2 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
         >
-          Book a session →
+          Book et forløb →
         </a>
       </div>
 
       {/* BYLINE */}
       <div className="flex flex-col gap-1.5 font-mono text-[12px] tracking-wider text-muted border-t border-b border-rule py-3.5 mb-12">
-        <span>A field note on how I run the session · SpAIke · 2026</span>
+        <span>En field note om hvordan jeg kører forløbet · SpAIke · 2026</span>
         <span>
-          Written from a recent three-hour session with a client team. Examples
-          are generalised, no client material is shown.
+          Skrevet ud fra et nyligt tre-timers forløb med et kundeteam. Eksempler
+          er generaliseret, intet klient-materiale vises.
         </span>
         <span>
-          By{" "}
+          Af{" "}
           <a
             href="https://spaike.dk"
             className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
@@ -152,44 +151,44 @@ export default function HandsOnCopilotTraining() {
         </span>
       </div>
 
-      {/* ============ THE PROBLEM ============ */}
+      {/* ============ PROBLEMET ============ */}
       <section className="lede">
         <p className="mb-[18px] first-letter:font-serif first-letter:text-[64px] first-letter:font-semibold first-letter:float-left first-letter:leading-[0.9] first-letter:mt-1 first-letter:mr-2 first-letter:-mb-1 first-letter:text-amber-dark">
-          Having Copilot is not the same as using it. Most people open the chat
-          box, ask it to tidy up a mail, and stop there. The license is paid for,
-          the tool sits inside the tools people already work in, and still most
-          of the working day looks exactly the way it did before.
+          Det er ikke det samme at have Copilot som at bruge det. De fleste åbner
+          chatboksen, beder den rette en mail til, og stopper der. Licensen er
+          betalt, værktøjet sidder inde i de programmer folk allerede arbejder i,
+          og alligevel ligner hverdagen stort set sig selv.
         </p>
         <p className="mb-[18px]">
-          That gap is not a tooling problem. A license is not a strategy, and a
-          demo does not change a habit. What changes a habit is sitting down with
-          the work people already recognise, their own mails, meetings and
-          documents, and building something small that drafts a task they do
-          every week.
+          Det hul er ikke et værktøjsproblem. En licens er ikke en strategi, og
+          en demo ændrer ikke en vane. Det der ændrer en vane, er at sætte sig
+          med det arbejde folk allerede kender, deres egne mails, møder og
+          dokumenter, og bygge noget småt der laver udkast til en opgave de har
+          hver uge.
         </p>
         <p className="mb-[18px]">
-          So that is what the session is: three hours, hands-on, on the team&apos;s
-          own tasks. By the end, people have built a small agent, started it
-          themselves, and checked what it produced. The point is the method, so
-          they can do the same with the rest of their work afterwards.
+          Så det er det forløbet er: tre timer, hands-on, på teamets egne
+          opgaver. Når vi er færdige, har folk bygget en lille agent, startet den
+          selv og tjekket hvad den lavede. Pointen er metoden, så de kan gøre det
+          samme med resten af deres arbejde bagefter.
         </p>
       </section>
 
-      {/* ============ HOW THE SESSION WORKS ============ */}
+      {/* ============ SAADAN FOREGAAR DET ============ */}
       <section className="my-16 scroll-mt-10" id="format">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          How the session works
+          Sådan foregår det
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Three hours, hands-on, built around your tasks
+          Tre timer, hands-on, bygget op om jeres opgaver
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 border border-rule rounded overflow-hidden my-8">
           {[
-            { k: "Format", v: "Three hours, hands-on. People work in Copilot the whole time, not watching slides." },
-            { k: "Group", v: "Up to around 20 people, in pairs, so no one works alone." },
-            { k: "Two tracks", v: "A beginner track and an experienced track, so everyone leaves with something they can use." },
-            { k: "Copilot first", v: "Built on the Copilot you already have, inside your own Microsoft environment." },
+            { k: "Format", v: "Tre timer, hands-on. Folk arbejder i Copilot hele vejen, ikke ser på slides." },
+            { k: "Hold", v: "Op til omkring 20 personer, i par, så ingen sidder alene." },
+            { k: "To spor", v: "Et begynder-spor og et øvet-spor, så alle går hjem med noget de kan bruge." },
+            { k: "Copilot-først", v: "Bygget på den Copilot I allerede har, inde i jeres eget Microsoft-miljø." },
           ].map((f, i) => (
             <div
               key={f.k}
@@ -203,103 +202,101 @@ export default function HandsOnCopilotTraining() {
           ))}
         </div>
 
-        {/* PRE-INTERVIEW. TODO(decision 4): promote to a headline feature if wanted. */}
+        {/* FORINTERVIEW. TODO(beslutning 4): loeft til fremhaevet feature hvis oensket. */}
         <div className="border-l-[3px] border-amber px-5 py-4 my-7">
           <div className="font-mono text-[10px] font-medium tracking-widest uppercase text-amber-dark mb-2">
-            Before the day
+            Før dagen
           </div>
           <p className="text-[16px]">
-            I tailor the session before it starts. A short AI pre-interview, a
-            voice agent people talk to for a few minutes, maps the roles in the
-            room and what each person wants to get out of the time. The agenda
-            and the examples are then built on their answers, not on a generic
-            template.
+            Jeg skræddersyr forløbet, før det går i gang. Et kort AI-forinterview,
+            en talende agent folk taler med i et par minutter, kortlægger rollerne
+            i rummet og hvad hver enkelt gerne vil have ud af tiden. Programmet og
+            eksemplerne bygges så på deres svar, ikke på en generisk skabelon.
           </p>
         </div>
 
         <p className="mb-[18px]">
-          Everyone also leaves with a short compendium: the tips and prompts from
-          the day, and a recipe for setting up agents and routines yourself, so
-          the session carries on after I leave.
+          Alle går også hjem med et kort kompendium: dagens tips og prompts, og en
+          opskrift på selv at sætte agenter og rutiner op, så forløbet fortsætter
+          efter jeg er gået.
         </p>
       </section>
 
-      {/* ============ THE THREE LEVELS ============ */}
+      {/* ============ DE TRE NIVEAUER ============ */}
       <section className="my-16 scroll-mt-10" id="levels">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          The mental map
+          Det mentale landkort
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Three levels: from asking, to getting it done, to working differently
+          Tre niveauer: fra at spørge, til at få det gjort, til at arbejde anderledes
         </h2>
         <p className="mb-[18px]">
-          The session opens with a simple map, so the rest of the day hangs
-          together. First you ask a capable assistant. Then you give the
-          assistant a fixed job and the context to do it. In time, you lay out
-          the work itself differently, because part of it now runs on its own.
-          Most teams are at the first level. The session spends most of its time
-          on the second.
+          Forløbet åbner med et enkelt landkort, så resten af dagen hænger sammen.
+          Først spørger I en dygtig assistent. Så giver I assistenten et fast job
+          og konteksten til at gøre det. Med tiden lægger I selve arbejdet
+          anderledes, fordi en del af det nu kører af sig selv. De fleste teams er
+          på det første niveau. Forløbet bruger det meste af tiden på det andet.
         </p>
         <div className="bg-cream-deep border border-rule rounded px-6 py-8 my-8 overflow-hidden">
           <ThreeLevels />
           <p className="font-mono text-[11px] tracking-wider uppercase text-muted text-center mt-3">
-            Ask a smart assistant · then hire it · then lay out the office differently
+            Spørg en dygtig assistent · ansæt den · indret kontoret anderledes
           </p>
         </div>
         <p className="mb-[18px]">
-          The step from chat to agent is not a cleverer model. It is the context
-          you give it. An agent has to be onboarded like a new colleague: access
-          to the tools, knowledge of how the house works, and a clear
-          instruction about the job, what it should do, what it must not, and
-          what a good result looks like.
+          Springet fra chat til agent er ikke en klogere model. Det er den
+          kontekst I giver den. En agent skal onboardes som en ny kollega: adgang
+          til værktøjerne, viden om hvordan huset arbejder, og en klar instruktion
+          om jobbet, hvad den skal, hvad den ikke må, og hvordan et godt resultat
+          ser ud.
         </p>
       </section>
 
-      {/* ============ AGENDA ============ */}
+      {/* ============ PROGRAM ============ */}
       <section className="my-16 scroll-mt-10" id="agenda">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          The agenda
+          Programmet
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          What a session looks like, hour by hour
+          Sådan ser et forløb ud, time for time
         </h2>
 
         <ol className="list-none border-l-2 border-rule pl-6 my-8 space-y-7">
           {[
             {
-              t: "Welcome",
+              t: "Velkomst",
               d: "~10 min",
-              b: "A leader opens: why the team is doing this, and the frame for the time. It lands harder from a partner than from the consultant alone.",
+              b: "En leder åbner: hvorfor teamet gør det her, og rammen for tiden. Det lander stærkere fra en leder end fra konsulenten alene.",
             },
             {
-              t: "Module 1 · How to think about AI",
+              t: "Modul 1 · Sådan tænker I AI",
               d: "~30 min",
-              b: "The three levels (chat, agents, workflows). Context as onboarding. The difference between free chat and your own Copilot, and why Copilot fits a regulated house, where data stays inside your environment.",
+              b: "De tre niveauer (chat, agenter, arbejdsgange). Kontekst som onboarding. Forskellen på gratis chat og jeres egen Copilot, og hvorfor Copilot passer til et reguleret hus, hvor data bliver inden for jeres miljø.",
             },
             {
-              t: "Module 2 · Chat in practice",
+              t: "Modul 2 · Chat i praksis",
               d: "~45 min",
-              b: "Better mails, texts and documents. What makes a good prompt (goal, context, source, expectation) and how to give Copilot access to your own material. Exercise 1: solve a real task in Copilot.",
+              b: "Bedre mails, tekster og dokumenter. Hvad der gør en god prompt (mål, kontekst, kilde, forventning) og hvordan I giver Copilot adgang til jeres eget materiale. Øvelse 1: løs en rigtig opgave i Copilot.",
             },
             {
-              t: "Break",
+              t: "Pause",
               d: "~10 min",
               b: "",
             },
             {
-              t: "Module 3 · Agents and triggers",
-              d: "~45 min · main focus",
-              b: "An agent is a saved instruction with a fixed job. We open the four agents, look at scheduling and triggers, and walk the recipe for building one. Exercise 2: build your first agent.",
+              t: "Modul 3 · Agenter og triggers",
+              d: "~45 min · hovedfokus",
+              b: "En agent er en gemt instruktion med et fast job. Vi åbner de fire agenter, ser på skemalægning og triggers, og går opskriften på at bygge en igennem. Øvelse 2: byg din første agent.",
             },
             {
-              t: "Module 4 · The next level",
+              t: "Modul 4 · Det næste niveau",
               d: "~20 min",
-              b: "Whole workflows, not faster versions of the old ones. A track for people who want to build more themselves. And the point that agents are only as good as the knowledge they are given.",
+              b: "Hele arbejdsgange, ikke hurtigere udgaver af de gamle. Et spor for dem der vil bygge mere selv. Og pointen at agenter kun er så gode som den viden de får.",
             },
             {
-              t: "Module 5 · Safety and getting started",
+              t: "Modul 5 · Tryghed og kom i gang",
               d: "~15 min",
-              b: "What protects you, what you still have to watch yourself, and the first concrete step each person takes this week.",
+              b: "Hvad der beskytter jer, hvad I selv skal holde øje med, og det første konkrete skridt hver enkelt tager i denne uge.",
             },
           ].map((m) => (
             <li key={m.t} className="relative">
@@ -322,55 +319,56 @@ export default function HandsOnCopilotTraining() {
         </ol>
       </section>
 
-      {/* ============ THE AGENTS ============ */}
+      {/* ============ AGENTERNE ============ */}
       <section className="my-16 scroll-mt-10" id="agents">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          The agents we build together
+          Agenterne vi bygger sammen
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Four office jobs, each turned into a small agent
+          Fire kontoropgaver, hver gjort til en lille agent
         </h2>
         <p className="mb-[18px]">
-          These are the four agents I bring to a session. They are ordinary
-          office tasks, not AI showpieces, and they are built from what the team
-          asked for in the pre-interview. Each one does the same thing: it reads
-          the right input, and it drafts. A person reviews, decides, and sends.
+          Det er de fire agenter jeg tager med til et forløb. Det er helt
+          almindelige kontoropgaver, ikke AI-udstillingsvinduer, og de er bygget
+          ud fra det teamet bad om i forinterviewet. De gør alle det samme: de
+          læser det rigtige input, og de laver et udkast. Et menneske retter,
+          beslutter og sender.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
           {[
             {
               tag: "C",
-              title: "Meeting brief",
-              does: "Prepares an adviser before a client meeting.",
+              title: "Mødebrief",
+              does: "Forbereder en rådgiver før et kundemøde.",
               input:
-                "Input: the calendar, the latest mail with the client, what was promised, and relevant internal notes.",
+                "Input: kalenderen, de seneste mails med kunden, hvad der er lovet, og relevante interne noter.",
               out:
-                "Delivers: one short internal one-pager, status, what the client asked for, what was promised, a suggested agenda, and questions to ask.",
+                "Leverer: ét kort internt mødebrief på én side, status, hvad kunden har bedt om, hvad der er lovet, forslag til dagsorden, og spørgsmål at stille.",
             },
             {
               tag: "D",
-              title: "Minutes and follow-up",
-              does: "Turns rough notes or a Teams transcript into clean minutes.",
-              input: "Input: meeting notes, a transcript, or text pasted into the chat.",
+              title: "Referat og opfølgning",
+              does: "Gør rå noter eller et Teams-transskript til et rent referat.",
+              input: "Input: mødenoter, et transskript, eller tekst indsat i chatten.",
               out:
-                "Delivers: structured minutes (decisions, discussion, tasks with owner and deadline), a draft follow-up mail, and suggested calendar entries. It creates and sends nothing itself.",
+                "Leverer: struktureret referat (beslutninger, drøftet, opgaver med ejer og frist), et udkast til opfølgningsmail, og forslag til kalenderaftaler. Den opretter og sender intet selv.",
             },
             {
               tag: "B",
-              title: "Presentation in the house style",
-              does: "Drafts a presentation in your own look and tone.",
-              input: "Input: the topic, audience and length, plus your style and templates.",
+              title: "Præsentation i husets stil",
+              does: "Laver et udkast til en præsentation i jeres eget udtryk og tone.",
+              input: "Input: emne, målgruppe og længde, plus jeres stil og skabeloner.",
               out:
-                "Delivers: an outline, finished slide texts, and a prompt to hand to Copilot in PowerPoint so it can build the slides in the house style.",
+                "Leverer: en disposition, færdige slide-tekster, og en prompt til Copilot i PowerPoint, så den kan bygge selve slidesne i husets stil.",
             },
             {
               tag: "A",
-              title: "Newsletter and client content",
-              does: "Drafts client content in a fixed, measured tone.",
-              input: "Input: notes, a link, or pasted source text, with any figures supplied.",
+              title: "Nyhedsbrev og kundeindhold",
+              does: "Laver udkast til kundeindhold i en fast, nøgtern tone.",
+              input: "Input: stikord, et link, eller indsat kildetekst, med eventuelle tal.",
               out:
-                "Delivers: a draft section in a set structure, with the house disclaimer. Figures come from the input, never guessed, and a checklist for the approver.",
+                "Leverer: et udkast til en sektion i en fast struktur, med husets disclaimer. Tal kommer fra input, aldrig gættet, og en tjekliste til godkenderen.",
             },
           ].map((a) => (
             <div
@@ -395,66 +393,67 @@ export default function HandsOnCopilotTraining() {
         <div className="bg-cream-deep border border-rule rounded px-6 py-8 my-8 overflow-hidden">
           <AgentFlow />
           <p className="font-mono text-[11px] tracking-wider uppercase text-muted text-center mt-3">
-            Input in · a draft out · a person reviews and sends
+            Input ind · et udkast ud · et menneske læser og sender
           </p>
         </div>
       </section>
 
-      {/* ============ YOU STAY IN CONTROL ============ */}
+      {/* ============ I BEVARER KONTROLLEN ============ */}
       <section className="my-16 scroll-mt-10" id="control">
         <div className="bg-ink text-cream px-8 py-10 -mx-2 rounded">
           <div className="font-mono text-[10px] tracking-widest uppercase text-amber mb-4">
-            You stay in control
+            I bevarer kontrollen
           </div>
           <h2 className="font-serif font-medium text-[30px] md:text-[38px] leading-[1.15] text-cream mb-5">
-            AI drafts. You review, decide, and hit send.
+            AI laver udkastet. I retter, beslutter og sender.
           </h2>
           <p className="text-[16px] text-cream/85 mb-4">
-            This is the honest centre of the session, and for a regulated team it
-            is the part that matters most. The agents produce a draft. Nothing
-            leaves the building until a person has read it, corrected it, and
-            chosen to send it. In this session the agents do not act on their own:
-            they hand you text you start and check.
+            Det er den ærlige kerne i forløbet, og for et reguleret team er det
+            den del der betyder mest. Agenterne laver et udkast. Intet forlader
+            huset, før et menneske har læst det, rettet det, og valgt at sende
+            det. I dette forløb handler agenterne ikke af sig selv: de rækker jer
+            en tekst I selv starter og tjekker.
           </p>
           <p className="text-[16px] text-cream/85 mb-4">
-            So checking the output is part of the skill, not an afterthought. One
-            exercise is a set of minutes with three deliberate errors planted in
-            it, and the group practises catching them. It is a small thing that
-            changes how people treat everything the tool produces afterwards.
+            Så det at tjekke output er en del af færdigheden, ikke en eftertanke.
+            Én øvelse er et referat med tre bevidst indlagte fejl, og gruppen
+            træner i at fange dem. Det er en lille ting, der ændrer hvordan folk
+            behandler alt hvad værktøjet laver bagefter.
           </p>
           <p className="text-[16px] text-cream/85">
-            On access: what Copilot can reach depends on your license and setup,
-            not on the fact that you are in a Microsoft tenant. It sees only what
-            the individual already has access to. I say that plainly in the room,
-            because a tool people trust for the wrong reasons is worse than one
-            they understand.
+            Om adgang: hvad Copilot kan tilgå afhænger af jeres licens og
+            opsætning, ikke af at I er i en Microsoft-tenant. Den ser kun det, den
+            enkelte selv har adgang til. Det siger jeg lige ud i rummet, for et
+            værktøj folk stoler på af de forkerte grunde er værre end et de
+            forstår.
           </p>
         </div>
       </section>
 
-      {/* ============ TRY IT YOURSELF ============ */}
+      {/* ============ PROEV DET SELV ============ */}
       <section className="my-16 scroll-mt-10" id="try">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          Try it yourself
+          Prøv det selv
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          Two starter instructions you can use today
+          To start-instruktioner I kan bruge i dag
         </h2>
         <p className="mb-[18px]">
-          You do not need a session to start. Here are two generic versions of
-          the agents above, written so you can paste them into a Copilot agent
-          and adapt them to your own house. They draft only. You review and send.
+          I behøver ikke et forløb for at komme i gang. Her er to generiske
+          udgaver af agenterne ovenfor, skrevet så I kan indsætte dem i en
+          Copilot-agent og tilpasse dem til jeres eget hus. De laver kun udkast.
+          I retter og sender.
         </p>
 
         <StarterPrompt
           name="meeting_brief"
-          summary="Starter instruction · meeting brief"
+          summary="Start-instruktion · mødebrief"
           note={
             <>
-              Paste this into a new Copilot agent (Agent Builder) and give it
-              access to your calendar, mail and files. It reads what was asked
-              and promised, and drafts a one-page brief before the meeting.
-              Replace nothing except the house specifics you want it to respect.
+              Indsæt den i en ny Copilot-agent (Agent Builder) og giv den adgang
+              til jeres kalender, mails og filer. Den læser hvad der blev spurgt
+              om og lovet, og laver et mødebrief på én side før mødet. Tilpas kun
+              de husdetaljer I vil have den til at respektere.
             </>
           }
           prompt={MEETING_BRIEF}
@@ -462,32 +461,32 @@ export default function HandsOnCopilotTraining() {
 
         <StarterPrompt
           name="minutes_follow_up"
-          summary="Starter instruction · minutes and follow-up"
+          summary="Start-instruktion · referat og opfølgning"
           note={
             <>
-              Paste this into a Copilot agent, or use it as a saved prompt in
-              chat. Give it the rough notes or a Teams transcript, and it drafts
-              the minutes, a follow-up mail, and suggested calendar entries. It
-              creates and sends nothing itself.
+              Indsæt den i en Copilot-agent, eller brug den som en gemt prompt i
+              chatten. Giv den de rå noter eller et Teams-transskript, og den
+              laver udkast til referatet, en opfølgningsmail, og forslag til
+              kalenderaftaler. Den opretter og sender intet selv.
             </>
           }
           prompt={MINUTES}
         />
       </section>
 
-      {/* ============ WHAT YOU LEAVE WITH ============ */}
+      {/* ============ HVAD I GAAR HJEM MED ============ */}
       <section className="my-16 scroll-mt-10" id="takeaways">
         <div className="font-mono text-[11px] font-medium tracking-wider uppercase text-amber-dark mb-3.5">
-          What you leave with
+          Hvad I går hjem med
         </div>
         <h2 className="font-serif font-semibold text-[28px] md:text-[36px] leading-[1.15] tracking-tight text-ink mb-6">
-          A method, not just a few prompts
+          En metode, ikke bare et par prompts
         </h2>
         <ul className="list-none space-y-3.5 my-6">
           {[
-            "The method: how to spot a task worth automating, set up a small agent for it, start it yourself, and check what it produces, so you can repeat it on your own work.",
-            "The four agents above as starting points, ready to adapt to your house.",
-            "A short compendium: the day's prompts and tips, plus a recipe for setting up agents and routines yourself.",
+            "Metoden: hvordan man spotter en opgave der er værd at automatisere, sætter en lille agent op, starter den selv, og tjekker hvad den laver, så I kan gentage det på jeres eget arbejde.",
+            "De fire agenter ovenfor som udgangspunkter, klar til at tilpasse jeres hus.",
+            "Et kort kompendium: dagens prompts og tips, plus en opskrift på selv at sætte agenter og rutiner op.",
           ].map((t) => (
             <li key={t} className="relative pl-7 text-[16px] leading-relaxed">
               <span className="absolute left-0 top-[9px] w-2.5 h-2.5 bg-amber rounded-[2px]" />
@@ -495,88 +494,88 @@ export default function HandsOnCopilotTraining() {
             </li>
           ))}
         </ul>
-        {/* COMPENDIUM_TODO(decision 5): to gate the compendium as an email download,
-            add a lead form here instead of describing it above. */}
+        {/* COMPENDIUM_TODO(beslutning 5): vil du email-gate kompendiet som download,
+            saa laeg en lead-formular her i stedet for at beskrive det ovenfor. */}
       </section>
 
-      {/* ============ SMALLER TEAM ============ */}
+      {/* ============ MINDRE TEAM ============ */}
       <section className="my-16 scroll-mt-10" id="smaller-team">
         <div className="border-l-[3px] border-ink px-5 py-4 my-7 bg-cream-deep">
           <div className="font-mono text-[10px] font-medium tracking-widest uppercase text-amber-dark mb-2">
-            For a smaller team
+            For et mindre team
           </div>
           <p className="text-[16px] mb-3">
-            You do not need a full session to use the same approach. If you are a
-            handful of people, or working on your own, pick the one task you
-            repeat most often and build a single agent for it, following the
-            recipe: solve it once in chat, correct it until it is right, write the
-            job down as an instruction, and save it so it runs again.
+            I behøver ikke et helt forløb for at bruge samme tilgang. Er I en
+            håndfuld eller arbejder alene, så vælg den ene opgave I gentager
+            oftest og byg en enkelt agent til den efter opskriften: løs den én
+            gang i chatten, ret den til den er rigtig, skriv jobbet ned som en
+            instruktion, og gem den så den kører igen.
           </p>
           <p className="text-[16px]">
-            The two starter instructions above are a fine place to begin. Start
-            with one task, one agent, one owner.
+            De to start-instruktioner ovenfor er et fint sted at begynde. Start
+            med én opgave, én agent, én ejer.
           </p>
         </div>
       </section>
 
-      {/* ============ CTA / PRODUCT ============ */}
+      {/* ============ CTA / PRODUKT ============ */}
       <section id="book" className="scroll-mt-10">
         <div className="bg-ink text-cream px-9 py-12 mt-[4.5rem] -mx-2 rounded">
           <div className="font-mono text-[10px] tracking-widest uppercase text-amber mb-4">
-            Run this for your team
+            Kør det for jeres team
           </div>
           <h3 className="font-serif font-medium text-[30px] leading-[1.2] text-cream mb-5">
-            If your team has Copilot but has not found where it fits
+            Hvis jeres team har Copilot, men ikke har fundet hvor det passer ind
           </h3>
           <p className="text-[16px] text-cream/85 mb-4">
-            I run this as a practical session built around your own tasks. It
-            suits a team that is in a Microsoft tenant, has Copilot or is close to
-            it, and wants people actually using it in the working day. You get the
-            pre-interview, the three-hour session in two tracks, the four agents
-            as starting points, and the compendium afterwards.
+            Jeg kører det som et praktisk forløb bygget op om jeres egne opgaver.
+            Det passer til et team der er i en Microsoft-tenant, har Copilot eller
+            er tæt på, og gerne vil have folk til faktisk at bruge det i
+            hverdagen. I får forinterviewet, de tre timer i to spor, de fire
+            agenter som udgangspunkter, og kompendiet bagefter.
           </p>
 
-          {/* PRICE_TODO(decision 1): default is "Pricing on request". Swap the
-              block below for a public anchor ("From DKK X") if you decide to. */}
+          {/* PRICE_TODO(beslutning 1): default er "Efter aftale". Skift blokken
+              nedenfor til et offentligt anker ("Fra DKK X") hvis du beslutter det. */}
           <div className="inline-flex items-center gap-3 border border-cream/25 rounded-sm px-4 py-2.5 mb-6">
             <span className="font-mono text-[10px] tracking-widest uppercase text-amber">
-              Pricing
+              Pris
             </span>
             <span className="font-sans text-[15px] text-cream">
-              On request
+              Efter aftale
             </span>
           </div>
 
           <div className="flex gap-4 flex-wrap">
             <a
-              href="mailto:michael@spaike.dk?subject=Hands-on%20Copilot%20training"
+              href="mailto:michael@spaike.dk?subject=Hands-on%20Copilot-tr%C3%A6ning"
               data-track-event="copilot_training_book_click"
               data-track-location="field-notes-copilot-training"
               className="inline-flex items-center gap-2 px-5 py-3 bg-amber text-ink hover:bg-amber-dark hover:text-cream no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
             >
-              Book a session →
+              Book et forløb →
             </a>
             <a
               href="https://spaike.dk"
               data-track-event="copilot_training_more_click"
               className="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
             >
-              More from SpAIke
+              Mere fra SpAIke
             </a>
           </div>
         </div>
       </section>
 
-      {/* ============ ARTICLE FOOTER ============ */}
+      {/* ============ ARTIKEL-FOOTER ============ */}
       <footer className="mt-16 pt-7 border-t border-rule font-mono text-[11px] tracking-wider text-muted leading-[1.7]">
-        A field note from SpAIke on how I run a hands-on Copilot session. Written
-        from a recent three-hour session with a client team. Examples are
-        generalised, and no client material is shown.
+        En field note fra SpAIke om hvordan jeg kører et praktisk Copilot-forløb.
+        Skrevet ud fra et nyligt tre-timers forløb med et kundeteam. Eksempler er
+        generaliseret, og intet klient-materiale vises.
         <br />
         <br />
-        Questions:{" "}
+        Spørgsmål:{" "}
         <a
-          href="mailto:michael@spaike.dk?subject=Hands-on%20Copilot%20training"
+          href="mailto:michael@spaike.dk?subject=Hands-on%20Copilot-tr%C3%A6ning"
           className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
         >
           michael@spaike.dk
@@ -588,7 +587,7 @@ export default function HandsOnCopilotTraining() {
         >
           spaike.dk
         </a>{" "}
-        · Commercial impact, powered by AI.
+        · Commercial impact, drevet af AI.
       </footer>
     </article>
   );
