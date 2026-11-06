@@ -24,7 +24,7 @@ Next.js 14 App Router + Tailwind + TS, hostet på Vercel. Brand og stack-referen
 - Fravalg logges i `DEFERRED.md`, eksterne adgange i `DEPENDENCIES.md`.
 
 ## Fejlsøgning & evidens
-Sidst verificeret: 2026-11-04 (tragt-måling)
+Sidst verificeret: 2026-11-06 (spaike-crm split-brain)
 
 **Logs/telemetri**
 - Serverless-logs: Vercel dashboard → projekt `spaike-landing` → Logs (filtrér på `/api/tilskud`, `/api/innovationsdag/*`, `/api/ai-tjek/*`). Routes logger med præfiks, fx `tilskud chat-fejl:`, `tilskud lead: PB-gem fejlede:`, `Brevo-fejl:`, `CVR-opslag fejlede:`.
@@ -50,6 +50,6 @@ Sidst verificeret: 2026-11-04 (tragt-måling)
 **Kendte gotchas**
 - Frisk Conductor-workspace mangler `.vercel/` og `.env.local` → API-routes giver 500 lokalt indtil env er hentet.
 - Rate-limit er in-memory pr. serverless-instans (best effort).
-- PocketBase (spaike-crm, Fly ARN) var utilgængelig udefra 2026-11-01 ~20:10 UTC til 2026-11-02 12:17 UTC efter en Fly-hændelse i ARN: maskinen svarede indefra, men proxyen gav 502 ("could not find a good candidate"), og genstart hjalp ikke. Løst ved at flytte til ny vært: `fly machine stop` → `fly volumes fork <vol> --require-unique-zone` → `fly machine clone <id> --attach-volume <ny-vol>:/pb/pb_data`. Ny maskine `8e21d5f76ee3d8` på `vol_rkg3n79ep3mw1n64`; den gamle (`08072d9f2974e8`, `vol_rnzxwwxw821pjj8r`) står stoppet som backup og kan slettes efter 2026-11-09. Lead, kontakt og sessioner er fail-soft (8 s timeout i `lib/pocketbase.ts`), men AI-tjekket kræver PocketBase.
+- PocketBase (spaike-crm, Fly ARN) var utilgængelig udefra 2026-11-01 ~20:10 UTC til 2026-11-02 12:17 UTC efter en Fly-hændelse i ARN: maskinen svarede indefra, men proxyen gav 502 ("could not find a good candidate"), og genstart hjalp ikke. Løst ved at flytte til ny vært: `fly machine stop` → `fly volumes fork <vol> --require-unique-zone` → `fly machine clone <id> --attach-volume <ny-vol>:/pb/pb_data`. Opdatering 2026-11-06: en `fly deploy` af spaike-crm fra spaike-pa (release v64, 5/11) genskabte BEGGE maskiner med hvert sit volumen, så proxyen fordelte trafik mellem to forskellige databaser (split-brain): `tilskud_sessioner` lå kun på `8e21d5f76ee3d8` (`vol_vgnq6j88l99wpk04`), mens `08072d9f2974e8` (`vol_4y8lqjly6p1ld2er`) havde en ældre database uden tabellen. Løst 6/11 ved at stoppe `08072…` og slå autostart fra (`fly machine update --autostart=false`). Regel: spaike-crm må kun have ÉN maskine (SQLite); backup-maskiner må ikke blive stående i appen, for `fly deploy` og proxy-autostart tager dem med. Tjek med `fly machines list -a spaike-crm`; test en bestemt maskine med headeren `fly-force-instance-id: <id>`. Snapshot af det gamle volumen `vol_rkg3n79ep3mw1n64` (4/11) udløber ca. 9/11. Lead, kontakt og sessioner er fail-soft (8 s timeout i `lib/pocketbase.ts`), men AI-tjekket kræver PocketBase.
 - Turnstile er ikke konfigureret i prod (nøgler mangler); gaten springer bot-tjek over.
 - CVR-ES (`distribution.virk.dk`) svarer kun på http; status for aktive virksomheder er `NORMAL` (ikke "Aktiv"); små selskaber har ofte hverken ansatte- eller årsværk-interval → forhåndstjek viser "?" og agenten spørger selv. Uden `CVR_USER`/`CVR_PASS` falder opslag tilbage til cvrapi.dk, som er kvote-blokeret fra Vercels IP'er (så sker opslaget i browseren).
