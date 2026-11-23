@@ -99,7 +99,7 @@ export const PROCESSER: Record<
     modul: "sager",
     forslag: [
       "Data flyttes automatisk mellem jeres systemer, så I kun taster tingene ind én gang.",
-      "Fejl bliver fanget, før de breder sig til flere systemer.",
+      "Fejl fanges, før de breder sig til flere systemer.",
       "Overførslerne kører af sig selv om natten.",
     ],
   },
@@ -175,9 +175,9 @@ export const MODENHED_SVAR: { id: ModenhedSvarId; tekst: string; niveau: 0 | 1 |
 ];
 
 const NAESTE_SKRIDT: Record<number, string> = {
-  0: "Næste skridt er at få én tidsrøver til at køre af sig selv, med en medarbejder der godkender.",
+  0: "Næste skridt er at få én tidsrøver til at køre af sig selv, med en medarbejder, der godkender.",
   1: "Næste skridt er at gå fra spredt brug til én arbejdsgang, der kører af sig selv.",
-  2: "Næste skridt er den næste tidsrøver, så I får flere arbejdsgange i drift.",
+  2: "Næste skridt er at tage den næste tidsrøver, så I får flere arbejdsgange i drift.",
   3: "Næste skridt er at holde det kørende og finde den næste tidsrøver.",
 };
 

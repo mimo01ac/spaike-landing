@@ -128,7 +128,9 @@ export default function SnapshotFlow() {
 
   const liste = skridtListe(k);
   const idx = liste.indexOf(skridt);
-  const antalSpm = k.processer.length > 0 ? liste.length - 2 : 9;
+  // "af 9" indtil opgaverne er valgt (højst 9); derefter det faktiske antal, så tallet
+  // ikke skifter, mens man krydser opgaver af.
+  const antalSpm = idx > liste.indexOf("processer") ? liste.length - 2 : 9;
   const fremdrift = Math.round((idx / (liste.length - 1)) * 100);
 
   function gaaTil(ny: Kladde, fra: string) {
@@ -229,7 +231,7 @@ export default function SnapshotFlow() {
         <h1 className={h1}>Hvor går jeres tid, og hvad koster det?</h1>
         <p className="font-sans text-[15.5px] text-ink-soft mt-4 leading-relaxed">
           Højst 9 korte spørgsmål, ca. 2 minutter. Du ser med det samme jeres største tidsrøver i timer om måneden
-          og kroner om året, hvor I står på skalaen fra 0 til 3, og hvilket modul der passer. Du skal ikke oplyse
+          og kroner om året, hvor langt I er med automatisering på en skala fra 0 til 3, og hvilket modul der passer. Du behøver ikke oplyse
           din mail for at se resultatet.
         </p>
         <div className="mt-7">
@@ -346,8 +348,8 @@ export default function SnapshotFlow() {
       <>
         {etiket(idx)}
         <h1 ref={overskrift} tabIndex={-1} className={h1}>
-          Hvor mange timer om ugen bruger I tilsammen på{" "}
-          <span className="text-amber-dark">{procesLabel(p, k.procesAndet).toLowerCase()}</span>?
+          Hvor mange timer om ugen bruger I tilsammen på opgaven{" "}
+          <span className="text-amber-dark">&bdquo;{procesLabel(p, k.procesAndet)}&ldquo;</span>?
         </h1>
         <p className="font-sans text-[13px] text-muted mt-2">Alle, der laver opgaven, tilsammen. Et skøn er fint.</p>
         <div className="flex flex-col gap-2 mt-5">
@@ -365,7 +367,7 @@ export default function SnapshotFlow() {
       <>
         {etiket(idx)}
         <h1 ref={overskrift} tabIndex={-1} className={h1}>
-          Hvad er timelønnen ca. for dem, der laver opgaverne?
+          Hvad er den omtrentlige timeløn for dem, der laver opgaverne?
         </h1>
         <p className="font-sans text-[13px] text-muted mt-2">
           Bruges kun til at regne tiden om til kroner. Du kan rette tallet bagefter.
@@ -426,7 +428,7 @@ export default function SnapshotFlow() {
         </div>
 
         <div className="mt-5 border border-rule bg-white rounded-sm px-5 py-5">
-          <p className="font-mono text-[11px] tracking-widest uppercase text-muted">Antagelser</p>
+          <p className="font-mono text-[11px] tracking-widest uppercase text-muted">Forudsætninger</p>
           <ul className="list-none p-0 m-0 mt-3 space-y-2 font-sans text-[14px] text-ink-soft">
             <li className="flex flex-wrap items-center gap-2">
               <label htmlFor="timeloen" className="text-ink">Timeløn:</label>
@@ -439,14 +441,14 @@ export default function SnapshotFlow() {
               />
               <span>kr. i timen</span>
               <span className="text-muted text-[12.5px]">
-                {loenGyldig ? (a.timeloenErStandard ? "(standard ud fra jeres svar, ret den gerne)" : "(rettet af dig)") : `(skriv et tal mellem 50 og 3.000; jeg regner med ${formatTal(standardTimeloen(svar.timeloen))} kr.)`}
+                {loenGyldig ? (a.timeloenErStandard ? "(ud fra jeres svar, du kan rette tallet)" : "(rettet af dig)") : `(skriv et tal mellem 50 og 3.000; jeg regner med ${formatTal(standardTimeloen(svar.timeloen))} kr.)`}
               </span>
             </li>
             <li>
               <span className="text-ink">Antal personer i virksomheden:</span> {STOERRELSER.find((s) => s.id === a.stoerrelse)?.tekst} (jeres svar). Timerne er jeres samlede skøn for alle, der laver opgaven.
             </li>
             <li>
-              <span className="text-ink">Lønomkostning:</span> timelønnen ganges med 1,25 for pension, ferie og andre lønudgifter, og der regnes med 52 uger om året.
+              <span className="text-ink">Lønomkostning:</span> timelønnen ganges med 1,25 til pension, ferie og andre lønudgifter, og jeg regner med 52 uger om året.
             </li>
           </ul>
         </div>
@@ -489,8 +491,8 @@ export default function SnapshotFlow() {
             <h2 className="font-serif text-[22px] text-ink">Vil du have detaljerne?</h2>
             <p className="font-sans text-[14.5px] text-ink-soft mt-2">
               Du får alle opgaverne regnet igennem, regnestykket i klartekst og tre konkrete måder at fjerne
-              jeres største tidsrøver. Dine svar lander hos mig, så jeg kan vende tilbage, hvis jeg ser noget
-              konkret for jer.
+              jeres største tidsrøver. Dine svar går til mig, så jeg kan vende tilbage, hvis jeg ser noget
+              konkret hos jer.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
               {(
@@ -529,7 +531,7 @@ export default function SnapshotFlow() {
                 {sender ? "Sender..." : "Vis detaljerne →"}
               </button>
               <p className="font-sans text-[12.5px] text-muted">
-                Ingen nyhedsbrev. Læs <a href="/privatlivspolitik" className="underline">privatlivspolitikken</a>.
+                Intet nyhedsbrev. Læs <a href="/privatlivspolitik" className="underline">privatlivspolitikken</a>.
               </p>
             </div>
           </form>
@@ -597,7 +599,7 @@ export default function SnapshotFlow() {
               onClick={() => tragt.bookKlik("detaljer")}
               className="block text-center mt-6 px-6 py-4 bg-amber text-ink hover:bg-amber-dark no-underline font-sans font-semibold text-[15px] rounded-sm transition-colors"
             >
-              Book 20 minutter: se hvordan den kan køre af sig selv →
+              Book 20 minutter og se, hvordan opgaven kan køre af sig selv →
             </a>
           </section>
         )}

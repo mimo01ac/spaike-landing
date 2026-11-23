@@ -12,7 +12,7 @@ import SnapshotFlow from "./_components/SnapshotFlow";
 export const metadata: Metadata = {
   title: "SpAIke Snapshot · Hvor går jeres tid, og hvad koster det?",
   description:
-    "Højst 9 korte spørgsmål på ca. 2 minutter. Se jeres største tidsrøver i timer om måneden og kroner om året, hvor I står på skalaen fra 0 til 3, og hvilket modul der passer. Gratis, uden mail.",
+    "Højst 9 korte spørgsmål på ca. 2 minutter. Se jeres største tidsrøver i timer om måneden og kroner om året, hvor langt I er med automatisering på en skala fra 0 til 3, og hvilket modul der passer. Gratis, uden mail.",
   alternates: { canonical: "/tjek" },
   openGraph: {
     title: "SpAIke Snapshot · Hvor går jeres tid, og hvad koster det?",

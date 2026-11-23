@@ -67,3 +67,14 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Indholdet (trin, priser, moduler, beviser) ligger som konstanter i `app/ydelser/page.tsx`, ikke i en delt datakilde · fart · det rigtige: `lib/ydelser.ts` som én kilde, hvis priserne skal genbruges i Snapshot, tilbud eller tilskudsflowet · effort S
 - Vækst-sporet (Markedskort + Pipeline-modul) vises uden pris, og modul-kortene linker til booking i stedet for egne undersider · scope: pris ikke besluttet, undersider ikke bestilt · det rigtige: pris på siden når den er låst; evt. én underside pr. modul med case · effort M
 - E2E dækker kun at siden renderer, nav-linket og link-integritet; ingen test af Umami-attributter på CTA'erne · fart · det rigtige: Playwright-assert på `data-track-event` for de tre events · effort S
+
+## 2026-11-23 · SpAIke Snapshot (/tjek) v1
+
+- Ingen branche-benchmark ("virksomheder som jer får typisk X % automatiseret") · designnoten har ingen kilde til tallene · det rigtige: egne tal fra Snapshot-leads + diagnoser, når der er nok data pr. branche · effort M
+- Leadet får ingen mail med rapporten; detaljerne vises kun på skærmen efter mail-gaten · fart, og ingen rigtige mails i natbyg · det rigtige: Brevo-mail med rapporten (rapport-eksemplet i vaulten) eller delbar `/tjek/rapport/[id]` · effort M
+- Niche-detektion og research-opfølgning (designnotens tier 2) er ikke bygget; Michael følger op manuelt fra notifikationsmailen · scope · det rigtige: agent der bruger firma + domæne → niche → branche-follow-up i kø til godkendelse · effort L
+- Modenhed 0-3 bygger på ét selvrapporteret svar (spørgsmål 9 erstatter prototypens "Har I forsøgt at løse det før?"; "prøvet, men gik i stå" giver niveau 1) · fart · det rigtige: kalibrér mod diagnoserne · effort S
+- Højst tre opgaver kan vælges, så flowet holder sig på 9 spørgsmål · scope · det rigtige: OK som det er, genovervej hvis mange vælger "Andet" · effort S
+- Svar gemmes ikke i localStorage (reload = forfra) · fart · det rigtige: gem kladden lokalt · effort S
+- Ingen Turnstile på snapshot-action; beskyttelse er honeypot + IP-rate-limit (5 pr. 10 min, in-memory pr. instans) og ingen LLM-kald, så misbrug koster kun PB-rækker og mails til Michael · fart · det rigtige: Turnstile når nøglerne sættes for hele sitet · effort S
+- Collection `snapshot_leads` er ikke oprettet i production (natbyg må ikke skrive dertil); indtil da gemmes intet, men mailen til Michael bærer leadet · regel for natbyg · det rigtige: Michael kører `node --env-file=.env.local scripts/setup-pocketbase.mjs` · effort S
