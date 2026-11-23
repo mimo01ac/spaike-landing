@@ -6,12 +6,17 @@
  *
  * Anti-spam: honeypot-felt ("felde") + per-IP rate-limit. Ingen captcha:
  * friktion vejer tungere end spamrisikoen ved nuvaerende trafik.
+ *
+ * action "snapshot" (SPA-1290): mail-gaten på /tjek. Logikken bor i
+ * lib/snapshot/lead.ts; header `x-snapshot-test: 1` = gem med test=true, ingen mail.
+ * Ligger her og ikke i en ny route pga. Vercel Hobby-loftet på 12 functions.
  */
 
 import { NextResponse } from "next/server";
 import { createRecord } from "@/lib/pocketbase";
 import { sendEmail } from "@/lib/email";
 import { checkRateLimit, clientIp } from "@/lib/rateLimit";
+import { haandterSnapshotLead, type SnapshotLeadInput } from "@/lib/snapshot/lead";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -22,21 +27,30 @@ function esc(s: string): string {
 
 export async function POST(req: Request) {
   const ip = clientIp(req);
-  const rl = checkRateLimit(`kontakt:${ip}`, 5, 10 * 60 * 1000);
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "For mange beskeder. Prøv igen om lidt." }, { status: 429 });
-  }
 
-  let body: { navn?: string; email?: string; besked?: string; consent?: boolean; felde?: string };
+  let body: { action?: string; navn?: string; email?: string; besked?: string; consent?: boolean; felde?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Ugyldig anmodning." }, { status: 400 });
   }
 
+  const erSnapshot = body.action === "snapshot";
+  const rl = checkRateLimit(erSnapshot ? `snapshot:${ip}` : `kontakt:${ip}`, 5, 10 * 60 * 1000);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "For mange beskeder. Prøv igen om lidt." }, { status: 429 });
+  }
+
   // Honeypot: bots udfylder feltet; svar "ok" uden at gemme noget.
-  if ((body.felde ?? "").trim() !== "") {
+  if (typeof body.felde === "string" && body.felde.trim() !== "") {
     return NextResponse.json({ ok: true });
+  }
+
+  if (erSnapshot) {
+    const test = req.headers.get("x-snapshot-test") === "1";
+    const r = await haandterSnapshotLead(body as SnapshotLeadInput, { test });
+    if (!r.ok) return NextResponse.json({ error: r.fejl }, { status: r.status });
+    return NextResponse.json({ ok: true, gemt: r.gemt, test: r.test, resultat: r.resultat });
   }
 
   const navn = (body.navn ?? "").trim().slice(0, 120);

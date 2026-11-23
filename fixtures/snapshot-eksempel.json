@@ -1,0 +1,9 @@
+{
+  "branche": "Klinik og sundhed",
+  "stoerrelse": "6-20",
+  "rolle": "Ejer eller direktør",
+  "processer": ["mail", "followup", "report"],
+  "timer": { "mail": "11-20", "followup": "6-10", "report": "3-5" },
+  "timeloen": "200-300",
+  "modenhed": "spredt"
+}

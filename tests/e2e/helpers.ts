@@ -16,6 +16,7 @@ export const PUBLIC_PAGES = [
   "/benchmark",
   "/brancher/landinspektorer",
   "/brancher/raadgivende-ingenioerer",
+  "/tjek",
   "/ai-tjek",
   "/tilskud",
   "/privatlivspolitik",

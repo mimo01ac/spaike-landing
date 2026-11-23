@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { DoubleRule, SectionLabel } from "../components/EditorialUI";
+import { MODENHED_NIVEAUER } from "@/lib/snapshot/beregn";
 
 /*
  * Katalog over SpAIke-metoden (SPA-1289, 2026-11-23).
@@ -149,12 +150,8 @@ const indbygget = [
   },
 ];
 
-const modenhed = [
-  { n: 0, navn: "Alt manuelt", tekst: "AI bruges ikke, eller kun privat." },
-  { n: 1, navn: "Spredt brug", tekst: "Nogle bruger ChatGPT eller Copilot, men intet kører af sig selv." },
-  { n: 2, navn: "Første modul i drift", tekst: "Én tidsrøver kører af sig selv, og en medarbejder godkender." },
-  { n: 3, navn: "Flere moduler", tekst: "Flere arbejdsgange kører, systemet kender virksomheden, og ledelsen styrer." },
-];
+// Samme skala som Snapshot-resultatet (én kilde).
+const modenhed = MODENHED_NIVEAUER;
 
 export default function YdelserPage() {
   return (
@@ -189,7 +186,7 @@ export default function YdelserPage() {
               data-track-placering="hero"
               className="inline-flex items-center gap-2 px-5 py-3 border border-ink text-ink hover:bg-cream-deep no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
             >
-              Tag det gratis tjek
+              Tag SpAIke Snapshot
             </a>
           </div>
         </section>
@@ -254,7 +251,8 @@ export default function YdelserPage() {
             {moduler.map((m) => (
               <article
                 key={m.id}
-                className="px-6 md:px-8 py-8 flex flex-col gap-3 border-r border-b border-rule"
+                id={m.id}
+                className="scroll-mt-24 px-6 md:px-8 py-8 flex flex-col gap-3 border-r border-b border-rule"
               >
                 <p className="font-serif italic text-[18px] leading-snug text-ink">
                   &bdquo;{m.tidsroever}&ldquo;
@@ -382,7 +380,7 @@ export default function YdelserPage() {
               Hvor meget af hverdagen kører af sig selv?
             </h2>
             <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
-              Det gratis tjek placerer jer på skalaen. Diagnosen viser, hvad der skal til for at
+              SpAIke Snapshot placerer jer gratis på skalaen. Diagnosen viser, hvad der skal til for at
               nå næste trin.
             </p>
           </div>
@@ -421,7 +419,7 @@ export default function YdelserPage() {
               </h2>
               <p className="font-sans text-[15px] leading-relaxed text-cream/80 max-w-2xl mb-7">
                 En kort samtale uden salgstale. I fortæller, hvad der fylder, og jeg siger ærligt, om
-                det er noget, jeg kan fjerne. Eller start med det gratis tjek.
+                det er noget, jeg kan fjerne. Eller start med SpAIke Snapshot.
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
@@ -440,7 +438,7 @@ export default function YdelserPage() {
                   data-track-placering="afslutning"
                   className="inline-flex items-center gap-2 px-5 py-3 border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
                 >
-                  Tag det gratis tjek
+                  Tag SpAIke Snapshot
                 </a>
               </div>
             </div>

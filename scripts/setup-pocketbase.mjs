@@ -172,6 +172,33 @@ const COLLECTIONS = [
       { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
     ],
   },
+  {
+    // SpAIke Snapshot (/tjek), mail-gaten. Skrives af /api/kontakt (action "snapshot").
+    name: "snapshot_leads",
+    type: "base",
+    fields: [
+      { name: "email", type: "email", required: true },
+      { name: "navn", type: "text" },
+      { name: "firma", type: "text" },
+      { name: "cvr", type: "text" },
+      { name: "domaene", type: "text" },
+      { name: "branche", type: "text" },
+      { name: "niveau", type: "number" },
+      { name: "top_proces", type: "text" },
+      { name: "svar", type: "json", maxSize: 200000 },
+      { name: "resultat", type: "json", maxSize: 200000 },
+      { name: "utm", type: "json", maxSize: 20000 },
+      { name: "test", type: "bool" },
+      {
+        name: "status",
+        type: "select",
+        maxSelect: 1,
+        values: ["new", "contacted", "booked", "done"],
+      },
+      { name: "created", type: "autodate", onCreate: true, onUpdate: false },
+      { name: "updated", type: "autodate", onCreate: true, onUpdate: true },
+    ],
+  },
 ];
 
 async function api(path, opts = {}, token) {
