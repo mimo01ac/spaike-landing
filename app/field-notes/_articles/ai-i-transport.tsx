@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Field Notes: AI i transport — SpAIke",
+  title: "Field Notes: AI i transport | SpAIke",
   description:
     "Tallene og de navngivne cases. Hvad transportvirksomheder som C.H. Robinson faktisk har opnået med AI, kildebelagt og med vægt på den kommercielle side: tilbud, forespørgsler og udbud.",
   openGraph: {
-    title: "AI i transport — tallene og de firmaer der allerede gør det",
+    title: "AI i transport: tallene og de firmaer der allerede gør det",
     description:
       "Kildebelagte tal (Penske, Descartes) og navngivne cases med konkrete resultater (C.H. Robinson, Uber Freight) om AI i transport og logistik.",
     type: "article",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "AI i transport — tallene og de firmaer der allerede gør det",
+    title: "AI i transport: tallene og de firmaer der allerede gør det",
     description:
       "Kildebelagte tal og navngivne cases med konkrete resultater om AI i transport og logistik.",
   },

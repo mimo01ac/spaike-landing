@@ -33,7 +33,7 @@ export default function Waitlist() {
               Udvælgelses-kriterier
             </p>
             <p className="font-serif text-[15px] leading-relaxed text-ink-soft">
-              50–500 ansatte · dansk virksomhed · kommercielle eller videnstunge
+              50-500 ansatte · dansk virksomhed · kommercielle eller videnstunge
               processer. Ingen pharma, finans eller offentlig sektor i Phase 1.
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function Waitlist() {
               Jeg vender personligt tilbage inden for et par hverdage.
             </p>
             <p className="font-mono text-xs tracking-widest uppercase text-muted mt-4">
-              — Michael
+              Michael
             </p>
           </div>
         ) : (
@@ -67,9 +67,9 @@ export default function Waitlist() {
               options={[
                 { value: "", label: "Vælg…" },
                 { value: "lt-50", label: "Under 50" },
-                { value: "50-100", label: "50–100" },
-                { value: "100-250", label: "100–250" },
-                { value: "250-500", label: "250–500" },
+                { value: "50-100", label: "50-100" },
+                { value: "100-250", label: "100-250" },
+                { value: "250-500", label: "250-500" },
                 { value: "gt-500", label: "Over 500" },
               ]}
             />

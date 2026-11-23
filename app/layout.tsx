@@ -28,14 +28,14 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.spaike.dk"),
-  title: "SpAIke — Commercial impact, drevet af AI",
+  title: "SpAIke | Commercial impact, drevet af AI",
   description:
     "Jeg hjælper danske mid-market virksomheder med at aligne AI-automation med strategiske mål. SpAIke Discovery starter med jeres vigtigste mål og leverer en konkret handlingsplan på 48 timer.",
   alternates: {
     canonical: "./",
   },
   openGraph: {
-    title: "SpAIke — Commercial impact, drevet af AI",
+    title: "SpAIke | Commercial impact, drevet af AI",
     description:
       "AI-automation aligned med jeres strategiske mål. Discovery starter med jeres vigtigste mål.",
     type: "website",

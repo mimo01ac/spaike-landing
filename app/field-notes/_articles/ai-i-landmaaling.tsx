@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Field Notes: AI i landmåling — SpAIke",
+  title: "Field Notes: AI i landmåling | SpAIke",
   description:
     "Hvad AI allerede klarer i landmålerens kontor: rapporter, tilbud og dokumenter. Rigtige eksempler med kilder du selv kan klikke på. Ingen droner nødvendige.",
   openGraph: {
-    title: "AI i landmåling — hvad AI allerede klarer i kontoret",
+    title: "AI i landmåling: hvad AI allerede klarer i kontoret",
     description:
       "Rigtige eksempler (Landbrugsstyrelsen, Arup, Talbots Law) på AI der tager kontor-timer: rapporter, tilbud og dokumenter. Ingen droner.",
     type: "article",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "AI i landmåling — hvad AI allerede klarer i kontoret",
+    title: "AI i landmåling: hvad AI allerede klarer i kontoret",
     description:
       "Rigtige eksempler på AI der tager kontor-timer for landinspektør- og opmålingsvirksomheder.",
   },

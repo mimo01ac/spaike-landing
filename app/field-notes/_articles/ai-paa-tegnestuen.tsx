@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Field Notes: AI på tegnestuen — SpAIke",
+  title: "Field Notes: AI på tegnestuen | SpAIke",
   description:
     "Hvor AI faktisk flytter noget for arkitekter og tegnestuer, og hvor det stadig er støj. Kildebelagte tal og konkrete cases, kurateret for den danske byggebranche.",
   openGraph: {
-    title: "AI på tegnestuen — hvad arkitekter faktisk bruger det til",
+    title: "AI på tegnestuen: hvad arkitekter faktisk bruger det til",
     description:
       "Kildebelagte tal (RIBA) og konkrete cases (bl.a. en tegnestue i Orlando fra 40 timer til under 4), kurateret for danske arkitekter og tegnestuer.",
     type: "article",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "AI på tegnestuen — hvad arkitekter faktisk bruger det til",
+    title: "AI på tegnestuen: hvad arkitekter faktisk bruger det til",
     description:
       "Kildebelagte tal og konkrete cases om AI for arkitekter og tegnestuer, kurateret for den danske byggebranche.",
   },

@@ -45,7 +45,7 @@ export default function AccountScoring() {
         <text x="290" y="184" fontSize="11" fill="#f3eee2">Industry fit</text>
 
         <line x1="290" y1="198" x2="420" y2="198" stroke="#6b6650" />
-        <text x="355" y="218" textAnchor="middle" fontFamily="Source Serif 4, serif" fontStyle="italic" fontSize="12" fill="#d4a857">weighted · 0–50</text>
+        <text x="355" y="218" textAnchor="middle" fontFamily="Source Serif 4, serif" fontStyle="italic" fontSize="12" fill="#d4a857">weighted · 0-50</text>
       </g>
 
       <line x1="440" y1="140" x2="500" y2="140" stroke="#0f1a2e" strokeWidth="1.2" markerEnd="url(#arrow-as)" />
