@@ -4,26 +4,26 @@ import Footer from "../components/Footer";
 import { DoubleRule, SectionLabel } from "../components/EditorialUI";
 
 /*
- * UDKAST (2026-11-05): samlet ydelses-hub, så nye ydelser bliver et kort,
- * ikke et nyt menupunkt. Tre trin efter kunderejsen (afklaring → kom i gang
- * selv → få det bygget) + en tværgående stribe (tilskud + guides).
+ * Katalog over SpAIke-metoden (SPA-1289, 2026-11-23).
+ * Kilde: vault "01 SpAIke/spaike-offering-overblik-2026-11-23.html" (afsnit 1, 1b, 4)
+ * og "Pakning og value proposition - SpAIke-metoden (sep 2026).md" (§3.3-3.6).
  *
- * ENDNU IKKE koblet på forside/nav. Når strukturen er godkendt:
- *   - tilføj ét nav-punkt "Ydelser" → /ydelser i Header.tsx
- *   - afgør om "Hvad vi bygger" + "Byg selv" på forsiden skal pege herind
- *     eller blive som de er
- *   - overvej en /field-notes-indexside som "Viden"-hjem (findes ikke i dag)
+ * Tekstregler: kun priserne nedenfor, kun beviserne JUC / Audiovox / WePlan,
+ * moduler uden kundebevis står som "pilot". Vækst-sporet har ingen pris (ikke besluttet).
+ * Ingen PrivateGPT, ingen "10x", ingen andre tal.
  */
 
+const BOOKING_URL = "https://calendly.com/michael-spaike/new-meeting";
+
 export const metadata: Metadata = {
-  title: "Ydelser | SpAIke",
+  title: "Ydelser: SpAIke-metoden | SpAIke",
   description:
-    "SpAIkes ydelser, fra afklaring til bygget løsning: AI-tjek, Discovery, hands-on Copilot-træning, AI-innovationsdag og AI-automation. Plus tilskud der kan betale op til halvdelen.",
+    "Fire trin: Se, Forstå, Fjern og Hold. Én tidsrøver væk ad gangen, til fast pris, i jeres egne systemer. Se priserne og de seks moduler.",
   alternates: { canonical: "/ydelser" },
   openGraph: {
-    title: "Ydelser | SpAIke",
+    title: "Ydelser: SpAIke-metoden | SpAIke",
     description:
-      "Fra afklaring til bygget løsning: AI-tjek, Discovery, Copilot-træning, AI-innovationsdag og AI-automation.",
+      "Fire trin med fast pris: Se, Forstå, Fjern og Hold. Seks moduler, der hver fjerner en tidsrøver.",
     type: "website",
     locale: "da_DK",
     url: "https://www.spaike.dk/ydelser",
@@ -31,69 +31,129 @@ export const metadata: Metadata = {
   },
 };
 
-interface Offering {
-  title: string;
-  body: string;
-  href: string;
-  cta: string;
-  event: string;
-  external?: boolean;
-}
-
-const tiers: { n: string; label: string; heading: string; intro: string; items: Offering[] }[] = [
+const trin = [
   {
     n: "01",
-    label: "Trin 1 · Afklaring",
-    heading: "Find ud af hvor I står",
-    intro:
-      "Lav forpligtelse. Start her hvis I vil have et billede af, hvor AI reelt flytter noget hos jer, før I beslutter noget.",
-    items: [
-      {
-        title: "AI-tjek",
-        body: "Kan AI-søgning overhovedet finde og anbefale jer? Indtast jeres webadresse og få en AI-parathedsscore på ti sekunder. Gratis, dansk, ingen konto.",
-        href: "/ai-tjek",
-        cta: "Tag tjekket",
-        event: "ydelser-ai-tjek",
-      },
-      {
-        title: "Discovery",
-        body: "48 timers klarhed. Jeg starter med jeres strategiske mål, interviewer 3 til 5 medarbejdere, og leverer en prioriteret handlingsplan for hvor AI kan frigøre ressourcer.",
-        href: "/#discovery",
-        cta: "Se Discovery",
-        event: "ydelser-discovery",
-      },
-    ],
+    navn: "Se",
+    spoergsmaal: "Hvor går vores tid, og hvad koster det?",
+    goer: "I får et hurtigt billede af jeres største tidsrøver i timer og kroner, og hvor I står på skalaen nedenfor. Selvbetjent og uden forpligtelse.",
+    pris: "Gratis",
   },
   {
     n: "02",
-    label: "Trin 2 · Kom i gang selv",
-    heading: "I lærer og bygger, med mig ved siden",
-    intro:
-      "Enablement. Her får jeres folk hands-on erfaring og en metode, så de kan bygge videre selv bagefter.",
-    items: [
-      {
-        title: "Hands-on Copilot-træning",
-        body: "Tre timer, hands-on, på jeres egne opgaver. Folk bygger deres første agenter og lærer metoden, så de selv kan sætte flere op bagefter. Ikke en demo.",
-        href: "/field-notes/hands-on-copilot-training",
-        cta: "Se forløbet",
-        event: "ydelser-copilot-training",
-      },
-      {
-        title: "AI-innovationsdag",
-        body: "Ét problem, ét lille team, én dag, og en fungerende løsning I selv har bygget. Med mig som sparringspartner, eller kør den selv med den gratis guide.",
-        href: "/ai-innovationsdag",
-        cta: "Se dagen",
-        event: "ydelser-innovationsdag",
-      },
-    ],
+    navn: "Forstå",
+    spoergsmaal: "Hvad skal vi gøre først, og hvad giver det?",
+    goer: "Jeg ser på arbejdsgangene sammen med dem, der laver arbejdet. I får kroner pr. problem på jeres egne tal, de tre første skridt og ét fast tilbud på det første. Prisen trækkes fra, hvis I går videre.",
+    pris: "Fra 22.500 kr.",
+    prisNote: "Fuld diagnose 34.500 kr.",
+  },
+  {
+    n: "03",
+    navn: "Fjern",
+    spoergsmaal: "Kan du ikke bare fjerne den tidsrøver?",
+    goer: "Ét modul ad gangen, med fast pris og leveringstid. Det bygges i jeres egne systemer, en medarbejder godkender, før noget går ud, og I får det overdraget.",
+    pris: "Lille modul 20.000-35.000 kr.",
+    prisNote: "Stort modul 50.000-115.000 kr.",
+  },
+  {
+    n: "04",
+    navn: "Hold",
+    spoergsmaal: "Hvem holder det kørende og gør det bedre?",
+    goer: "Overvågning, rettelser og opdateringer, en månedlig driftsrapport og et kvartalsmøde, hvor vi finder det næste, der er værd at tage fat på.",
+    pris: "Fra 36.000 kr. om året",
+    prisNote: "pr. modul",
   },
 ];
 
-const buildCategories = [
-  "AI på indbakker, chatbots og voice agents, når kundeservice ikke kan følge med.",
-  "CRM-automation, pitch-assistenter og lead-routing, så sælgerne bruger tiden på kunder.",
-  "Søgning i jeres egen dokumentation, automatisk sagsoprettelse og intern AI-assistent.",
-  "Workflow-automation og end-to-end flows, når processer kører manuelt.",
+type Bevis = { kunde: string; tekst: string };
+
+const moduler: {
+  id: string;
+  tidsroever: string;
+  modul: string;
+  goer: string;
+  beviser: Bevis[];
+}[] = [
+  {
+    id: "henvendelser",
+    tidsroever: "Indbakken æder dagen.",
+    modul: "Henvendelses-modul",
+    goer: "Sorterer mails, skriver svarkladder og fører reklamationer igennem. En medarbejder godkender svaret.",
+    beviser: [
+      { kunde: "JUC", tekst: "Kundeservice i 7 landeindbakker." },
+      { kunde: "Audiovox", tekst: "Reklamation fra 8 trin til 2." },
+    ],
+  },
+  {
+    id: "sager",
+    tidsroever: "Vi taster det samme ind flere steder.",
+    modul: "Sags- og dokument-modul",
+    goer: "Gør en formular eller en mail til færdige sager og dokumenter i jeres egne systemer.",
+    beviser: [{ kunde: "WePlan", tekst: "Sagsoprettelse fra timer til sekunder." }],
+  },
+  {
+    id: "opfoelgning",
+    tidsroever: "Opfølgningen glipper, og CRM er forældet.",
+    modul: "Opfølgnings-modul",
+    goer: "Brief før mødet, opfølgning efter, en ringeliste og et CRM, der holder sig opdateret.",
+    beviser: [],
+  },
+  {
+    id: "overblik",
+    tidsroever: "Jeg mangler overblik over tallene.",
+    modul: "Overbliks-modul",
+    goer: "Henter tallene fra jeres systemer og samler dem i en ugentlig status til ledelsen.",
+    beviser: [],
+  },
+  {
+    id: "viden",
+    tidsroever: "Viden sidder i hovederne på folk.",
+    modul: "Videns-modul",
+    goer: "Samler virksomhedens viden, så medarbejderne kan slå op i den i jeres egen Claude eller Copilot.",
+    beviser: [],
+  },
+  {
+    id: "kundedialog",
+    tidsroever: "Kun én person kan svare kunderne.",
+    modul: "Kunde-dialog-modul",
+    goer: "En chatbot eller en stemme, der svarer kunderne døgnet rundt ud fra jeres egen viden.",
+    beviser: [{ kunde: "JUC", tekst: "Chatbot, der svarer døgnet rundt." }],
+  },
+];
+
+const indbygget = [
+  {
+    titel: "Data i jeres hus",
+    tekst: "Løsningen kører i jeres egne systemer. Jeres data flytter ikke ud til mig.",
+  },
+  {
+    titel: "Mennesker godkender",
+    tekst: "Systemet laver kladden, en medarbejder godkender. Der sendes ikke noget af sig selv, der koster penge eller rører kunder.",
+  },
+  {
+    titel: "Overdragelse med driftsdokument",
+    tekst: "I får et driftsdokument, så jeres egne folk ved, hvordan det kører, og hvad de skal gøre, hvis noget går galt.",
+  },
+  {
+    titel: "Databehandleraftale",
+    tekst: "Der er en databehandleraftale, før jeg rører jeres data.",
+    link: { href: "/databehandleraftale", label: "Læs databehandleraftalen" },
+  },
+  {
+    titel: "Ingen leverandørlås",
+    tekst: "Alt er bygget, så det kan flyttes til en anden leverandør eller en anden model uden at starte forfra.",
+  },
+  {
+    titel: "Fast pris på skrift",
+    tekst: "Pris, omfang og leveringstid står i tilbuddet, før vi går i gang.",
+  },
+];
+
+const modenhed = [
+  { n: 0, navn: "Alt manuelt", tekst: "AI bruges ikke, eller kun privat." },
+  { n: 1, navn: "Hjælp hist og her", tekst: "Nogle bruger ChatGPT eller Copilot, men intet kører af sig selv." },
+  { n: 2, navn: "Første modul i drift", tekst: "Én tidsrøver kører af sig selv, og en medarbejder godkender." },
+  { n: 3, navn: "Flere moduler", tekst: "Flere arbejdsgange kører, systemet kender virksomheden, og ledelsen styrer." },
 ];
 
 export default function YdelserPage() {
@@ -101,182 +161,288 @@ export default function YdelserPage() {
     <>
       <Header />
       <main>
-        {/* HERO */}
-        <section className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-10">
-          <SectionLabel>Ydelser</SectionLabel>
+        {/* 1 · HERO */}
+        <section className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-12">
+          <SectionLabel>Ydelser · SpAIke-metoden</SectionLabel>
           <h1 className="font-serif text-4xl md:text-6xl font-normal leading-[1.02] tracking-tight max-w-4xl mt-2">
-            Fra afklaring til{" "}
-            <em className="italic text-amber-dark">bygget løsning.</em>
+            Få tiden tilbage, <em className="italic text-amber-dark">én tidsrøver ad gangen.</em>
           </h1>
           <p className="font-serif text-base md:text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
-            Det meste starter med at finde ud af, hvor AI reelt flytter noget, og
-            ender et sted mellem at I bygger selv og at jeg bygger det for jer.
-            Her er ydelserne i den rækkefølge, de typisk bruges.
+            Jeg fjerner det, der fylder i hverdagen, fx indbakken, opfølgningen og data, der
+            tastes ind to gange. Til fast pris, i drift på få uger, og det kører i jeres egne
+            systemer. I ejer det bagefter.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track-event="ydelser_book_click"
+              data-track-placering="hero"
+              className="inline-flex items-center gap-2 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+            >
+              Book et møde →
+            </a>
+            <a
+              href="/tjek"
+              data-track-event="ydelser_tjek_click"
+              data-track-placering="hero"
+              className="inline-flex items-center gap-2 px-5 py-3 border border-ink text-ink hover:bg-cream-deep no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+            >
+              Tag det gratis tjek
+            </a>
+          </div>
+        </section>
+
+        {/* 2 · DE FIRE TRIN */}
+        <section id="trin">
+          <DoubleRule />
+          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+            <SectionLabel>Fire trin</SectionLabel>
+            <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
+              Se · Forstå · Fjern · Hold
+            </h2>
+            <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
+              I kan stå af efter hvert trin. Hvert trin har sin egen pris, og I ved, hvad det
+              koster, før I siger ja.
+            </p>
+          </div>
+          <ol className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-rule list-none p-0 m-0">
+            {trin.map((t, i) => (
+              <li
+                key={t.navn}
+                className={`px-6 md:px-8 py-9 flex flex-col gap-3.5 ${
+                  i > 0 ? "border-t md:border-t-0 border-rule" : ""
+                } ${i % 2 === 1 ? "md:border-l" : ""} ${i >= 2 ? "md:border-t lg:border-t-0" : ""} ${
+                  i > 0 ? "lg:border-l" : ""
+                } border-rule`}
+              >
+                <span className="font-mono text-[11px] text-amber-dark tracking-wider">{t.n}</span>
+                <h3 className="font-serif text-3xl font-medium leading-none text-ink">{t.navn}</h3>
+                <p className="font-serif italic text-[16px] leading-snug text-ink">
+                  &bdquo;{t.spoergsmaal}&ldquo;
+                </p>
+                <p className="font-sans text-[14px] leading-relaxed text-ink-soft">{t.goer}</p>
+                <div className="mt-auto pt-4 border-t border-rule">
+                  <p className="font-sans font-semibold text-[15px] text-ink">{t.pris}</p>
+                  {t.prisNote && (
+                    <p className="font-sans text-[13px] text-muted mt-0.5">{t.prisNote}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-5 pb-2 font-sans text-[12px] text-muted">
+            Alle priser er ekskl. moms.
           </p>
         </section>
 
-        {/* TRIN 1 + 2 */}
-        {tiers.map((tier) => (
-          <section key={tier.n}>
-            <DoubleRule />
-            <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
-              <SectionLabel>{tier.label}</SectionLabel>
-              <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
-                {tier.heading}
-              </h2>
-              <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
-                {tier.intro}
-              </p>
-            </div>
-            <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 border-t border-rule">
-              {tier.items.map((o, i) => (
-                <a
-                  key={o.title}
-                  href={o.href}
-                  data-track-event="ydelser_click"
-                  data-track-target={o.event}
-                  className={`group px-6 md:px-9 py-9 flex flex-col gap-3.5 min-h-[220px] no-underline hover:bg-cream-deep transition-colors ${
-                    i === 1 ? "border-t md:border-t-0 md:border-l border-rule" : ""
-                  }`}
-                >
-                  <h3 className="font-serif text-2xl font-medium leading-[1.15] text-ink">
-                    {o.title}
-                  </h3>
-                  <p className="font-sans text-[14px] leading-relaxed text-ink-soft">
-                    {o.body}
-                  </p>
-                  <span className="mt-auto font-mono text-[11px] tracking-wider uppercase text-ink group-hover:text-amber-dark transition-colors">
-                    {o.cta} →
-                  </span>
-                </a>
-              ))}
-            </div>
-          </section>
-        ))}
-
-        {/* TRIN 3 · FAA DET BYGGET */}
-        <section>
+        {/* 3 · DE SEKS MODULER */}
+        <section id="moduler">
           <DoubleRule />
           <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
-            <SectionLabel>Trin 3 · Få det bygget</SectionLabel>
+            <SectionLabel>Fjern · seks moduler</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
-              Jeg leverer løsningen
+              Hvilken tidsrøver vil I af med?
             </h2>
             <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
-              Når retningen er klar, bygger jeg AI-automationen aligned med jeres
-              strategiske mål. Hvad det bliver, afhænger af jeres Discovery og
-              jeres prioriteter.
+              Hvert modul fjerner én tidsrøver. Hvor et modul kører hos en kunde, står kunden på.
+              De andre er i pilot.
             </p>
           </div>
-          <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 border-t border-rule">
-            {buildCategories.map((c, i) => (
-              <div
-                key={c}
-                className={`px-6 md:px-9 py-7 flex gap-4 ${
-                  i > 0 ? "border-t border-rule" : ""
-                } ${i % 2 === 1 ? "md:border-l" : ""} ${i === 1 ? "md:border-t-0" : ""}`}
+          <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-rule">
+            {moduler.map((m) => (
+              <article
+                key={m.id}
+                className="px-6 md:px-8 py-8 flex flex-col gap-3 border-r border-b border-rule"
               >
-                <span className="font-mono text-[11px] text-amber-dark tracking-wider pt-1">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <p className="font-sans text-[14.5px] leading-relaxed text-ink">
-                  {c}
+                <p className="font-serif italic text-[18px] leading-snug text-ink">
+                  &bdquo;{m.tidsroever}&ldquo;
                 </p>
+                <p className="font-mono text-[11px] tracking-wider uppercase text-amber-dark">
+                  → {m.modul}
+                </p>
+                <p className="font-sans text-[14px] leading-relaxed text-ink-soft">{m.goer}</p>
+                <div className="mt-2">
+                  {m.beviser.length > 0 ? (
+                    <ul className="list-none p-0 m-0 space-y-1.5">
+                      {m.beviser.map((b) => (
+                        <li key={b.kunde + b.tekst} className="font-sans text-[13.5px] text-ink">
+                          <span className="font-semibold">{b.kunde}:</span> {b.tekst}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span className="inline-block font-mono text-[10px] tracking-widest uppercase text-muted border border-rule px-2 py-1 rounded-sm">
+                      Pilot
+                    </span>
+                  )}
+                </div>
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track-event="ydelser_modul_click"
+                  data-track-modul={m.id}
+                  className="mt-auto pt-3 font-mono text-[11px] tracking-wider uppercase text-ink hover:text-amber-dark no-underline transition-colors"
+                >
+                  Spørg til modulet →
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* 4 · VÆKST-SPORET */}
+        <section id="vaekst">
+          <DoubleRule />
+          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-14">
+            <div className="border border-amber bg-cream-deep px-6 md:px-10 py-10 rounded-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-[10px] tracking-widest uppercase bg-amber text-ink px-2 py-1 rounded-sm">
+                  Nyt
+                </span>
+                <span className="font-mono text-[11px] tracking-widest uppercase text-muted">
+                  Vækst-sporet
+                </span>
+              </div>
+              <h2 className="font-serif text-3xl md:text-4xl font-normal leading-[1.1] tracking-tight max-w-3xl">
+                Flere af de rigtige kunder
+              </h2>
+              <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
+                De seks moduler giver tid tilbage. Vækst-sporet handler om, hvem I skal ringe til.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-ink">Markedskort</h3>
+                  <p className="font-sans text-[14px] leading-relaxed text-ink-soft mt-2">
+                    Hvor mange virksomheder i markedet ligner jeres bedste kunder, hvem vokser, og
+                    hvem skal I ringe til først? Ud fra CVR og de offentlige regnskaber, med
+                    beslutningstager og uden reklamebeskyttede virksomheder.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-ink">Pipeline-modul</h3>
+                  <p className="font-sans text-[14px] leading-relaxed text-ink-soft mt-2">
+                    Samme motor koblet på jeres CRM: en ny ringeliste hver måned med en begrundelse
+                    for hvert navn, og jeres egne resultater gør listen bedre over tid.
+                  </p>
+                </div>
+              </div>
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="ydelser_book_click"
+                data-track-placering="vaekst"
+                className="inline-flex items-center gap-2 mt-8 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+              >
+                Spørg mig om vækst-sporet →
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* 5 · INDBYGGET I ALT */}
+        <section id="indbygget">
+          <DoubleRule />
+          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+            <SectionLabel>Indbygget i alt</SectionLabel>
+            <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
+              Det får I altid med
+            </h2>
+            <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
+              Det er ikke tilkøb. Det følger med i hvert modul.
+            </p>
+          </div>
+          <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-rule">
+            {indbygget.map((x) => (
+              <div key={x.titel} className="px-6 md:px-8 py-7 border-r border-b border-rule">
+                <h3 className="font-serif text-xl font-medium text-ink">{x.titel}</h3>
+                <p className="font-sans text-[14px] leading-relaxed text-ink-soft mt-2">{x.tekst}</p>
+                {x.link && (
+                  <a
+                    href={x.link.href}
+                    className="inline-block mt-3 font-sans text-[13.5px] text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark no-underline transition-colors"
+                  >
+                    {x.link.label} →
+                  </a>
+                )}
               </div>
             ))}
           </div>
-          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-8">
-            <a
-              href="/#discovery"
-              data-track-event="ydelser_click"
-              data-track-target="ydelser-byg-discovery"
-              className="inline-flex items-center gap-2 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
-            >
-              Start med en Discovery →
-            </a>
-          </div>
         </section>
 
-        {/* TVAERGAAENDE: tilskud + guides */}
-        <section>
+        {/* 6 · MODENHEDSSKALA */}
+        <section id="modenhed">
           <DoubleRule />
           <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
-            <SectionLabel>På tværs</SectionLabel>
+            <SectionLabel>Modenhed 0-3</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
-              To ting der gælder hele vejen
+              Hvor meget af hverdagen kører af sig selv?
             </h2>
+            <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
+              Det gratis tjek placerer jer på skalaen. Diagnosen viser, hvad der skal til for at
+              nå næste trin.
+            </p>
           </div>
-          <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 border-t border-rule">
-            <a
-              href="/tilskud"
-              data-track-event="ydelser_click"
-              data-track-target="ydelser-tilskud"
-              className="group px-6 md:px-9 py-9 flex flex-col gap-3.5 min-h-[200px] no-underline hover:bg-cream-deep transition-colors"
-            >
-              <div className="font-mono text-[11px] text-amber-dark tracking-wider">
-                Finansiering
-              </div>
-              <h3 className="font-serif text-2xl font-medium leading-[1.15] text-ink">
-                Tilskud kan betale op til halvdelen
-              </h3>
-              <p className="font-sans text-[14px] leading-relaxed text-ink-soft">
-                Tjek på fem til ti minutter, om I kan søge SMV:Digitals
-                rådgivertilskud til AI og automatisering (50 %, op til 150.000
-                kr.). Flere af ydelserne ovenfor kan lægges ind under det.
-              </p>
-              <span className="mt-auto font-mono text-[11px] tracking-wider uppercase text-ink group-hover:text-amber-dark transition-colors">
-                Tag tilskudstjekket →
-              </span>
-            </a>
-            <div className="px-6 md:px-9 py-9 flex flex-col gap-3.5 min-h-[200px] border-t md:border-t-0 md:border-l border-rule">
-              <div className="font-mono text-[11px] text-amber-dark tracking-wider">
-                Viden og guides
-              </div>
-              <h3 className="font-serif text-2xl font-medium leading-[1.15] text-ink">
-                Field notes og guides
-              </h3>
-              <p className="font-sans text-[14px] leading-relaxed text-ink-soft">
-                Jeg deler løbende guides og field notes I kan bruge selv, fx{" "}
-                <a
-                  href="/field-notes/hands-on-copilot-training"
-                  className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
-                >
-                  hands-on Copilot-træning
-                </a>{" "}
-                og{" "}
-                <a
-                  href="/field-notes/vibe-coding-guide"
-                  className="text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark transition-colors"
-                >
-                  guiden til vibe coding-værktøjer
-                </a>
-                .
-              </p>
-            </div>
-          </div>
+          <ol
+            className="max-w-editorial mx-auto w-full px-6 md:px-14 pb-14 grid grid-cols-1 md:grid-cols-4 gap-3 list-none m-0"
+            aria-label="Modenhedsskala fra 0 til 3"
+          >
+            {modenhed.map((m) => (
+              <li key={m.n} className="flex flex-col">
+                <div className="flex gap-1 mb-3" aria-hidden="true">
+                  {[1, 2, 3].map((bar) => (
+                    <span
+                      key={bar}
+                      className={`h-2 flex-1 rounded-sm ${bar <= m.n ? "bg-amber" : "bg-rule"}`}
+                    />
+                  ))}
+                </div>
+                <p className="font-mono text-[11px] tracking-wider text-amber-dark">Niveau {m.n}</p>
+                <p className="font-serif text-lg font-medium text-ink mt-1">{m.navn}</p>
+                <p className="font-sans text-[13.5px] leading-relaxed text-ink-soft mt-1">{m.tekst}</p>
+              </li>
+            ))}
+          </ol>
         </section>
 
-        {/* CTA */}
+        {/* 7 · AFSLUTNING */}
         <section>
           <DoubleRule />
           <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-16">
             <div className="bg-ink text-cream px-8 md:px-12 py-12 rounded">
               <div className="font-mono text-[10px] tracking-widest uppercase text-amber mb-4">
-                Ikke sikker på hvor I skal starte?
+                Næste skridt
               </div>
-              <h2 className="font-serif font-medium text-[28px] md:text-[36px] leading-[1.2] text-cream mb-5 max-w-2xl">
-                Tag en kort snak, så finder vi det rigtige sted at begynde
+              <h2 className="font-serif font-medium text-[28px] md:text-[36px] leading-[1.2] text-cream mb-4 max-w-2xl">
+                Tag en snak om jeres største tidsrøver
               </h2>
-              <a
-                href="https://calendly.com/michael-spaike/new-meeting"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-umami-event="book_moede_click"
-                data-umami-event-location="ydelser"
-                className="inline-flex items-center gap-2 px-5 py-3 bg-amber text-ink hover:bg-amber-dark hover:text-cream no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
-              >
-                Book et møde →
-              </a>
+              <p className="font-sans text-[15px] leading-relaxed text-cream/80 max-w-2xl mb-7">
+                En halv time uden salgstale. I fortæller, hvad der fylder, og jeg siger ærligt, om
+                det er noget, jeg kan fjerne. Eller start med det gratis tjek.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track-event="ydelser_book_click"
+                  data-track-placering="afslutning"
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-amber text-ink hover:bg-amber-dark hover:text-cream no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+                >
+                  Book et møde →
+                </a>
+                <a
+                  href="/tjek"
+                  data-track-event="ydelser_tjek_click"
+                  data-track-placering="afslutning"
+                  className="inline-flex items-center gap-2 px-5 py-3 border border-cream text-cream hover:bg-cream hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+                >
+                  Tag det gratis tjek
+                </a>
+              </div>
             </div>
           </div>
         </section>

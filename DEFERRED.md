@@ -60,3 +60,10 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Skifter brugeren fra chat til stemme midt i en session, får stemmeagenten chat-svarene som kontekst, men den endelige vurdering bygger kun på stemme-udskriften (klientens kopi starter tom ved skift) · det rigtige: send chat-historikken med til VoiceSamtale ved skift · effort S
 - Genoptagelse kun inden for 7 dage og ikke efter lead/vurdering · bevidst valg
 - Fortsæt-linket sendes også til adresser, der ikke findes (bounce hos Brevo) · lav risiko, kræver at man kender e-mail og CVR · effort XS hvis det skal begrænses
+
+## 2026-11-23 · Katalog-side /ydelser (SPA-1289)
+
+- `/tjek` (Snapshot) findes ikke endnu; midlertidig 307-redirect `/tjek` → `/ai-tjek` i `next.config.mjs`, så CTA'en ikke giver 404 · scope: Snapshot bygges i næste ticket i kæden · det rigtige: fjern redirecten i samme commit som `app/tjek/page.tsx` (ellers vinder redirecten over siden) · effort S
+- Indholdet (trin, priser, moduler, beviser) ligger som konstanter i `app/ydelser/page.tsx`, ikke i en delt datakilde · fart · det rigtige: `lib/ydelser.ts` som én kilde, hvis priserne skal genbruges i Snapshot, tilbud eller tilskudsflowet · effort S
+- Vækst-sporet (Markedskort + Pipeline-modul) vises uden pris, og modul-kortene linker til booking i stedet for egne undersider · scope: pris ikke besluttet, undersider ikke bestilt · det rigtige: pris på siden når den er låst; evt. én underside pr. modul med case · effort M
+- E2E dækker kun at siden renderer, nav-linket og link-integritet; ingen test af Umami-attributter på CTA'erne · fart · det rigtige: Playwright-assert på `data-track-event` for de tre events · effort S
