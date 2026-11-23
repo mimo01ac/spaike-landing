@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { DoubleRule, SectionLabel } from "../components/EditorialUI";
+import { DoubleRule, SectionLabel, SpaikeWordmark } from "../components/EditorialUI";
+import PdfKnap from "./PdfKnap";
 import { MODENHED_NIVEAUER } from "@/lib/snapshot/beregn";
 
 /*
@@ -150,16 +151,34 @@ const indbygget = [
   },
 ];
 
+/** Holder beløbet samlet ("20.000-35.000 kr."), så det ikke knækker over to linjer. */
+function Pris({ tekst }: { tekst: string }) {
+  const m = tekst.match(/^(.*?)(\d[\d.-]*\s*kr\..*)$/);
+  if (!m) return <>{tekst}</>;
+  return (
+    <>
+      {m[1]}
+      <span className="whitespace-nowrap">{m[2]}</span>
+    </>
+  );
+}
+
 // Samme skala som Snapshot-resultatet (én kilde).
 const modenhed = MODENHED_NIVEAUER;
 
 export default function YdelserPage() {
   return (
-    <>
+    <div className="katalog">
       <Header />
       <main>
+        {/* Kun i print/PDF (SPA-1291): brevhoved i stedet for sitets header. */}
+        <div className="print-kun katalog-brevhoved">
+          <SpaikeWordmark size="md" />
+          <span className="katalog-brevhoved-tekst">Ydelser og priser · spaike.dk/ydelser</span>
+        </div>
+
         {/* 1 · HERO */}
-        <section className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-12">
+        <section id="hero" className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-12">
           <SectionLabel>Ydelser · SpAIke-metoden</SectionLabel>
           <h1 className="font-serif text-4xl md:text-6xl font-normal leading-[1.02] tracking-tight max-w-4xl mt-2">
             Få tiden tilbage, <em className="italic text-amber-dark">én tidsrøver ad gangen.</em>
@@ -169,7 +188,7 @@ export default function YdelserPage() {
             tastes ind to gange. Det sker til fast pris, er i drift på få uger og kører i jeres
             egne systemer. I ejer det bagefter.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="print-skjul mt-8 flex flex-wrap gap-3">
             <a
               href={BOOKING_URL}
               target="_blank"
@@ -188,13 +207,14 @@ export default function YdelserPage() {
             >
               Tag SpAIke Snapshot
             </a>
+            <PdfKnap placering="hero" />
           </div>
         </section>
 
         {/* 2 · DE FIRE TRIN */}
         <section id="trin">
           <DoubleRule />
-          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+          <div className="katalog-hoved max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
             <SectionLabel>Fire trin</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
               Se · Forstå · Fjern · Hold
@@ -221,9 +241,13 @@ export default function YdelserPage() {
                 </p>
                 <p className="font-sans text-[14px] leading-relaxed text-ink-soft">{t.goer}</p>
                 <div className="mt-auto pt-4 border-t border-rule">
-                  <p className="font-sans font-semibold text-[15px] text-ink">{t.pris}</p>
+                  <p className="font-sans font-semibold text-[15px] text-ink">
+                    <Pris tekst={t.pris} />
+                  </p>
                   {t.prisNote && (
-                    <p className="font-sans text-[13px] text-muted mt-0.5">{t.prisNote}</p>
+                    <p className="font-sans text-[13px] text-muted mt-0.5">
+                      <Pris tekst={t.prisNote} />
+                    </p>
                   )}
                 </div>
               </li>
@@ -237,7 +261,7 @@ export default function YdelserPage() {
         {/* 3 · DE SEKS MODULER */}
         <section id="moduler">
           <DoubleRule />
-          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+          <div className="katalog-hoved max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
             <SectionLabel>Fjern · seks moduler</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
               Hvilken tidsrøver vil I af med?
@@ -282,7 +306,7 @@ export default function YdelserPage() {
                   rel="noopener noreferrer"
                   data-track-event="ydelser_modul_click"
                   data-track-modul={m.id}
-                  className="mt-auto pt-3 font-mono text-[11px] tracking-wider uppercase text-ink hover:text-amber-dark no-underline transition-colors"
+                  className="print-skjul mt-auto pt-3 font-mono text-[11px] tracking-wider uppercase text-ink hover:text-amber-dark no-underline transition-colors"
                 >
                   Spørg til modulet →
                 </a>
@@ -333,7 +357,7 @@ export default function YdelserPage() {
                 rel="noopener noreferrer"
                 data-track-event="ydelser_book_click"
                 data-track-placering="vaekst"
-                className="inline-flex items-center gap-2 mt-8 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
+                className="print-skjul inline-flex items-center gap-2 mt-8 px-5 py-3 bg-ink text-cream hover:bg-amber hover:text-ink no-underline font-sans font-medium text-[15px] rounded-sm transition-colors"
               >
                 Spørg mig om vækst-sporet →
               </a>
@@ -344,7 +368,7 @@ export default function YdelserPage() {
         {/* 5 · INDBYGGET I ALT */}
         <section id="indbygget">
           <DoubleRule />
-          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+          <div className="katalog-hoved max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
             <SectionLabel>Indbygget i alt</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
               Det får I altid med
@@ -361,7 +385,7 @@ export default function YdelserPage() {
                 {x.link && (
                   <a
                     href={x.link.href}
-                    className="inline-block mt-3 font-sans text-[13.5px] text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark no-underline transition-colors"
+                    className="print-skjul inline-block mt-3 font-sans text-[13.5px] text-ink border-b border-rule hover:text-amber-dark hover:border-amber-dark no-underline transition-colors"
                   >
                     {x.link.label} →
                   </a>
@@ -374,7 +398,7 @@ export default function YdelserPage() {
         {/* 6 · MODENHEDSSKALA */}
         <section id="modenhed">
           <DoubleRule />
-          <div className="max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
+          <div className="katalog-hoved max-w-editorial mx-auto w-full px-6 md:px-14 pt-14 pb-8">
             <SectionLabel>Modenhed 0-3</SectionLabel>
             <h2 className="font-serif text-3xl md:text-5xl font-normal leading-[1.05] tracking-tight max-w-3xl">
               Hvor meget af hverdagen kører af sig selv?
@@ -407,7 +431,7 @@ export default function YdelserPage() {
         </section>
 
         {/* 7 · AFSLUTNING */}
-        <section>
+        <section id="naeste">
           <DoubleRule />
           <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-16">
             <div className="bg-ink text-cream px-8 md:px-12 py-12 rounded">
@@ -421,7 +445,7 @@ export default function YdelserPage() {
                 En kort samtale uden salgstale. I fortæller, hvad der fylder, og jeg siger ærligt, om
                 det er noget, jeg kan fjerne. Eller start med SpAIke Snapshot.
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="print-skjul flex flex-wrap gap-3">
                 <a
                   href={BOOKING_URL}
                   target="_blank"
@@ -440,12 +464,20 @@ export default function YdelserPage() {
                 >
                   Tag SpAIke Snapshot
                 </a>
+                <PdfKnap placering="afslutning" inverted />
               </div>
+              {/* Kontaktlinje: kun i print/PDF, nederst på side 2. */}
+              <p className="print-kun katalog-kontakt">
+                Michael Mortensen ·{" "}
+                <a href="mailto:michael@spaike.dk">michael@spaike.dk</a> ·{" "}
+                <a href="tel:+4551925818">+45 51 92 58 18</a> ·{" "}
+                <a href="https://www.spaike.dk">spaike.dk</a>
+              </p>
             </div>
           </div>
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

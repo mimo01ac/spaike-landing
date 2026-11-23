@@ -34,6 +34,230 @@ body {
   }
 }
 
+/* Katalog som leave-behind (SPA-1291): /ydelser på 2 A4-sider.
+   Siden er pakket i .katalog. Reglen ovenfor skjuler alt med visibility, så
+   .katalog gør sig selv synlig igen. Side 1: trin + moduler. Side 2: vækst,
+   indbygget, modenhed, næste skridt + kontaktlinje. Testes af
+   tests/e2e/ydelser-pdf.spec.ts (sideantal <= 2). */
+.print-kun {
+  display: none;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 13mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  .katalog,
+  .katalog * {
+    visibility: visible;
+  }
+  .katalog {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #0f1a2e;
+  }
+  .katalog *,
+  .katalog *::before,
+  .katalog *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .katalog > header,
+  .katalog > footer,
+  .katalog .print-skjul {
+    display: none !important;
+  }
+  .katalog .print-kun {
+    display: block;
+  }
+  .katalog a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Layout: fuld bredde, tæt luft */
+  .katalog main .max-w-editorial {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .katalog main section {
+    break-inside: avoid;
+  }
+  .katalog main p,
+  .katalog main li {
+    font-size: 8.5pt;
+    line-height: 1.4;
+  }
+  .katalog main h3 {
+    font-size: 11.5pt;
+    line-height: 1.2;
+  }
+  .katalog main h2 {
+    font-size: 17pt;
+    line-height: 1.1;
+  }
+
+  /* Brevhoved */
+  .katalog .katalog-brevhoved {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 6pt;
+    border-bottom: 2px solid #d4a857;
+  }
+  .katalog .katalog-brevhoved-tekst {
+    font-family: var(--font-mono), monospace;
+    font-size: 7pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6b6650;
+  }
+
+  /* Hero */
+  .katalog #hero {
+    padding: 10pt 0 8pt;
+  }
+  .katalog #hero h1 {
+    font-size: 23pt;
+    margin-top: 0;
+    max-width: none;
+  }
+  .katalog #hero h1 + p {
+    font-size: 10pt;
+    margin-top: 6pt;
+    max-width: none;
+  }
+
+  /* Overskriftsblokke */
+  .katalog .katalog-hoved {
+    padding: 8pt 0 6pt;
+  }
+  .katalog .katalog-hoved > p:first-child {
+    margin-bottom: 4pt;
+  }
+  .katalog .katalog-hoved > p:last-child {
+    margin-top: 3pt;
+    max-width: none;
+  }
+
+  /* Fire trin: 4 kolonner */
+  .katalog #trin ol {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .katalog #trin li {
+    padding: 8pt 8pt;
+    gap: 4pt;
+    border-top: 0;
+    border-left: 1px solid #d8d3c7;
+    break-inside: avoid;
+  }
+  .katalog #trin li:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .katalog #trin li h3 {
+    font-size: 15pt;
+    line-height: 1;
+  }
+  .katalog #trin li > div {
+    padding-top: 5pt;
+  }
+  .katalog #trin li > div p:first-child {
+    font-size: 9.5pt;
+  }
+  .katalog #trin > p {
+    padding: 4pt 0 0;
+    font-size: 7.5pt;
+  }
+
+  /* Seks moduler: 3 x 2 */
+  .katalog #moduler .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .katalog #moduler article {
+    padding: 7pt 9pt;
+    gap: 4pt;
+    break-inside: avoid;
+  }
+  .katalog #moduler article > p:first-child {
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+  .katalog #moduler article > div {
+    margin-top: 0;
+  }
+
+  /* Side 2 starter med vækst-sporet */
+  .katalog #vaekst {
+    break-before: page;
+  }
+  .katalog #vaekst > div {
+    padding: 0;
+  }
+  .katalog #vaekst > div > div {
+    padding: 12pt 14pt;
+  }
+  .katalog #vaekst h2 {
+    margin-top: 0;
+  }
+  .katalog #vaekst .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12pt;
+    margin-top: 8pt;
+  }
+  .katalog #vaekst .mb-4 {
+    margin-bottom: 6pt;
+  }
+
+  /* Indbygget: 3 x 2 */
+  .katalog #indbygget .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .katalog #indbygget .grid > div {
+    padding: 7pt 9pt;
+    break-inside: avoid;
+  }
+
+  /* Modenhed: 4 kolonner */
+  .katalog #modenhed ol {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0 0 6pt;
+    gap: 9pt;
+  }
+  .katalog #modenhed li {
+    break-inside: avoid;
+  }
+
+  /* Næste skridt + kontaktlinje */
+  .katalog #naeste > div {
+    padding: 10pt 0 0;
+  }
+  .katalog #naeste > div > div {
+    padding: 14pt 16pt;
+  }
+  .katalog #naeste h2 {
+    font-size: 15pt;
+    margin-bottom: 5pt;
+  }
+  .katalog #naeste p.mb-7 {
+    margin-bottom: 0;
+  }
+  .katalog .katalog-kontakt {
+    margin-top: 10pt;
+    padding-top: 8pt;
+    border-top: 1px solid #d4a857;
+    font-family: var(--font-sans), sans-serif;
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: #f3eee2;
+  }
+}
+
 /* Juridiske sider (privatlivspolitik, databehandleraftale, vilkår) */
 .legal-prose {
   color: #3a3f4e;

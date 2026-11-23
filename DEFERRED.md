@@ -78,3 +78,9 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Svar gemmes ikke i localStorage (reload = forfra) · fart · det rigtige: gem kladden lokalt · effort S
 - Ingen Turnstile på snapshot-action; beskyttelse er honeypot + IP-rate-limit (5 pr. 10 min, in-memory pr. instans) og ingen LLM-kald, så misbrug koster kun PB-rækker og mails til Michael · fart · det rigtige: Turnstile når nøglerne sættes for hele sitet · effort S
 - Collection `snapshot_leads` er ikke oprettet i production (natbyg må ikke skrive dertil); indtil da gemmes intet, men mailen til Michael bærer leadet · regel for natbyg · det rigtige: Michael kører `node --env-file=.env.local scripts/setup-pocketbase.mjs` · effort S
+
+## 2026-11-23 · /ydelser som PDF-leave-behind (SPA-1291)
+
+- PDF'en laves af browserens print-dialog (`window.print()`), ikke som en færdig fil: brugeren skal selv vælge "Gem som PDF", og Safari/Firefox er ikke afprøvet (kun Chromium) · ticketens rammer (ingen ny route) · det rigtige: hvis det skal være ét klik til en fil, en statisk PDF bygget i CI med Playwright og lagt i `public/` · effort S
+- Sideantallet holdes af faste print-skriftstørrelser; side 1 har ca. 5 % luft, så længere tekster på trin eller moduler kan give en tredje side · fart · det rigtige: Playwright-testen fanger det (den fejler ved 3 sider), så bare kør den ved tekstændringer · effort S
+- Den globale print-regel for case-briefen (`body * { visibility: hidden }`) gælder stadig på alle andre sider, så de printer tomt · uden for ticket · det rigtige: scope reglen til siden med `.brief-print` (`body:has(.brief-print)`) · effort S
