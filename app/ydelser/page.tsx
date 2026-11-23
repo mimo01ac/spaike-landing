@@ -36,22 +36,22 @@ const trin = [
     n: "01",
     navn: "Se",
     spoergsmaal: "Hvor går vores tid, og hvad koster det?",
-    goer: "I får et hurtigt billede af jeres største tidsrøver i timer og kroner, og hvor I står på skalaen nedenfor. Selvbetjent og uden forpligtelse.",
+    goer: "I får et hurtigt billede af jeres største tidsrøver i timer og kroner og af, hvor I står på skalaen nedenfor. Det gør I selv, uden forpligtelse.",
     pris: "Gratis",
   },
   {
     n: "02",
     navn: "Forstå",
     spoergsmaal: "Hvad skal vi gøre først, og hvad giver det?",
-    goer: "Jeg ser på arbejdsgangene sammen med dem, der laver arbejdet. I får kroner pr. problem på jeres egne tal, de tre første skridt og ét fast tilbud på det første. Prisen trækkes fra, hvis I går videre.",
+    goer: "Jeg ser på arbejdsgangene sammen med dem, der laver arbejdet. I får hvert problem opgjort i kroner ud fra jeres egne tal, de tre første skridt og ét fast tilbud på det første. Prisen trækkes fra, hvis I går videre.",
     pris: "Fra 22.500 kr.",
     prisNote: "Fuld diagnose 34.500 kr.",
   },
   {
     n: "03",
     navn: "Fjern",
-    spoergsmaal: "Kan du ikke bare fjerne den tidsrøver?",
-    goer: "Ét modul ad gangen, med fast pris og leveringstid. Det bygges i jeres egne systemer, en medarbejder godkender, før noget går ud, og I får det overdraget.",
+    spoergsmaal: "Kan du ikke bare fjerne det?",
+    goer: "Ét modul ad gangen, med fast pris og leveringstid. Det bygges i jeres egne systemer. En medarbejder godkender, før noget går ud, og I overtager det bagefter.",
     pris: "Lille modul 20.000-35.000 kr.",
     prisNote: "Stort modul 50.000-115.000 kr.",
   },
@@ -93,9 +93,9 @@ const moduler: {
   },
   {
     id: "opfoelgning",
-    tidsroever: "Opfølgningen glipper, og CRM er forældet.",
+    tidsroever: "Opfølgningen glipper, og CRM'et er ikke opdateret.",
     modul: "Opfølgnings-modul",
-    goer: "Brief før mødet, opfølgning efter, en ringeliste og et CRM, der holder sig opdateret.",
+    goer: "Forberedelse før mødet, opfølgning bagefter, en ringeliste og et CRM, der holder sig selv opdateret.",
     beviser: [],
   },
   {
@@ -107,28 +107,28 @@ const moduler: {
   },
   {
     id: "viden",
-    tidsroever: "Viden sidder i hovederne på folk.",
+    tidsroever: "Det hele sidder i hovedet på nogle få medarbejdere.",
     modul: "Videns-modul",
-    goer: "Samler virksomhedens viden, så medarbejderne kan slå op i den i jeres egen Claude eller Copilot.",
+    goer: "Samler virksomhedens viden, så medarbejderne kan finde den i jeres egen Claude eller Copilot.",
     beviser: [],
   },
   {
     id: "kundedialog",
     tidsroever: "Kun én person kan svare kunderne.",
     modul: "Kunde-dialog-modul",
-    goer: "En chatbot eller en stemme, der svarer kunderne døgnet rundt ud fra jeres egen viden.",
+    goer: "En chatbot eller en stemmeagent, der svarer kunderne døgnet rundt ud fra jeres egen viden.",
     beviser: [{ kunde: "JUC", tekst: "Chatbot, der svarer døgnet rundt." }],
   },
 ];
 
 const indbygget = [
   {
-    titel: "Data i jeres hus",
+    titel: "Data hos jer",
     tekst: "Løsningen kører i jeres egne systemer. Jeres data flytter ikke ud til mig.",
   },
   {
     titel: "Mennesker godkender",
-    tekst: "Systemet laver kladden, en medarbejder godkender. Der sendes ikke noget af sig selv, der koster penge eller rører kunder.",
+    tekst: "Systemet laver kladden, og en medarbejder godkender den. Intet, der koster penge eller går ud til kunder, sendes af sig selv.",
   },
   {
     titel: "Overdragelse med driftsdokument",
@@ -141,7 +141,7 @@ const indbygget = [
   },
   {
     titel: "Ingen leverandørlås",
-    tekst: "Alt er bygget, så det kan flyttes til en anden leverandør eller en anden model uden at starte forfra.",
+    tekst: "Jeg bygger det, så det kan flyttes til en anden leverandør eller en anden model uden at starte forfra.",
   },
   {
     titel: "Fast pris på skrift",
@@ -151,7 +151,7 @@ const indbygget = [
 
 const modenhed = [
   { n: 0, navn: "Alt manuelt", tekst: "AI bruges ikke, eller kun privat." },
-  { n: 1, navn: "Hjælp hist og her", tekst: "Nogle bruger ChatGPT eller Copilot, men intet kører af sig selv." },
+  { n: 1, navn: "Spredt brug", tekst: "Nogle bruger ChatGPT eller Copilot, men intet kører af sig selv." },
   { n: 2, navn: "Første modul i drift", tekst: "Én tidsrøver kører af sig selv, og en medarbejder godkender." },
   { n: 3, navn: "Flere moduler", tekst: "Flere arbejdsgange kører, systemet kender virksomheden, og ledelsen styrer." },
 ];
@@ -169,8 +169,8 @@ export default function YdelserPage() {
           </h1>
           <p className="font-serif text-base md:text-lg text-ink-soft mt-5 max-w-2xl leading-relaxed">
             Jeg fjerner det, der fylder i hverdagen, fx indbakken, opfølgningen og data, der
-            tastes ind to gange. Til fast pris, i drift på få uger, og det kører i jeres egne
-            systemer. I ejer det bagefter.
+            tastes ind to gange. Det sker til fast pris, er i drift på få uger og kører i jeres
+            egne systemer. I ejer det bagefter.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
@@ -246,8 +246,8 @@ export default function YdelserPage() {
               Hvilken tidsrøver vil I af med?
             </h2>
             <p className="font-sans text-[14px] md:text-[15px] text-ink-soft mt-4 max-w-2xl leading-relaxed">
-              Hvert modul fjerner én tidsrøver. Hvor et modul kører hos en kunde, står kunden på.
-              De andre er i pilot.
+              Hvert modul fjerner én tidsrøver. Hvor et modul allerede kører hos en kunde, er kunden
+              nævnt. De øvrige er i pilot.
             </p>
           </div>
           <div className="max-w-editorial mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-rule">
@@ -317,15 +317,15 @@ export default function YdelserPage() {
                   <h3 className="font-serif text-xl font-medium text-ink">Markedskort</h3>
                   <p className="font-sans text-[14px] leading-relaxed text-ink-soft mt-2">
                     Hvor mange virksomheder i markedet ligner jeres bedste kunder, hvem vokser, og
-                    hvem skal I ringe til først? Ud fra CVR og de offentlige regnskaber, med
-                    beslutningstager og uden reklamebeskyttede virksomheder.
+                    hvem skal I ringe til først? Svaret bygger på CVR og de offentlige regnskaber.
+                    Det udpeger beslutningstageren og udelader reklamebeskyttede virksomheder.
                   </p>
                 </div>
                 <div>
                   <h3 className="font-serif text-xl font-medium text-ink">Pipeline-modul</h3>
                   <p className="font-sans text-[14px] leading-relaxed text-ink-soft mt-2">
-                    Samme motor koblet på jeres CRM: en ny ringeliste hver måned med en begrundelse
-                    for hvert navn, og jeres egne resultater gør listen bedre over tid.
+                    Det samme grundlag koblet til jeres CRM: hver måned en ny ringeliste med en
+                    begrundelse for hvert navn. Jeres egne resultater gør listen bedre over tid.
                   </p>
                 </div>
               </div>
@@ -420,7 +420,7 @@ export default function YdelserPage() {
                 Tag en snak om jeres største tidsrøver
               </h2>
               <p className="font-sans text-[15px] leading-relaxed text-cream/80 max-w-2xl mb-7">
-                En halv time uden salgstale. I fortæller, hvad der fylder, og jeg siger ærligt, om
+                En kort samtale uden salgstale. I fortæller, hvad der fylder, og jeg siger ærligt, om
                 det er noget, jeg kan fjerne. Eller start med det gratis tjek.
               </p>
               <div className="flex flex-wrap gap-3">
