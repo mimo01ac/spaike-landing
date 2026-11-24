@@ -16,5 +16,5 @@ Format: hvad · ejer · lead-time · "sæt i gang senest" · status (ikke-starte
 
 ## /tjek (SpAIke Snapshot, v1 2026-11-23)
 
-- **PocketBase-collection `snapshot_leads`** (spaike-crm på Fly) · Michael · minutter · sæt i gang senest: før merge til main · **ikke-startet**: defineret i `scripts/setup-pocketbase.mjs`, ikke kørt (natbyg). Verificér bagefter med `node scripts/snapshot-cli.mjs lead --base <preview-url>` → forvent `gemt i PocketBase=true` og en record med `test=true`. Lokalt uden env: `HTTP 200 @ 2026-11-23` med `gemt=false` og log `snapshot lead: PB-gem fejlede:`.
+- **PocketBase-collection `snapshot_leads`** (spaike-crm på Fly) · Michael · minutter · **klar**: oprettet 24/11-2026 med `scripts/setup-pocketbase.mjs` (alle regler `null`, kun superuser; anonym liste `HTTP 403 @ 2026-11-24T11:52Z`). Test-lead mod lokal production-build med rigtige nøgler: `HTTP 200 @ 2026-11-24T11:54Z`, `gemt i PocketBase=true`, record læst med `test=true` og slettet igen. Ikke kørt mod Vercel-previewen (kræver Vercel-login); production bruger samme nøgler som kontaktformularen.
 - **Brevo** (delt, `BREVO_API_KEY`) · klar (delt med kontakt/tilskud). Snapshot-mail ikke afprøvet live (ingen rigtige mails i natbyg).
