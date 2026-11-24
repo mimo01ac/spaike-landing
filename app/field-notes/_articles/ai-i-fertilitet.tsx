@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Field Notes: AI i fertilitetsbehandling — SpAIke",
+  title: "Field Notes: AI i fertilitetsbehandling | SpAIke",
   description:
     "Hvad tallene viser, og hvad frontløberne allerede gør. Kildebelagte tal og navngivne cases om AI i fertilitetsbehandling, med vægt på driften: svartid, opfølgning og patientkommunikation.",
   openGraph: {
     title:
-      "AI i fertilitetsbehandling — hvad frontløberne allerede gør",
+      "AI i fertilitetsbehandling: hvad frontløberne allerede gør",
     description:
       "Kildebelagte tal (Journal of IVF-Worldwide, Nature Medicine) og navngivne cases (Care Fertility, IVF Australia, First Fertility) om AI i fertilitetsbehandling.",
     type: "article",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title:
-      "AI i fertilitetsbehandling — hvad frontløberne allerede gør",
+      "AI i fertilitetsbehandling: hvad frontløberne allerede gør",
     description:
       "Kildebelagte tal og navngivne cases om AI i fertilitetsbehandling, kurateret for fertilitetsklinikker.",
   },

@@ -3,6 +3,7 @@ import type { Page, Route } from "@playwright/test";
 /** Alle offentlige sider der skal svare 200 og have indhold. */
 export const PUBLIC_PAGES = [
   "/",
+  "/ydelser",
   "/ai-innovationsdag",
   "/ai-innovationsdag/guide",
   "/ai-innovationsdag/ideer",
@@ -15,6 +16,7 @@ export const PUBLIC_PAGES = [
   "/benchmark",
   "/brancher/landinspektorer",
   "/brancher/raadgivende-ingenioerer",
+  "/tjek",
   "/ai-tjek",
   "/tilskud",
   "/privatlivspolitik",

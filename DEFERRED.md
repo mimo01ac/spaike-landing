@@ -60,3 +60,27 @@ Format: hvad blev fravalgt · hvorfor · det rigtige · effort (S/M/L).
 - Skifter brugeren fra chat til stemme midt i en session, får stemmeagenten chat-svarene som kontekst, men den endelige vurdering bygger kun på stemme-udskriften (klientens kopi starter tom ved skift) · det rigtige: send chat-historikken med til VoiceSamtale ved skift · effort S
 - Genoptagelse kun inden for 7 dage og ikke efter lead/vurdering · bevidst valg
 - Fortsæt-linket sendes også til adresser, der ikke findes (bounce hos Brevo) · lav risiko, kræver at man kender e-mail og CVR · effort XS hvis det skal begrænses
+
+## 2026-11-23 · Katalog-side /ydelser (SPA-1289)
+
+- `/tjek` (Snapshot) findes ikke endnu; midlertidig 307-redirect `/tjek` → `/ai-tjek` i `next.config.mjs`, så CTA'en ikke giver 404 · scope: Snapshot bygges i næste ticket i kæden · det rigtige: fjern redirecten i samme commit som `app/tjek/page.tsx` (ellers vinder redirecten over siden) · effort S
+- Indholdet (trin, priser, moduler, beviser) ligger som konstanter i `app/ydelser/page.tsx`, ikke i en delt datakilde · fart · det rigtige: `lib/ydelser.ts` som én kilde, hvis priserne skal genbruges i Snapshot, tilbud eller tilskudsflowet · effort S
+- Vækst-sporet (Markedskort + Pipeline-modul) vises uden pris, og modul-kortene linker til booking i stedet for egne undersider · scope: pris ikke besluttet, undersider ikke bestilt · det rigtige: pris på siden når den er låst; evt. én underside pr. modul med case · effort M
+- E2E dækker kun at siden renderer, nav-linket og link-integritet; ingen test af Umami-attributter på CTA'erne · fart · det rigtige: Playwright-assert på `data-track-event` for de tre events · effort S
+
+## 2026-11-23 · SpAIke Snapshot (/tjek) v1
+
+- Ingen branche-benchmark ("virksomheder som jer får typisk X % automatiseret") · designnoten har ingen kilde til tallene · det rigtige: egne tal fra Snapshot-leads + diagnoser, når der er nok data pr. branche · effort M
+- Leadet får ingen mail med rapporten; detaljerne vises kun på skærmen efter mail-gaten · fart, og ingen rigtige mails i natbyg · det rigtige: Brevo-mail med rapporten (rapport-eksemplet i vaulten) eller delbar `/tjek/rapport/[id]` · effort M
+- Niche-detektion og research-opfølgning (designnotens tier 2) er ikke bygget; Michael følger op manuelt fra notifikationsmailen · scope · det rigtige: agent der bruger firma + domæne → niche → branche-follow-up i kø til godkendelse · effort L
+- Modenhed 0-3 bygger på ét selvrapporteret svar (spørgsmål 9 erstatter prototypens "Har I forsøgt at løse det før?"; "prøvet, men gik i stå" giver niveau 1) · fart · det rigtige: kalibrér mod diagnoserne · effort S
+- Højst tre opgaver kan vælges, så flowet holder sig på 9 spørgsmål · scope · det rigtige: OK som det er, genovervej hvis mange vælger "Andet" · effort S
+- Svar gemmes ikke i localStorage (reload = forfra) · fart · det rigtige: gem kladden lokalt · effort S
+- Ingen Turnstile på snapshot-action; beskyttelse er honeypot + IP-rate-limit (5 pr. 10 min, in-memory pr. instans) og ingen LLM-kald, så misbrug koster kun PB-rækker og mails til Michael · fart · det rigtige: Turnstile når nøglerne sættes for hele sitet · effort S
+- Collection `snapshot_leads` er ikke oprettet i production (natbyg må ikke skrive dertil); indtil da gemmes intet, men mailen til Michael bærer leadet · regel for natbyg · det rigtige: Michael kører `node --env-file=.env.local scripts/setup-pocketbase.mjs` · effort S
+
+## 2026-11-23 · /ydelser som PDF-leave-behind (SPA-1291)
+
+- PDF'en laves af browserens print-dialog (`window.print()`), ikke som en færdig fil: brugeren skal selv vælge "Gem som PDF", og Safari/Firefox er ikke afprøvet (kun Chromium) · ticketens rammer (ingen ny route) · det rigtige: hvis det skal være ét klik til en fil, en statisk PDF bygget i CI med Playwright og lagt i `public/` · effort S
+- Sideantallet holdes af faste print-skriftstørrelser; side 1 har ca. 5 % luft, så længere tekster på trin eller moduler kan give en tredje side · fart · det rigtige: Playwright-testen fanger det (den fejler ved 3 sider), så bare kør den ved tekstændringer · effort S
+- Den globale print-regel for case-briefen (`body * { visibility: hidden }`) gælder stadig på alle andre sider, så de printer tomt · uden for ticket · det rigtige: scope reglen til siden med `.brief-print` (`body:has(.brief-print)`) · effort S

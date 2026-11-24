@@ -51,6 +51,13 @@ export default function Hero() {
               Prøv Discovery (beta)
             </a>
           </div>
+          <a
+            href="/tjek"
+            data-track-event="snapshot_forside_click"
+            className="font-sans text-sm text-ink-soft underline decoration-rule underline-offset-4 hover:text-amber-dark -mt-3"
+          >
+            Eller se jeres største tidsrøver i timer og kroner på 2 minutter →
+          </a>
         </div>
 
         {/* RIGHT — Et lille manifest + founder + stats */}

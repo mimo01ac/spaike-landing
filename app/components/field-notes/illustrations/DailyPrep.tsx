@@ -62,8 +62,8 @@ export default function DailyPrep() {
         <line x1="520" y1="190" x2="660" y2="190" stroke="#d8d3c7" />
 
         <text x="525" y="210" fontFamily="Inter, sans-serif" fontSize="10" fill="#6b6650" fontWeight="500">PREP FOR TODAY</text>
-        <text x="525" y="226" fontFamily="Inter, sans-serif" fontSize="11" fill="#0f1a2e">09:30 Acme — legal redlines</text>
-        <text x="525" y="244" fontFamily="Inter, sans-serif" fontSize="11" fill="#0f1a2e">11:00 Northbeam — close push</text>
+        <text x="525" y="226" fontFamily="Inter, sans-serif" fontSize="11" fill="#0f1a2e">09:30 Acme · legal redlines</text>
+        <text x="525" y="244" fontFamily="Inter, sans-serif" fontSize="11" fill="#0f1a2e">11:00 Northbeam · close push</text>
         <text x="525" y="262" fontFamily="Inter, sans-serif" fontSize="11" fill="#0f1a2e">14:00 internal forecast</text>
       </g>
     </svg>

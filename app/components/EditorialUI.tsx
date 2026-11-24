@@ -43,7 +43,9 @@ export function SectionLabel({
         inverted ? "text-amber" : "text-muted"
       }`}
     >
-      — {children}
+      {/* Lille amber streg som CSS-element i stedet for en tankestreg i teksten (Michael 23/11). */}
+      <span aria-hidden="true" className="inline-block w-[1em] h-px bg-amber align-middle mr-[0.6em] -mt-px" />
+      {children}
     </p>
   );
 }

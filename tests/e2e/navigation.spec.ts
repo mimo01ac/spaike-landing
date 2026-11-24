@@ -11,9 +11,7 @@ test.describe("forsiden", () => {
     test.skip(isMobile, "Nav-links er bevidst skjult på mobil (kun logo + Book møde-CTA)");
     await page.goto("/");
     for (const [label, id] of [
-      ["Hvad vi bygger", "hvad-vi-bygger"],
       ["Discovery", "discovery"],
-      ["Byg selv", "byg-selv"],
       ["Manifest", "manifest"],
       ["Kontakt", "kontakt"],
     ] as const) {
@@ -21,6 +19,14 @@ test.describe("forsiden", () => {
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
       await expect(page.locator(`[id="${id}"]`)).toBeInViewport();
     }
+  });
+
+  test("header-nav: Ydelser peger på ydelses-hub'en", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Nav-links er bevidst skjult på mobil");
+    await page.goto("/");
+    await page.getByRole("navigation").getByRole("link", { name: "Ydelser" }).click();
+    await expect(page).toHaveURL(/\/ydelser$/);
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   const cards = [

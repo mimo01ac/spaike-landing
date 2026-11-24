@@ -29,20 +29,20 @@ export default function About() {
             </h2>
             <div className="space-y-4 text-lg text-neutral-700 leading-relaxed">
               <p>
-                Efter 15+ år i kommercielle roller — McKinsey, Nilfisk, GetWhy,
-                home — fra konsulent-verden til scale-up til stor corporate —
-                har jeg set hvor AI-projekter strander.
+                Efter 15+ år i kommercielle roller (McKinsey, Nilfisk, GetWhy,
+                home), fra konsulentverdenen over scale-ups til store koncerner,
+                har jeg set, hvor AI-projekter strander.
               </p>
               <p>
                 Ikke fordi teknologien ikke virker. Fordi forretningsforståelsen
                 mangler.
               </p>
               <p>
-                Så jeg byggede SpAIke. Spiken er i kombinationen — kommerciel
+                Så jeg byggede SpAIke. Spiken er i kombinationen: kommerciel
                 skarpsindighed plus hands-on AI-byggeri. Det er det der gør
                 forskellen mellem at eksperimentere med AI og at flytte tallene.
               </p>
-              <p className="text-base text-neutral-600">— Michael Mortensen, founder</p>
+              <p className="text-base text-neutral-600">Michael Mortensen, founder</p>
             </div>
           </div>
         </div>

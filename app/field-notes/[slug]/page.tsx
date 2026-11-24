@@ -14,7 +14,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Params): Metadata {
   const entry = articles[params.slug];
-  return entry ? entry.metadata : { title: "Not found — SpAIke" };
+  return entry ? entry.metadata : { title: "Not found | SpAIke" };
 }
 
 export default function FieldNotePage({ params }: Params) {

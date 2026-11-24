@@ -79,7 +79,8 @@ export default function DiscoveryCTA() {
 
       <div className="max-w-editorial mx-auto w-full px-6 md:px-14 py-12 border-t border-rule">
         <p className="font-mono text-[11px] tracking-widest uppercase text-muted mb-5">
-          — I rapporten finder I
+          <span aria-hidden="true" className="inline-block w-[1em] h-px bg-amber align-middle mr-[0.6em] -mt-px" />
+          I rapporten finder I
         </p>
         <ul className="grid md:grid-cols-2 gap-x-12 gap-y-3 font-serif text-lg text-ink-soft leading-relaxed max-w-4xl">
           <li className="flex gap-3">
