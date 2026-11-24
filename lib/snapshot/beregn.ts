@@ -132,11 +132,11 @@ export const PROCESSER: Record<
   },
   keyperson: {
     label: "Opgaver, som kun én bestemt person kan løse",
-    modul: "kundedialog",
+    modul: "viden",
     forslag: [
       "Arbejdsgangen bliver beskrevet, så en kollega eller et system kan udføre den.",
       "Forretningen går ikke i stå, når personen er syg eller på ferie.",
-      "Kunderne kan få svar på de faste spørgsmål døgnet rundt, uden at det går gennem én person.",
+      "Kollegerne kan slå svaret op, når de har brug for det, uden at det går gennem én person.",
     ],
   },
 };
